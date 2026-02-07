@@ -1,0 +1,7 @@
+.git
+.env
+*.md
+ai-brain/
+cfg/
+plugins/
+download-server.sh

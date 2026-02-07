@@ -1,0 +1,8 @@
+# Downloaded server files (~3GB, run ./download-server.sh to populate)
+server-files/
+
+# Runtime
+*.log
+
+# SourceMod compiled plugins (keep source, not binaries)
+*.smx
