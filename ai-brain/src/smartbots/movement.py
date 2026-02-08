@@ -80,7 +80,7 @@ class MovementController:
         if path is None:
             return None
 
-        waypoints = self.nav.path_to_annotated_waypoints(path, self.terrain)
+        waypoints = self.nav.path_to_safe_waypoints(path, self.terrain)
         nav_state = BotNavState(
             waypoints=waypoints, last_repath_tick=tick,
             last_progress_tick=tick, last_progress_pos=pos,

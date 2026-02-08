@@ -8,7 +8,6 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
-from smartbots.awareness import SpatialAnalyzer
 from smartbots.navigation import AnnotatedWaypoint, NavGraph
 from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP
 from smartbots.state import BotState, GameState
@@ -25,12 +24,9 @@ REPATH_DIST = 300.0
 REPATH_INTERVAL = 40
 STUCK_MOVE_DIST = 20.0
 STUCK_TICKS = 40
-NUDGE_TICKS = 16
-MAX_DETOUR_ATTEMPTS = 3
 JUMP_TRIGGER_DIST = 50.0
 JUMP_COOLDOWN = 4
 CROUCH_APPROACH_DIST = 100.0
-# Look-ahead distance along the path polyline (Source units)
 LOOK_AHEAD_DIST = 200.0
 
 
@@ -46,7 +42,6 @@ class BotBehaviorState(Enum):
     NAVIGATING = auto()
     ARRIVED = auto()
     HOLDING = auto()
-    STUCK = auto()
 
 
 @dataclass
@@ -68,9 +63,7 @@ class BotNavState:
     last_progress_tick: int = 0
     last_progress_pos: tuple[float, float, float] = (0.0, 0.0, 0.0)
     last_jump_tick: int = 0
-    nudge_target: tuple[float, float, float] | None = None
-    nudge_until: int = 0
-    detour_attempts: int = 0
+    stuck_repaths: int = 0
 
 
 @dataclass
@@ -90,7 +83,6 @@ class BotManager:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
-        self.spatial = SpatialAnalyzer(nav, terrain)
         self._brains: dict[int, BotBrain] = {}
 
     def _get_brain(self, bot_id: int) -> BotBrain:
@@ -146,7 +138,7 @@ class BotManager:
             look = brain.goal.look_dir or brain.goal.position or bot.pos
             return BotCommand(id=bot.id, move_target=bot.pos, look_target=look)
 
-        # NAVIGATING or STUCK
+        # NAVIGATING
         return self._tick_navigate(brain, bot, tick)
 
     def _compute_path(
@@ -164,7 +156,7 @@ class BotManager:
         if path is None:
             return None
 
-        waypoints = self.nav.path_to_annotated_waypoints(path, self.terrain)
+        waypoints = self.nav.path_to_safe_waypoints(path, self.terrain)
         nav = BotNavState(
             waypoints=waypoints, last_repath_tick=tick,
             last_progress_tick=tick, last_progress_pos=pos,
@@ -216,65 +208,22 @@ class BotManager:
                 log.info("bot=%d: patrol -> next point %d", brain.bot_id, brain.goal.patrol_idx)
             return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
 
-        # Nudging
-        if nav.nudge_target is not None:
-            if tick < nav.nudge_until:
-                return BotCommand(
-                    id=bot.id, move_target=nav.nudge_target, look_target=nav.nudge_target,
-                )
-            log.info("bot=%d: nudge done, repathing", brain.bot_id)
-            nav.nudge_target = None
-            new_nav = self._compute_path(brain, bot.pos, target_pos, tick)
-            if new_nav is not None:
-                brain.nav_state = new_nav
-                nav = new_nav
-                if nav.waypoint_idx >= len(nav.waypoints):
-                    brain.state = BotBehaviorState.ARRIVED
-                    return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
-            else:
-                brain.nav_state = None
-                brain.state = BotBehaviorState.IDLE
-                return None
-
-        # Stuck detection — use spatial awareness for smart detour
+        # Stuck detection — simple repath
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
             pdx = bot.pos[0] - nav.last_progress_pos[0]
             pdy = bot.pos[1] - nav.last_progress_pos[1]
             moved = math.sqrt(pdx * pdx + pdy * pdy)
             if moved < STUCK_MOVE_DIST:
-                wp = nav.waypoints[nav.waypoint_idx]
-                current_area = self.nav.find_area(bot.pos)
-
-                if nav.detour_attempts < MAX_DETOUR_ATTEMPTS:
-                    detour = self.spatial.find_detour(
-                        pos=bot.pos, goal_pos=target_pos,
-                        area_id=current_area, current_waypoint=wp.pos,
-                    )
-                else:
-                    detour = None
-
-                if detour is not None:
-                    nav.nudge_target = detour
-                    nav.nudge_until = tick + NUDGE_TICKS
-                    nav.detour_attempts += 1
-                    brain.state = BotBehaviorState.STUCK
-                    log.warning(
-                        "bot=%d: stuck (moved=%.0f), detour to (%.0f,%.0f) attempt=%d",
-                        brain.bot_id, moved, detour[0], detour[1], nav.detour_attempts,
-                    )
-                    return BotCommand(id=bot.id, move_target=detour, look_target=detour)
-
-                # Exhausted detour attempts — full repath from scratch
+                nav.stuck_repaths += 1
                 log.warning(
-                    "bot=%d: stuck, detours exhausted (%d), full repath",
-                    brain.bot_id, nav.detour_attempts,
+                    "bot=%d: stuck (moved=%.0f), repath attempt=%d",
+                    brain.bot_id, moved, nav.stuck_repaths,
                 )
-                nav.detour_attempts = 0
                 new_nav = self._compute_path(brain, bot.pos, target_pos, tick)
                 if new_nav is not None:
+                    new_nav.stuck_repaths = nav.stuck_repaths
                     brain.nav_state = new_nav
                     nav = new_nav
-                    brain.state = BotBehaviorState.NAVIGATING
                 else:
                     brain.nav_state = None
                     brain.state = BotBehaviorState.IDLE
@@ -282,7 +231,7 @@ class BotManager:
             else:
                 nav.last_progress_tick = tick
                 nav.last_progress_pos = bot.pos
-                nav.detour_attempts = 0  # reset on progress
+                nav.stuck_repaths = 0
 
         # Repath if off course
         wp = nav.waypoints[nav.waypoint_idx]
@@ -304,12 +253,7 @@ class BotManager:
                 dy = bot.pos[1] - wp.pos[1]
                 dist = math.sqrt(dx * dx + dy * dy)
 
-        if brain.state == BotBehaviorState.STUCK:
-            brain.state = BotBehaviorState.NAVIGATING
-
         flags = self._compute_flags(nav, bot.pos, tick)
-        # Look ahead along the path for smooth, natural forward-looking.
-        # Decoupled look (strafing) is only for combat, not basic navigation.
         look_target = self._path_lookahead(nav, bot.pos)
 
         if tick % 40 == 0:
@@ -363,11 +307,7 @@ class BotManager:
         self, nav: BotNavState, bot_pos: tuple[float, float, float],
         lookahead: float = LOOK_AHEAD_DIST,
     ) -> tuple[float, float, float]:
-        """Find a point on the path polyline *lookahead* units ahead of the bot.
-
-        This produces smooth anticipatory looking — the bot looks where it's
-        going next, not at its feet.
-        """
+        """Find a point on the path polyline *lookahead* units ahead of the bot."""
         idx = nav.waypoint_idx
         if idx >= len(nav.waypoints):
             return nav.waypoints[-1].pos

@@ -1,4 +1,4 @@
-"""Navigation graph with A* pathfinding and funnel-smoothed paths."""
+"""Navigation graph with A* pathfinding and center-line safe waypoints."""
 
 from __future__ import annotations
 
@@ -17,18 +17,14 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
-# Portal shrink on each side — keeps the smoothed path slightly off walls.
-# Nav mesh portals on ministry are often only 25u wide, so 16u (hull half-width)
-# would collapse most of them. 8u is a good compromise.
-AGENT_RADIUS = 8.0
+# Portal width below which we insert an extra crossing-point waypoint
+# so the bot threads the doorway precisely.
+NARROW_PORTAL_THRESHOLD = 50.0
 
-# Push funnel-smoothed waypoints this far from wall edges and ledges.
-# Roughly half the player hull width (~32u total).
-WALL_MARGIN = 16.0
-
-# Height-drop threshold for ledge detection (matches JUMP_THRESHOLD in terrain.py).
-# Defined locally to avoid circular import (terrain.py imports from navigation.py).
-_LEDGE_THRESHOLD = 18.0
+# How far past a narrow portal to place the perpendicular exit waypoint.
+# Must exceed WAYPOINT_REACH_DIST (40u) so the bot can't "consume" the
+# waypoint from the source side without actually passing through.
+DOORWAY_EXIT_DIST = 50.0
 
 Pos3 = tuple[float, float, float]
 Portal = tuple[Pos3, Pos3]  # (left, right)
@@ -53,159 +49,6 @@ def _dist(a: Vector3, b: Vector3) -> float:
 
 def _dist_sq_2d(ax: float, ay: float, bx: float, by: float) -> float:
     return (ax - bx) ** 2 + (ay - by) ** 2
-
-
-def _cross2d(o: Pos3, a: Pos3, b: Pos3) -> float:
-    """2D cross product of vectors OA and OB. Positive = B is left of O→A."""
-    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-
-
-def _vequal2d(a: Pos3, b: Pos3, eps: float = 0.001) -> bool:
-    return abs(a[0] - b[0]) < eps and abs(a[1] - b[1]) < eps
-
-
-# ── wall offset ───────────────────────────────────────────────────────
-
-
-def _offset_from_walls(
-    pos: Pos3,
-    area_id: int,
-    areas: dict[int, NavArea],
-    terrain: TerrainAnalyzer,
-) -> Pos3:
-    """Push a waypoint away from wall edges and ledges within its area.
-
-    Wall edges: area sides with no connections.
-    Ledge edges: connected sides where ALL neighbors are large drops.
-    Portal edges (doorways): left alone.
-    """
-    area = areas.get(area_id)
-    if area is None:
-        return pos
-
-    min_x = min(area.nw.x, area.se.x)
-    max_x = max(area.nw.x, area.se.x)
-    min_y = min(area.nw.y, area.se.y)
-    max_y = max(area.nw.y, area.se.y)
-
-    x, y, z = pos
-
-    # Classify each edge: N=0 (max_y), E=1 (max_x), S=2 (min_y), W=3 (min_x)
-    wall = [False, False, False, False]
-    for d in range(4):
-        if not area.connections[d]:
-            wall[d] = True
-        else:
-            # Ledge: all neighbours in this direction are big drops
-            all_ledge = True
-            for nid in area.connections[d]:
-                trans = terrain.get_transition(area_id, nid)
-                if trans is None or trans.height_delta >= -_LEDGE_THRESHOLD:
-                    all_ledge = False
-                    break
-            if all_ledge:
-                wall[d] = True
-
-    # Y axis (N/S walls)
-    if wall[0] and wall[2]:
-        height = max_y - min_y
-        if height < WALL_MARGIN * 2:
-            y = (min_y + max_y) / 2
-        else:
-            y = max(min_y + WALL_MARGIN, min(max_y - WALL_MARGIN, y))
-    elif wall[0]:
-        y = min(y, max_y - WALL_MARGIN)
-    elif wall[2]:
-        y = max(y, min_y + WALL_MARGIN)
-
-    # X axis (E/W walls)
-    if wall[1] and wall[3]:
-        width = max_x - min_x
-        if width < WALL_MARGIN * 2:
-            x = (min_x + max_x) / 2
-        else:
-            x = max(min_x + WALL_MARGIN, min(max_x - WALL_MARGIN, x))
-    elif wall[1]:
-        x = min(x, max_x - WALL_MARGIN)
-    elif wall[3]:
-        x = max(x, min_x + WALL_MARGIN)
-
-    x = max(min_x, min(max_x, x))
-    y = max(min_y, min(max_y, y))
-    return (x, y, z)
-
-
-# ── funnel algorithm ───────────────────────────────────────────────────
-
-
-def _funnel_smooth(
-    start: Pos3, goal: Pos3, portals: list[Portal],
-) -> list[tuple[Pos3, int]]:
-    """Simple Stupid Funnel Algorithm (Mononen).
-
-    Returns list of (waypoint, portal_index) tuples.
-    portal_index is -1 for start, len(portals) for goal.
-    Intermediate waypoints have the index of the portal they lie on.
-    """
-    if not portals:
-        return [(start, -1), (goal, 0)]
-
-    # Build full portal list: degenerate start, actual portals, degenerate goal
-    pts: list[Portal] = [(start, start)]
-    pts.extend(portals)
-    pts.append((goal, goal))
-
-    result: list[tuple[Pos3, int]] = [(start, -1)]
-
-    apex = start
-    apex_idx = 0
-    left = start
-    left_idx = 0
-    right = start
-    right_idx = 0
-
-    i = 1
-    while i < len(pts):
-        pl, pr = pts[i]
-
-        # Try to narrow the right side
-        if _cross2d(apex, right, pr) <= 0.0:
-            if _vequal2d(apex, right) or _cross2d(apex, left, pr) > 0.0:
-                right = pr
-                right_idx = i
-            else:
-                # Right crossed over left — insert left as new apex
-                result.append((left, left_idx - 1))
-                apex = left
-                apex_idx = left_idx
-                left = apex
-                right = apex
-                left_idx = apex_idx
-                right_idx = apex_idx
-                i = apex_idx + 1
-                continue
-
-        # Try to narrow the left side
-        if _cross2d(apex, left, pl) >= 0.0:
-            if _vequal2d(apex, left) or _cross2d(apex, right, pl) < 0.0:
-                left = pl
-                left_idx = i
-            else:
-                # Left crossed over right — insert right as new apex
-                result.append((right, right_idx - 1))
-                apex = right
-                apex_idx = right_idx
-                left = apex
-                right = apex
-                left_idx = apex_idx
-                right_idx = apex_idx
-                i = apex_idx + 1
-                continue
-
-        i += 1
-
-    result.append((goal, len(portals)))
-    return result
 
 
 # ── NavGraph ───────────────────────────────────────────────────────────
@@ -338,12 +181,16 @@ class NavGraph:
         z = (self._centers[from_id].z + self._centers[to_id].z) / 2
         return (x, y, z)
 
-    def portal_edge(self, from_id: int, to_id: int) -> Portal | None:
-        """Shared edge as (left, right) relative to travel direction.
+    def _portal_direction(self, from_id: int, to_id: int) -> int:
+        """Direction (0=N,1=E,2=S,3=W) of the portal from *from_id* to *to_id*."""
+        from_area = self.areas[from_id]
+        for d, connected_ids in enumerate(from_area.connections):
+            if to_id in connected_ids:
+                return d
+        return -1
 
-        Portal is shrunk by AGENT_RADIUS on each side to prevent wall-hugging.
-        Returns None if areas aren't directly connected.
-        """
+    def portal_width(self, from_id: int, to_id: int) -> float:
+        """Width of the shared edge (portal) between two connected areas."""
         from_area = self.areas[from_id]
         to_area = self.areas[to_id]
 
@@ -353,7 +200,7 @@ class NavGraph:
                 direction = d
                 break
         if direction == -1:
-            return None
+            return 0.0
 
         f_min_x = min(from_area.nw.x, from_area.se.x)
         f_max_x = max(from_area.nw.x, from_area.se.x)
@@ -364,47 +211,89 @@ class NavGraph:
         t_min_y = min(to_area.nw.y, to_area.se.y)
         t_max_y = max(to_area.nw.y, to_area.se.y)
 
-        z = (self._centers[from_id].z + self._centers[to_id].z) / 2
+        if direction in (0, 2):  # N/S — overlap on X
+            return max(0.0, min(f_max_x, t_max_x) - max(f_min_x, t_min_x))
+        else:  # E/W — overlap on Y
+            return max(0.0, min(f_max_y, t_max_y) - max(f_min_y, t_min_y))
 
-        if direction in (0, 2):  # north/south — shared Y edge, overlap on X
-            shared_y = f_max_y if direction == 0 else f_min_y
-            lo = max(f_min_x, t_min_x)
-            hi = min(f_max_x, t_max_x)
-            width = hi - lo
-            if width > AGENT_RADIUS * 2:
-                lo += AGENT_RADIUS
-                hi -= AGENT_RADIUS
-            else:
-                mid = (lo + hi) / 2
-                lo = hi = mid
-            p1: Pos3 = (lo, shared_y, z)
-            p2: Pos3 = (hi, shared_y, z)
-        else:  # east/west — shared X edge, overlap on Y
-            shared_x = f_max_x if direction == 1 else f_min_x
-            lo = max(f_min_y, t_min_y)
-            hi = min(f_max_y, t_max_y)
-            width = hi - lo
-            if width > AGENT_RADIUS * 2:
-                lo += AGENT_RADIUS
-                hi -= AGENT_RADIUS
-            else:
-                mid = (lo + hi) / 2
-                lo = hi = mid
-            p1 = (shared_x, lo, z)
-            p2 = (shared_x, hi, z)
+    # ── safe waypoint generation ─────────────────────────────────────
 
-        # Determine left/right using cross product with travel direction
-        from_c = self._centers[from_id]
-        to_c = self._centers[to_id]
-        travel_x = to_c.x - from_c.x
-        travel_y = to_c.y - from_c.y
+    def path_to_safe_waypoints(
+        self, path: list[int], terrain: TerrainAnalyzer,
+    ) -> list[AnnotatedWaypoint]:
+        """Convert an area-ID path to safe center-line waypoints.
 
-        cross = travel_x * (p1[1] - from_c.y) - travel_y * (p1[0] - from_c.x)
-        if cross >= 0:
-            return (p1, p2)  # p1 is left
-        return (p2, p1)  # p2 is left
+        Every waypoint is an area center (guaranteed inside the area), so the bot
+        cannot get stuck on boundary geometry.  For narrow portals (doorways), an
+        extra crossing-point waypoint is inserted so the bot threads the gap.
+        """
+        if not path:
+            return []
+        if len(path) == 1:
+            return [AnnotatedWaypoint(
+                pos=self.area_center(path[0]), area_id=path[0],
+                needs_crouch=terrain.is_crouch_area(path[0]),
+            )]
 
-    # ── waypoint generation ─────────────────────────────────────────
+        waypoints: list[AnnotatedWaypoint] = []
+
+        for i, area_id in enumerate(path):
+            # Check if the portal INTO this area is narrow (doorway)
+            if i > 0:
+                prev_id = path[i - 1]
+                width = self.portal_width(prev_id, area_id)
+                trans = terrain.get_transition(prev_id, area_id)
+
+                if width < NARROW_PORTAL_THRESHOLD:
+                    # Two waypoints: approach (source side) + exit (dest side),
+                    # both perpendicular to the portal edge so the bot passes
+                    # through at 90° for maximum clearance.
+                    cp = self.crossing_point(prev_id, area_id)
+                    d = self._portal_direction(prev_id, area_id)
+                    offset = DOORWAY_EXIT_DIST
+                    if d == 0:    # N: portal at max_y
+                        approach_wp: Pos3 = (cp[0], cp[1] - offset, cp[2])
+                        exit_wp: Pos3 = (cp[0], cp[1] + offset, cp[2])
+                    elif d == 1:  # E: portal at max_x
+                        approach_wp = (cp[0] - offset, cp[1], cp[2])
+                        exit_wp = (cp[0] + offset, cp[1], cp[2])
+                    elif d == 2:  # S: portal at min_y
+                        approach_wp = (cp[0], cp[1] + offset, cp[2])
+                        exit_wp = (cp[0], cp[1] - offset, cp[2])
+                    else:         # W: portal at min_x
+                        approach_wp = (cp[0] + offset, cp[1], cp[2])
+                        exit_wp = (cp[0] - offset, cp[1], cp[2])
+                    jump = bool(trans and trans.needs_jump)
+                    crouch = (bool(trans and trans.needs_crouch)
+                              or terrain.is_crouch_area(area_id))
+                    waypoints.append(AnnotatedWaypoint(
+                        pos=approach_wp, area_id=prev_id,
+                        needs_jump=False, needs_crouch=crouch,
+                    ))
+                    waypoints.append(AnnotatedWaypoint(
+                        pos=exit_wp, area_id=area_id,
+                        needs_jump=jump, needs_crouch=crouch,
+                    ))
+                elif trans and trans.needs_jump:
+                    # Wide portal but needs jump — insert crossing waypoint
+                    cp = self.crossing_point(prev_id, area_id)
+                    waypoints.append(AnnotatedWaypoint(
+                        pos=cp, area_id=area_id,
+                        needs_jump=True,
+                        needs_crouch=terrain.is_crouch_area(area_id),
+                    ))
+
+            # Area center waypoint (skip first area — bot is already there)
+            if i > 0:
+                waypoints.append(AnnotatedWaypoint(
+                    pos=self.area_center(area_id), area_id=area_id,
+                    needs_crouch=terrain.is_crouch_area(area_id),
+                ))
+
+        log.info(
+            "Safe waypoints: %d areas -> %d waypoints", len(path), len(waypoints),
+        )
+        return waypoints
 
     def path_to_waypoints(
         self, path: list[int], pull_fraction: float = 0.3
@@ -428,101 +317,6 @@ class NavGraph:
                 waypoints.append(wp)
             else:
                 waypoints.append(self.area_center(path[-1]))
-        return waypoints
-
-    def path_to_annotated_waypoints(
-        self, path: list[int], terrain: TerrainAnalyzer,
-    ) -> list[AnnotatedWaypoint]:
-        """Convert an area-ID path to funnel-smoothed annotated waypoints.
-
-        Uses the Simple Stupid Funnel Algorithm for path smoothing, then
-        inserts extra waypoints at jump transitions that the funnel skipped.
-        """
-        if not path:
-            return []
-        if len(path) == 1:
-            return [AnnotatedWaypoint(
-                pos=self.area_center(path[0]), area_id=path[0],
-                needs_crouch=terrain.is_crouch_area(path[0]),
-            )]
-
-        start = self.area_center(path[0])
-        goal = self.area_center(path[-1])
-
-        # Build portal list
-        portals: list[Portal] = []
-        for i in range(len(path) - 1):
-            edge = self.portal_edge(path[i], path[i + 1])
-            if edge is None:
-                # Fallback: degenerate portal at crossing point
-                cp = self.crossing_point(path[i], path[i + 1])
-                portals.append((cp, cp))
-            else:
-                portals.append(edge)
-
-        # Run funnel algorithm
-        funnel_result = _funnel_smooth(start, goal, portals)
-
-        raw_area_count = len(path) - 1  # old method would produce this many waypoints
-
-        # Build annotated waypoints from funnel output
-        waypoints: list[AnnotatedWaypoint] = []
-        prev_portal_idx = -1  # start
-
-        for pos, portal_idx in funnel_result[1:]:  # skip start point
-            # Determine area_id for this waypoint
-            if portal_idx >= len(portals):
-                area_id = path[-1]
-            elif portal_idx >= 0:
-                area_id = path[portal_idx + 1]
-            else:
-                area_id = path[0]
-
-            # Check all transitions between previous and current funnel waypoints
-            # to find jump/crouch transitions the funnel may have smoothed away
-            check_start = max(0, prev_portal_idx + 1)
-            check_end = min(len(portals), portal_idx + 1) if portal_idx >= 0 else 0
-
-            jump_portals: list[int] = []
-            for j in range(check_start, check_end):
-                trans = terrain.get_transition(path[j], path[j + 1])
-                if trans and trans.needs_jump:
-                    jump_portals.append(j)
-
-            # Insert extra waypoints at jump transitions that the funnel skipped
-            for jp in jump_portals:
-                jump_pos = self.crossing_point(path[jp], path[jp + 1])
-                jump_area = path[jp + 1]
-                jump_pos = _offset_from_walls(
-                    jump_pos, jump_area, self.areas, terrain,
-                )
-                waypoints.append(AnnotatedWaypoint(
-                    pos=jump_pos, area_id=jump_area,
-                    needs_jump=True,
-                    needs_crouch=terrain.is_crouch_area(jump_area),
-                ))
-
-            # Check crouch for this waypoint's area
-            needs_crouch = terrain.is_crouch_area(area_id)
-            # Also check if any skipped transition leads to a crouch area
-            for j in range(check_start, check_end):
-                trans = terrain.get_transition(path[j], path[j + 1])
-                if trans and trans.needs_crouch:
-                    needs_crouch = True
-
-            waypoints.append(AnnotatedWaypoint(
-                pos=_offset_from_walls(pos, area_id, self.areas, terrain),
-                area_id=area_id,
-                needs_crouch=needs_crouch,
-            ))
-
-            prev_portal_idx = portal_idx
-
-        log.info(
-            "Funnel: %d areas -> %d raw -> %d smoothed waypoints",
-            len(path), raw_area_count, len(waypoints),
-        )
-
         return waypoints
 
     # ── graph queries ───────────────────────────────────────────────
