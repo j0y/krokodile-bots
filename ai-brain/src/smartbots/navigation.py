@@ -358,7 +358,19 @@ class NavGraph:
                     q.append(n)
         return visited
 
-    def find_gathering_point(self, near_area: int | None = None) -> int:
+    def _area_size(self, area_id: int) -> float:
+        """2D area of a nav area in square units."""
+        a = self.areas[area_id]
+        return abs(a.nw.x - a.se.x) * abs(a.nw.y - a.se.y)
+
+    def find_gathering_point(
+        self, near_area: int | None = None, min_size: float = 10000.0,
+    ) -> int:
+        """Find a large area near the map center suitable for gathering.
+
+        Prefers areas larger than *min_size* sq.u (default 100x100).
+        Among those, picks the one closest to the component centroid.
+        """
         if not self._centers:
             raise ValueError("Nav mesh has no areas")
 
@@ -372,9 +384,13 @@ class NavGraph:
         n = len(candidates)
         cx, cy = sum_x / n, sum_y / n
 
+        # Filter to large areas; fall back to all if none qualify.
+        large = {a for a in candidates if self._area_size(a) >= min_size}
+        pool = large or candidates
+
         best_id = -1
         best_dist = float("inf")
-        for aid in candidates:
+        for aid in pool:
             center = self._centers[aid]
             d = _dist_sq_2d(cx, cy, center.x, center.y)
             if d < best_dist:
@@ -382,9 +398,10 @@ class NavGraph:
                 best_id = aid
 
         c = self._centers[best_id]
+        sz = self._area_size(best_id)
         log.info(
-            "Gathering point: area %d at (%.0f, %.0f, %.0f), component center (%.0f, %.0f), "
-            "component size %d",
-            best_id, c.x, c.y, c.z, cx, cy, n,
+            "Gathering point: area %d (%.0f sq.u) at (%.0f, %.0f, %.0f), "
+            "component center (%.0f, %.0f), component size %d",
+            best_id, sz, c.x, c.y, c.z, cx, cy, n,
         )
         return best_id

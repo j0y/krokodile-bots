@@ -39,7 +39,7 @@ services:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
       - NAV_MAP=${NAV_MAP:-ministry_coop}
-      - STRATEGY=${STRATEGY:-gathering}
+      - RECORD_POSITIONS=${RECORD_POSITIONS:-0}
       - SPATIAL_DATA_DIR=/app/data
     depends_on:
       - insurgency
@@ -85,7 +85,7 @@ services:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
       - NAV_MAP=${NAV_MAP:-ministry_coop}
-      - STRATEGY=explore
+      - RECORD_POSITIONS=1
       - SPATIAL_DATA_DIR=/app/data
     depends_on:
       - insurgency-record
