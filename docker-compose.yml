@@ -1,16 +1,14 @@
-version: '3.8'
-
 services:
   insurgency:
     build:
-      context: .
+      context: ./insurgency-server
       dockerfile: Dockerfile
     container_name: insurgency-server
     restart: unless-stopped
     network_mode: host
     volumes:
-      - ./cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
-      - ./plugins:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom:ro
+      - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
+      - ./insurgency-server/plugins:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom:ro
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Dev Server
       - SERVER_PASSWORD=
@@ -19,29 +17,22 @@ services:
       - START_MAP=ministry_coop
       - GAME_MODE=coop
       - TICKRATE=64
-      # For the Python AI bridge (optional)
-      - AI_BRIDGE_ENABLED=0
-      - AI_BRIDGE_HOST=ai-brain
+      - AI_BRIDGE_HOST=127.0.0.1
       - AI_BRIDGE_PORT=9000
     stdin_open: true
     tty: true
 
-  # Optional: Python AI brain service for advanced bot logic
   ai-brain:
     build:
       context: ./ai-brain
       dockerfile: Dockerfile
     container_name: insurgency-ai
     restart: unless-stopped
-    ports:
-      - "9000:9000"
-    volumes:
-      - ./ai-brain/src:/app/src
+    network_mode: host
     environment:
-      - RCON_HOST=127.0.0.1
-      - RCON_PORT=27025
-      - RCON_PASSWORD=changeme
+      - AI_LISTEN_HOST=0.0.0.0
+      - AI_LISTEN_PORT=9000
     depends_on:
       - insurgency
     profiles:
-      - ai  # Only starts with: docker compose --profile ai up
+      - ai
