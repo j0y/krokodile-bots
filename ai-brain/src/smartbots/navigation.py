@@ -35,6 +35,11 @@ MEDIUM_PORTAL_THRESHOLD = 150.0
 Pos3 = tuple[float, float, float]
 Portal = tuple[Pos3, Pos3]  # (left, right)
 
+# Margin from portal/area edges when applying lateral offset (Source units).
+LATERAL_MARGIN = 16.0
+# Maximum lateral offset from area center (Source units).
+MAX_LATERAL_OFFSET = 200.0
+
 
 @dataclass
 class AnnotatedWaypoint:
@@ -222,6 +227,104 @@ class NavGraph:
         else:  # E/W — overlap on Y
             return max(0.0, min(f_max_y, t_max_y) - max(f_min_y, t_min_y))
 
+    def portal_endpoints(self, from_id: int, to_id: int) -> Portal | None:
+        """Return (left, right) endpoints of the shared portal edge."""
+        from_area = self.areas[from_id]
+        to_area = self.areas[to_id]
+        direction = self._portal_direction(from_id, to_id)
+        if direction == -1:
+            return None
+
+        f_min_x = min(from_area.nw.x, from_area.se.x)
+        f_max_x = max(from_area.nw.x, from_area.se.x)
+        f_min_y = min(from_area.nw.y, from_area.se.y)
+        f_max_y = max(from_area.nw.y, from_area.se.y)
+        t_min_x = min(to_area.nw.x, to_area.se.x)
+        t_max_x = max(to_area.nw.x, to_area.se.x)
+        t_min_y = min(to_area.nw.y, to_area.se.y)
+        t_max_y = max(to_area.nw.y, to_area.se.y)
+
+        z = (self._centers[from_id].z + self._centers[to_id].z) / 2
+        if direction in (0, 2):  # N/S portal runs along X
+            o_min = max(f_min_x, t_min_x)
+            o_max = min(f_max_x, t_max_x)
+            y = f_max_y if direction == 0 else f_min_y
+            return ((o_min, y, z), (o_max, y, z))
+        else:  # E/W portal runs along Y
+            o_min = max(f_min_y, t_min_y)
+            o_max = min(f_max_y, t_max_y)
+            x = f_max_x if direction == 1 else f_min_x
+            return ((x, o_min, z), (x, o_max, z))
+
+    def area_bounds(self, area_id: int) -> tuple[float, float, float, float]:
+        """Return (min_x, min_y, max_x, max_y) for an area."""
+        area = self.areas[area_id]
+        return (
+            min(area.nw.x, area.se.x),
+            min(area.nw.y, area.se.y),
+            max(area.nw.x, area.se.x),
+            max(area.nw.y, area.se.y),
+        )
+
+    def _offset_crossing(self, from_id: int, to_id: int, lane: float) -> Pos3:
+        """Crossing point offset laterally along the portal by *lane* ∈ [-1, 1]."""
+        if lane == 0.0:
+            return self.crossing_point(from_id, to_id)
+        endpoints = self.portal_endpoints(from_id, to_id)
+        if endpoints is None:
+            return self.crossing_point(from_id, to_id)
+
+        (ax, ay, az), (bx, by, bz) = endpoints
+        width = math.sqrt((bx - ax) ** 2 + (by - ay) ** 2)
+        usable = max(0.0, width - 2 * LATERAL_MARGIN)
+        offset = lane * usable / 2
+
+        mx, my, mz = (ax + bx) / 2, (ay + by) / 2, (az + bz) / 2
+        if width > 0.001:
+            dx, dy = (bx - ax) / width, (by - ay) / width
+        else:
+            dx, dy = 0.0, 0.0
+        return (mx + dx * offset, my + dy * offset, mz)
+
+    def _offset_area_center(
+        self, area_id: int, lane: float,
+        travel_dir: Pos3 | None = None,
+    ) -> Pos3:
+        """Area center offset perpendicular to *travel_dir* by *lane* ∈ [-1, 1]."""
+        cx, cy, cz = self.area_center(area_id)
+        if lane == 0.0 or travel_dir is None:
+            return (cx, cy, cz)
+
+        tx, ty = travel_dir[0], travel_dir[1]
+        mag = math.sqrt(tx * tx + ty * ty)
+        if mag < 0.001:
+            return (cx, cy, cz)
+        tx, ty = tx / mag, ty / mag
+
+        # Perpendicular direction (90° clockwise)
+        px, py = ty, -tx
+
+        # Max offset before hitting area wall (with margin)
+        min_x, min_y, max_x, max_y = self.area_bounds(area_id)
+        if abs(px) > 0.001:
+            limit_x = min(
+                abs(cx - min_x - LATERAL_MARGIN),
+                abs(max_x - cx - LATERAL_MARGIN),
+            ) / abs(px)
+        else:
+            limit_x = float("inf")
+        if abs(py) > 0.001:
+            limit_y = min(
+                abs(cy - min_y - LATERAL_MARGIN),
+                abs(max_y - cy - LATERAL_MARGIN),
+            ) / abs(py)
+        else:
+            limit_y = float("inf")
+        max_off = max(0.0, min(limit_x, limit_y, MAX_LATERAL_OFFSET))
+
+        offset = lane * max_off
+        return (cx + px * offset, cy + py * offset, cz)
+
     def _area_depth_from_portal(self, area_id: int, portal_direction: int) -> float:
         """Extent of *area_id* perpendicular to a portal edge.
 
@@ -236,12 +339,17 @@ class NavGraph:
 
     def path_to_safe_waypoints(
         self, path: list[int], terrain: TerrainAnalyzer,
+        lane: float = 0.0,
     ) -> list[AnnotatedWaypoint]:
-        """Convert an area-ID path to safe center-line waypoints.
+        """Convert an area-ID path to safe waypoints with optional lateral offset.
 
         Every waypoint is an area center (guaranteed inside the area), so the bot
         cannot get stuck on boundary geometry.  For narrow portals (doorways), an
         extra crossing-point waypoint is inserted so the bot threads the gap.
+
+        *lane* ∈ [-1, 1] offsets waypoints laterally: portal crossings shift
+        along the shared edge, area centers shift perpendicular to travel direction.
+        Narrow doorways naturally squeeze the offset (little usable width).
         """
         if not path:
             return []
@@ -264,7 +372,7 @@ class NavGraph:
                     # Two waypoints: approach (source side) + exit (dest side),
                     # both perpendicular to the portal edge so the bot passes
                     # through at 90° for maximum clearance.
-                    cp = self.crossing_point(prev_id, area_id)
+                    cp = self._offset_crossing(prev_id, area_id, lane)
                     d = self._portal_direction(prev_id, area_id)
 
                     # Clamp offsets so waypoints stay inside their areas.
@@ -299,7 +407,7 @@ class NavGraph:
                 elif width < MEDIUM_PORTAL_THRESHOLD or (trans and trans.needs_jump):
                     # Medium portal or jump transition — single crossing-point
                     # waypoint prevents corner-cutting without approach/exit.
-                    cp = self.crossing_point(prev_id, area_id)
+                    cp = self._offset_crossing(prev_id, area_id, lane)
                     jump = bool(trans and trans.needs_jump)
                     crouch = (bool(trans and trans.needs_crouch)
                               or terrain.is_crouch_area(area_id))
@@ -310,13 +418,23 @@ class NavGraph:
 
             # Area center waypoint (skip first area — bot is already there)
             if i > 0:
+                # Compute travel direction for lateral offset
+                prev_center = self.area_center(path[i - 1])
+                curr_center = self.area_center(area_id)
+                travel_dir: Pos3 = (
+                    curr_center[0] - prev_center[0],
+                    curr_center[1] - prev_center[1],
+                    0.0,
+                )
                 waypoints.append(AnnotatedWaypoint(
-                    pos=self.area_center(area_id), area_id=area_id,
+                    pos=self._offset_area_center(area_id, lane, travel_dir),
+                    area_id=area_id,
                     needs_crouch=terrain.is_crouch_area(area_id),
                 ))
 
         log.info(
-            "Safe waypoints: %d areas -> %d waypoints", len(path), len(waypoints),
+            "Safe waypoints: %d areas -> %d waypoints (lane=%.2f)",
+            len(path), len(waypoints), lane,
         )
         return waypoints
 

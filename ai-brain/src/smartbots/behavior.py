@@ -8,8 +8,10 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
+from smartbots.flow_field import FlowFieldCache
 from smartbots.navigation import AnnotatedWaypoint, NavGraph
 from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP
+from smartbots.smoothing import apply_separation, smooth_waypoints
 from smartbots.state import BotState, GameState
 from smartbots.terrain import TerrainAnalyzer
 
@@ -72,6 +74,7 @@ class BotBrain:
     state: BotBehaviorState = BotBehaviorState.IDLE
     goal: BotGoal = field(default_factory=BotGoal)
     nav_state: BotNavState | None = None
+    lane: float = 0.0  # lateral offset [-1, 1], assigned by BotManager
 
 
 class BotManager:
@@ -84,6 +87,7 @@ class BotManager:
         self.terrain = terrain
         self.strategy = strategy
         self._brains: dict[int, BotBrain] = {}
+        self._flow_cache = FlowFieldCache(nav)
 
     def _get_brain(self, bot_id: int) -> BotBrain:
         if bot_id not in self._brains:
@@ -100,6 +104,21 @@ class BotManager:
             brain.state = BotBehaviorState.NAVIGATING
         log.info("bot=%d: goal set type=%s state=%s", bot_id, goal.type.name, brain.state.name)
 
+    def _assign_lanes(self) -> None:
+        """Distribute lateral lane offsets among bots sharing the same goal."""
+        goal_groups: dict[tuple[float, float, float], list[int]] = {}
+        for bot_id, brain in self._brains.items():
+            if brain.state == BotBehaviorState.NAVIGATING and brain.goal.position:
+                goal_groups.setdefault(brain.goal.position, []).append(bot_id)
+
+        for bot_ids in goal_groups.values():
+            bot_ids.sort()
+            n = len(bot_ids)
+            for rank, bid in enumerate(bot_ids):
+                self._brains[bid].lane = (
+                    0.0 if n == 1 else -1.0 + 2.0 * rank / (n - 1)
+                )
+
     def compute_commands(self, state: GameState) -> list[BotCommand]:
         # Let strategy assign/update goals
         new_goals = self.strategy.assign_goals(state, self._brains, self.nav)
@@ -114,17 +133,21 @@ class BotManager:
                     brain.state = BotBehaviorState.IDLE
                     brain.nav_state = None
 
+        self._assign_lanes()
+
         commands: list[BotCommand] = []
         for bot in state.bots.values():
             if not bot.alive:
                 continue
-            cmd = self._tick_bot(self._get_brain(bot.id), bot, state.tick)
+            cmd = self._tick_bot(self._get_brain(bot.id), bot, state)
             if cmd is not None:
                 commands.append(cmd)
 
         return commands
 
-    def _tick_bot(self, brain: BotBrain, bot: BotState, tick: int) -> BotCommand | None:
+    def _tick_bot(
+        self, brain: BotBrain, bot: BotState, state: GameState,
+    ) -> BotCommand | None:
         if brain.state == BotBehaviorState.IDLE:
             return None
 
@@ -139,7 +162,7 @@ class BotManager:
             return BotCommand(id=bot.id, move_target=bot.pos, look_target=look)
 
         # NAVIGATING
-        return self._tick_navigate(brain, bot, tick)
+        return self._tick_navigate(brain, bot, state)
 
     def _compute_path(
         self, brain: BotBrain, pos: tuple[float, float, float],
@@ -147,27 +170,39 @@ class BotManager:
     ) -> BotNavState | None:
         current_area = self.nav.find_area(pos)
         goal_area = self.nav.find_area(target)
-        path = self.nav.find_path(current_area, goal_area)
+
+        # Use cached flow field instead of per-bot A*
+        flow = self._flow_cache.get(goal_area)
+        path = flow.extract_path(current_area)
 
         if path is None:
             local_target = self.nav.find_gathering_point(current_area)
-            path = self.nav.find_path(current_area, local_target)
+            flow = self._flow_cache.get(local_target)
+            path = flow.extract_path(current_area)
 
         if path is None:
             return None
 
-        waypoints = self.nav.path_to_safe_waypoints(path, self.terrain)
+        # Generate waypoints with lateral offset, then smooth
+        waypoints = self.nav.path_to_safe_waypoints(
+            path, self.terrain, lane=brain.lane,
+        )
+        waypoints = smooth_waypoints(waypoints, self.nav)
+
         nav = BotNavState(
             waypoints=waypoints, last_repath_tick=tick,
             last_progress_tick=tick, last_progress_pos=pos,
         )
         log.info(
-            "bot=%d: path %d -> %d (%d waypoints)",
-            brain.bot_id, path[0], path[-1], len(waypoints),
+            "bot=%d: path %d -> %d (%d waypoints, lane=%.2f)",
+            brain.bot_id, path[0], path[-1], len(waypoints), brain.lane,
         )
         return nav
 
-    def _tick_navigate(self, brain: BotBrain, bot: BotState, tick: int) -> BotCommand | None:
+    def _tick_navigate(
+        self, brain: BotBrain, bot: BotState, state: GameState,
+    ) -> BotCommand | None:
+        tick = state.tick
         target_pos = brain.goal.position
         if target_pos is None:
             brain.state = BotBehaviorState.IDLE
@@ -256,17 +291,27 @@ class BotManager:
         flags = self._compute_flags(nav, bot.pos, tick)
         look_target = self._path_lookahead(nav, bot.pos)
 
+        # Apply separation force to avoid clumping
+        peer_positions = [
+            b.pos for b in state.bots.values()
+            if b.alive and b.id != bot.id
+        ]
+        move_target = apply_separation(bot.pos, wp.pos, peer_positions)
+
         if tick % 40 == 0:
             log.info(
                 "  bot=%d state=%s wp=%d/%d pos=(%.0f,%.0f) -> wp=(%.0f,%.0f) dist=%.0f"
-                " flags=%d",
+                " flags=%d lane=%.2f",
                 brain.bot_id, brain.state.name,
                 nav.waypoint_idx, len(nav.waypoints),
                 bot.pos[0], bot.pos[1], wp.pos[0], wp.pos[1], dist,
-                flags,
+                flags, brain.lane,
             )
 
-        return BotCommand(id=bot.id, move_target=wp.pos, look_target=look_target, flags=flags)
+        return BotCommand(
+            id=bot.id, move_target=move_target,
+            look_target=look_target, flags=flags,
+        )
 
     def _compute_flags(
         self, nav: BotNavState, bot_pos: tuple[float, float, float], tick: int,
