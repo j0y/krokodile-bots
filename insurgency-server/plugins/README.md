@@ -76,3 +76,48 @@ insurgency-server/server-files/insurgency/addons/sourcemod/scripting/spcomp \
 ```
 
 The compiled `.smx` is volume-mounted into the container at runtime.
+
+---
+
+## Docker Compose Profiles
+
+### AI mode — custom Python AI controls the bots
+
+```bash
+docker compose --profile ai up --build
+```
+
+Loads `smartbots_bridge.smx` — suppresses original AI, Python brain sends movement commands.
+
+### Record mode — original AI runs, positions recorded to DuckDB
+
+```bash
+docker compose --profile record up --build
+
+# Override map:
+START_MAP=sinjar_coop docker compose --profile record up --build
+```
+
+Loads `smartbots_observer.smx` — a pure observer plugin that sends bot positions to Python over UDP without interfering with the game's native AI. The Python side (`STRATEGY=explore`) writes positions to `ai-brain/data/{map}_traces.duckdb`.
+
+Bot count is controlled by `insurgency-server/cfg/server_checkpoint.cfg` (overrides the engine default). Key cvars:
+
+```
+ins_bot_count_checkpoint_min    16
+ins_bot_count_checkpoint_max    16
+```
+
+---
+
+## SmartBots Observer Plugin
+
+Lightweight companion plugin for position recording. No detours, no commands, no game interference — just sends the same JSON state packets as the bridge plugin at ~8Hz.
+
+### Compiling
+
+```bash
+insurgency-server/server-files/insurgency/addons/sourcemod/scripting/spcomp \
+  insurgency-server/plugins/smartbots_observer.sp \
+  -iinsurgency-server/server-files/insurgency/addons/sourcemod/scripting/include \
+  -oinsurgency-server/plugins/smartbots_observer.smx
+```
