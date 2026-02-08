@@ -4,7 +4,7 @@ State (SM → Python): JSON
     {"tick": 123, "bots": [{"id": 3, "pos": [x,y,z], "ang": [p,y,r], "hp": 100, "alive": 1, "team": 2}]}
 
 Commands (Python → SM): line-based text, one bot per line
-    <id> <target_x> <target_y> <target_z> <speed>\n
+    <id> <mx> <my> <mz> <lx> <ly> <lz> <flags>\n
 """
 
 from __future__ import annotations
@@ -14,6 +14,16 @@ from dataclasses import dataclass
 from typing import Any
 
 from smartbots.state import BotState, GameState
+
+# Action flag bitmask constants (must match AI_FLAG_* in SM plugin)
+FLAG_JUMP = 1
+FLAG_DUCK = 2
+FLAG_ATTACK = 4
+FLAG_RELOAD = 8
+FLAG_WALK = 16
+FLAG_SPRINT = 32
+FLAG_USE = 64
+FLAG_ATTACK2 = 128
 
 
 def decode_state(data: bytes) -> GameState:
@@ -35,11 +45,12 @@ def decode_state(data: bytes) -> GameState:
 
 @dataclass
 class BotCommand:
-    """A movement command for a single bot."""
+    """A movement + look + action command for a single bot."""
 
     id: int
-    target: tuple[float, float, float]
-    speed: float = 1.0
+    move_target: tuple[float, float, float]
+    look_target: tuple[float, float, float]
+    flags: int = 0
 
 
 def encode_commands(commands: list[BotCommand]) -> bytes:
@@ -47,6 +58,9 @@ def encode_commands(commands: list[BotCommand]) -> bytes:
     lines: list[str] = []
     for cmd in commands:
         lines.append(
-            f"{cmd.id} {cmd.target[0]:.1f} {cmd.target[1]:.1f} {cmd.target[2]:.1f} {cmd.speed:.2f}"
+            f"{cmd.id}"
+            f" {cmd.move_target[0]:.1f} {cmd.move_target[1]:.1f} {cmd.move_target[2]:.1f}"
+            f" {cmd.look_target[0]:.1f} {cmd.look_target[1]:.1f} {cmd.look_target[2]:.1f}"
+            f" {cmd.flags}"
         )
     return "\n".join(lines).encode("utf-8")

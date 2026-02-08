@@ -16,10 +16,20 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define PLUGIN_VERSION "0.4.0"
+#define PLUGIN_VERSION "0.5.0"
 #define MAX_BOTS 64
 #define MAX_MSG_LEN 4096
 #define SEND_INTERVAL 0.125  // ~8Hz
+
+// Action flag bitmask (must match Python FLAG_* constants)
+#define AI_FLAG_JUMP    1
+#define AI_FLAG_DUCK    2
+#define AI_FLAG_ATTACK  4
+#define AI_FLAG_RELOAD  8
+#define AI_FLAG_WALK    16
+#define AI_FLAG_SPRINT  32
+#define AI_FLAG_USE     64
+#define AI_FLAG_ATTACK2 128
 
 public Plugin myinfo = {
     name = "SmartBots Bridge",
@@ -56,8 +66,9 @@ Handle g_hCallFaceTowards;
 
 // Per-bot state
 bool g_bHasCommand[MAX_BOTS + 1];
-float g_fTargetPos[MAX_BOTS + 1][3];
-float g_fTargetSpeed[MAX_BOTS + 1];
+float g_fMoveTarget[MAX_BOTS + 1][3];
+float g_fLookTarget[MAX_BOTS + 1][3];
+int g_iActionFlags[MAX_BOTS + 1];
 Address g_pBotLoco[MAX_BOTS + 1];  // ILocomotion* per client
 
 // Guard: skip Approach detour when called from our Update hook
@@ -86,7 +97,7 @@ public void OnPluginStart()
     for (int i = 0; i <= MAX_BOTS; i++)
     {
         g_bHasCommand[i] = false;
-        g_fTargetSpeed[i] = 0.0;
+        g_iActionFlags[i] = 0;
         g_pBotLoco[i] = Address_Null;
     }
 
@@ -376,8 +387,8 @@ public MRESReturn Detour_OnApproach(Address pThis, DHookParam hParams)
     if (!IsClientInGame(client) || !IsPlayerAlive(client))
         return MRES_Ignored;
 
-    // Replace the goal vector with our target
-    hParams.SetVector(1, g_fTargetPos[client]);
+    // Replace the goal vector with our move target
+    hParams.SetVector(1, g_fMoveTarget[client]);
 
     g_iApproachRedirected++;
 
@@ -386,7 +397,7 @@ public MRESReturn Detour_OnApproach(Address pThis, DHookParam hParams)
     {
         LogMessage("[SmartBots] Approach redirect bot=%d target=(%.0f,%.0f,%.0f) total=%d",
             client,
-            g_fTargetPos[client][0], g_fTargetPos[client][1], g_fTargetPos[client][2],
+            g_fMoveTarget[client][0], g_fMoveTarget[client][1], g_fMoveTarget[client][2],
             g_iApproachRedirected);
     }
 
@@ -434,25 +445,86 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse,
     float pos[3];
     GetClientAbsOrigin(client, pos);
 
-    // Direction to target (2D)
-    float dx = g_fTargetPos[client][0] - pos[0];
-    float dy = g_fTargetPos[client][1] - pos[1];
-    float dist = SquareRoot(dx * dx + dy * dy);
+    // --- Look direction (aim at look target) ---
+    float lookDx = g_fLookTarget[client][0] - pos[0];
+    float lookDy = g_fLookTarget[client][1] - pos[1];
+    float lookDz = g_fLookTarget[client][2] - (pos[2] + 64.0);  // eye height
+    float lookDist2D = SquareRoot(lookDx * lookDx + lookDy * lookDy);
 
-    if (dist < 10.0)
-        return Plugin_Continue;  // close enough
+    float lookYaw = ArcTangent2(lookDy, lookDx) * (180.0 / 3.14159265);
+    float lookPitch = 0.0;
+    if (lookDist2D > 1.0)
+        lookPitch = -ArcTangent2(lookDz, lookDist2D) * (180.0 / 3.14159265);
 
-    // Face toward target
-    float desiredYaw = ArcTangent2(dy, dx) * (180.0 / 3.14159265);
-    angles[0] = 0.0;
-    angles[1] = desiredYaw;
+    // --- Movement direction ---
+    float moveDx = g_fMoveTarget[client][0] - pos[0];
+    float moveDy = g_fMoveTarget[client][1] - pos[1];
+    float moveDist = SquareRoot(moveDx * moveDx + moveDy * moveDy);
+
+    // Clear directional buttons
+    buttons &= ~(IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT);
+
+    if (moveDist < 10.0)
+    {
+        // Arrived: stand still but apply look direction and flags
+        vel[0] = 0.0;
+        vel[1] = 0.0;
+        vel[2] = 0.0;
+    }
+    else
+    {
+        // Decompose movement into local frame relative to look direction
+        float moveYaw = ArcTangent2(moveDy, moveDx) * (180.0 / 3.14159265);
+        float delta = (moveYaw - lookYaw) * (3.14159265 / 180.0);
+
+        vel[0] = Cosine(delta) * 450.0;   // forward
+        vel[1] = -Sine(delta) * 450.0;    // side (Source: negative = right)
+        vel[2] = 0.0;
+
+        // Set directional buttons to match velocity
+        if (vel[0] > 50.0)
+            buttons |= IN_FORWARD;
+        else if (vel[0] < -50.0)
+            buttons |= IN_BACK;
+
+        if (vel[1] > 50.0)
+            buttons |= IN_MOVELEFT;
+        else if (vel[1] < -50.0)
+            buttons |= IN_MOVERIGHT;
+    }
+
+    // Apply look angles
+    angles[0] = lookPitch;
+    angles[1] = lookYaw;
     angles[2] = 0.0;
 
-    // Run forward
-    vel[0] = 450.0;
-    vel[1] = 0.0;
-    vel[2] = 0.0;
-    buttons |= IN_FORWARD;
+    // --- Action flags ---
+    int aflags = g_iActionFlags[client];
+
+    // Always clear prone/duck unless explicitly requested
+    buttons &= ~IN_DUCK;
+    buttons &= ~IN_ALT1;
+
+    if (aflags & AI_FLAG_JUMP)
+    {
+        buttons |= IN_JUMP;
+        // One-shot: clear jump flag after applying
+        g_iActionFlags[client] &= ~AI_FLAG_JUMP;
+    }
+    if (aflags & AI_FLAG_DUCK)
+        buttons |= IN_DUCK;
+    if (aflags & AI_FLAG_ATTACK)
+        buttons |= IN_ATTACK;
+    if (aflags & AI_FLAG_RELOAD)
+        buttons |= IN_RELOAD;
+    if (aflags & AI_FLAG_WALK)
+        buttons |= IN_WALK;
+    if (aflags & AI_FLAG_SPRINT)
+        buttons |= IN_SPEED;
+    if (aflags & AI_FLAG_USE)
+        buttons |= IN_USE;
+    if (aflags & AI_FLAG_ATTACK2)
+        buttons |= IN_ATTACK2;
 
     return Plugin_Changed;
 }
@@ -483,11 +555,13 @@ public Action Cmd_Status(int client, int args)
         bool alive = IsPlayerAlive(i);
         int team = GetClientTeam(i);
 
-        PrintToServer("[SmartBots] Bot %d: alive=%d team=%d pos=(%.0f,%.0f,%.0f) loco=0x%X hasCmd=%d target=(%.0f,%.0f,%.0f)",
+        PrintToServer("[SmartBots] Bot %d: alive=%d team=%d pos=(%.0f,%.0f,%.0f) loco=0x%X hasCmd=%d move=(%.0f,%.0f,%.0f) look=(%.0f,%.0f,%.0f) flags=%d",
             i, alive, team, pos[0], pos[1], pos[2],
             g_pBotLoco[i],
             g_bHasCommand[i],
-            g_fTargetPos[i][0], g_fTargetPos[i][1], g_fTargetPos[i][2]);
+            g_fMoveTarget[i][0], g_fMoveTarget[i][1], g_fMoveTarget[i][2],
+            g_fLookTarget[i][0], g_fLookTarget[i][1], g_fLookTarget[i][2],
+            g_iActionFlags[i]);
     }
 
     return Plugin_Handled;
@@ -556,7 +630,7 @@ public void OnSocketError(Handle socket, const int errorType,
 // ---------------------------------------------------------------------------
 // Receive commands from Python
 //
-// Format: one bot per line — "id x y z speed\n"
+// Format: one bot per line — "id mx my mz lx ly lz flags\n"
 // ---------------------------------------------------------------------------
 
 public void OnSocketReceive(Handle socket, const char[] receiveData,
@@ -564,8 +638,8 @@ public void OnSocketReceive(Handle socket, const char[] receiveData,
 {
     bool dbg = g_cvDebug.BoolValue;
 
-    char lines[MAX_BOTS][128];
-    int count = ExplodeString(receiveData, "\n", lines, MAX_BOTS, 128);
+    char lines[MAX_BOTS][160];
+    int count = ExplodeString(receiveData, "\n", lines, MAX_BOTS, 160);
 
     int parsed = 0;
     for (int i = 0; i < count; i++)
@@ -574,9 +648,9 @@ public void OnSocketReceive(Handle socket, const char[] receiveData,
         if (strlen(lines[i]) == 0)
             continue;
 
-        char parts[5][32];
-        int numParts = ExplodeString(lines[i], " ", parts, 5, 32);
-        if (numParts < 5)
+        char parts[8][32];
+        int numParts = ExplodeString(lines[i], " ", parts, 8, 32);
+        if (numParts < 8)
         {
             if (dbg)
                 LogMessage("[SmartBots] Bad command line (parts=%d): '%s'",
@@ -592,10 +666,13 @@ public void OnSocketReceive(Handle socket, const char[] receiveData,
             continue;
         }
 
-        g_fTargetPos[botId][0] = StringToFloat(parts[1]);
-        g_fTargetPos[botId][1] = StringToFloat(parts[2]);
-        g_fTargetPos[botId][2] = StringToFloat(parts[3]);
-        g_fTargetSpeed[botId] = StringToFloat(parts[4]);
+        g_fMoveTarget[botId][0] = StringToFloat(parts[1]);
+        g_fMoveTarget[botId][1] = StringToFloat(parts[2]);
+        g_fMoveTarget[botId][2] = StringToFloat(parts[3]);
+        g_fLookTarget[botId][0] = StringToFloat(parts[4]);
+        g_fLookTarget[botId][1] = StringToFloat(parts[5]);
+        g_fLookTarget[botId][2] = StringToFloat(parts[6]);
+        g_iActionFlags[botId] = StringToInt(parts[7]);
         g_bHasCommand[botId] = true;
         parsed++;
     }

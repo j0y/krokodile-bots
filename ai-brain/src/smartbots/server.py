@@ -6,10 +6,12 @@ import asyncio
 import logging
 import os
 
-from smartbots.movement import MovementController
+from smartbots.behavior import BotManager
 from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.state import GameState
+from smartbots.strategy import GatheringStrategy
+from smartbots.terrain import TerrainAnalyzer
 
 log = logging.getLogger(__name__)
 
@@ -17,10 +19,10 @@ log = logging.getLogger(__name__)
 class AIBrainProtocol(asyncio.DatagramProtocol):
     """UDP protocol handler for the AI brain."""
 
-    def __init__(self, controller: MovementController) -> None:
+    def __init__(self, manager: BotManager) -> None:
         self.transport: asyncio.DatagramTransport | None = None
         self.last_state: GameState | None = None
-        self.controller = controller
+        self.manager = manager
 
     def connection_made(self, transport: asyncio.BaseTransport) -> None:
         self.transport = transport  # type: ignore[assignment]
@@ -49,7 +51,7 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
                 )
 
         # Compute commands and send back
-        commands: list[BotCommand] = self.controller.compute_commands(state)
+        commands: list[BotCommand] = self.manager.compute_commands(state)
         if commands and self.transport is not None:
             payload = encode_commands(commands)
             self.transport.sendto(payload, addr)
@@ -59,24 +61,26 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
             log.info("  -> no commands (no alive bots or all arrived)")
 
 
-def _build_controller() -> MovementController:
-    """Load nav mesh and create the movement controller."""
+def _build_manager() -> BotManager:
+    """Load nav mesh and create the bot manager."""
     nav_map = os.environ.get("NAV_MAP", "ministry_coop")
     maps_dir = os.environ.get("NAV_MAPS_DIR", "/app/maps")
     nav_path = os.path.join(maps_dir, f"{nav_map}.nav")
     nav = NavGraph(nav_path)
-    return MovementController(nav)
+    terrain = TerrainAnalyzer(nav)
+    strategy = GatheringStrategy()
+    return BotManager(nav, terrain, strategy)
 
 
 async def run_server(host: str, port: int) -> None:
     """Start the UDP server and run forever."""
     log.info("Starting AI brain on %s:%d", host, port)
 
-    controller = _build_controller()
+    manager = _build_manager()
 
     loop = asyncio.get_running_loop()
     transport, _ = await loop.create_datagram_endpoint(
-        lambda: AIBrainProtocol(controller),
+        lambda: AIBrainProtocol(manager),
         local_addr=(host, port),
     )
     try:

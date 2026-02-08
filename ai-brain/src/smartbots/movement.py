@@ -5,11 +5,12 @@ from __future__ import annotations
 import logging
 import math
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
-from smartbots.navigation import NavGraph
-from smartbots.protocol import BotCommand
+from smartbots.navigation import AnnotatedWaypoint, NavGraph
+from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP
 from smartbots.state import GameState
+from smartbots.terrain import TerrainAnalyzer
 
 log = logging.getLogger(__name__)
 
@@ -26,17 +27,24 @@ STUCK_TICKS = 40  # ~5 seconds at 8Hz
 NUDGE_DIST = 50.0
 # How many ticks the nudge lasts before resuming normal navigation.
 NUDGE_TICKS = 16  # ~2 seconds at 8Hz
+# Jump trigger distance: start jumping when within this distance of a jump waypoint.
+JUMP_TRIGGER_DIST = 50.0
+# Jump cooldown in ticks (~0.5s at 8Hz).
+JUMP_COOLDOWN = 4
+# Crouch approach distance: start crouching this far before a crouch waypoint.
+CROUCH_APPROACH_DIST = 100.0
 
 
 @dataclass
 class BotNavState:
     """Per-bot navigation state."""
 
-    waypoints: list[tuple[float, float, float]]
+    waypoints: list[AnnotatedWaypoint]
     waypoint_idx: int = 0
     last_repath_tick: int = 0
     last_progress_tick: int = 0
     last_progress_pos: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    last_jump_tick: int = 0
     # Nudge: random walk to get off ledges
     nudge_target: tuple[float, float, float] | None = None
     nudge_until: int = 0
@@ -45,8 +53,9 @@ class BotNavState:
 class MovementController:
     """Computes movement commands using nav mesh pathfinding."""
 
-    def __init__(self, nav: NavGraph) -> None:
+    def __init__(self, nav: NavGraph, terrain: TerrainAnalyzer) -> None:
         self.nav = nav
+        self.terrain = terrain
         self.target_area: int | None = None
         self._bot_nav: dict[int, BotNavState] = {}
         self._unreachable: set[int] = set()
@@ -71,7 +80,7 @@ class MovementController:
         if path is None:
             return None
 
-        waypoints = self.nav.path_to_waypoints(path)
+        waypoints = self.nav.path_to_annotated_waypoints(path, self.terrain)
         nav_state = BotNavState(
             waypoints=waypoints, last_repath_tick=tick,
             last_progress_tick=tick, last_progress_pos=pos,
@@ -81,6 +90,56 @@ class MovementController:
             bot_id, path[0], path[-1], len(waypoints),
         )
         return nav_state
+
+    def _compute_flags(
+        self, nav_state: BotNavState, bot_pos: tuple[float, float, float], tick: int,
+    ) -> int:
+        """Compute action flags (jump/crouch) based on annotated waypoints."""
+        flags = 0
+        idx = nav_state.waypoint_idx
+        if idx >= len(nav_state.waypoints):
+            return flags
+
+        wp = nav_state.waypoints[idx]
+        dx = bot_pos[0] - wp.pos[0]
+        dy = bot_pos[1] - wp.pos[1]
+        dist = math.sqrt(dx * dx + dy * dy)
+
+        # Jump: trigger when close to a jump waypoint, with cooldown
+        if wp.needs_jump and dist < JUMP_TRIGGER_DIST:
+            if (tick - nav_state.last_jump_tick) >= JUMP_COOLDOWN:
+                flags |= FLAG_JUMP
+                nav_state.last_jump_tick = tick
+
+        # Crouch: if current waypoint needs crouch
+        if wp.needs_crouch:
+            flags |= FLAG_DUCK
+        # Also check if approaching a crouch waypoint
+        elif idx + 1 < len(nav_state.waypoints):
+            next_wp = nav_state.waypoints[idx + 1]
+            if next_wp.needs_crouch:
+                ndx = bot_pos[0] - next_wp.pos[0]
+                ndy = bot_pos[1] - next_wp.pos[1]
+                ndist = math.sqrt(ndx * ndx + ndy * ndy)
+                if ndist < CROUCH_APPROACH_DIST:
+                    flags |= FLAG_DUCK
+
+        # Also crouch if the bot is currently in a crouch area
+        current_area = self.nav.find_area(bot_pos)
+        if self.terrain.is_crouch_area(current_area):
+            flags |= FLAG_DUCK
+
+        return flags
+
+    def _look_ahead(self, nav_state: BotNavState) -> tuple[float, float, float]:
+        """Look at the next waypoint after the current one (look-ahead)."""
+        idx = nav_state.waypoint_idx
+        if idx + 1 < len(nav_state.waypoints):
+            return nav_state.waypoints[idx + 1].pos
+        # At last waypoint — look at it directly
+        if idx < len(nav_state.waypoints):
+            return nav_state.waypoints[idx].pos
+        return nav_state.waypoints[-1].pos
 
     def compute_commands(self, state: GameState) -> list[BotCommand]:
         commands: list[BotCommand] = []
@@ -113,8 +172,8 @@ class MovementController:
             # Advance past reached waypoints
             while nav_state.waypoint_idx < len(nav_state.waypoints):
                 wp = nav_state.waypoints[nav_state.waypoint_idx]
-                dx = bot.pos[0] - wp[0]
-                dy = bot.pos[1] - wp[1]
+                dx = bot.pos[0] - wp.pos[0]
+                dy = bot.pos[1] - wp.pos[1]
                 if math.sqrt(dx * dx + dy * dy) < WAYPOINT_REACH_DIST:
                     nav_state.waypoint_idx += 1
                 else:
@@ -127,7 +186,10 @@ class MovementController:
             # If currently nudging, send the nudge target
             if nav_state.nudge_target is not None:
                 if state.tick < nav_state.nudge_until:
-                    commands.append(BotCommand(id=bot.id, target=nav_state.nudge_target, speed=1.0))
+                    commands.append(BotCommand(
+                        id=bot.id, move_target=nav_state.nudge_target,
+                        look_target=nav_state.nudge_target,
+                    ))
                     continue
                 # Nudge done — repath from new position
                 log.info("bot=%d: nudge done, repathing", bot.id)
@@ -160,7 +222,9 @@ class MovementController:
                         "bot=%d: stuck (moved=%.0f), nudging to (%.0f,%.0f)",
                         bot.id, moved, nudge[0], nudge[1],
                     )
-                    commands.append(BotCommand(id=bot.id, target=nudge, speed=1.0))
+                    commands.append(BotCommand(
+                        id=bot.id, move_target=nudge, look_target=nudge,
+                    ))
                     continue
                 # Made progress — reset tracker
                 nav_state.last_progress_tick = state.tick
@@ -168,8 +232,8 @@ class MovementController:
 
             # Repath if too far from next waypoint (bot drifted off course)
             wp = nav_state.waypoints[nav_state.waypoint_idx]
-            dx = bot.pos[0] - wp[0]
-            dy = bot.pos[1] - wp[1]
+            dx = bot.pos[0] - wp.pos[0]
+            dy = bot.pos[1] - wp.pos[1]
             dist = math.sqrt(dx * dx + dy * dy)
 
             if dist > REPATH_DIST and (state.tick - nav_state.last_repath_tick) >= REPATH_INTERVAL:
@@ -181,17 +245,24 @@ class MovementController:
                     if nav_state.waypoint_idx >= len(nav_state.waypoints):
                         continue
                     wp = nav_state.waypoints[nav_state.waypoint_idx]
-                    dx = bot.pos[0] - wp[0]
-                    dy = bot.pos[1] - wp[1]
+                    dx = bot.pos[0] - wp.pos[0]
+                    dy = bot.pos[1] - wp.pos[1]
                     dist = math.sqrt(dx * dx + dy * dy)
 
-            commands.append(BotCommand(id=bot.id, target=wp, speed=1.0))
+            flags = self._compute_flags(nav_state, bot.pos, state.tick)
+            look_target = self._look_ahead(nav_state)
+
+            commands.append(BotCommand(
+                id=bot.id, move_target=wp.pos, look_target=look_target, flags=flags,
+            ))
 
             if state.tick % 40 == 0:
                 log.info(
-                    "  bot=%d wp=%d/%d pos=(%.0f,%.0f) -> wp=(%.0f,%.0f) dist=%.0f",
+                    "  bot=%d wp=%d/%d pos=(%.0f,%.0f) -> wp=(%.0f,%.0f) dist=%.0f"
+                    " flags=%d jump=%s crouch=%s",
                     bot.id, nav_state.waypoint_idx, len(nav_state.waypoints),
-                    bot.pos[0], bot.pos[1], wp[0], wp[1], dist,
+                    bot.pos[0], bot.pos[1], wp.pos[0], wp.pos[1], dist,
+                    flags, wp.needs_jump, wp.needs_crouch,
                 )
 
         return commands
