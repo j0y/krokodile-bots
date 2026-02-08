@@ -20,7 +20,7 @@ cd insurgency-server && ./download-server.sh && cd ..
 docker compose --profile ai up --build
 
 # 3. Connect in-game
-# connect 192.168.1...:27025
+# connect 192.168.1...:27025`
 ```
 
 Game server only (no AI): `docker compose up insurgency --build`
