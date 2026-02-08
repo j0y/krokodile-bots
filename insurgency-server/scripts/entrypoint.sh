@@ -59,6 +59,14 @@ sv_cheats 1
 exec betterbots.cfg
 
 // ---------------------------------------------------------------
+// Round Timers (low for faster debugging)
+// ---------------------------------------------------------------
+mp_timer_pregame 3
+mp_timer_preround 3
+mp_timer_preround_first 3
+mp_timer_postround 3
+
+// ---------------------------------------------------------------
 // SourceMod
 // ---------------------------------------------------------------
 // sv_pure 0 required for SourceMod/MetaMod
