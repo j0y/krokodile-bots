@@ -1,4 +1,5 @@
 services:
+  # --- AI mode: SmartBots bridge plugin + Python AI brain ---
   insurgency:
     build:
       context: ./insurgency-server
@@ -16,13 +17,14 @@ services:
       - SERVER_PASSWORD=
       - RCON_PASSWORD=changeme
       - MAX_PLAYERS=32
-      - START_MAP=ministry_coop
+      - START_MAP=${START_MAP:-ministry_coop}
       - GAME_MODE=coop
       - TICKRATE=64
-      - AI_BRIDGE_HOST=127.0.0.1
-      - AI_BRIDGE_PORT=9000
+      - BOT_COUNT=${BOT_COUNT:-0}
     stdin_open: true
     tty: true
+    profiles:
+      - ai
 
   ai-brain:
     build:
@@ -37,10 +39,57 @@ services:
     environment:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
-      - NAV_MAP=ministry_coop
-      - STRATEGY=explore
+      - NAV_MAP=${NAV_MAP:-ministry_coop}
+      - STRATEGY=${STRATEGY:-gathering}
       - SPATIAL_DATA_DIR=/app/data
     depends_on:
       - insurgency
     profiles:
       - ai
+
+  # --- Record mode: observer-only plugin + original AI + position recording ---
+  insurgency-record:
+    build:
+      context: ./insurgency-server
+      dockerfile: Dockerfile
+    container_name: insurgency-record
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
+      - ./insurgency-server/plugins/smartbots_observer.smx:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom/smartbots_observer.smx:ro
+      - ./ai-brain/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
+    environment:
+      - SERVER_HOSTNAME=Insurgency Smart Bots Recorder
+      - SERVER_PASSWORD=
+      - RCON_PASSWORD=changeme
+      - MAX_PLAYERS=32
+      - START_MAP=${START_MAP:-ministry_coop}
+      - GAME_MODE=custom
+      - TICKRATE=64
+      - BOT_COUNT=32
+    stdin_open: true
+    tty: true
+    profiles:
+      - record
+
+  ai-record:
+    build:
+      context: ./ai-brain
+      dockerfile: Dockerfile
+    container_name: insurgency-ai-record
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
+      - ./ai-brain/data:/app/data
+    environment:
+      - AI_LISTEN_HOST=0.0.0.0
+      - AI_LISTEN_PORT=9000
+      - NAV_MAP=${NAV_MAP:-ministry_coop}
+      - STRATEGY=explore
+      - SPATIAL_DATA_DIR=/app/data
+    depends_on:
+      - insurgency-record
+    profiles:
+      - record

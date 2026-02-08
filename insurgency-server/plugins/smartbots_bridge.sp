@@ -65,9 +65,6 @@ Handle g_hCallRun;
 // SDKCall for calling FaceTowards() to rotate bot toward target
 Handle g_hCallFaceTowards;
 
-// ConVar for extra bots
-ConVar g_cvExtraBots;
-
 // Per-bot state
 bool g_bHasCommand[MAX_BOTS + 1];
 float g_fMoveTarget[MAX_BOTS + 1][3];
@@ -93,10 +90,6 @@ public void OnPluginStart()
         "AI brain port", _, true, 1.0, true, 65535.0);
     g_cvDebug = CreateConVar("sm_smartbots_debug", "1",
         "Enable debug logging (0=off, 1=on)", _, true, 0.0, true, 1.0);
-    g_cvExtraBots = CreateConVar("sm_smartbots_extra", "27",
-        "Extra bots to add via ins_bot_add on round start", _, true, 0.0, true, 31.0);
-
-    HookEvent("round_start", Event_RoundStart);
 
     RegAdminCmd("sm_smartbots_status", Cmd_Status, ADMFLAG_GENERIC,
         "Show SmartBots bridge status");
@@ -299,25 +292,6 @@ public void OnMapStart()
     {
         CreateTimer(3.0, Timer_Connect, _, TIMER_FLAG_NO_MAPCHANGE);
     }
-}
-
-public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
-{
-    int extra = g_cvExtraBots.IntValue;
-    if (extra > 0)
-    {
-        CreateTimer(1.0, Timer_AddBots, extra, TIMER_FLAG_NO_MAPCHANGE);
-    }
-}
-
-public Action Timer_AddBots(Handle timer, int count)
-{
-    for (int i = 0; i < count; i++)
-    {
-        ServerCommand("ins_bot_add");
-    }
-    LogMessage("[SmartBots] Added %d extra bots via ins_bot_add", count);
-    return Plugin_Stop;
 }
 
 // ---------------------------------------------------------------------------

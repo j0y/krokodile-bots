@@ -14,6 +14,7 @@ MAX_PLAYERS="${MAX_PLAYERS:-32}"
 START_MAP="${START_MAP:-ministry_coop}"
 GAME_MODE="${GAME_MODE:-coop}"
 TICKRATE="${TICKRATE:-64}"
+BOT_COUNT="${BOT_COUNT:-0}"
 
 echo "=============================================="
 echo " Insurgency 2014 Dedicated Server"
@@ -56,6 +57,8 @@ sv_log_onefile 0
 // Bot cvars are cheat-protected, sv_cheats required
 // ---------------------------------------------------------------
 sv_cheats 1
+mp_limitteams 0
+mp_autoteambalance 0
 exec betterbots.cfg
 
 // ---------------------------------------------------------------
@@ -65,6 +68,14 @@ mp_timer_pregame 3
 mp_timer_preround 3
 mp_timer_preround_first 3
 mp_timer_postround 3
+
+// ---------------------------------------------------------------
+// Bot Count (coop checkpoint)
+// ---------------------------------------------------------------
+mp_coop_max_bots ${BOT_COUNT}
+ins_bot_count_checkpoint_min ${BOT_COUNT}
+ins_bot_count_checkpoint_max ${BOT_COUNT}
+ins_bot_count_checkpoint_default 0
 
 // ---------------------------------------------------------------
 // SourceMod
