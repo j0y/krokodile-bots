@@ -38,17 +38,30 @@ ConVar g_cvDebug;
 Handle g_hSocket = INVALID_HANDLE;
 bool g_bSocketReady = false;
 
-// DHooks detour
+// DHooks detours
 DynamicDetour g_detourApproach;
+DynamicDetour g_detourUpdate;
+DynamicDetour g_detourIntention;
+// SDKCall for clearing locomotion stuck status
+Handle g_hClearStuckStatus;
 
 // SDKCall for getting locomotion interface directly from entity
 Handle g_hGetLocomotionInterface;
+// SDKCall for directly calling Approach on ILocomotion*
+Handle g_hCallApproach;
+// SDKCall for calling Run() to set locomotion speed
+Handle g_hCallRun;
+// SDKCall for calling FaceTowards() to rotate bot toward target
+Handle g_hCallFaceTowards;
 
 // Per-bot state
 bool g_bHasCommand[MAX_BOTS + 1];
 float g_fTargetPos[MAX_BOTS + 1][3];
 float g_fTargetSpeed[MAX_BOTS + 1];
 Address g_pBotLoco[MAX_BOTS + 1];  // ILocomotion* per client
+
+// Guard: skip Approach detour when called from our Update hook
+bool g_bInUpdateHook = false;
 
 // Tick counter for state messages
 int g_iTickCount = 0;
@@ -117,6 +130,63 @@ bool SetupDHooks()
 
     LogMessage("[SmartBots] Approach detour enabled");
 
+    // --- Detour: CINSBotLocomotion::Update ---
+    // Called every tick by the NextBot framework. We inject Approach(target) in
+    // the pre-hook so the locomotion system always has our goal to process,
+    // regardless of what the behavior tree decided.
+    g_detourUpdate = DynamicDetour.FromConf(hConf, "CINSBotLocomotion::Update");
+    if (g_detourUpdate == null)
+    {
+        LogError("[SmartBots] Failed to create detour for CINSBotLocomotion::Update");
+        delete hConf;
+        return false;
+    }
+
+    if (!g_detourUpdate.Enable(Hook_Pre, Detour_OnUpdate))
+    {
+        LogError("[SmartBots] Failed to enable Update detour");
+        delete hConf;
+        return false;
+    }
+
+    LogMessage("[SmartBots] Update detour enabled");
+
+    // --- Detour: CINSNextBot::CINSNextBotIntention::Update ---
+    // Suppress the behavior tree entirely so it can't interfere with our
+    // movement commands (no Stop(), no hold position, no state changes).
+    g_detourIntention = DynamicDetour.FromConf(hConf, "CINSNextBot::CINSNextBotIntention::Update");
+    if (g_detourIntention == null)
+    {
+        LogError("[SmartBots] Failed to create detour for Intention::Update");
+        delete hConf;
+        return false;
+    }
+
+    if (!g_detourIntention.Enable(Hook_Pre, Detour_OnIntentionUpdate))
+    {
+        LogError("[SmartBots] Failed to enable Intention detour");
+        delete hConf;
+        return false;
+    }
+
+    LogMessage("[SmartBots] Intention detour enabled (behavior tree suppressed)");
+
+    // --- SDKCall: ILocomotion::ClearStuckStatus (ILocomotion* → clear stuck flag) ---
+    StartPrepSDKCall(SDKCall_Raw);
+    PrepSDKCall_SetFromConf(hConf, SDKConf_Signature,
+        "ILocomotion::ClearStuckStatus");
+    PrepSDKCall_AddParameter(SDKType_String, SDKPass_Pointer);
+    g_hClearStuckStatus = EndPrepSDKCall();
+
+    if (g_hClearStuckStatus == null)
+    {
+        LogError("[SmartBots] Failed to create SDKCall for ClearStuckStatus");
+        delete hConf;
+        return false;
+    }
+
+    LogMessage("[SmartBots] SDKCalls ready (ClearStuckStatus)");
+
     // --- SDKCall: GetLocomotionInterface (entity → ILocomotion*) ---
     // CINSNextBot inherits CINSPlayer at offset 0, so CBaseEntity* == CINSNextBot*.
     // Calling CINSNextBot::GetLocomotionInterface via SDKCall_Entity is safe.
@@ -133,7 +203,49 @@ bool SetupDHooks()
         return false;
     }
 
-    LogMessage("[SmartBots] SDKCalls ready (GetLocomotionInterface)");
+    // --- SDKCall: CINSBotLocomotion::Approach (ILocomotion* → direct call) ---
+    StartPrepSDKCall(SDKCall_Raw);
+    PrepSDKCall_SetFromConf(hConf, SDKConf_Signature,
+        "CINSBotLocomotion::Approach");
+    PrepSDKCall_AddParameter(SDKType_Vector, SDKPass_ByRef);
+    PrepSDKCall_AddParameter(SDKType_Float, SDKPass_Plain);
+    g_hCallApproach = EndPrepSDKCall();
+
+    if (g_hCallApproach == null)
+    {
+        LogError("[SmartBots] Failed to create SDKCall for Approach");
+        delete hConf;
+        return false;
+    }
+
+    // --- SDKCall: PlayerLocomotion::Run (ILocomotion* → set run speed) ---
+    StartPrepSDKCall(SDKCall_Raw);
+    PrepSDKCall_SetFromConf(hConf, SDKConf_Signature,
+        "PlayerLocomotion::Run");
+    g_hCallRun = EndPrepSDKCall();
+
+    if (g_hCallRun == null)
+    {
+        LogError("[SmartBots] Failed to create SDKCall for Run");
+        delete hConf;
+        return false;
+    }
+
+    // --- SDKCall: CINSBotLocomotion::FaceTowards (ILocomotion* → rotate toward target) ---
+    StartPrepSDKCall(SDKCall_Raw);
+    PrepSDKCall_SetFromConf(hConf, SDKConf_Signature,
+        "CINSBotLocomotion::FaceTowards");
+    PrepSDKCall_AddParameter(SDKType_Vector, SDKPass_ByRef);
+    g_hCallFaceTowards = EndPrepSDKCall();
+
+    if (g_hCallFaceTowards == null)
+    {
+        LogError("[SmartBots] Failed to create SDKCall for FaceTowards");
+        delete hConf;
+        return false;
+    }
+
+    LogMessage("[SmartBots] SDKCalls ready (GetLocomotionInterface, Approach, Run, FaceTowards)");
 
     delete hConf;
     return true;
@@ -144,6 +256,14 @@ public void OnPluginEnd()
     if (g_detourApproach != null)
     {
         g_detourApproach.Disable(Hook_Pre, Detour_OnApproach);
+    }
+    if (g_detourUpdate != null)
+    {
+        g_detourUpdate.Disable(Hook_Pre, Detour_OnUpdate);
+    }
+    if (g_detourIntention != null)
+    {
+        g_detourIntention.Disable(Hook_Pre, Detour_OnIntentionUpdate);
     }
 
     if (g_hSocket != INVALID_HANDLE)
@@ -220,6 +340,19 @@ int LocoToClient(Address pLoco)
 }
 
 // ---------------------------------------------------------------------------
+// DHooks detour: CINSNextBot::CINSNextBotIntention::Update()
+//
+// Suppress the behavior tree entirely. Without this, the behavior calls
+// Stop(), enters hold-position states, and fights our movement commands.
+// Locomotion, body, and vision subsystems continue to update normally.
+// ---------------------------------------------------------------------------
+
+public MRESReturn Detour_OnIntentionUpdate(Address pThis)
+{
+    return MRES_Supercede;
+}
+
+// ---------------------------------------------------------------------------
 // DHooks detour: CINSBotLocomotion::Approach(const Vector &goal, float weight)
 //
 // When the bot's behavior tree calls Approach with its own destination,
@@ -229,6 +362,10 @@ int LocoToClient(Address pLoco)
 
 public MRESReturn Detour_OnApproach(Address pThis, DHookParam hParams)
 {
+    // Skip if this Approach call came from our own Update hook
+    if (g_bInUpdateHook)
+        return MRES_Ignored;
+
     int client = LocoToClient(pThis);
     if (client <= 0)
         return MRES_Ignored;
@@ -254,6 +391,40 @@ public MRESReturn Detour_OnApproach(Address pThis, DHookParam hParams)
     }
 
     return MRES_ChangedHandled;
+}
+
+// ---------------------------------------------------------------------------
+// DHooks detour: CINSBotLocomotion::Update()
+//
+// With the behavior tree suppressed, nothing calls Stop() or fights us.
+// Inject Run() + Approach(target) and let the locomotion do its job:
+// it converts goals into button presses → usercmds → proper animations.
+// ---------------------------------------------------------------------------
+
+public MRESReturn Detour_OnUpdate(Address pThis)
+{
+    int client = LocoToClient(pThis);
+    if (client <= 0)
+        return MRES_Ignored;
+
+    if (!g_bHasCommand[client])
+        return MRES_Ignored;
+
+    if (!IsClientInGame(client) || !IsPlayerAlive(client))
+        return MRES_Ignored;
+
+    // Clear stuck status so the locomotion re-engages each tick,
+    // then face target, set run speed + goal.
+    SDKCall(g_hClearStuckStatus, pThis, "smartbots");
+    SDKCall(g_hCallFaceTowards, pThis, g_fTargetPos[client]);
+    SDKCall(g_hCallRun, pThis);
+    g_bInUpdateHook = true;
+    SDKCall(g_hCallApproach, pThis, g_fTargetPos[client], 1.0);
+    g_bInUpdateHook = false;
+
+    g_iApproachRedirected++;
+
+    return MRES_Ignored;  // let locomotion process our goal into movement
 }
 
 // ---------------------------------------------------------------------------

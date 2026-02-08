@@ -9,17 +9,37 @@
 				"library"	"server"
 				"linux"		"@_ZN17CINSBotLocomotion8ApproachERK6Vectorf"
 			}
+			"CINSBotLocomotion::Update"
+			{
+				"library"	"server"
+				"linux"		"@_ZN17CINSBotLocomotion6UpdateEv"
+			}
 			"CINSBotLocomotion::FaceTowards"
 			{
 				"library"	"server"
 				"linux"		"@_ZN17CINSBotLocomotion11FaceTowardsERK6Vector"
+			}
+			"PlayerLocomotion::Run"
+			{
+				"library"	"server"
+				"linux"		"@_ZN16PlayerLocomotion3RunEv"
+			}
+			"CINSNextBot::CINSNextBotIntention::Update"
+			{
+				"library"	"server"
+				"linux"		"@_ZN11CINSNextBot20CINSNextBotIntention6UpdateEv"
+			}
+			"ILocomotion::ClearStuckStatus"
+			{
+				"library"	"server"
+				"linux"		"@_ZN11ILocomotion16ClearStuckStatusEPKc"
 			}
 			"CINSNextBot::GetLocomotionInterface"
 			{
 				"library"	"server"
 				"linux"		"@_ZNK11CINSNextBot22GetLocomotionInterfaceEv"
 			}
-}
+		}
 
 		"Functions"
 		{
@@ -38,6 +58,34 @@
 					"weight"
 					{
 						"type"	"float"
+					}
+				}
+			}
+			"CINSBotLocomotion::Update"
+			{
+				"signature"	"CINSBotLocomotion::Update"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"address"
+			}
+			"CINSNextBot::CINSNextBotIntention::Update"
+			{
+				"signature"	"CINSNextBot::CINSNextBotIntention::Update"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"address"
+			}
+			"ILocomotion::ClearStuckStatus"
+			{
+				"signature"	"ILocomotion::ClearStuckStatus"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"address"
+				"arguments"
+				{
+					"reason"
+					{
+						"type"	"charptr"
 					}
 				}
 			}

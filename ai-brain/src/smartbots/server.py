@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 
-from smartbots.movement import compute_commands
+from smartbots.movement import MovementController
+from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.state import GameState
 
@@ -15,9 +17,10 @@ log = logging.getLogger(__name__)
 class AIBrainProtocol(asyncio.DatagramProtocol):
     """UDP protocol handler for the AI brain."""
 
-    def __init__(self) -> None:
+    def __init__(self, controller: MovementController) -> None:
         self.transport: asyncio.DatagramTransport | None = None
         self.last_state: GameState | None = None
+        self.controller = controller
 
     def connection_made(self, transport: asyncio.BaseTransport) -> None:
         self.transport = transport  # type: ignore[assignment]
@@ -46,22 +49,34 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
                 )
 
         # Compute commands and send back
-        commands: list[BotCommand] = compute_commands(state)
+        commands: list[BotCommand] = self.controller.compute_commands(state)
         if commands and self.transport is not None:
             payload = encode_commands(commands)
             self.transport.sendto(payload, addr)
             if state.tick % 40 == 0:
                 log.info("  -> sent %d commands (%d bytes)", len(commands), len(payload))
         elif state.tick % 40 == 0:
-            log.info("  -> no commands (no alive bots)")
+            log.info("  -> no commands (no alive bots or all arrived)")
+
+
+def _build_controller() -> MovementController:
+    """Load nav mesh and create the movement controller."""
+    nav_map = os.environ.get("NAV_MAP", "ministry_coop")
+    maps_dir = os.environ.get("NAV_MAPS_DIR", "/app/maps")
+    nav_path = os.path.join(maps_dir, f"{nav_map}.nav")
+    nav = NavGraph(nav_path)
+    return MovementController(nav)
 
 
 async def run_server(host: str, port: int) -> None:
     """Start the UDP server and run forever."""
     log.info("Starting AI brain on %s:%d", host, port)
+
+    controller = _build_controller()
+
     loop = asyncio.get_running_loop()
     transport, _ = await loop.create_datagram_endpoint(
-        AIBrainProtocol,
+        lambda: AIBrainProtocol(controller),
         local_addr=(host, port),
     )
     try:

@@ -30,9 +30,12 @@ services:
     container_name: insurgency-ai
     restart: unless-stopped
     network_mode: host
+    volumes:
+      - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
     environment:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
+      - NAV_MAP=ministry_coop
     depends_on:
       - insurgency
     profiles:
