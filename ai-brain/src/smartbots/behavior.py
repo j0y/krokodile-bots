@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import logging
 import math
-import random
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
+from smartbots.awareness import SpatialAnalyzer
 from smartbots.navigation import AnnotatedWaypoint, NavGraph
 from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP
 from smartbots.state import BotState, GameState
@@ -20,13 +20,13 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 # Navigation constants
-WAYPOINT_REACH_DIST = 80.0
+WAYPOINT_REACH_DIST = 40.0
 REPATH_DIST = 300.0
 REPATH_INTERVAL = 40
 STUCK_MOVE_DIST = 20.0
 STUCK_TICKS = 40
-NUDGE_DIST = 80.0
 NUDGE_TICKS = 16
+MAX_DETOUR_ATTEMPTS = 3
 JUMP_TRIGGER_DIST = 50.0
 JUMP_COOLDOWN = 4
 CROUCH_APPROACH_DIST = 100.0
@@ -70,6 +70,7 @@ class BotNavState:
     last_jump_tick: int = 0
     nudge_target: tuple[float, float, float] | None = None
     nudge_until: int = 0
+    detour_attempts: int = 0
 
 
 @dataclass
@@ -89,6 +90,7 @@ class BotManager:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
+        self.spatial = SpatialAnalyzer(nav, terrain)
         self._brains: dict[int, BotBrain] = {}
 
     def _get_brain(self, bot_id: int) -> BotBrain:
@@ -234,35 +236,53 @@ class BotManager:
                 brain.state = BotBehaviorState.IDLE
                 return None
 
-        # Stuck detection
+        # Stuck detection — use spatial awareness for smart detour
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
             pdx = bot.pos[0] - nav.last_progress_pos[0]
             pdy = bot.pos[1] - nav.last_progress_pos[1]
             moved = math.sqrt(pdx * pdx + pdy * pdy)
             if moved < STUCK_MOVE_DIST:
                 wp = nav.waypoints[nav.waypoint_idx]
-                # Nudge perpendicular to the direction of the stuck waypoint
-                # (more likely to go around an obstacle than a random direction)
-                angle_to_wp = math.atan2(
-                    wp.pos[1] - bot.pos[1], wp.pos[0] - bot.pos[0],
-                )
-                perp = math.pi / 2 if random.random() > 0.5 else -math.pi / 2
-                nudge_angle = angle_to_wp + perp
-                nudge = (
-                    bot.pos[0] + math.cos(nudge_angle) * NUDGE_DIST,
-                    bot.pos[1] + math.sin(nudge_angle) * NUDGE_DIST,
-                    bot.pos[2],
-                )
-                nav.nudge_target = nudge
-                nav.nudge_until = tick + NUDGE_TICKS
-                brain.state = BotBehaviorState.STUCK
+                current_area = self.nav.find_area(bot.pos)
+
+                if nav.detour_attempts < MAX_DETOUR_ATTEMPTS:
+                    detour = self.spatial.find_detour(
+                        pos=bot.pos, goal_pos=target_pos,
+                        area_id=current_area, current_waypoint=wp.pos,
+                    )
+                else:
+                    detour = None
+
+                if detour is not None:
+                    nav.nudge_target = detour
+                    nav.nudge_until = tick + NUDGE_TICKS
+                    nav.detour_attempts += 1
+                    brain.state = BotBehaviorState.STUCK
+                    log.warning(
+                        "bot=%d: stuck (moved=%.0f), detour to (%.0f,%.0f) attempt=%d",
+                        brain.bot_id, moved, detour[0], detour[1], nav.detour_attempts,
+                    )
+                    return BotCommand(id=bot.id, move_target=detour, look_target=detour)
+
+                # Exhausted detour attempts — full repath from scratch
                 log.warning(
-                    "bot=%d: stuck (moved=%.0f), nudging perpendicular to (%.0f,%.0f)",
-                    brain.bot_id, moved, nudge[0], nudge[1],
+                    "bot=%d: stuck, detours exhausted (%d), full repath",
+                    brain.bot_id, nav.detour_attempts,
                 )
-                return BotCommand(id=bot.id, move_target=nudge, look_target=nudge)
-            nav.last_progress_tick = tick
-            nav.last_progress_pos = bot.pos
+                nav.detour_attempts = 0
+                new_nav = self._compute_path(brain, bot.pos, target_pos, tick)
+                if new_nav is not None:
+                    brain.nav_state = new_nav
+                    nav = new_nav
+                    brain.state = BotBehaviorState.NAVIGATING
+                else:
+                    brain.nav_state = None
+                    brain.state = BotBehaviorState.IDLE
+                    return None
+            else:
+                nav.last_progress_tick = tick
+                nav.last_progress_pos = bot.pos
+                nav.detour_attempts = 0  # reset on progress
 
         # Repath if off course
         wp = nav.waypoints[nav.waypoint_idx]
@@ -288,9 +308,9 @@ class BotManager:
             brain.state = BotBehaviorState.NAVIGATING
 
         flags = self._compute_flags(nav, bot.pos, tick)
-        # Face the movement target — this keeps forward walk animation intact.
+        # Look ahead along the path for smooth, natural forward-looking.
         # Decoupled look (strafing) is only for combat, not basic navigation.
-        look_target = wp.pos
+        look_target = self._path_lookahead(nav, bot.pos)
 
         if tick % 40 == 0:
             log.info(

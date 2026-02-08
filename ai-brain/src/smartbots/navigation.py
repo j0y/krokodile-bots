@@ -19,8 +19,16 @@ log = logging.getLogger(__name__)
 
 # Portal shrink on each side — keeps the smoothed path slightly off walls.
 # Nav mesh portals on ministry are often only 25u wide, so 16u (hull half-width)
-# would collapse most of them. 4u is enough to avoid wall-hugging.
-AGENT_RADIUS = 4.0
+# would collapse most of them. 8u is a good compromise.
+AGENT_RADIUS = 8.0
+
+# Push funnel-smoothed waypoints this far from wall edges and ledges.
+# Roughly half the player hull width (~32u total).
+WALL_MARGIN = 16.0
+
+# Height-drop threshold for ledge detection (matches JUMP_THRESHOLD in terrain.py).
+# Defined locally to avoid circular import (terrain.py imports from navigation.py).
+_LEDGE_THRESHOLD = 18.0
 
 Pos3 = tuple[float, float, float]
 Portal = tuple[Pos3, Pos3]  # (left, right)
@@ -54,6 +62,77 @@ def _cross2d(o: Pos3, a: Pos3, b: Pos3) -> float:
 
 def _vequal2d(a: Pos3, b: Pos3, eps: float = 0.001) -> bool:
     return abs(a[0] - b[0]) < eps and abs(a[1] - b[1]) < eps
+
+
+# ── wall offset ───────────────────────────────────────────────────────
+
+
+def _offset_from_walls(
+    pos: Pos3,
+    area_id: int,
+    areas: dict[int, NavArea],
+    terrain: TerrainAnalyzer,
+) -> Pos3:
+    """Push a waypoint away from wall edges and ledges within its area.
+
+    Wall edges: area sides with no connections.
+    Ledge edges: connected sides where ALL neighbors are large drops.
+    Portal edges (doorways): left alone.
+    """
+    area = areas.get(area_id)
+    if area is None:
+        return pos
+
+    min_x = min(area.nw.x, area.se.x)
+    max_x = max(area.nw.x, area.se.x)
+    min_y = min(area.nw.y, area.se.y)
+    max_y = max(area.nw.y, area.se.y)
+
+    x, y, z = pos
+
+    # Classify each edge: N=0 (max_y), E=1 (max_x), S=2 (min_y), W=3 (min_x)
+    wall = [False, False, False, False]
+    for d in range(4):
+        if not area.connections[d]:
+            wall[d] = True
+        else:
+            # Ledge: all neighbours in this direction are big drops
+            all_ledge = True
+            for nid in area.connections[d]:
+                trans = terrain.get_transition(area_id, nid)
+                if trans is None or trans.height_delta >= -_LEDGE_THRESHOLD:
+                    all_ledge = False
+                    break
+            if all_ledge:
+                wall[d] = True
+
+    # Y axis (N/S walls)
+    if wall[0] and wall[2]:
+        height = max_y - min_y
+        if height < WALL_MARGIN * 2:
+            y = (min_y + max_y) / 2
+        else:
+            y = max(min_y + WALL_MARGIN, min(max_y - WALL_MARGIN, y))
+    elif wall[0]:
+        y = min(y, max_y - WALL_MARGIN)
+    elif wall[2]:
+        y = max(y, min_y + WALL_MARGIN)
+
+    # X axis (E/W walls)
+    if wall[1] and wall[3]:
+        width = max_x - min_x
+        if width < WALL_MARGIN * 2:
+            x = (min_x + max_x) / 2
+        else:
+            x = max(min_x + WALL_MARGIN, min(max_x - WALL_MARGIN, x))
+    elif wall[1]:
+        x = min(x, max_x - WALL_MARGIN)
+    elif wall[3]:
+        x = max(x, min_x + WALL_MARGIN)
+
+    x = max(min_x, min(max_x, x))
+    y = max(min_y, min(max_y, y))
+    return (x, y, z)
 
 
 # ── funnel algorithm ───────────────────────────────────────────────────
@@ -414,6 +493,9 @@ class NavGraph:
             for jp in jump_portals:
                 jump_pos = self.crossing_point(path[jp], path[jp + 1])
                 jump_area = path[jp + 1]
+                jump_pos = _offset_from_walls(
+                    jump_pos, jump_area, self.areas, terrain,
+                )
                 waypoints.append(AnnotatedWaypoint(
                     pos=jump_pos, area_id=jump_area,
                     needs_jump=True,
@@ -429,7 +511,8 @@ class NavGraph:
                     needs_crouch = True
 
             waypoints.append(AnnotatedWaypoint(
-                pos=pos, area_id=area_id,
+                pos=_offset_from_walls(pos, area_id, self.areas, terrain),
+                area_id=area_id,
                 needs_crouch=needs_crouch,
             ))
 

@@ -142,9 +142,9 @@ bool SetupDHooks()
     LogMessage("[SmartBots] Approach detour enabled");
 
     // --- Detour: CINSBotLocomotion::Update ---
-    // Called every tick by the NextBot framework. We inject Approach(target) in
-    // the pre-hook so the locomotion system always has our goal to process,
-    // regardless of what the behavior tree decided.
+    // Called every tick by the NextBot framework. We inject Run() + Approach(target)
+    // in the pre-hook so the locomotion system produces walk/run animations
+    // and faces the movement target. ClearStuckStatus prevents false stuck state.
     g_detourUpdate = DynamicDetour.FromConf(hConf, "CINSBotLocomotion::Update");
     if (g_detourUpdate == null)
     {
@@ -407,7 +407,11 @@ public MRESReturn Detour_OnApproach(Address pThis, DHookParam hParams)
 // ---------------------------------------------------------------------------
 // DHooks detour: CINSBotLocomotion::Update()
 //
-// Only clear stuck status. All movement is handled via OnPlayerRunCmd.
+// Run() sets locomotion to run mode.  Approach() is called with a point
+// ~50u from the bot in the movement direction (not the distant waypoint)
+// so the locomotion always considers it reachable — this drives walk/run
+// animations without blocking the velocity motor in OnPlayerRunCmd.
+// FaceTowards(look_target) is called when look differs from move direction.
 // ---------------------------------------------------------------------------
 
 public MRESReturn Detour_OnUpdate(Address pThis)
@@ -421,14 +425,60 @@ public MRESReturn Detour_OnUpdate(Address pThis)
 
     SDKCall(g_hClearStuckStatus, pThis, "smartbots");
 
+    if (g_bHasCommand[client])
+    {
+        float pos[3];
+        GetClientAbsOrigin(client, pos);
+
+        // Compute a nearby Approach target (~50u toward the move target)
+        // so the locomotion system always considers it reachable.
+        // This drives animations without blocking the velocity motor.
+        float dx = g_fMoveTarget[client][0] - pos[0];
+        float dy = g_fMoveTarget[client][1] - pos[1];
+        float dist = SquareRoot(dx * dx + dy * dy);
+
+        float approachTarget[3];
+        if (dist > 50.0)
+        {
+            float scale = 50.0 / dist;
+            approachTarget[0] = pos[0] + dx * scale;
+            approachTarget[1] = pos[1] + dy * scale;
+            approachTarget[2] = pos[2];
+        }
+        else
+        {
+            approachTarget[0] = g_fMoveTarget[client][0];
+            approachTarget[1] = g_fMoveTarget[client][1];
+            approachTarget[2] = g_fMoveTarget[client][2];
+        }
+
+        g_bInUpdateHook = true;
+        SDKCall(g_hCallRun, pThis);
+        SDKCall(g_hCallApproach, pThis, approachTarget, 1.0);
+
+        // FaceTowards: only when look_target differs significantly from
+        // move_target, otherwise Approach already handles facing.
+        float ldx = g_fLookTarget[client][0] - g_fMoveTarget[client][0];
+        float ldy = g_fLookTarget[client][1] - g_fMoveTarget[client][1];
+        if (SquareRoot(ldx * ldx + ldy * ldy) > 100.0)
+        {
+            SDKCall(g_hCallFaceTowards, pThis, g_fLookTarget[client]);
+        }
+
+        g_bInUpdateHook = false;
+    }
+
     return MRES_Ignored;
 }
 
 // ---------------------------------------------------------------------------
-// OnPlayerRunCmd — direct movement control
+// OnPlayerRunCmd — velocity motor + action flags
 //
-// Calculate direction to target, set eye angles + forward velocity.
-// With the behavior tree suppressed, nothing fights our overrides.
+// Approach() in the Update hook drives animations and body rotation.
+// Velocity injection here is the actual motor for player-based bots —
+// Approach alone does not produce player-command velocity.  We decompose
+// our desired movement relative to the current facing (set by Approach)
+// so the two systems cooperate.
 // ---------------------------------------------------------------------------
 
 public Action OnPlayerRunCmd(int client, int &buttons, int &impulse,
@@ -445,58 +495,40 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse,
     float pos[3];
     GetClientAbsOrigin(client, pos);
 
-    // --- Look direction (aim at look target) ---
-    float lookDx = g_fLookTarget[client][0] - pos[0];
-    float lookDy = g_fLookTarget[client][1] - pos[1];
-    float lookDz = g_fLookTarget[client][2] - (pos[2] + 64.0);  // eye height
-    float lookDist2D = SquareRoot(lookDx * lookDx + lookDy * lookDy);
-
-    float lookYaw = ArcTangent2(lookDy, lookDx) * (180.0 / 3.14159265);
-    float lookPitch = 0.0;
-    if (lookDist2D > 1.0)
-        lookPitch = -ArcTangent2(lookDz, lookDist2D) * (180.0 / 3.14159265);
-
-    // --- Movement direction ---
+    // --- Movement velocity ---
     float moveDx = g_fMoveTarget[client][0] - pos[0];
     float moveDy = g_fMoveTarget[client][1] - pos[1];
     float moveDist = SquareRoot(moveDx * moveDx + moveDy * moveDy);
 
-    // Clear directional buttons
-    buttons &= ~(IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT);
-
     if (moveDist < 10.0)
     {
-        // Arrived: stand still but apply look direction and flags
         vel[0] = 0.0;
         vel[1] = 0.0;
         vel[2] = 0.0;
+        buttons &= ~(IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT);
     }
     else
     {
-        // Decompose movement into local frame relative to look direction
+        // Decompose movement into local frame relative to CURRENT facing
+        // (set by Approach / locomotion — we don't override angles)
+        float currentYaw = angles[1];
         float moveYaw = ArcTangent2(moveDy, moveDx) * (180.0 / 3.14159265);
-        float delta = (moveYaw - lookYaw) * (3.14159265 / 180.0);
+        float delta = (moveYaw - currentYaw) * (3.14159265 / 180.0);
 
-        vel[0] = Cosine(delta) * 450.0;   // forward
-        vel[1] = -Sine(delta) * 450.0;    // side (Source: negative = right)
+        vel[0] = Cosine(delta) * 450.0;
+        vel[1] = -Sine(delta) * 450.0;
         vel[2] = 0.0;
 
-        // Set directional buttons to match velocity
+        buttons &= ~(IN_FORWARD | IN_BACK | IN_MOVELEFT | IN_MOVERIGHT);
         if (vel[0] > 50.0)
             buttons |= IN_FORWARD;
         else if (vel[0] < -50.0)
             buttons |= IN_BACK;
-
         if (vel[1] > 50.0)
             buttons |= IN_MOVELEFT;
         else if (vel[1] < -50.0)
             buttons |= IN_MOVERIGHT;
     }
-
-    // Apply look angles
-    angles[0] = lookPitch;
-    angles[1] = lookYaw;
-    angles[2] = 0.0;
 
     // --- Action flags ---
     int aflags = g_iActionFlags[client];
