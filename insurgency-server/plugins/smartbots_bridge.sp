@@ -396,9 +396,7 @@ public MRESReturn Detour_OnApproach(Address pThis, DHookParam hParams)
 // ---------------------------------------------------------------------------
 // DHooks detour: CINSBotLocomotion::Update()
 //
-// With the behavior tree suppressed, nothing calls Stop() or fights us.
-// Inject Run() + Approach(target) and let the locomotion do its job:
-// it converts goals into button presses → usercmds → proper animations.
+// Only clear stuck status. All movement is handled via OnPlayerRunCmd.
 // ---------------------------------------------------------------------------
 
 public MRESReturn Detour_OnUpdate(Address pThis)
@@ -407,24 +405,56 @@ public MRESReturn Detour_OnUpdate(Address pThis)
     if (client <= 0)
         return MRES_Ignored;
 
-    if (!g_bHasCommand[client])
-        return MRES_Ignored;
-
     if (!IsClientInGame(client) || !IsPlayerAlive(client))
         return MRES_Ignored;
 
-    // Clear stuck status so the locomotion re-engages each tick,
-    // then face target, set run speed + goal.
     SDKCall(g_hClearStuckStatus, pThis, "smartbots");
-    SDKCall(g_hCallFaceTowards, pThis, g_fTargetPos[client]);
-    SDKCall(g_hCallRun, pThis);
-    g_bInUpdateHook = true;
-    SDKCall(g_hCallApproach, pThis, g_fTargetPos[client], 1.0);
-    g_bInUpdateHook = false;
 
-    g_iApproachRedirected++;
+    return MRES_Ignored;
+}
 
-    return MRES_Ignored;  // let locomotion process our goal into movement
+// ---------------------------------------------------------------------------
+// OnPlayerRunCmd — direct movement control
+//
+// Calculate direction to target, set eye angles + forward velocity.
+// With the behavior tree suppressed, nothing fights our overrides.
+// ---------------------------------------------------------------------------
+
+public Action OnPlayerRunCmd(int client, int &buttons, int &impulse,
+    float vel[3], float angles[3], int &weapon,
+    int &subtype, int &cmdnum, int &tickcount, int &seed,
+    int mouse[2])
+{
+    if (!g_bHasCommand[client])
+        return Plugin_Continue;
+
+    if (!IsPlayerAlive(client))
+        return Plugin_Continue;
+
+    float pos[3];
+    GetClientAbsOrigin(client, pos);
+
+    // Direction to target (2D)
+    float dx = g_fTargetPos[client][0] - pos[0];
+    float dy = g_fTargetPos[client][1] - pos[1];
+    float dist = SquareRoot(dx * dx + dy * dy);
+
+    if (dist < 10.0)
+        return Plugin_Continue;  // close enough
+
+    // Face toward target
+    float desiredYaw = ArcTangent2(dy, dx) * (180.0 / 3.14159265);
+    angles[0] = 0.0;
+    angles[1] = desiredYaw;
+    angles[2] = 0.0;
+
+    // Run forward
+    vel[0] = 450.0;
+    vel[1] = 0.0;
+    vel[2] = 0.0;
+    buttons |= IN_FORWARD;
+
+    return Plugin_Changed;
 }
 
 // ---------------------------------------------------------------------------

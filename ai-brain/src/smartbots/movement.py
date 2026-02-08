@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import math
+import random
 from dataclasses import dataclass, field
 
 from smartbots.navigation import NavGraph
@@ -18,9 +19,13 @@ WAYPOINT_REACH_DIST = 150.0
 REPATH_DIST = 300.0
 # Re-check path validity every N ticks (~5 seconds at 8Hz).
 REPATH_INTERVAL = 40
-# If a bot hasn't moved at least this far in STUCK_TICKS, skip the waypoint.
+# If a bot hasn't moved at least this far in STUCK_TICKS, nudge it.
 STUCK_MOVE_DIST = 20.0
 STUCK_TICKS = 40  # ~5 seconds at 8Hz
+# Random nudge distance when stuck (short walk to get off a ledge).
+NUDGE_DIST = 50.0
+# How many ticks the nudge lasts before resuming normal navigation.
+NUDGE_TICKS = 16  # ~2 seconds at 8Hz
 
 
 @dataclass
@@ -32,6 +37,9 @@ class BotNavState:
     last_repath_tick: int = 0
     last_progress_tick: int = 0
     last_progress_pos: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    # Nudge: random walk to get off ledges
+    nudge_target: tuple[float, float, float] | None = None
+    nudge_until: int = 0
 
 
 class MovementController:
@@ -112,36 +120,49 @@ class MovementController:
                 else:
                     break
 
-            # Already at destination (or all waypoints skipped)
+            # Already at destination
             if nav_state.waypoint_idx >= len(nav_state.waypoints):
-                # Check if we're actually near the goal or just burned through skips
-                goal_center = self.nav.area_center(goal_area)
-                gdx = bot.pos[0] - goal_center[0]
-                gdy = bot.pos[1] - goal_center[1]
-                if math.sqrt(gdx * gdx + gdy * gdy) > WAYPOINT_REACH_DIST:
-                    # Not at goal — force repath on next tick
-                    self._bot_nav.pop(bot.id, None)
                 continue
 
-            # Stuck detection: if bot hasn't moved enough, skip waypoint
+            # If currently nudging, send the nudge target
+            if nav_state.nudge_target is not None:
+                if state.tick < nav_state.nudge_until:
+                    commands.append(BotCommand(id=bot.id, target=nav_state.nudge_target, speed=1.0))
+                    continue
+                # Nudge done — repath from new position
+                log.info("bot=%d: nudge done, repathing", bot.id)
+                nav_state.nudge_target = None
+                new_state = self._compute_path(bot.id, bot.pos, goal_area, state.tick)
+                if new_state is not None:
+                    self._bot_nav[bot.id] = new_state
+                    nav_state = new_state
+                    if nav_state.waypoint_idx >= len(nav_state.waypoints):
+                        continue
+                else:
+                    self._bot_nav.pop(bot.id, None)
+                    continue
+
+            # Stuck detection: if bot hasn't moved enough, nudge in random direction
             if (state.tick - nav_state.last_progress_tick) >= STUCK_TICKS:
                 pdx = bot.pos[0] - nav_state.last_progress_pos[0]
                 pdy = bot.pos[1] - nav_state.last_progress_pos[1]
                 moved = math.sqrt(pdx * pdx + pdy * pdy)
                 if moved < STUCK_MOVE_DIST:
-                    old_idx = nav_state.waypoint_idx
-                    nav_state.waypoint_idx += 1
-                    log.warning(
-                        "bot=%d: stuck (moved=%.0f in %d ticks), skip wp %d -> %d/%d",
-                        bot.id, moved, STUCK_TICKS, old_idx,
-                        nav_state.waypoint_idx, len(nav_state.waypoints),
+                    angle = random.uniform(0, 2 * math.pi)
+                    nudge = (
+                        bot.pos[0] + math.cos(angle) * NUDGE_DIST,
+                        bot.pos[1] + math.sin(angle) * NUDGE_DIST,
+                        bot.pos[2],
                     )
-                    if nav_state.waypoint_idx >= len(nav_state.waypoints):
-                        continue
-                    # After skipping, suppress repath for a while so we don't
-                    # immediately repath back to waypoint 0 (skip→repath loop).
-                    nav_state.last_repath_tick = state.tick
-                # Reset progress tracker
+                    nav_state.nudge_target = nudge
+                    nav_state.nudge_until = state.tick + NUDGE_TICKS
+                    log.warning(
+                        "bot=%d: stuck (moved=%.0f), nudging to (%.0f,%.0f)",
+                        bot.id, moved, nudge[0], nudge[1],
+                    )
+                    commands.append(BotCommand(id=bot.id, target=nudge, speed=1.0))
+                    continue
+                # Made progress — reset tracker
                 nav_state.last_progress_tick = state.tick
                 nav_state.last_progress_pos = bot.pos
 
