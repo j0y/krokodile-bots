@@ -14,7 +14,6 @@ MAX_PLAYERS="${MAX_PLAYERS:-32}"
 START_MAP="${START_MAP:-ministry_coop}"
 GAME_MODE="${GAME_MODE:-coop}"
 TICKRATE="${TICKRATE:-64}"
-BOT_COUNT="${BOT_COUNT:-0}"
 
 echo "=============================================="
 echo " Insurgency 2014 Dedicated Server"
@@ -69,13 +68,6 @@ mp_timer_preround 3
 mp_timer_preround_first 3
 mp_timer_postround 3
 
-// ---------------------------------------------------------------
-// Bot Count (coop checkpoint)
-// ---------------------------------------------------------------
-mp_coop_max_bots ${BOT_COUNT}
-ins_bot_count_checkpoint_min ${BOT_COUNT}
-ins_bot_count_checkpoint_max ${BOT_COUNT}
-ins_bot_count_checkpoint_default 0
 
 // ---------------------------------------------------------------
 // SourceMod
@@ -187,6 +179,7 @@ echo "    Map: ${START_MAP}"
 echo "    Mode: ${GAME_MODE}"
 echo "    Max Players: ${MAX_PLAYERS}"
 echo "    Tickrate: ${TICKRATE}"
+echo "    Bots: ${BOT_COUNT}"
 echo "=============================================="
 
 cd "${SERVER_DIR}"

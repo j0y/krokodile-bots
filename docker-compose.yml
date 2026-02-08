@@ -20,7 +20,6 @@ services:
       - START_MAP=${START_MAP:-ministry_coop}
       - GAME_MODE=coop
       - TICKRATE=64
-      - BOT_COUNT=${BOT_COUNT:-0}
     stdin_open: true
     tty: true
     profiles:
@@ -65,9 +64,8 @@ services:
       - RCON_PASSWORD=changeme
       - MAX_PLAYERS=32
       - START_MAP=${START_MAP:-ministry_coop}
-      - GAME_MODE=custom
+      - GAME_MODE=coop
       - TICKRATE=64
-      - BOT_COUNT=32
     stdin_open: true
     tty: true
     profiles:

@@ -29,7 +29,6 @@ public Plugin myinfo = {
 
 ConVar g_cvAIHost;
 ConVar g_cvAIPort;
-ConVar g_cvBotCount;
 
 Handle g_hSocket = INVALID_HANDLE;
 bool g_bSocketReady = false;
@@ -41,10 +40,6 @@ public void OnPluginStart()
         "AI brain host address");
     g_cvAIPort = CreateConVar("sm_smartbots_port", "9000",
         "AI brain port", _, true, 1.0, true, 65535.0);
-    g_cvBotCount = CreateConVar("sm_observer_bots", "32",
-        "Number of bots to maintain", _, true, 0.0, true, 32.0);
-
-    HookEvent("round_start", Event_RoundStart);
 
     CreateTimer(3.0, Timer_Connect, _, TIMER_FLAG_NO_MAPCHANGE);
 
@@ -67,43 +62,6 @@ public void OnMapStart()
     {
         CreateTimer(3.0, Timer_Connect, _, TIMER_FLAG_NO_MAPCHANGE);
     }
-}
-
-// ---------------------------------------------------------------------------
-// Bot spawning
-// ---------------------------------------------------------------------------
-
-public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
-{
-    int target = g_cvBotCount.IntValue;
-    if (target > 0)
-    {
-        CreateTimer(2.0, Timer_AddBots, target, TIMER_FLAG_NO_MAPCHANGE);
-    }
-}
-
-public Action Timer_AddBots(Handle timer, int target)
-{
-    int current = 0;
-    for (int i = 1; i <= MaxClients; i++)
-    {
-        if (IsClientInGame(i) && IsFakeClient(i))
-            current++;
-    }
-
-    int needed = target - current;
-    for (int i = 0; i < needed; i++)
-    {
-        ServerCommand("ins_bot_add");
-    }
-
-    if (needed > 0)
-    {
-        LogMessage("[SmartBots Observer] Added %d bots (had %d, target %d)",
-            needed, current, target);
-    }
-
-    return Plugin_Stop;
 }
 
 // ---------------------------------------------------------------------------
