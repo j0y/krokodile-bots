@@ -26,6 +26,12 @@ NARROW_PORTAL_THRESHOLD = 50.0
 # waypoint from the source side without actually passing through.
 DOORWAY_EXIT_DIST = 50.0
 
+# Portal width below which we insert a single crossing-point waypoint
+# to prevent corner-cutting.  Above this, bots can freely cut across
+# wide-open portals (trace data shows engine AI only crosses perpendicular
+# on portals narrower than ~150u).
+MEDIUM_PORTAL_THRESHOLD = 150.0
+
 Pos3 = tuple[float, float, float]
 Portal = tuple[Pos3, Pos3]  # (left, right)
 
@@ -216,6 +222,16 @@ class NavGraph:
         else:  # E/W — overlap on Y
             return max(0.0, min(f_max_y, t_max_y) - max(f_min_y, t_min_y))
 
+    def _area_depth_from_portal(self, area_id: int, portal_direction: int) -> float:
+        """Extent of *area_id* perpendicular to a portal edge.
+
+        portal_direction: 0/2 (N/S) → Y extent, 1/3 (E/W) → X extent.
+        """
+        area = self.areas[area_id]
+        if portal_direction in (0, 2):
+            return abs(area.nw.y - area.se.y)
+        return abs(area.nw.x - area.se.x)
+
     # ── safe waypoint generation ─────────────────────────────────────
 
     def path_to_safe_waypoints(
@@ -250,19 +266,25 @@ class NavGraph:
                     # through at 90° for maximum clearance.
                     cp = self.crossing_point(prev_id, area_id)
                     d = self._portal_direction(prev_id, area_id)
-                    offset = DOORWAY_EXIT_DIST
+
+                    # Clamp offsets so waypoints stay inside their areas.
+                    approach_depth = self._area_depth_from_portal(prev_id, d)
+                    exit_depth = self._area_depth_from_portal(area_id, d)
+                    approach_off = max(8.0, min(DOORWAY_EXIT_DIST, approach_depth - 8.0))
+                    exit_off = max(8.0, min(DOORWAY_EXIT_DIST, exit_depth - 8.0))
+
                     if d == 0:    # N: portal at max_y
-                        approach_wp: Pos3 = (cp[0], cp[1] - offset, cp[2])
-                        exit_wp: Pos3 = (cp[0], cp[1] + offset, cp[2])
+                        approach_wp: Pos3 = (cp[0], cp[1] - approach_off, cp[2])
+                        exit_wp: Pos3 = (cp[0], cp[1] + exit_off, cp[2])
                     elif d == 1:  # E: portal at max_x
-                        approach_wp = (cp[0] - offset, cp[1], cp[2])
-                        exit_wp = (cp[0] + offset, cp[1], cp[2])
+                        approach_wp = (cp[0] - approach_off, cp[1], cp[2])
+                        exit_wp = (cp[0] + exit_off, cp[1], cp[2])
                     elif d == 2:  # S: portal at min_y
-                        approach_wp = (cp[0], cp[1] + offset, cp[2])
-                        exit_wp = (cp[0], cp[1] - offset, cp[2])
+                        approach_wp = (cp[0], cp[1] + approach_off, cp[2])
+                        exit_wp = (cp[0], cp[1] - exit_off, cp[2])
                     else:         # W: portal at min_x
-                        approach_wp = (cp[0] + offset, cp[1], cp[2])
-                        exit_wp = (cp[0] - offset, cp[1], cp[2])
+                        approach_wp = (cp[0] + approach_off, cp[1], cp[2])
+                        exit_wp = (cp[0] - exit_off, cp[1], cp[2])
                     jump = bool(trans and trans.needs_jump)
                     crouch = (bool(trans and trans.needs_crouch)
                               or terrain.is_crouch_area(area_id))
@@ -274,13 +296,16 @@ class NavGraph:
                         pos=exit_wp, area_id=area_id,
                         needs_jump=jump, needs_crouch=crouch,
                     ))
-                elif trans and trans.needs_jump:
-                    # Wide portal but needs jump — insert crossing waypoint
+                elif width < MEDIUM_PORTAL_THRESHOLD or (trans and trans.needs_jump):
+                    # Medium portal or jump transition — single crossing-point
+                    # waypoint prevents corner-cutting without approach/exit.
                     cp = self.crossing_point(prev_id, area_id)
+                    jump = bool(trans and trans.needs_jump)
+                    crouch = (bool(trans and trans.needs_crouch)
+                              or terrain.is_crouch_area(area_id))
                     waypoints.append(AnnotatedWaypoint(
                         pos=cp, area_id=area_id,
-                        needs_jump=True,
-                        needs_crouch=terrain.is_crouch_area(area_id),
+                        needs_jump=jump, needs_crouch=crouch,
                     ))
 
             # Area center waypoint (skip first area — bot is already there)
