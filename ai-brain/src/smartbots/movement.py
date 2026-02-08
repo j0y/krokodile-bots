@@ -1,17 +1,18 @@
-"""Movement controller — MVP: send all alive bots to a hardcoded waypoint on ministry."""
+"""Movement controller — MVP: send all alive bots to a fixed convergence point."""
 
 from __future__ import annotations
 
 from smartbots.protocol import BotCommand
 from smartbots.state import GameState
 
-# Hardcoded waypoint on ministry (near Security spawn, ground level)
-# This is a known walkable position on ministry_coop.
-TARGET = (480.0, 1440.0, 0.0)
+# Fixed convergence point on ministry_coop (central area, ground level).
+# Bots typically spawn around x=1800-2500, y=-500 to -1400.
+# This point is within the accessible area.
+TARGET = (2200.0, -1100.0, 32.0)
 
 
 def compute_commands(state: GameState) -> list[BotCommand]:
-    """For each alive bot, return a command to walk toward the hardcoded target."""
+    """For each alive bot, return a command to walk toward the fixed target."""
     commands: list[BotCommand] = []
     for bot in state.bots.values():
         if not bot.alive:

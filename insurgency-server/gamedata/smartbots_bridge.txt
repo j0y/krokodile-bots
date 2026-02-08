@@ -1,0 +1,60 @@
+"Games"
+{
+	"insurgency"
+	{
+		"Signatures"
+		{
+			"CINSBotLocomotion::Approach"
+			{
+				"library"	"server"
+				"linux"		"@_ZN17CINSBotLocomotion8ApproachERK6Vectorf"
+			}
+			"CINSBotLocomotion::FaceTowards"
+			{
+				"library"	"server"
+				"linux"		"@_ZN17CINSBotLocomotion11FaceTowardsERK6Vector"
+			}
+			"CINSNextBot::GetLocomotionInterface"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK11CINSNextBot22GetLocomotionInterfaceEv"
+			}
+}
+
+		"Functions"
+		{
+			"CINSBotLocomotion::Approach"
+			{
+				"signature"	"CINSBotLocomotion::Approach"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"address"
+				"arguments"
+				{
+					"goal"
+					{
+						"type"	"vectorptr"
+					}
+					"weight"
+					{
+						"type"	"float"
+					}
+				}
+			}
+			"CINSBotLocomotion::FaceTowards"
+			{
+				"signature"	"CINSBotLocomotion::FaceTowards"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"address"
+				"arguments"
+				{
+					"target"
+					{
+						"type"	"vectorptr"
+					}
+				}
+			}
+		}
+	}
+}

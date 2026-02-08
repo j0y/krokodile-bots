@@ -33,13 +33,27 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
         self.last_state = state
         bot_count = len(state.bots)
         alive_count = sum(1 for b in state.bots.values() if b.alive)
-        log.info("tick=%d bots=%d alive=%d from=%s", state.tick, bot_count, alive_count, addr)
+
+        # Log per-bot details every ~5 seconds (tick divisible by 40 at 8Hz)
+        if state.tick % 40 == 0:
+            log.info("tick=%d bots=%d alive=%d from=%s", state.tick, bot_count, alive_count, addr)
+            for b in state.bots.values():
+                log.info(
+                    "  bot=%d alive=%s team=%d hp=%d pos=(%.0f,%.0f,%.0f) ang=(%.0f,%.0f,%.0f)",
+                    b.id, b.alive, b.team, b.health,
+                    b.pos[0], b.pos[1], b.pos[2],
+                    b.ang[0], b.ang[1], b.ang[2],
+                )
 
         # Compute commands and send back
         commands: list[BotCommand] = compute_commands(state)
         if commands and self.transport is not None:
             payload = encode_commands(commands)
             self.transport.sendto(payload, addr)
+            if state.tick % 40 == 0:
+                log.info("  -> sent %d commands (%d bytes)", len(commands), len(payload))
+        elif state.tick % 40 == 0:
+            log.info("  -> no commands (no alive bots)")
 
 
 async def run_server(host: str, port: int) -> None:

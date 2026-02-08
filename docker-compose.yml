@@ -9,6 +9,7 @@ services:
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
       - ./insurgency-server/plugins:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom:ro
+      - ./insurgency-server/gamedata/smartbots_bridge.txt:/home/steam/insurgency-server/insurgency/addons/sourcemod/gamedata/smartbots_bridge.txt:ro
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Dev Server
       - SERVER_PASSWORD=

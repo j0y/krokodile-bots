@@ -66,12 +66,11 @@ sv_pure 0
 EOF
 
 # ============================================================
-# Copy custom plugins if mounted
+# Custom plugins (mounted at plugins/custom/, SM auto-loads subdirs)
 # ============================================================
 if [ -d "${GAME_DIR}/addons/sourcemod/plugins/custom" ]; then
-    echo "[*] Copying custom plugins..."
-    cp -f "${GAME_DIR}/addons/sourcemod/plugins/custom/"*.smx \
-          "${GAME_DIR}/addons/sourcemod/plugins/" 2>/dev/null || true
+    echo "[*] Custom plugins detected (auto-loaded by SM from plugins/custom/):"
+    ls -1 "${GAME_DIR}/addons/sourcemod/plugins/custom/"*.smx 2>/dev/null || echo "    (none)"
 fi
 
 # ============================================================

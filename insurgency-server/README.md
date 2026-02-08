@@ -14,7 +14,7 @@ Dockerized Insurgency 2014 dedicated server with MetaMod + SourceMod.
 insurgency-server/
 ├── Dockerfile              # Game server image (debian:bullseye-slim)
 ├── download-server.sh      # Downloads server + MM + SM to server-files/
-├── server-files/            # Pre-downloaded game files (~50GB, gitignored)
+├── server-files/            # Pre-downloaded game files (~10GB, gitignored)
 ├── scripts/
 │   ├── entrypoint.sh       # Server startup, config generation, MM/SM verification
 │   ├── entrypoint-vanilla.sh
@@ -22,8 +22,10 @@ insurgency-server/
 │   └── betterbots.cfg      # Bot behavior CVars
 ├── cfg/                    # Mount custom .cfg files here
 ├── plugins/                # Custom SM plugins (.sp source + .smx compiled)
-│   ├── smartbots_bridge.sp # SmartBots UDP bridge plugin source
+│   ├── smartbots_bridge.sp # SmartBots DHooks bridge plugin source
 │   └── smartbots_bridge.smx
+├── gamedata/               # DHooks gamedata files
+│   └── smartbots_bridge.txt # Vtable offsets + signatures for Insurgency NextBot
 └── .env
 ```
 
@@ -41,15 +43,17 @@ insurgency-server/
 
 ## Custom Plugins
 
-Drop `.smx` files into `./plugins/` — they're copied into SM's plugins dir on container start.
+Plugins in `./plugins/` are mounted into SM's `plugins/custom/` dir (auto-loaded by SourceMod).
+Gamedata files in `./gamedata/` are mounted into SM's `gamedata/` dir.
 
 ### Compiling plugins
 
 ```bash
-server-files/insurgency/addons/sourcemod/scripting/spcomp \
+cd insurgency-server
+./server-files/insurgency/addons/sourcemod/scripting/spcomp \
   plugins/smartbots_bridge.sp \
-  -iserver-files/insurgency/addons/sourcemod/scripting/include \
-  -oplugins/smartbots_bridge.smx
+  -i./server-files/insurgency/addons/sourcemod/scripting/include \
+  -o./plugins/smartbots_bridge.smx
 ```
 
 ## Version Compatibility
