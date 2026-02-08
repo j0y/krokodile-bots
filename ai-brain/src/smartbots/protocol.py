@@ -24,6 +24,7 @@ FLAG_WALK = 16
 FLAG_SPRINT = 32
 FLAG_USE = 64
 FLAG_ATTACK2 = 128
+FLAG_TELEPORT = 256
 
 
 def decode_state(data: bytes) -> GameState:

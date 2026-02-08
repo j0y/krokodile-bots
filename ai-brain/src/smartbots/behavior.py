@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import logging
 import math
+import random
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 from smartbots.navigation import AnnotatedWaypoint, NavGraph
-from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP
+from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP, FLAG_TELEPORT
 from smartbots.state import BotState, GameState
 from smartbots.terrain import TerrainAnalyzer
 
@@ -35,6 +36,7 @@ class BotGoalType(Enum):
     HOLD = auto()
     PATROL = auto()
     IDLE = auto()
+    EXPLORE = auto()  # Direct walk toward target, no pathfinding
 
 
 class BotBehaviorState(Enum):
@@ -138,8 +140,60 @@ class BotManager:
             look = brain.goal.look_dir or brain.goal.position or bot.pos
             return BotCommand(id=bot.id, move_target=bot.pos, look_target=look)
 
-        # NAVIGATING
+        # NAVIGATING — dispatch by goal type
+        if brain.goal.type == BotGoalType.EXPLORE:
+            return self._tick_explore(brain, bot, tick)
         return self._tick_navigate(brain, bot, tick)
+
+    def _tick_explore(self, brain: BotBrain, bot: BotState, tick: int) -> BotCommand | None:
+        """Teleport to goal position, then walk in a random direction."""
+        target = brain.goal.position
+        if target is None:
+            brain.state = BotBehaviorState.IDLE
+            return None
+
+        # First tick: teleport to the target area, pick a random walk direction
+        if brain.nav_state is None:
+            angle = random.uniform(0, 2 * math.pi)
+            walk_target = (
+                target[0] + math.cos(angle) * 500.0,
+                target[1] + math.sin(angle) * 500.0,
+                target[2],
+            )
+            brain.nav_state = BotNavState(
+                waypoints=[], last_progress_tick=tick, last_progress_pos=target,
+            )
+            brain.goal.look_dir = walk_target  # stash walk target
+            log.info("bot=%d: teleport to (%.0f,%.0f,%.0f), walk toward (%.0f,%.0f)",
+                     brain.bot_id, *target, walk_target[0], walk_target[1])
+            return BotCommand(
+                id=bot.id, move_target=target, look_target=target, flags=FLAG_TELEPORT,
+            )
+
+        # Subsequent ticks: walk toward the random direction
+        walk_target = brain.goal.look_dir or target
+        dx = bot.pos[0] - walk_target[0]
+        dy = bot.pos[1] - walk_target[1]
+        dist = math.sqrt(dx * dx + dy * dy)
+
+        # Arrived at walk target
+        if dist < WAYPOINT_REACH_DIST:
+            brain.state = BotBehaviorState.IDLE
+            return BotCommand(id=bot.id, move_target=bot.pos, look_target=bot.pos)
+
+        # Stuck detection
+        ns = brain.nav_state
+        if (tick - ns.last_progress_tick) >= STUCK_TICKS:
+            pdx = bot.pos[0] - ns.last_progress_pos[0]
+            pdy = bot.pos[1] - ns.last_progress_pos[1]
+            if math.sqrt(pdx * pdx + pdy * pdy) < STUCK_MOVE_DIST:
+                brain.state = BotBehaviorState.IDLE
+                log.info("bot=%d: explore stuck, going IDLE", brain.bot_id)
+                return BotCommand(id=bot.id, move_target=bot.pos, look_target=bot.pos)
+            ns.last_progress_tick = tick
+            ns.last_progress_pos = bot.pos
+
+        return BotCommand(id=bot.id, move_target=walk_target, look_target=walk_target)
 
     def _compute_path(
         self, brain: BotBrain, pos: tuple[float, float, float],

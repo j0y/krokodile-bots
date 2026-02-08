@@ -10,6 +10,7 @@ services:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
       - ./insurgency-server/plugins:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom:ro
       - ./insurgency-server/gamedata/smartbots_bridge.txt:/home/steam/insurgency-server/insurgency/addons/sourcemod/gamedata/smartbots_bridge.txt:ro
+      - ./ai-brain/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Dev Server
       - SERVER_PASSWORD=
@@ -32,10 +33,13 @@ services:
     network_mode: host
     volumes:
       - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
+      - ./ai-brain/data:/app/data
     environment:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
       - NAV_MAP=ministry_coop
+      - STRATEGY=explore
+      - SPATIAL_DATA_DIR=/app/data
     depends_on:
       - insurgency
     profiles:

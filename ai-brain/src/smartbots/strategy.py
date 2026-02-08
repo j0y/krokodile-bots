@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import random
 from typing import Protocol
 
 from smartbots.behavior import BotBrain, BotBehaviorState, BotGoal, BotGoalType
@@ -58,5 +59,34 @@ class GatheringStrategy:
             if brain is None or brain.state == BotBehaviorState.IDLE:
                 new_goals[bot.id] = BotGoal(
                     type=BotGoalType.MOVE_TO, position=self._target_pos,
+                )
+        return new_goals
+
+
+class ExplorationStrategy:
+    """Send bots to random nav areas across the map to build spatial data fast."""
+
+    def __init__(self) -> None:
+        self._area_ids: list[int] = []
+
+    def assign_goals(
+        self,
+        state: GameState,
+        brains: dict[int, BotBrain],
+        nav: NavGraph,
+    ) -> dict[int, BotGoal]:
+        if not self._area_ids:
+            self._area_ids = list(nav.areas.keys())
+
+        new_goals: dict[int, BotGoal] = {}
+        for bot in state.bots.values():
+            if not bot.alive:
+                continue
+            brain = brains.get(bot.id)
+            if brain is None or brain.state == BotBehaviorState.IDLE:
+                area_id = random.choice(self._area_ids)
+                target = nav.area_center(area_id)
+                new_goals[bot.id] = BotGoal(
+                    type=BotGoalType.EXPLORE, position=target,
                 )
         return new_goals

@@ -19,7 +19,7 @@
 #define PLUGIN_VERSION "0.5.0"
 #define MAX_BOTS 64
 #define MAX_MSG_LEN 4096
-#define SEND_INTERVAL 0.125  // ~8Hz
+#define SEND_INTERVAL 0.03125  // ~32Hz
 
 // Action flag bitmask (must match Python FLAG_* constants)
 #define AI_FLAG_JUMP    1
@@ -30,6 +30,7 @@
 #define AI_FLAG_SPRINT  32
 #define AI_FLAG_USE     64
 #define AI_FLAG_ATTACK2 128
+#define AI_FLAG_TELEPORT 256
 
 public Plugin myinfo = {
     name = "SmartBots Bridge",
@@ -64,6 +65,9 @@ Handle g_hCallRun;
 // SDKCall for calling FaceTowards() to rotate bot toward target
 Handle g_hCallFaceTowards;
 
+// ConVar for extra bots
+ConVar g_cvExtraBots;
+
 // Per-bot state
 bool g_bHasCommand[MAX_BOTS + 1];
 float g_fMoveTarget[MAX_BOTS + 1][3];
@@ -89,6 +93,10 @@ public void OnPluginStart()
         "AI brain port", _, true, 1.0, true, 65535.0);
     g_cvDebug = CreateConVar("sm_smartbots_debug", "1",
         "Enable debug logging (0=off, 1=on)", _, true, 0.0, true, 1.0);
+    g_cvExtraBots = CreateConVar("sm_smartbots_extra", "27",
+        "Extra bots to add via ins_bot_add on round start", _, true, 0.0, true, 31.0);
+
+    HookEvent("round_start", Event_RoundStart);
 
     RegAdminCmd("sm_smartbots_status", Cmd_Status, ADMFLAG_GENERIC,
         "Show SmartBots bridge status");
@@ -291,6 +299,25 @@ public void OnMapStart()
     {
         CreateTimer(3.0, Timer_Connect, _, TIMER_FLAG_NO_MAPCHANGE);
     }
+}
+
+public void Event_RoundStart(Event event, const char[] name, bool dontBroadcast)
+{
+    int extra = g_cvExtraBots.IntValue;
+    if (extra > 0)
+    {
+        CreateTimer(1.0, Timer_AddBots, extra, TIMER_FLAG_NO_MAPCHANGE);
+    }
+}
+
+public Action Timer_AddBots(Handle timer, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        ServerCommand("ins_bot_add");
+    }
+    LogMessage("[SmartBots] Added %d extra bots via ins_bot_add", count);
+    return Plugin_Stop;
 }
 
 // ---------------------------------------------------------------------------
@@ -528,6 +555,17 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse,
             buttons |= IN_MOVELEFT;
         else if (vel[1] < -50.0)
             buttons |= IN_MOVERIGHT;
+    }
+
+    // --- Teleport ---
+    if (g_iActionFlags[client] & AI_FLAG_TELEPORT)
+    {
+        TeleportEntity(client, g_fMoveTarget[client], NULL_VECTOR, NULL_VECTOR);
+        g_iActionFlags[client] &= ~AI_FLAG_TELEPORT;
+        if (g_cvDebug.BoolValue)
+            LogMessage("[SmartBots] Teleported bot %d to (%.0f,%.0f,%.0f)",
+                client, g_fMoveTarget[client][0], g_fMoveTarget[client][1], g_fMoveTarget[client][2]);
+        return Plugin_Changed;
     }
 
     // --- Action flags ---
