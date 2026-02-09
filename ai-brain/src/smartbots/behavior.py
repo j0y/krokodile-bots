@@ -202,6 +202,10 @@ class BotManager:
                     log.info("bot=%d: patrol -> next point %d", brain.bot_id, brain.goal.patrol_idx)
                 return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
 
+        # Skip close ground-level goals to avoid orbiting tight waypoints
+        # (mirrors Valve PathFollower::CheckProgress m_minLookAheadRange)
+        pf.skip_close_goals(bot.pos)
+
         # Stuck detection
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
             pdx = bot.pos[0] - nav.last_progress_pos[0]

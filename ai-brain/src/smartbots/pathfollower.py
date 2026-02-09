@@ -44,6 +44,37 @@ CROUCH_APPROACH_DIST = 100.0
 # NAV flags (duplicated from terrain.py to avoid circular import)
 _NAV_STAIRS_FLAG = 0x1000
 
+# ── Corner / portal handling ──
+# Half hull width — keeps crossing points away from portal endpoints (walls)
+HULL_HALF_WIDTH = 16.0
+
+# Push crossing points this far past the portal into the destination area
+AREA_ENTRY_PUSH = 20.0
+
+# Skip ground-level goals closer than this (mirrors nb_goal_look_ahead_range)
+MIN_LOOK_AHEAD_RANGE = 30.0
+
+# Blend move target toward next segment when within this range of a curved goal
+CORNER_BLEND_RANGE = 80.0
+
+# ── Nav-mesh Avoid() feelers (mirrors PathFollower::Avoid) ──
+# Each entry: (angle_degrees_from_forward, trace_range, weight)
+# Positive angle = left of forward direction; symmetric pairs.
+_AVOID_FEELERS: list[tuple[float, float, float]] = [
+    (10.0, 60.0, 1.0),    # near-forward-left
+    (-10.0, 60.0, 1.0),   # near-forward-right
+    (30.0, 50.0, 0.8),    # diagonal-left
+    (-30.0, 50.0, 0.8),   # diagonal-right
+    (55.0, 40.0, 0.5),    # wide-left
+    (-55.0, 40.0, 0.5),   # wide-right
+]
+# Lateral offset for feeler start (perpendicular to forward, toward feeler's side)
+AVOID_HULL_OFFSET = 12.0
+# Distance to push adjusted goal from bot when avoiding
+AVOID_PUSH = 100.0
+# Emit detailed avoid log every N _avoid() calls per PathFollower instance
+_AVOID_LOG_INTERVAL = 40
+
 
 # ---------------------------------------------------------------------------
 # Data structures
@@ -162,8 +193,41 @@ def compute_path_details(
             to_seg.portal_center = (mid_x, mid_y, mid_z)
             to_seg.portal_half_width = half_w
 
-            # Use Z from the "from" area at the crossing XY (so bot can reach it)
-            z = terrain._z_at(nav.areas[from_seg.area_id], closest[0], closest[1])
+            # ── Portal margin clamping ──
+            # Keep crossing point HULL_HALF_WIDTH from portal endpoints to
+            # prevent corner-hugging (Avoid()-equivalent for server-side paths).
+            portal_len = _dist_2d(portal_a, portal_b)
+            if portal_len > 2 * HULL_HALF_WIDTH:
+                t_min = HULL_HALF_WIDTH / portal_len
+                t_max = 1.0 - t_min
+                t_clamped = max(t_min, min(t_max, _t))
+                if t_clamped != _t:
+                    closest = (
+                        portal_a[0] + t_clamped * (portal_b[0] - portal_a[0]),
+                        portal_a[1] + t_clamped * (portal_b[1] - portal_a[1]),
+                        portal_a[2] + t_clamped * (portal_b[2] - portal_a[2]),
+                    )
+            else:
+                # Portal narrower than hull — use center
+                closest = (mid_x, mid_y, mid_z)
+
+            # ── Push into destination area ──
+            # Offset crossing point past the portal edge so the bot aims
+            # through the portal, not at it.  Direction: toward to_area center.
+            to_center = nav.area_center(to_seg.area_id)
+            push_dx = to_center[0] - closest[0]
+            push_dy = to_center[1] - closest[1]
+            push_mag = math.sqrt(push_dx * push_dx + push_dy * push_dy)
+            if push_mag > 0.001:
+                push_dist = min(AREA_ENTRY_PUSH, push_mag * 0.5)
+                closest = (
+                    closest[0] + push_dx / push_mag * push_dist,
+                    closest[1] + push_dy / push_mag * push_dist,
+                    closest[2],
+                )
+
+            # Use Z from destination area (crossing has been pushed into it)
+            z = terrain._z_at(nav.areas[to_seg.area_id], closest[0], closest[1])
             to_seg.pos = (closest[0], closest[1], z)
         else:
             # No shared edge — use area center as fallback
@@ -291,6 +355,7 @@ class PathFollower:
         self.nav = nav
         self.terrain = terrain
         self.goal_idx = 1  # first goal is the second segment (bot starts at first)
+        self._avoid_calls = 0
 
     @property
     def total_length(self) -> float:
@@ -361,14 +426,188 @@ class PathFollower:
             return False
         return True
 
+    # ── Min look-ahead skip (mirrors PathFollower::CheckProgress) ──
+
+    def skip_close_goals(self, bot_pos: Pos3) -> None:
+        """Skip ground-level goals within MIN_LOOK_AHEAD_RANGE.
+
+        Mirrors Valve's ``m_minLookAheadRange`` in ``PathFollower::CheckProgress``:
+        if a goal is too close and the next one is also on-ground and reachable,
+        advance past it to avoid orbiting tight waypoints at corners.
+        """
+        while self.goal_idx < len(self.segments) - 1:
+            goal = self.segments[self.goal_idx]
+            if goal.type != SegmentType.ON_GROUND:
+                break
+
+            dx = goal.pos[0] - bot_pos[0]
+            dy = goal.pos[1] - bot_pos[1]
+            dist = math.sqrt(dx * dx + dy * dy)
+            if dist >= MIN_LOOK_AHEAD_RANGE:
+                break
+
+            nxt = self.segments[self.goal_idx + 1]
+            if nxt.type != SegmentType.ON_GROUND:
+                break
+            # Don't skip uphill — matches Valve's stepHeight check
+            if nxt.pos[2] > bot_pos[2] + STEP_HEIGHT:
+                break
+
+            self.goal_idx += 1
+
+    # ── Nav-mesh Avoid (mirrors PathFollower::Avoid) ──
+
+    def _avoid(self, bot_pos: Pos3, goal_pos: Pos3) -> Pos3:
+        """Adjust *goal_pos* using multi-feeler nav-mesh traces.
+
+        Casts 6 feelers (3 symmetric pairs) at varying angles from the
+        forward direction.  Each feeler that intersects a nav-mesh boundary
+        contributes to a weighted lateral avoidance score.
+
+        Mirrors ``PathFollower::Avoid()`` from the Valve reference but uses
+        nav area containment instead of engine hull traces.
+        """
+        goal = self.get_goal()
+        if goal is None or goal.type != SegmentType.ON_GROUND:
+            return goal_pos
+
+        # Forward and left unit vectors (2D)
+        fwd_x = goal_pos[0] - bot_pos[0]
+        fwd_y = goal_pos[1] - bot_pos[1]
+        fwd_mag = math.sqrt(fwd_x * fwd_x + fwd_y * fwd_y)
+        if fwd_mag < 0.001:
+            return goal_pos
+        fwd_x /= fwd_mag
+        fwd_y /= fwd_mag
+        left_x = -fwd_y
+        left_y = fwd_x
+
+        self._avoid_calls += 1
+        should_log = (self._avoid_calls % _AVOID_LOG_INTERVAL == 0)
+
+        left_score = 0.0
+        right_score = 0.0
+        any_hit = False
+        feeler_tags: list[str] = []
+
+        for angle_deg, feeler_range, weight in _AVOID_FEELERS:
+            # Rotate forward vector by angle to get feeler direction
+            rad = math.radians(angle_deg)
+            cos_a = math.cos(rad)
+            sin_a = math.sin(rad)
+            dir_x = fwd_x * cos_a - fwd_y * sin_a
+            dir_y = fwd_x * sin_a + fwd_y * cos_a
+
+            # Start point: offset to feeler's side of the hull
+            if angle_deg > 0:
+                sx = bot_pos[0] + AVOID_HULL_OFFSET * left_x
+                sy = bot_pos[1] + AVOID_HULL_OFFSET * left_y
+            elif angle_deg < 0:
+                sx = bot_pos[0] - AVOID_HULL_OFFSET * left_x
+                sy = bot_pos[1] - AVOID_HULL_OFFSET * left_y
+            else:
+                sx, sy = bot_pos[0], bot_pos[1]
+
+            ex = sx + feeler_range * dir_x
+            ey = sy + feeler_range * dir_y
+
+            frac = self.nav.trace_nav((sx, sy), (ex, ey))
+
+            if frac < 1.0:
+                any_hit = True
+                blocked = weight * (1.0 - frac)
+                if angle_deg > 0:
+                    left_score += blocked
+                else:
+                    right_score += blocked
+
+            if should_log:
+                tag = f"{frac:.2f}" if frac < 1.0 else "ok"
+                feeler_tags.append(f"{angle_deg:+.0f}°:{tag}")
+
+        if should_log and feeler_tags:
+            log.debug(
+                "  avoid feelers [%s] L=%.2f R=%.2f",
+                " ".join(feeler_tags), left_score, right_score,
+            )
+
+        if not any_hit:
+            return goal_pos
+
+        # Determine avoidance direction
+        if left_score < 0.01:
+            avoid_result = -right_score  # right blocked → steer left
+        elif right_score < 0.01:
+            avoid_result = left_score    # left blocked → steer right
+        else:
+            # Both sides blocked — steer toward the less-blocked side
+            if abs(right_score - left_score) < 0.01:
+                return goal_pos  # equally blocked, go straight
+            elif right_score > left_score:
+                avoid_result = -right_score
+            else:
+                avoid_result = left_score
+
+        # Adjusted direction: 0.5*forward - left*avoidResult (matches Valve)
+        adj_x = 0.5 * fwd_x - left_x * avoid_result
+        adj_y = 0.5 * fwd_y - left_y * avoid_result
+        adj_mag = math.sqrt(adj_x * adj_x + adj_y * adj_y)
+        if adj_mag < 0.001:
+            return goal_pos
+        adj_x /= adj_mag
+        adj_y /= adj_mag
+
+        result = (
+            bot_pos[0] + AVOID_PUSH * adj_x,
+            bot_pos[1] + AVOID_PUSH * adj_y,
+            goal_pos[2],
+        )
+
+        if should_log:
+            log.info(
+                "  avoid: L=%.2f R=%.2f result=%.2f goal(%.0f,%.0f)->(%.0f,%.0f)",
+                left_score, right_score, avoid_result,
+                goal_pos[0], goal_pos[1], result[0], result[1],
+            )
+
+        return result
+
     # ── Movement targets ──
 
     def get_move_target(self, bot_pos: Pos3) -> Pos3:
-        """Return the position the bot should move toward (current goal)."""
+        """Return the position the bot should move toward.
+
+        Applies corner blending at curves, then nav-mesh feeler avoidance.
+        """
         goal = self.get_goal()
         if goal is None:
             return self.segments[-1].pos if self.segments else bot_pos
-        return goal.pos
+
+        goal_pos = goal.pos
+
+        # Corner blending: when approaching a curve, aim past the corner
+        nxt_idx = self.goal_idx + 1
+        if (
+            abs(goal.curvature) > 0.1
+            and goal.type == SegmentType.ON_GROUND
+            and nxt_idx < len(self.segments)
+            and self.segments[nxt_idx].type == SegmentType.ON_GROUND
+        ):
+            dx = goal.pos[0] - bot_pos[0]
+            dy = goal.pos[1] - bot_pos[1]
+            dist = math.sqrt(dx * dx + dy * dy)
+            if dist < CORNER_BLEND_RANGE:
+                nxt = self.segments[nxt_idx]
+                # t ramps from 0 (at CORNER_BLEND_RANGE) to 0.5 (at goal)
+                t = 0.5 * (1.0 - dist / CORNER_BLEND_RANGE)
+                goal_pos = (
+                    goal.pos[0] + t * (nxt.pos[0] - goal.pos[0]),
+                    goal.pos[1] + t * (nxt.pos[1] - goal.pos[1]),
+                    goal.pos[2] + t * (nxt.pos[2] - goal.pos[2]),
+                )
+
+        # Nav-mesh feeler avoidance (replaces Valve's trace-based Avoid)
+        return self._avoid(bot_pos, goal_pos)
 
     def get_look_target(self, bot_pos: Pos3) -> Pos3:
         """Return a point further ahead on the path for look direction."""

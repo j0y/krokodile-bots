@@ -33,6 +33,8 @@ def _dist_sq_2d(ax: float, ay: float, bx: float, by: float) -> float:
 class NavGraph:
     """Wraps a parsed NavMesh and provides pathfinding."""
 
+    _GRID_CELL_SIZE = 256.0
+
     def __init__(self, nav_path: str | Path) -> None:
         log.info("Loading nav mesh from %s", nav_path)
         self.mesh: NavMesh = parse_nav(nav_path)
@@ -42,10 +44,54 @@ class NavGraph:
             aid: area.center() for aid, area in self.areas.items()
         }
 
+        # Precompute area bounds (min_x, min_y, max_x, max_y)
+        self._bounds: dict[int, tuple[float, float, float, float]] = {}
+        for aid, area in self.areas.items():
+            self._bounds[aid] = (
+                min(area.nw.x, area.se.x),
+                min(area.nw.y, area.se.y),
+                max(area.nw.x, area.se.x),
+                max(area.nw.y, area.se.y),
+            )
+
+        # Spatial grid for O(1) point-in-area queries
+        self._build_spatial_grid()
+
         log.info(
-            "Nav mesh loaded: %d areas, %d ladders",
-            len(self.areas), len(self.mesh.ladders),
+            "Nav mesh loaded: %d areas, %d ladders, %d grid cells",
+            len(self.areas), len(self.mesh.ladders), len(self._grid),
         )
+
+    def _build_spatial_grid(self) -> None:
+        """Build a hash-grid mapping (cell_x, cell_y) → [area_id, ...]."""
+        cs = self._GRID_CELL_SIZE
+        grid: dict[tuple[int, int], list[int]] = {}
+
+        if not self._bounds:
+            self._grid = grid
+            self._grid_origin = (0.0, 0.0)
+            return
+
+        ox = min(b[0] for b in self._bounds.values())
+        oy = min(b[1] for b in self._bounds.values())
+        self._grid_origin = (ox, oy)
+
+        for aid, (min_x, min_y, max_x, max_y) in self._bounds.items():
+            cx0 = int((min_x - ox) / cs)
+            cx1 = int((max_x - ox) / cs)
+            cy0 = int((min_y - oy) / cs)
+            cy1 = int((max_y - oy) / cs)
+            for cx in range(cx0, cx1 + 1):
+                for cy in range(cy0, cy1 + 1):
+                    grid.setdefault((cx, cy), []).append(aid)
+
+        self._grid = grid
+
+    def _grid_lookup(self, x: float, y: float) -> list[int]:
+        """Return area IDs in the grid cell containing (x, y)."""
+        ox, oy = self._grid_origin
+        cs = self._GRID_CELL_SIZE
+        return self._grid.get((int((x - ox) / cs), int((y - oy) / cs)), [])
 
     def area_center(self, area_id: int) -> Pos3:
         c = self._centers[area_id]
@@ -55,14 +101,13 @@ class NavGraph:
         """Find the nav area containing *pos*, or the nearest one by center distance."""
         x, y = pos[0], pos[1]
 
-        for aid, area in self.areas.items():
-            min_x = min(area.nw.x, area.se.x)
-            max_x = max(area.nw.x, area.se.x)
-            min_y = min(area.nw.y, area.se.y)
-            max_y = max(area.nw.y, area.se.y)
+        # Fast grid lookup
+        for aid in self._grid_lookup(x, y):
+            min_x, min_y, max_x, max_y = self._bounds[aid]
             if min_x <= x <= max_x and min_y <= y <= max_y:
                 return aid
 
+        # Fallback: nearest center
         best_id = -1
         best_dist = float("inf")
         for aid, center in self._centers.items():
@@ -71,6 +116,39 @@ class NavGraph:
                 best_dist = d
                 best_id = aid
         return best_id
+
+    # ── Nav-mesh trace (replaces engine hull traces) ──────────────
+
+    def is_on_nav(self, x: float, y: float) -> bool:
+        """Return True if (x, y) is inside any nav area (with 2u tolerance)."""
+        tol = 2.0
+        for aid in self._grid_lookup(x, y):
+            min_x, min_y, max_x, max_y = self._bounds[aid]
+            if (min_x - tol) <= x <= (max_x + tol) and (min_y - tol) <= y <= (max_y + tol):
+                return True
+        return False
+
+    def trace_nav(
+        self,
+        start: tuple[float, float],
+        end: tuple[float, float],
+        steps: int = 8,
+    ) -> float:
+        """Trace a 2D line; return fraction [0..1] where it first leaves nav.
+
+        1.0 = entire line on nav (clear).
+        0.0 = start point is already off-nav.
+        Mirrors the ``fraction`` field of engine ``trace_t`` results.
+        """
+        for i in range(steps + 1):
+            t = i / steps
+            x = start[0] + t * (end[0] - start[0])
+            y = start[1] + t * (end[1] - start[1])
+            if not self.is_on_nav(x, y):
+                if i == 0:
+                    return 0.0
+                return (i - 1) / steps
+        return 1.0
 
     # ── A* pathfinding ──────────────────────────────────────────────
 
@@ -223,13 +301,7 @@ class NavGraph:
 
     def area_bounds(self, area_id: int) -> tuple[float, float, float, float]:
         """Return (min_x, min_y, max_x, max_y) for an area."""
-        area = self.areas[area_id]
-        return (
-            min(area.nw.x, area.se.x),
-            min(area.nw.y, area.se.y),
-            max(area.nw.x, area.se.x),
-            max(area.nw.y, area.se.y),
-        )
+        return self._bounds[area_id]
 
     # ── graph queries ───────────────────────────────────────────────
 
