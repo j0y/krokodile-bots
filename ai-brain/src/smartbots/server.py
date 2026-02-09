@@ -9,6 +9,7 @@ import signal
 from pathlib import Path
 
 from smartbots.behavior import BotManager
+from smartbots.clearance import ClearanceMap
 from smartbots.collision_map import CollisionMap
 from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
@@ -109,12 +110,23 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
     else:
         log.info("No visibility map at %s", vis_path)
 
+    # Try loading precomputed clearance map
+    clr: ClearanceMap | None = None
+    clr_path = Path(data_dir) / f"{nav_map}_clearance.npz"
+    if clr_path.exists():
+        try:
+            clr = ClearanceMap(clr_path)
+        except Exception:
+            log.exception("Failed to load clearance map from %s", clr_path)
+    else:
+        log.info("No clearance map at %s", clr_path)
+
     recorder: SpatialRecorder | None = None
     if os.environ.get("RECORD_POSITIONS", "").strip() == "1":
         recorder = SpatialRecorder(nav_map, data_dir)
         log.info("Position recording enabled (dir=%s)", data_dir)
 
-    return BotManager(nav, terrain, strategy, cmap, vis), recorder
+    return BotManager(nav, terrain, strategy, cmap, vis, clr), recorder
 
 
 async def run_server(host: str, port: int) -> None:

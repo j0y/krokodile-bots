@@ -15,6 +15,7 @@ from smartbots.state import BotState, GameState
 from smartbots.terrain import TerrainAnalyzer
 
 if TYPE_CHECKING:
+    from smartbots.clearance import ClearanceMap
     from smartbots.collision_map import CollisionMap
     from smartbots.strategy import Strategy
     from smartbots.visibility import VisibilityMap
@@ -84,12 +85,14 @@ class BotManager:
         strategy: Strategy,
         collision_map: CollisionMap | None = None,
         visibility: VisibilityMap | None = None,
+        clearance: ClearanceMap | None = None,
     ) -> None:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
         self.collision_map = collision_map
         self.visibility = visibility
+        self.clearance = clearance
         self._brains: dict[int, BotBrain] = {}
 
     def _get_brain(self, bot_id: int) -> BotBrain:
@@ -154,14 +157,18 @@ class BotManager:
         self, brain: BotBrain, pos: tuple[float, float, float],
         target: tuple[float, float, float], tick: int,
     ) -> BotNavState | None:
-        follower = compute_path(pos, target, self.nav, self.terrain, self.collision_map)
+        follower = compute_path(
+            pos, target, self.nav, self.terrain, self.collision_map, self.clearance,
+        )
 
         if follower is None:
             # Fallback: try navigating to nearest large area
             current_area = self.nav.find_area(pos)
             local_target = self.nav.find_gathering_point(current_area)
             local_pos = self.nav.area_center(local_target)
-            follower = compute_path(pos, local_pos, self.nav, self.terrain, self.collision_map)
+            follower = compute_path(
+                pos, local_pos, self.nav, self.terrain, self.collision_map, self.clearance,
+            )
 
         if follower is None:
             return None
@@ -258,26 +265,36 @@ class BotManager:
         look_target = pf.get_look_target(bot.pos)
         flags, nav.last_jump_tick = pf.compute_flags(bot.pos, tick, nav.last_jump_tick)
 
-        # Unstick: back away then jump forward when deeply stuck.
-        # Cycle: back up (create space) → jump toward goal → normal movement.
+        # Unstick: clearance-directed escape when deeply stuck.
         if nav.stuck_repaths >= STUCK_JUMP_THRESHOLD:
             from smartbots.protocol import FLAG_JUMP
-            cycle = tick % STUCK_JUMP_PERIOD
-            third = STUCK_JUMP_PERIOD // 3
-            if cycle < third:
-                # Back away from move_target to clear the obstacle
-                dx = bot.pos[0] - move_target[0]
-                dy = bot.pos[1] - move_target[1]
-                mag = math.sqrt(dx * dx + dy * dy)
-                if mag > 0.001:
-                    move_target = (
-                        bot.pos[0] + dx / mag * 80.0,
-                        bot.pos[1] + dy / mag * 80.0,
-                        bot.pos[2],
-                    )
-            elif cycle < third * 2:
-                # Jump while moving toward goal
-                flags |= FLAG_JUMP
+            if self.clearance is not None:
+                area_id = self.nav.find_area(bot.pos)
+                best_angle = self.clearance.get_open_direction(area_id)
+                move_target = (
+                    bot.pos[0] + 80.0 * math.cos(best_angle),
+                    bot.pos[1] + 80.0 * math.sin(best_angle),
+                    bot.pos[2],
+                )
+                # Jump every other cycle to clear obstacles
+                if (tick % STUCK_JUMP_PERIOD) < STUCK_JUMP_PERIOD // 2:
+                    flags |= FLAG_JUMP
+            else:
+                # Fallback: back away then jump forward
+                cycle = tick % STUCK_JUMP_PERIOD
+                third = STUCK_JUMP_PERIOD // 3
+                if cycle < third:
+                    dx = bot.pos[0] - move_target[0]
+                    dy = bot.pos[1] - move_target[1]
+                    mag = math.sqrt(dx * dx + dy * dy)
+                    if mag > 0.001:
+                        move_target = (
+                            bot.pos[0] + dx / mag * 80.0,
+                            bot.pos[1] + dy / mag * 80.0,
+                            bot.pos[2],
+                        )
+                elif cycle < third * 2:
+                    flags |= FLAG_JUMP
 
         if tick % 40 == 0:
             goal = pf.get_goal()

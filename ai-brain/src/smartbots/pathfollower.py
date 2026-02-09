@@ -18,6 +18,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from smartbots.clearance import ClearanceMap
     from smartbots.collision_map import CollisionMap
     from smartbots.navigation import NavGraph
     from smartbots.terrain import TerrainAnalyzer
@@ -362,11 +363,13 @@ class PathFollower:
         nav: NavGraph,
         terrain: TerrainAnalyzer,
         collision_map: CollisionMap | None = None,
+        clearance: ClearanceMap | None = None,
     ) -> None:
         self.segments = segments
         self.nav = nav
         self.terrain = terrain
         self.collision_map = collision_map
+        self.clearance = clearance
         self.goal_idx = 1  # first goal is the second segment (bot starts at first)
         self._avoid_calls = 0
 
@@ -562,7 +565,24 @@ class PathFollower:
         else:
             # Both sides blocked — steer toward the less-blocked side
             if abs(right_score - left_score) < 0.01:
-                return goal_pos  # equally blocked, go straight
+                # Symmetry breaker: use clearance to pick the more open side
+                if self.clearance is not None:
+                    area_id = self.nav.find_area(bot_pos)
+                    fwd_angle = math.atan2(fwd_y, fwd_x)
+                    cl_left = self.clearance.get_clearance_at(
+                        area_id, bot_pos[0], bot_pos[1], fwd_angle + 0.785,
+                    )
+                    cl_right = self.clearance.get_clearance_at(
+                        area_id, bot_pos[0], bot_pos[1], fwd_angle - 0.785,
+                    )
+                    if cl_left > cl_right + 10.0:
+                        avoid_result = -0.3
+                    elif cl_right > cl_left + 10.0:
+                        avoid_result = 0.3
+                    else:
+                        return goal_pos
+                else:
+                    return goal_pos
             elif right_score > left_score:
                 avoid_result = -right_score
             else:
@@ -743,6 +763,7 @@ def compute_path(
     nav: NavGraph,
     terrain: TerrainAnalyzer,
     collision_map: CollisionMap | None = None,
+    clearance: ClearanceMap | None = None,
 ) -> PathFollower | None:
     """Full pipeline: A* → segment chain → path details → post-process.
 
@@ -758,7 +779,7 @@ def compute_path(
             Segment(area_id=goal_area, pos=goal_pos),
         ]
         post_process(segs)
-        return PathFollower(segs, nav, terrain, collision_map)
+        return PathFollower(segs, nav, terrain, collision_map, clearance)
 
     area_path = nav.find_path(start_area, goal_area)
     if area_path is None:
@@ -786,4 +807,4 @@ def compute_path(
         "Path: %d areas -> %d segments, length=%.0f",
         len(area_path), len(segments), segments[-1].distance_from_start if segments else 0,
     )
-    return PathFollower(segments, nav, terrain, collision_map)
+    return PathFollower(segments, nav, terrain, collision_map, clearance)
