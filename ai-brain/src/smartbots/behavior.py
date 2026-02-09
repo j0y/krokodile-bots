@@ -1,4 +1,4 @@
-"""Per-bot behavior model with state machine and goal system."""
+"""Per-bot behavior model with state machine and NextBot-style path following."""
 
 from __future__ import annotations
 
@@ -8,10 +8,9 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
-from smartbots.flow_field import FlowFieldCache
-from smartbots.navigation import AnnotatedWaypoint, NavGraph
-from smartbots.protocol import BotCommand, FLAG_DUCK, FLAG_JUMP
-from smartbots.smoothing import apply_separation, smooth_waypoints
+from smartbots.navigation import NavGraph
+from smartbots.pathfollower import PathFollower, compute_path
+from smartbots.protocol import BotCommand
 from smartbots.state import BotState, GameState
 from smartbots.terrain import TerrainAnalyzer
 
@@ -21,15 +20,10 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 # Navigation constants
-WAYPOINT_REACH_DIST = 40.0
-REPATH_DIST = 300.0
+REPATH_DEVIATION = 200.0
 REPATH_INTERVAL = 40
 STUCK_MOVE_DIST = 20.0
 STUCK_TICKS = 40
-JUMP_TRIGGER_DIST = 50.0
-JUMP_COOLDOWN = 4
-CROUCH_APPROACH_DIST = 100.0
-LOOK_AHEAD_DIST = 200.0
 
 
 class BotGoalType(Enum):
@@ -57,10 +51,9 @@ class BotGoal:
 
 @dataclass
 class BotNavState:
-    """Per-bot navigation state."""
+    """Per-bot navigation state using PathFollower."""
 
-    waypoints: list[AnnotatedWaypoint]
-    waypoint_idx: int = 0
+    path: PathFollower
     last_repath_tick: int = 0
     last_progress_tick: int = 0
     last_progress_pos: tuple[float, float, float] = (0.0, 0.0, 0.0)
@@ -74,7 +67,6 @@ class BotBrain:
     state: BotBehaviorState = BotBehaviorState.IDLE
     goal: BotGoal = field(default_factory=BotGoal)
     nav_state: BotNavState | None = None
-    lane: float = 0.0  # lateral offset [-1, 1], assigned by BotManager
 
 
 class BotManager:
@@ -87,7 +79,6 @@ class BotManager:
         self.terrain = terrain
         self.strategy = strategy
         self._brains: dict[int, BotBrain] = {}
-        self._flow_cache = FlowFieldCache(nav)
 
     def _get_brain(self, bot_id: int) -> BotBrain:
         if bot_id not in self._brains:
@@ -104,21 +95,6 @@ class BotManager:
             brain.state = BotBehaviorState.NAVIGATING
         log.info("bot=%d: goal set type=%s state=%s", bot_id, goal.type.name, brain.state.name)
 
-    def _assign_lanes(self) -> None:
-        """Distribute lateral lane offsets among bots sharing the same goal."""
-        goal_groups: dict[tuple[float, float, float], list[int]] = {}
-        for bot_id, brain in self._brains.items():
-            if brain.state == BotBehaviorState.NAVIGATING and brain.goal.position:
-                goal_groups.setdefault(brain.goal.position, []).append(bot_id)
-
-        for bot_ids in goal_groups.values():
-            bot_ids.sort()
-            n = len(bot_ids)
-            for rank, bid in enumerate(bot_ids):
-                self._brains[bid].lane = (
-                    0.0 if n == 1 else -1.0 + 2.0 * rank / (n - 1)
-                )
-
     def compute_commands(self, state: GameState) -> list[BotCommand]:
         # Let strategy assign/update goals
         new_goals = self.strategy.assign_goals(state, self._brains, self.nav)
@@ -132,8 +108,6 @@ class BotManager:
                     brain = self._brains[bot.id]
                     brain.state = BotBehaviorState.IDLE
                     brain.nav_state = None
-
-        self._assign_lanes()
 
         commands: list[BotCommand] = []
         for bot in state.bots.values():
@@ -168,34 +142,25 @@ class BotManager:
         self, brain: BotBrain, pos: tuple[float, float, float],
         target: tuple[float, float, float], tick: int,
     ) -> BotNavState | None:
-        current_area = self.nav.find_area(pos)
-        goal_area = self.nav.find_area(target)
+        follower = compute_path(pos, target, self.nav, self.terrain)
 
-        # Use cached flow field instead of per-bot A*
-        flow = self._flow_cache.get(goal_area)
-        path = flow.extract_path(current_area)
-
-        if path is None:
+        if follower is None:
+            # Fallback: try navigating to nearest large area
+            current_area = self.nav.find_area(pos)
             local_target = self.nav.find_gathering_point(current_area)
-            flow = self._flow_cache.get(local_target)
-            path = flow.extract_path(current_area)
+            local_pos = self.nav.area_center(local_target)
+            follower = compute_path(pos, local_pos, self.nav, self.terrain)
 
-        if path is None:
+        if follower is None:
             return None
 
-        # Generate waypoints with lateral offset, then smooth
-        waypoints = self.nav.path_to_safe_waypoints(
-            path, self.terrain, lane=brain.lane,
-        )
-        waypoints = smooth_waypoints(waypoints, self.nav)
-
         nav = BotNavState(
-            waypoints=waypoints, last_repath_tick=tick,
+            path=follower, last_repath_tick=tick,
             last_progress_tick=tick, last_progress_pos=pos,
         )
         log.info(
-            "bot=%d: path %d -> %d (%d waypoints, lane=%.2f)",
-            brain.bot_id, path[0], path[-1], len(waypoints), brain.lane,
+            "bot=%d: path computed (%d segments)",
+            brain.bot_id, len(follower.segments),
         )
         return nav
 
@@ -219,31 +184,25 @@ class BotManager:
                 return None
             brain.nav_state = nav
 
-        # Advance past reached waypoints
-        while nav.waypoint_idx < len(nav.waypoints):
-            wp = nav.waypoints[nav.waypoint_idx]
-            dx = bot.pos[0] - wp.pos[0]
-            dy = bot.pos[1] - wp.pos[1]
-            if math.sqrt(dx * dx + dy * dy) < WAYPOINT_REACH_DIST:
-                nav.waypoint_idx += 1
-            else:
-                break
+        pf = nav.path
 
-        # Reached destination
-        if nav.waypoint_idx >= len(nav.waypoints):
-            brain.state = BotBehaviorState.ARRIVED
-            log.info("bot=%d: NAVIGATING -> ARRIVED", brain.bot_id)
-            if brain.goal.type == BotGoalType.PATROL and brain.goal.patrol_points:
-                brain.goal.patrol_idx = (
-                    (brain.goal.patrol_idx + 1) % len(brain.goal.patrol_points)
-                )
-                brain.goal.position = brain.goal.patrol_points[brain.goal.patrol_idx]
-                brain.nav_state = None
-                brain.state = BotBehaviorState.NAVIGATING
-                log.info("bot=%d: patrol -> next point %d", brain.bot_id, brain.goal.patrol_idx)
-            return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
+        # Advance past reached goals (NextBot-style dividing plane check)
+        while pf.is_at_goal(bot.pos):
+            if not pf.advance():
+                # Path complete
+                brain.state = BotBehaviorState.ARRIVED
+                log.info("bot=%d: NAVIGATING -> ARRIVED", brain.bot_id)
+                if brain.goal.type == BotGoalType.PATROL and brain.goal.patrol_points:
+                    brain.goal.patrol_idx = (
+                        (brain.goal.patrol_idx + 1) % len(brain.goal.patrol_points)
+                    )
+                    brain.goal.position = brain.goal.patrol_points[brain.goal.patrol_idx]
+                    brain.nav_state = None
+                    brain.state = BotBehaviorState.NAVIGATING
+                    log.info("bot=%d: patrol -> next point %d", brain.bot_id, brain.goal.patrol_idx)
+                return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
 
-        # Stuck detection — simple repath
+        # Stuck detection
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
             pdx = bot.pos[0] - nav.last_progress_pos[0]
             pdy = bot.pos[1] - nav.last_progress_pos[1]
@@ -269,112 +228,36 @@ class BotManager:
                 nav.stuck_repaths = 0
 
         # Repath if off course
-        wp = nav.waypoints[nav.waypoint_idx]
-        dx = bot.pos[0] - wp.pos[0]
-        dy = bot.pos[1] - wp.pos[1]
-        dist = math.sqrt(dx * dx + dy * dy)
-
-        if dist > REPATH_DIST and (tick - nav.last_repath_tick) >= REPATH_INTERVAL:
-            log.info("bot=%d: repathing (dist=%.0f > %.0f)", brain.bot_id, dist, REPATH_DIST)
+        deviation = pf.deviation(bot.pos)
+        if deviation > REPATH_DEVIATION and (tick - nav.last_repath_tick) >= REPATH_INTERVAL:
+            log.info("bot=%d: repathing (deviation=%.0f > %.0f)", brain.bot_id, deviation, REPATH_DEVIATION)
             new_nav = self._compute_path(brain, bot.pos, target_pos, tick)
             if new_nav is not None:
+                brain.nav_state = new_nav
                 nav = new_nav
-                brain.nav_state = nav
-                if nav.waypoint_idx >= len(nav.waypoints):
-                    brain.state = BotBehaviorState.ARRIVED
-                    return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
-                wp = nav.waypoints[nav.waypoint_idx]
-                dx = bot.pos[0] - wp.pos[0]
-                dy = bot.pos[1] - wp.pos[1]
-                dist = math.sqrt(dx * dx + dy * dy)
+                pf = nav.path
 
-        flags = self._compute_flags(nav, bot.pos, tick)
-        look_target = self._path_lookahead(nav, bot.pos)
-
-        # Apply separation force to avoid clumping
-        peer_positions = [
-            b.pos for b in state.bots.values()
-            if b.alive and b.id != bot.id
-        ]
-        move_target = apply_separation(bot.pos, wp.pos, peer_positions)
+        # Movement targets
+        move_target = pf.get_move_target(bot.pos)
+        look_target = pf.get_look_target(bot.pos)
+        flags, nav.last_jump_tick = pf.compute_flags(bot.pos, tick, nav.last_jump_tick)
 
         if tick % 40 == 0:
+            goal = pf.get_goal()
+            goal_pos = goal.pos if goal else move_target
+            dx = bot.pos[0] - goal_pos[0]
+            dy = bot.pos[1] - goal_pos[1]
+            dist = math.sqrt(dx * dx + dy * dy)
             log.info(
-                "  bot=%d state=%s wp=%d/%d pos=(%.0f,%.0f) -> wp=(%.0f,%.0f) dist=%.0f"
-                " flags=%d lane=%.2f",
+                "  bot=%d state=%s seg=%d/%d pos=(%.0f,%.0f) -> goal=(%.0f,%.0f)"
+                " dist=%.0f flags=%d",
                 brain.bot_id, brain.state.name,
-                nav.waypoint_idx, len(nav.waypoints),
-                bot.pos[0], bot.pos[1], wp.pos[0], wp.pos[1], dist,
-                flags, brain.lane,
+                pf.goal_idx, len(pf.segments),
+                bot.pos[0], bot.pos[1], goal_pos[0], goal_pos[1], dist,
+                flags,
             )
 
         return BotCommand(
             id=bot.id, move_target=move_target,
             look_target=look_target, flags=flags,
         )
-
-    def _compute_flags(
-        self, nav: BotNavState, bot_pos: tuple[float, float, float], tick: int,
-    ) -> int:
-        flags = 0
-        idx = nav.waypoint_idx
-        if idx >= len(nav.waypoints):
-            return flags
-
-        wp = nav.waypoints[idx]
-        dx = bot_pos[0] - wp.pos[0]
-        dy = bot_pos[1] - wp.pos[1]
-        dist = math.sqrt(dx * dx + dy * dy)
-
-        if wp.needs_jump and dist < JUMP_TRIGGER_DIST:
-            if (tick - nav.last_jump_tick) >= JUMP_COOLDOWN:
-                flags |= FLAG_JUMP
-                nav.last_jump_tick = tick
-
-        if wp.needs_crouch:
-            flags |= FLAG_DUCK
-        elif idx + 1 < len(nav.waypoints):
-            next_wp = nav.waypoints[idx + 1]
-            if next_wp.needs_crouch:
-                ndx = bot_pos[0] - next_wp.pos[0]
-                ndy = bot_pos[1] - next_wp.pos[1]
-                ndist = math.sqrt(ndx * ndx + ndy * ndy)
-                if ndist < CROUCH_APPROACH_DIST:
-                    flags |= FLAG_DUCK
-
-        current_area = self.nav.find_area(bot_pos)
-        if self.terrain.is_crouch_area(current_area):
-            flags |= FLAG_DUCK
-
-        return flags
-
-    def _path_lookahead(
-        self, nav: BotNavState, bot_pos: tuple[float, float, float],
-        lookahead: float = LOOK_AHEAD_DIST,
-    ) -> tuple[float, float, float]:
-        """Find a point on the path polyline *lookahead* units ahead of the bot."""
-        idx = nav.waypoint_idx
-        if idx >= len(nav.waypoints):
-            return nav.waypoints[-1].pos
-
-        remaining = lookahead
-        current = bot_pos
-
-        for i in range(idx, len(nav.waypoints)):
-            wp_pos = nav.waypoints[i].pos
-            dx = wp_pos[0] - current[0]
-            dy = wp_pos[1] - current[1]
-            seg_len = math.sqrt(dx * dx + dy * dy)
-
-            if seg_len >= remaining and seg_len > 0.001:
-                t = remaining / seg_len
-                return (
-                    current[0] + dx * t,
-                    current[1] + dy * t,
-                    current[2] + (wp_pos[2] - current[2]) * t,
-                )
-
-            remaining -= seg_len
-            current = wp_pos
-
-        return nav.waypoints[-1].pos

@@ -1,4 +1,4 @@
-"""Navigation graph with A* pathfinding and center-line safe waypoints."""
+"""Navigation graph with A* pathfinding and portal helpers."""
 
 from __future__ import annotations
 
@@ -6,49 +6,14 @@ import heapq
 import logging
 import math
 from collections import deque
-from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from smartbots.nav_parser import NavArea, NavMesh, Vector3, parse_nav
 
-if TYPE_CHECKING:
-    from smartbots.terrain import TerrainAnalyzer
-
 log = logging.getLogger(__name__)
 
-# Portal width below which we insert an extra crossing-point waypoint
-# so the bot threads the doorway precisely.
-NARROW_PORTAL_THRESHOLD = 50.0
-
-# How far past a narrow portal to place the perpendicular exit waypoint.
-# Must exceed WAYPOINT_REACH_DIST (40u) so the bot can't "consume" the
-# waypoint from the source side without actually passing through.
-DOORWAY_EXIT_DIST = 50.0
-
-# Portal width below which we insert a single crossing-point waypoint
-# to prevent corner-cutting.  Above this, bots can freely cut across
-# wide-open portals (trace data shows engine AI only crosses perpendicular
-# on portals narrower than ~150u).
-MEDIUM_PORTAL_THRESHOLD = 150.0
-
 Pos3 = tuple[float, float, float]
-Portal = tuple[Pos3, Pos3]  # (left, right)
-
-# Margin from portal/area edges when applying lateral offset (Source units).
-LATERAL_MARGIN = 16.0
-# Maximum lateral offset from area center (Source units).
-MAX_LATERAL_OFFSET = 200.0
-
-
-@dataclass
-class AnnotatedWaypoint:
-    """A waypoint with terrain annotations for jump/crouch."""
-
-    pos: Pos3
-    area_id: int
-    needs_jump: bool = False
-    needs_crouch: bool = False
+Portal = tuple[Pos3, Pos3]  # (endpoint_a, endpoint_b)
 
 
 # ── geometry helpers ────────────────────────────────────────────────────
@@ -228,7 +193,7 @@ class NavGraph:
             return max(0.0, min(f_max_y, t_max_y) - max(f_min_y, t_min_y))
 
     def portal_endpoints(self, from_id: int, to_id: int) -> Portal | None:
-        """Return (left, right) endpoints of the shared portal edge."""
+        """Return (endpoint_a, endpoint_b) of the shared portal edge."""
         from_area = self.areas[from_id]
         to_area = self.areas[to_id]
         direction = self._portal_direction(from_id, to_id)
@@ -265,202 +230,6 @@ class NavGraph:
             max(area.nw.x, area.se.x),
             max(area.nw.y, area.se.y),
         )
-
-    def _offset_crossing(self, from_id: int, to_id: int, lane: float) -> Pos3:
-        """Crossing point offset laterally along the portal by *lane* ∈ [-1, 1]."""
-        if lane == 0.0:
-            return self.crossing_point(from_id, to_id)
-        endpoints = self.portal_endpoints(from_id, to_id)
-        if endpoints is None:
-            return self.crossing_point(from_id, to_id)
-
-        (ax, ay, az), (bx, by, bz) = endpoints
-        width = math.sqrt((bx - ax) ** 2 + (by - ay) ** 2)
-        usable = max(0.0, width - 2 * LATERAL_MARGIN)
-        offset = lane * usable / 2
-
-        mx, my, mz = (ax + bx) / 2, (ay + by) / 2, (az + bz) / 2
-        if width > 0.001:
-            dx, dy = (bx - ax) / width, (by - ay) / width
-        else:
-            dx, dy = 0.0, 0.0
-        return (mx + dx * offset, my + dy * offset, mz)
-
-    def _offset_area_center(
-        self, area_id: int, lane: float,
-        travel_dir: Pos3 | None = None,
-    ) -> Pos3:
-        """Area center offset perpendicular to *travel_dir* by *lane* ∈ [-1, 1]."""
-        cx, cy, cz = self.area_center(area_id)
-        if lane == 0.0 or travel_dir is None:
-            return (cx, cy, cz)
-
-        tx, ty = travel_dir[0], travel_dir[1]
-        mag = math.sqrt(tx * tx + ty * ty)
-        if mag < 0.001:
-            return (cx, cy, cz)
-        tx, ty = tx / mag, ty / mag
-
-        # Perpendicular direction (90° clockwise)
-        px, py = ty, -tx
-
-        # Max offset before hitting area wall (with margin)
-        min_x, min_y, max_x, max_y = self.area_bounds(area_id)
-        if abs(px) > 0.001:
-            limit_x = min(
-                abs(cx - min_x - LATERAL_MARGIN),
-                abs(max_x - cx - LATERAL_MARGIN),
-            ) / abs(px)
-        else:
-            limit_x = float("inf")
-        if abs(py) > 0.001:
-            limit_y = min(
-                abs(cy - min_y - LATERAL_MARGIN),
-                abs(max_y - cy - LATERAL_MARGIN),
-            ) / abs(py)
-        else:
-            limit_y = float("inf")
-        max_off = max(0.0, min(limit_x, limit_y, MAX_LATERAL_OFFSET))
-
-        offset = lane * max_off
-        return (cx + px * offset, cy + py * offset, cz)
-
-    def _area_depth_from_portal(self, area_id: int, portal_direction: int) -> float:
-        """Extent of *area_id* perpendicular to a portal edge.
-
-        portal_direction: 0/2 (N/S) → Y extent, 1/3 (E/W) → X extent.
-        """
-        area = self.areas[area_id]
-        if portal_direction in (0, 2):
-            return abs(area.nw.y - area.se.y)
-        return abs(area.nw.x - area.se.x)
-
-    # ── safe waypoint generation ─────────────────────────────────────
-
-    def path_to_safe_waypoints(
-        self, path: list[int], terrain: TerrainAnalyzer,
-        lane: float = 0.0,
-    ) -> list[AnnotatedWaypoint]:
-        """Convert an area-ID path to safe waypoints with optional lateral offset.
-
-        Every waypoint is an area center (guaranteed inside the area), so the bot
-        cannot get stuck on boundary geometry.  For narrow portals (doorways), an
-        extra crossing-point waypoint is inserted so the bot threads the gap.
-
-        *lane* ∈ [-1, 1] offsets waypoints laterally: portal crossings shift
-        along the shared edge, area centers shift perpendicular to travel direction.
-        Narrow doorways naturally squeeze the offset (little usable width).
-        """
-        if not path:
-            return []
-        if len(path) == 1:
-            return [AnnotatedWaypoint(
-                pos=self.area_center(path[0]), area_id=path[0],
-                needs_crouch=terrain.is_crouch_area(path[0]),
-            )]
-
-        waypoints: list[AnnotatedWaypoint] = []
-
-        for i, area_id in enumerate(path):
-            # Check if the portal INTO this area is narrow (doorway)
-            if i > 0:
-                prev_id = path[i - 1]
-                width = self.portal_width(prev_id, area_id)
-                trans = terrain.get_transition(prev_id, area_id)
-
-                if width < NARROW_PORTAL_THRESHOLD:
-                    # Two waypoints: approach (source side) + exit (dest side),
-                    # both perpendicular to the portal edge so the bot passes
-                    # through at 90° for maximum clearance.
-                    cp = self._offset_crossing(prev_id, area_id, lane)
-                    d = self._portal_direction(prev_id, area_id)
-
-                    # Clamp offsets so waypoints stay inside their areas.
-                    approach_depth = self._area_depth_from_portal(prev_id, d)
-                    exit_depth = self._area_depth_from_portal(area_id, d)
-                    approach_off = max(8.0, min(DOORWAY_EXIT_DIST, approach_depth - 8.0))
-                    exit_off = max(8.0, min(DOORWAY_EXIT_DIST, exit_depth - 8.0))
-
-                    if d == 0:    # N: portal at max_y
-                        approach_wp: Pos3 = (cp[0], cp[1] - approach_off, cp[2])
-                        exit_wp: Pos3 = (cp[0], cp[1] + exit_off, cp[2])
-                    elif d == 1:  # E: portal at max_x
-                        approach_wp = (cp[0] - approach_off, cp[1], cp[2])
-                        exit_wp = (cp[0] + exit_off, cp[1], cp[2])
-                    elif d == 2:  # S: portal at min_y
-                        approach_wp = (cp[0], cp[1] + approach_off, cp[2])
-                        exit_wp = (cp[0], cp[1] - exit_off, cp[2])
-                    else:         # W: portal at min_x
-                        approach_wp = (cp[0] + approach_off, cp[1], cp[2])
-                        exit_wp = (cp[0] - exit_off, cp[1], cp[2])
-                    jump = bool(trans and trans.needs_jump)
-                    crouch = (bool(trans and trans.needs_crouch)
-                              or terrain.is_crouch_area(area_id))
-                    waypoints.append(AnnotatedWaypoint(
-                        pos=approach_wp, area_id=prev_id,
-                        needs_jump=False, needs_crouch=crouch,
-                    ))
-                    waypoints.append(AnnotatedWaypoint(
-                        pos=exit_wp, area_id=area_id,
-                        needs_jump=jump, needs_crouch=crouch,
-                    ))
-                elif width < MEDIUM_PORTAL_THRESHOLD or (trans and trans.needs_jump):
-                    # Medium portal or jump transition — single crossing-point
-                    # waypoint prevents corner-cutting without approach/exit.
-                    cp = self._offset_crossing(prev_id, area_id, lane)
-                    jump = bool(trans and trans.needs_jump)
-                    crouch = (bool(trans and trans.needs_crouch)
-                              or terrain.is_crouch_area(area_id))
-                    waypoints.append(AnnotatedWaypoint(
-                        pos=cp, area_id=area_id,
-                        needs_jump=jump, needs_crouch=crouch,
-                    ))
-
-            # Area center waypoint (skip first area — bot is already there)
-            if i > 0:
-                # Compute travel direction for lateral offset
-                prev_center = self.area_center(path[i - 1])
-                curr_center = self.area_center(area_id)
-                travel_dir: Pos3 = (
-                    curr_center[0] - prev_center[0],
-                    curr_center[1] - prev_center[1],
-                    0.0,
-                )
-                waypoints.append(AnnotatedWaypoint(
-                    pos=self._offset_area_center(area_id, lane, travel_dir),
-                    area_id=area_id,
-                    needs_crouch=terrain.is_crouch_area(area_id),
-                ))
-
-        log.info(
-            "Safe waypoints: %d areas -> %d waypoints (lane=%.2f)",
-            len(path), len(waypoints), lane,
-        )
-        return waypoints
-
-    def path_to_waypoints(
-        self, path: list[int], pull_fraction: float = 0.3
-    ) -> list[Pos3]:
-        """Convert an area-ID path to XYZ waypoints (legacy, no funnel)."""
-        if not path:
-            return []
-        if len(path) == 1:
-            return [self.area_center(path[0])]
-
-        waypoints: list[Pos3] = []
-        for i in range(1, len(path)):
-            if i < len(path) - 1:
-                cx = self.crossing_point(path[i - 1], path[i])
-                ac = self.area_center(path[i])
-                wp = (
-                    cx[0] + (ac[0] - cx[0]) * pull_fraction,
-                    cx[1] + (ac[1] - cx[1]) * pull_fraction,
-                    cx[2] + (ac[2] - cx[2]) * pull_fraction,
-                )
-                waypoints.append(wp)
-            else:
-                waypoints.append(self.area_center(path[-1]))
-        return waypoints
 
     # ── graph queries ───────────────────────────────────────────────
 
