@@ -58,9 +58,19 @@ MIN_LOOK_AHEAD_RANGE = 30.0
 # Blend move target toward next segment when within this range of a curved goal
 CORNER_BLEND_RANGE = 80.0
 
-# ── Clearance-based wall repulsion ──
-# Max lateral push when wall is at distance 0 (scales down with distance)
-WALL_PUSH = 60.0
+# ── Clearance-steered movement ──
+# How far ahead to place the steered move target (caps at dist-to-goal)
+STEER_AHEAD_DIST = 120.0
+
+# ── Path clearance validation ──
+# Hard wall: clearance below this triggers segment skip
+_PATH_CLEARANCE_BLOCKED = 24.0
+# Caution zone: tight enough to aim past even if not fully blocked
+_PATH_CLEARANCE_CAUTION = 48.0
+# How many segments ahead to scan
+_PATH_LOOKAHEAD = 5
+# Sample clearance every this many units along each segment
+_PATH_SAMPLE_STEP = 32.0
 
 # ── Portal clearance optimization ──
 # Number of evenly-spaced samples along the portal to test clearance
@@ -475,20 +485,92 @@ class PathFollower:
 
             self.goal_idx += 1
 
+    # ── Path clearance validation ──
+
+    def scan_path_clearance(self) -> tuple[float, int | None]:
+        """Scan upcoming path and return (min_clearance, tightest_segment_idx).
+
+        Traces along the line between consecutive waypoints, sampling
+        clearance every ``_PATH_SAMPLE_STEP`` units.  Returns the minimum
+        clearance found and the segment index where it occurs.
+
+        The caller decides how to react based on the value:
+        - ``< _PATH_CLEARANCE_BLOCKED`` — hard wall, skip past it
+        - ``< _PATH_CLEARANCE_CAUTION`` — tight, aim past it
+        - above caution — clear, normal path following
+
+        Returns ``(inf, None)`` when no clearance data is available.
+        """
+        if self.clearance is None:
+            return (float("inf"), None)
+
+        worst_clr = float("inf")
+        worst_idx: int | None = None
+
+        end = min(self.goal_idx + _PATH_LOOKAHEAD, len(self.segments))
+        for i in range(self.goal_idx, end):
+            seg = self.segments[i]
+            if seg.type != SegmentType.ON_GROUND:
+                continue
+
+            prev = self.segments[i - 1] if i > 0 else None
+            if prev is None:
+                continue
+
+            dx = seg.pos[0] - prev.pos[0]
+            dy = seg.pos[1] - prev.pos[1]
+            seg_len = math.sqrt(dx * dx + dy * dy)
+            if seg_len < 1.0:
+                continue
+            travel_angle = math.atan2(dy, dx)
+
+            # Sample along the segment every _PATH_SAMPLE_STEP units
+            n_samples = max(2, int(seg_len / _PATH_SAMPLE_STEP) + 1)
+            for si in range(n_samples):
+                t = si / (n_samples - 1)
+                sx = prev.pos[0] + t * dx
+                sy = prev.pos[1] + t * dy
+                area_id = self.nav.find_area((sx, sy, 0.0))
+                clr = self.clearance.get_clearance_at(
+                    area_id, sx, sy, travel_angle, height=1,
+                )
+                if clr < worst_clr:
+                    worst_clr = clr
+                    worst_idx = i
+
+        return (worst_clr, worst_idx)
+
     # ── Movement targets ──
 
     def get_move_target(self, bot_pos: Pos3) -> Pos3:
         """Return the position the bot should move toward.
 
-        Pipeline: corner blending → clearance-based wall repulsion.
-        Repulsion uses precomputed raycasts to push bots away from nearby
-        walls, keeping them centered in corridors so A* can work.
+        Pipeline: path tightness check → corner blending → clearance steering.
+        When the path ahead is tight, the aim point is shifted further along
+        the path (past the obstacle) so clearance steering naturally routes
+        around it.  The tighter the path, the more we aim past.
         """
         goal = self.get_goal()
         if goal is None:
             return self.segments[-1].pos if self.segments else bot_pos
 
         goal_pos = goal.pos
+
+        # ── Gradient aim-past: shift aim further ahead when path is tight ──
+        if self.clearance is not None and goal.type == SegmentType.ON_GROUND:
+            min_clr, tight_idx = self.scan_path_clearance()
+            if tight_idx is not None and min_clr < _PATH_CLEARANCE_CAUTION:
+                # Blend factor: 0.0 at caution threshold, 1.0 at blocked
+                blend = 1.0 - min_clr / _PATH_CLEARANCE_CAUTION
+                # Aim past the tight segment: pick 1-2 segments further
+                aim_idx = min(tight_idx + 1, len(self.segments) - 1)
+                aim_seg = self.segments[aim_idx]
+                if aim_seg.type == SegmentType.ON_GROUND:
+                    goal_pos = (
+                        goal_pos[0] + blend * (aim_seg.pos[0] - goal_pos[0]),
+                        goal_pos[1] + blend * (aim_seg.pos[1] - goal_pos[1]),
+                        goal_pos[2] + blend * (aim_seg.pos[2] - goal_pos[2]),
+                    )
 
         # Corner blending: when approaching a curve, aim past the corner
         nxt_idx = self.goal_idx + 1
@@ -505,22 +587,27 @@ class PathFollower:
                 nxt = self.segments[nxt_idx]
                 t = 0.5 * (1.0 - dist / CORNER_BLEND_RANGE)
                 goal_pos = (
-                    goal.pos[0] + t * (nxt.pos[0] - goal.pos[0]),
-                    goal.pos[1] + t * (nxt.pos[1] - goal.pos[1]),
-                    goal.pos[2] + t * (nxt.pos[2] - goal.pos[2]),
+                    goal_pos[0] + t * (nxt.pos[0] - goal_pos[0]),
+                    goal_pos[1] + t * (nxt.pos[1] - goal_pos[1]),
+                    goal_pos[2] + t * (nxt.pos[2] - goal_pos[2]),
                 )
 
-        # Wall repulsion from precomputed clearance data
+        # Clearance-steered movement: path gives direction, spatial data
+        # picks the actual heading.  Falls back to direct goal if no
+        # clearance data or no passable direction found.
         if self.clearance is not None and goal.type == SegmentType.ON_GROUND:
             area_id = self.nav.find_area(bot_pos)
-            rx, ry, strength = self.clearance.get_repulsion(
-                area_id, bot_pos[0], bot_pos[1],
+            sdx, sdy, best_clr = self.clearance.get_steering_direction(
+                area_id, bot_pos[0], bot_pos[1], goal_pos[0], goal_pos[1],
             )
-            if strength > 0.0:
-                push = WALL_PUSH * strength
-                goal_pos = (
-                    goal_pos[0] + rx * push,
-                    goal_pos[1] + ry * push,
+            if abs(sdx) > 0.001 or abs(sdy) > 0.001:
+                dx = goal_pos[0] - bot_pos[0]
+                dy = goal_pos[1] - bot_pos[1]
+                dist = math.sqrt(dx * dx + dy * dy)
+                step = min(dist, STEER_AHEAD_DIST)
+                return (
+                    bot_pos[0] + sdx * step,
+                    bot_pos[1] + sdy * step,
                     goal_pos[2],
                 )
 
@@ -649,7 +736,7 @@ def compute_path(
         post_process(segs)
         return PathFollower(segs, nav, terrain, clearance)
 
-    area_path = nav.find_path(start_area, goal_area, clearance)
+    area_path = nav.find_path(start_area, goal_area)
     if area_path is None:
         return None
 

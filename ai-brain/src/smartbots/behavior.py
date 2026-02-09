@@ -219,6 +219,26 @@ class BotManager:
         # (mirrors Valve PathFollower::CheckProgress m_minLookAheadRange)
         pf.skip_close_goals(bot.pos)
 
+        # Proactive path clearance scan: skip hard-blocked segments.
+        # Gradient response (aim-past for caution zone) is handled inside
+        # get_move_target(); here we only skip truly blocked segments.
+        from smartbots.pathfollower import _PATH_CLEARANCE_BLOCKED
+
+        min_clr, tight_idx = pf.scan_path_clearance()
+        if tight_idx is not None and min_clr < _PATH_CLEARANCE_BLOCKED:
+            skipped = 0
+            while pf.goal_idx <= tight_idx:
+                if not pf.advance():
+                    break
+                skipped += 1
+            if skipped > 0:
+                pf.skip_close_goals(bot.pos)
+                log.info(
+                    "bot=%d: path blocked (clr=%.0f), skipped %d segs past %d, now %d/%d",
+                    brain.bot_id, min_clr, skipped, tight_idx,
+                    pf.goal_idx, len(pf.segments),
+                )
+
         # Stuck detection
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
             pdx = bot.pos[0] - nav.last_progress_pos[0]
