@@ -18,6 +18,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from smartbots.collision_map import CollisionMap
     from smartbots.navigation import NavGraph
     from smartbots.terrain import TerrainAnalyzer
 
@@ -68,10 +69,15 @@ _AVOID_FEELERS: list[tuple[float, float, float]] = [
     (55.0, 40.0, 0.5),    # wide-left
     (-55.0, 40.0, 0.5),   # wide-right
 ]
+# Max possible per-side score (sum of weights for one side) — used to normalize
+_AVOID_MAX_SIDE = sum(w for a, _, w in _AVOID_FEELERS if a > 0)
 # Lateral offset for feeler start (perpendicular to forward, toward feeler's side)
 AVOID_HULL_OFFSET = 12.0
 # Distance to push adjusted goal from bot when avoiding
 AVOID_PUSH = 100.0
+# Avoid scales down when goal is far — full strength below this, zero above AVOID_FAR
+AVOID_NEAR = 50.0
+AVOID_FAR = 150.0
 # Emit detailed avoid log every N _avoid() calls per PathFollower instance
 _AVOID_LOG_INTERVAL = 40
 
@@ -350,10 +356,17 @@ def post_process(segments: list[Segment]) -> None:
 class PathFollower:
     """NextBot-style segment-based path follower."""
 
-    def __init__(self, segments: list[Segment], nav: NavGraph, terrain: TerrainAnalyzer) -> None:
+    def __init__(
+        self,
+        segments: list[Segment],
+        nav: NavGraph,
+        terrain: TerrainAnalyzer,
+        collision_map: CollisionMap | None = None,
+    ) -> None:
         self.segments = segments
         self.nav = nav
         self.terrain = terrain
+        self.collision_map = collision_map
         self.goal_idx = 1  # first goal is the second segment (bot starts at first)
         self._avoid_calls = 0
 
@@ -511,7 +524,10 @@ class PathFollower:
             ex = sx + feeler_range * dir_x
             ey = sy + feeler_range * dir_y
 
-            frac = self.nav.trace_nav((sx, sy), (ex, ey))
+            if self.collision_map is not None:
+                frac = self.collision_map.trace((sx, sy), (ex, ey), bot_pos[2])
+            else:
+                frac = self.nav.trace_nav((sx, sy), (ex, ey))
 
             if frac < 1.0:
                 any_hit = True
@@ -524,6 +540,10 @@ class PathFollower:
             if should_log:
                 tag = f"{frac:.2f}" if frac < 1.0 else "ok"
                 feeler_tags.append(f"{angle_deg:+.0f}°:{tag}")
+
+        # Normalize scores to [0..1] — Valve's formula expects avoidResult in that range
+        left_score /= _AVOID_MAX_SIDE
+        right_score /= _AVOID_MAX_SIDE
 
         if should_log and feeler_tags:
             log.debug(
@@ -547,6 +567,14 @@ class PathFollower:
                 avoid_result = -right_score
             else:
                 avoid_result = left_score
+
+        # Scale avoid by distance to goal — far goals rely on the path, close goals
+        # need avoidance.  Full strength below AVOID_NEAR, zero above AVOID_FAR.
+        goal_dist = fwd_mag  # distance to goal (already computed above)
+        if goal_dist > AVOID_FAR:
+            return goal_pos
+        if goal_dist > AVOID_NEAR:
+            avoid_result *= 1.0 - (goal_dist - AVOID_NEAR) / (AVOID_FAR - AVOID_NEAR)
 
         # Adjusted direction: 0.5*forward - left*avoidResult (matches Valve)
         adj_x = 0.5 * fwd_x - left_x * avoid_result
@@ -714,6 +742,7 @@ def compute_path(
     goal_pos: Pos3,
     nav: NavGraph,
     terrain: TerrainAnalyzer,
+    collision_map: CollisionMap | None = None,
 ) -> PathFollower | None:
     """Full pipeline: A* → segment chain → path details → post-process.
 
@@ -729,7 +758,7 @@ def compute_path(
             Segment(area_id=goal_area, pos=goal_pos),
         ]
         post_process(segs)
-        return PathFollower(segs, nav, terrain)
+        return PathFollower(segs, nav, terrain, collision_map)
 
     area_path = nav.find_path(start_area, goal_area)
     if area_path is None:
@@ -757,4 +786,4 @@ def compute_path(
         "Path: %d areas -> %d segments, length=%.0f",
         len(area_path), len(segments), segments[-1].distance_from_start if segments else 0,
     )
-    return PathFollower(segments, nav, terrain)
+    return PathFollower(segments, nav, terrain, collision_map)

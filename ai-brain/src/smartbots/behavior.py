@@ -15,6 +15,7 @@ from smartbots.state import BotState, GameState
 from smartbots.terrain import TerrainAnalyzer
 
 if TYPE_CHECKING:
+    from smartbots.collision_map import CollisionMap
     from smartbots.strategy import Strategy
 
 log = logging.getLogger(__name__)
@@ -24,6 +25,9 @@ REPATH_DEVIATION = 200.0
 REPATH_INTERVAL = 40
 STUCK_MOVE_DIST = 20.0
 STUCK_TICKS = 40
+# After this many consecutive stuck repaths, run back-up → jump → normal cycle
+STUCK_JUMP_THRESHOLD = 5
+STUCK_JUMP_PERIOD = 24  # full cycle length in ticks (3 phases of 8 ticks each)
 
 
 class BotGoalType(Enum):
@@ -73,11 +77,16 @@ class BotManager:
     """Manages per-bot behavior and produces movement commands."""
 
     def __init__(
-        self, nav: NavGraph, terrain: TerrainAnalyzer, strategy: Strategy,
+        self,
+        nav: NavGraph,
+        terrain: TerrainAnalyzer,
+        strategy: Strategy,
+        collision_map: CollisionMap | None = None,
     ) -> None:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
+        self.collision_map = collision_map
         self._brains: dict[int, BotBrain] = {}
 
     def _get_brain(self, bot_id: int) -> BotBrain:
@@ -142,14 +151,14 @@ class BotManager:
         self, brain: BotBrain, pos: tuple[float, float, float],
         target: tuple[float, float, float], tick: int,
     ) -> BotNavState | None:
-        follower = compute_path(pos, target, self.nav, self.terrain)
+        follower = compute_path(pos, target, self.nav, self.terrain, self.collision_map)
 
         if follower is None:
             # Fallback: try navigating to nearest large area
             current_area = self.nav.find_area(pos)
             local_target = self.nav.find_gathering_point(current_area)
             local_pos = self.nav.area_center(local_target)
-            follower = compute_path(pos, local_pos, self.nav, self.terrain)
+            follower = compute_path(pos, local_pos, self.nav, self.terrain, self.collision_map)
 
         if follower is None:
             return None
@@ -245,6 +254,27 @@ class BotManager:
         move_target = pf.get_move_target(bot.pos)
         look_target = pf.get_look_target(bot.pos)
         flags, nav.last_jump_tick = pf.compute_flags(bot.pos, tick, nav.last_jump_tick)
+
+        # Unstick: back away then jump forward when deeply stuck.
+        # Cycle: back up (create space) → jump toward goal → normal movement.
+        if nav.stuck_repaths >= STUCK_JUMP_THRESHOLD:
+            from smartbots.protocol import FLAG_JUMP
+            cycle = tick % STUCK_JUMP_PERIOD
+            third = STUCK_JUMP_PERIOD // 3
+            if cycle < third:
+                # Back away from move_target to clear the obstacle
+                dx = bot.pos[0] - move_target[0]
+                dy = bot.pos[1] - move_target[1]
+                mag = math.sqrt(dx * dx + dy * dy)
+                if mag > 0.001:
+                    move_target = (
+                        bot.pos[0] + dx / mag * 80.0,
+                        bot.pos[1] + dy / mag * 80.0,
+                        bot.pos[2],
+                    )
+            elif cycle < third * 2:
+                # Jump while moving toward goal
+                flags |= FLAG_JUMP
 
         if tick % 40 == 0:
             goal = pf.get_goal()

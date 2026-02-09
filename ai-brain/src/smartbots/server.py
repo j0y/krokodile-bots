@@ -6,8 +6,10 @@ import asyncio
 import logging
 import os
 import signal
+from pathlib import Path
 
 from smartbots.behavior import BotManager
+from smartbots.collision_map import CollisionMap
 from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.spatial_recorder import SpatialRecorder
@@ -42,11 +44,13 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
         bot_count = len(state.bots)
         alive_count = sum(1 for b in state.bots.values() if b.alive)
 
-        # Record positions when enabled
+        # Record positions and traces when enabled
         if self.recorder is not None:
             for b in state.bots.values():
                 if b.alive:
                     self.recorder.record(b.id, b.pos)
+                    if b.traces:
+                        self.recorder.record_traces(b.id, b.pos, b.traces)
             self.recorder.maybe_save(state.tick)
 
         # Log per-bot details every ~5 seconds (tick divisible by 40 at 8Hz)
@@ -75,19 +79,30 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
     """Load nav mesh and create the bot manager."""
     nav_map = os.environ.get("NAV_MAP", "ministry_coop")
     maps_dir = os.environ.get("NAV_MAPS_DIR", "/app/maps")
+    data_dir = os.environ.get("SPATIAL_DATA_DIR", "/app/data")
     nav_path = os.path.join(maps_dir, f"{nav_map}.nav")
     nav = NavGraph(nav_path)
     terrain = TerrainAnalyzer(nav)
     strategy = GatheringStrategy()
     log.info("Strategy: gathering")
 
+    # Try loading collision map for runtime avoidance
+    cmap: CollisionMap | None = None
+    collision_path = Path(data_dir) / f"{nav_map}_collision.npz"
+    if collision_path.exists():
+        try:
+            cmap = CollisionMap(collision_path)
+        except Exception:
+            log.exception("Failed to load collision map from %s", collision_path)
+    else:
+        log.info("No collision map at %s, using nav-mesh traces for avoidance", collision_path)
+
     recorder: SpatialRecorder | None = None
     if os.environ.get("RECORD_POSITIONS", "").strip() == "1":
-        data_dir = os.environ.get("SPATIAL_DATA_DIR", "/app/data")
         recorder = SpatialRecorder(nav_map, data_dir)
         log.info("Position recording enabled (dir=%s)", data_dir)
 
-    return BotManager(nav, terrain, strategy), recorder
+    return BotManager(nav, terrain, strategy, cmap), recorder
 
 
 async def run_server(host: str, port: int) -> None:

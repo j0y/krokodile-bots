@@ -11,6 +11,7 @@ class BotState:
     health: int
     alive: bool
     team: int
+    traces: list[float] = field(default_factory=list)
 
 
 @dataclass

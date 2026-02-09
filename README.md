@@ -23,6 +23,7 @@ docker compose --profile ai up --build
 ```
 
 Game server only (no AI): `docker compose up insurgency --build`
+Observer: `docker compose --profile record up --build`
 
 ## Project Structure
 

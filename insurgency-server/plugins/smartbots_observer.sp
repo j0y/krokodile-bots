@@ -14,10 +14,18 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define PLUGIN_VERSION "0.1.0"
+#define PLUGIN_VERSION "0.2.0"
 #define MAX_BOTS 64
-#define MAX_MSG_LEN 4096
+#define MAX_MSG_LEN 8192
 #define SEND_INTERVAL 0.125  // ~8Hz (recording only, no need for 32Hz)
+
+// Lidar trace config
+#define TRACE_DIRS 24
+#define TRACE_RANGE 200.0
+#define TRACE_STEP 15.0      // degrees between traces (360 / 24)
+#define TRACE_NUM_HEIGHTS 2
+// Heights: foot (z+8, hull covers z-8..z+24) and waist (z+32, hull covers z+16..z+48)
+float g_fTraceHeights[TRACE_NUM_HEIGHTS] = { 8.0, 32.0 };
 
 public Plugin myinfo = {
     name = "SmartBots Observer",
@@ -131,6 +139,15 @@ public void OnSocketReceive(Handle socket, const char[] receiveData,
 }
 
 // ---------------------------------------------------------------------------
+// Trace filter — ignore the bot entity itself
+// ---------------------------------------------------------------------------
+
+public bool TraceFilter_IgnoreSelf(int entity, int contentsMask, any data)
+{
+    return entity != view_as<int>(data);
+}
+
+// ---------------------------------------------------------------------------
 // Send state to Python (~8Hz)
 // ---------------------------------------------------------------------------
 
@@ -170,9 +187,58 @@ public Action Timer_SendState(Handle timer)
         first = false;
 
         offset += FormatEx(msg[offset], MAX_MSG_LEN - offset,
-            "{\"id\":%d,\"pos\":[%.1f,%.1f,%.1f],\"ang\":[%.1f,%.1f,%.1f],\"hp\":%d,\"alive\":%d,\"team\":%d}",
+            "{\"id\":%d,\"pos\":[%.1f,%.1f,%.1f],\"ang\":[%.1f,%.1f,%.1f],\"hp\":%d,\"alive\":%d,\"team\":%d",
             client, pos[0], pos[1], pos[2], ang[0], ang[1], ang[2],
             health, alive ? 1 : 0, team);
+
+        // Cast hull traces at 2 heights × 24 directions (lidar scan)
+        // Layout: [foot_0..foot_23, waist_0..waist_23] = 48 fractions
+        if (alive)
+        {
+            offset += FormatEx(msg[offset], MAX_MSG_LEN - offset, ",\"traces\":[");
+
+            float mins[3], maxs[3];
+            mins[0] = -4.0; mins[1] = -4.0; mins[2] = -16.0;
+            maxs[0] = 4.0;  maxs[1] = 4.0;  maxs[2] = 16.0;
+
+            bool firstFrac = true;
+            for (int h = 0; h < TRACE_NUM_HEIGHTS; h++)
+            {
+                float start[3];
+                start[0] = pos[0];
+                start[1] = pos[1];
+                start[2] = pos[2] + g_fTraceHeights[h];
+
+                for (int t = 0; t < TRACE_DIRS; t++)
+                {
+                    float angle = float(t) * TRACE_STEP;
+                    float rad = DegToRad(angle);
+
+                    float end[3];
+                    end[0] = start[0] + TRACE_RANGE * Cosine(rad);
+                    end[1] = start[1] + Sine(rad) * TRACE_RANGE;
+                    end[2] = start[2];
+
+                    TR_TraceHullFilter(start, end, mins, maxs,
+                        MASK_NPCSOLID, TraceFilter_IgnoreSelf, client);
+
+                    float frac;
+                    if (TR_StartSolid())
+                        frac = 0.0;
+                    else
+                        frac = TR_GetFraction();
+
+                    if (!firstFrac)
+                        offset += FormatEx(msg[offset], MAX_MSG_LEN - offset, ",");
+                    firstFrac = false;
+                    offset += FormatEx(msg[offset], MAX_MSG_LEN - offset, "%.2f", frac);
+                }
+            }
+
+            offset += FormatEx(msg[offset], MAX_MSG_LEN - offset, "]");
+        }
+
+        offset += FormatEx(msg[offset], MAX_MSG_LEN - offset, "}");
     }
 
     offset += FormatEx(msg[offset], MAX_MSG_LEN - offset, "]}");

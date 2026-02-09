@@ -39,6 +39,7 @@ def decode_state(data: bytes) -> GameState:
             health=int(b["hp"]),
             alive=bool(b["alive"]),
             team=int(b["team"]),
+            traces=b.get("traces", []),
         )
         bots[bot.id] = bot
     return GameState(tick=int(raw.get("tick", 0)), bots=bots)
