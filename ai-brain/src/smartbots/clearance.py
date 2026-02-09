@@ -104,6 +104,33 @@ class ClearanceMap:
         a_bin = self._angle_to_bin(angle)
         return float(self._clearance[s, height, a_bin])
 
+    # ── Private helpers ──
+
+    def _get_ring(
+        self, area_id: int, x: float, y: float, height: int = 1,
+    ) -> np.ndarray | None:
+        """Return float32 clearance ring [A] for nearest sample, or None."""
+        idx = self._id_to_idx.get(area_id)
+        if idx is None:
+            return None
+
+        start, count = int(self._sample_idx[idx, 0]), int(self._sample_idx[idx, 1])
+        if count <= 0:
+            return None
+
+        if count == 1:
+            s = start
+        else:
+            positions = self._sample_pos[start : start + count, :2]
+            ddx = positions[:, 0] - x
+            ddy = positions[:, 1] - y
+            dists_sq = ddx * ddx + ddy * ddy
+            s = start + int(np.argmin(dists_sq))
+
+        return self._clearance[s, height, :].astype(np.float32)  # [A]
+
+    # ── Public queries ──
+
     def get_open_direction(self, area_id: int, height: int = 2) -> float:
         """Horizontal angle (radians) with maximum clearance from area center.
 
@@ -149,25 +176,10 @@ class ClearanceMap:
         Returns (dx, dy, strength) where (dx, dy) is a unit vector and
         strength is in [0, 1].  Strength 0 means no nearby walls.
         """
-        idx = self._id_to_idx.get(area_id)
-        if idx is None:
+        ring = self._get_ring(area_id, x, y, height)
+        if ring is None:
             return (0.0, 0.0, 0.0)
 
-        start, count = int(self._sample_idx[idx, 0]), int(self._sample_idx[idx, 1])
-        if count <= 0:
-            return (0.0, 0.0, 0.0)
-
-        # Find nearest sample
-        if count == 1:
-            s = start
-        else:
-            positions = self._sample_pos[start : start + count, :2]
-            dx = positions[:, 0] - x
-            dy = positions[:, 1] - y
-            dists_sq = dx * dx + dy * dy
-            s = start + int(np.argmin(dists_sq))
-
-        ring = self._clearance[s, height, :].astype(np.float32)  # [A]
         min_dist = float(np.min(ring))
 
         # No wall within repulsion radius → no force
@@ -197,6 +209,70 @@ class ClearanceMap:
         strength = min(1.0, 1.0 - min_dist / _REPULSION_RADIUS)
         return (push_x / mag, push_y / mag, strength)
 
+    def get_steering_direction(
+        self,
+        area_id: int,
+        x: float,
+        y: float,
+        goal_x: float,
+        goal_y: float,
+        *,
+        height: int = 1,
+    ) -> tuple[float, float, float]:
+        """Clearance-weighted steering direction toward a goal.
+
+        Scores each azimuth bin by alignment with goal × clearance²,
+        picking the direction that best balances progress toward the goal
+        with available space.  Naturally steers around corners.
+
+        Returns (dx, dy, best_clearance) where (dx, dy) is a unit vector
+        and best_clearance is the raw clearance in the chosen direction.
+        Returns (0, 0, 0) if no data or no passable direction.
+        """
+        ring = self._get_ring(area_id, x, y, height)
+        if ring is None:
+            return (0.0, 0.0, 0.0)
+
+        n = self._num_azimuths
+        goal_angle = math.atan2(goal_y - y, goal_x - x)
+
+        # Min-filter: for each bin, use the minimum clearance across ±1 neighbor
+        # to account for hull width (~32u).  A "clear" bin next to a wall is not
+        # actually passable.
+        filtered = [0.0] * n
+        for i in range(n):
+            filtered[i] = min(
+                float(ring[(i - 1) % n]),
+                float(ring[i]),
+                float(ring[(i + 1) % n]),
+            )
+
+        best_score = -1.0
+        best_bin = -1
+        for i in range(n):
+            clr = filtered[i]
+            if clr < _MIN_PASSABLE:
+                continue
+            # How goal-facing this direction is (0..1).
+            # 0.5+0.5*cos so perpendicular dirs score 0.5 (needed at corners).
+            alignment = 0.5 + 0.5 * math.cos(float(self._ray_azimuths[i]) - goal_angle)
+            # How open this direction is (0..1), quadratic to strongly prefer open paths
+            clr_score = min(clr, _STEERING_RADIUS) / _STEERING_RADIUS
+            score = alignment * clr_score * clr_score
+            if score > best_score:
+                best_score = score
+                best_bin = i
+
+        if best_bin < 0:
+            return (0.0, 0.0, 0.0)
+
+        best_angle = float(self._ray_azimuths[best_bin])
+        return (math.cos(best_angle), math.sin(best_angle), float(ring[best_bin]))
+
 
 # Wall repulsion activates when closest wall is within this distance
 _REPULSION_RADIUS = 80.0
+# Steering considers directions "fully open" at this distance
+_STEERING_RADIUS = 120.0
+# Directions with less clearance than this are impassable (hull width)
+_MIN_PASSABLE = 20.0
