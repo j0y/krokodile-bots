@@ -16,6 +16,7 @@ from smartbots.spatial_recorder import SpatialRecorder
 from smartbots.state import GameState
 from smartbots.strategy import GatheringStrategy
 from smartbots.terrain import TerrainAnalyzer
+from smartbots.visibility import VisibilityMap
 
 log = logging.getLogger(__name__)
 
@@ -97,12 +98,23 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
     else:
         log.info("No collision map at %s, using nav-mesh traces for avoidance", collision_path)
 
+    # Try loading precomputed visibility map
+    vis: VisibilityMap | None = None
+    vis_path = Path(data_dir) / f"{nav_map}_visibility.npz"
+    if vis_path.exists():
+        try:
+            vis = VisibilityMap(vis_path)
+        except Exception:
+            log.exception("Failed to load visibility map from %s", vis_path)
+    else:
+        log.info("No visibility map at %s", vis_path)
+
     recorder: SpatialRecorder | None = None
     if os.environ.get("RECORD_POSITIONS", "").strip() == "1":
         recorder = SpatialRecorder(nav_map, data_dir)
         log.info("Position recording enabled (dir=%s)", data_dir)
 
-    return BotManager(nav, terrain, strategy, cmap), recorder
+    return BotManager(nav, terrain, strategy, cmap, vis), recorder
 
 
 async def run_server(host: str, port: int) -> None:

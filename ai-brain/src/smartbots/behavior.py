@@ -17,6 +17,7 @@ from smartbots.terrain import TerrainAnalyzer
 if TYPE_CHECKING:
     from smartbots.collision_map import CollisionMap
     from smartbots.strategy import Strategy
+    from smartbots.visibility import VisibilityMap
 
 log = logging.getLogger(__name__)
 
@@ -82,11 +83,13 @@ class BotManager:
         terrain: TerrainAnalyzer,
         strategy: Strategy,
         collision_map: CollisionMap | None = None,
+        visibility: VisibilityMap | None = None,
     ) -> None:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
         self.collision_map = collision_map
+        self.visibility = visibility
         self._brains: dict[int, BotBrain] = {}
 
     def _get_brain(self, bot_id: int) -> BotBrain:

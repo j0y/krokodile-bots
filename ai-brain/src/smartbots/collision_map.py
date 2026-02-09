@@ -14,10 +14,12 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
+VOXEL_EMPTY: np.uint8 = np.uint8(1)
 VOXEL_SOLID: np.uint8 = np.uint8(2)
 
-# Heights to check during trace — must match SM plugin g_fTraceHeights
-_TRACE_HEIGHTS = (8.0, 32.0)
+# Trace heights — must match SM plugin g_fTraceHeights
+_FOOT_HEIGHT = 8.0
+_WAIST_HEIGHT = 32.0
 
 
 class CollisionMap:
@@ -64,14 +66,17 @@ class CollisionMap:
         end: tuple[float, float],
         z: float = 0.0,
     ) -> float:
-        """2D line trace through the voxel grid, checking all recorded heights.
+        """2D line trace through the voxel grid.
 
         Returns fraction [0..1] where the first solid voxel is hit.
         Drop-in replacement for NavGraph.trace_nav().
 
-        Uses step-based ray marching at half-voxel resolution for accuracy.
-        Checks both foot and waist Z-slices at each step — a hit at any
-        height counts, so knee-high blocks are detected.
+        Uses step-based ray marching at half-voxel resolution.
+
+        Blocking rules per voxel column:
+        - Waist SOLID → blocked (wall)
+        - Foot SOLID + waist not EMPTY → blocked (unverified obstacle)
+        - Foot SOLID + waist EMPTY → walkable surface (stairs/ramp), pass through
         """
         dx = end[0] - start[0]
         dy = end[1] - start[1]
@@ -79,23 +84,21 @@ class CollisionMap:
         if ray_len < 0.001:
             return 1.0
 
-        # Step at half-voxel resolution
         step_size = self.voxel_size * 0.5
         num_steps = int(ray_len / step_size) + 1
         inv_len = 1.0 / ray_len
         dir_x = dx * inv_len
         dir_y = dy * inv_len
 
-        # Pre-compute Z grid indices for each trace height
-        z_indices: list[int] = []
-        for h in _TRACE_HEIGHTS:
-            trace_z = z + h
-            iz = int((trace_z - self.origin[2]) * self._inv_voxel)
-            if 0 <= iz < self.grid.shape[2]:
-                z_indices.append(iz)
+        # Pre-compute Z grid indices for foot and waist
+        iz_foot = int((z + _FOOT_HEIGHT - self.origin[2]) * self._inv_voxel)
+        iz_waist = int((z + _WAIST_HEIGHT - self.origin[2]) * self._inv_voxel)
+        sz = self.grid.shape[2]
+        has_foot = 0 <= iz_foot < sz
+        has_waist = 0 <= iz_waist < sz
 
-        if not z_indices:
-            return 1.0  # all heights out of grid bounds
+        if not has_foot and not has_waist:
+            return 1.0
 
         for i in range(1, num_steps + 1):
             d = i * step_size
@@ -109,8 +112,13 @@ class CollisionMap:
             if ix < 0 or iy < 0 or ix >= self.grid.shape[0] or iy >= self.grid.shape[1]:
                 continue
 
-            for iz in z_indices:
-                if self.grid[ix, iy, iz] == VOXEL_SOLID:
+            # Waist solid → wall, always blocked
+            if has_waist and self.grid[ix, iy, iz_waist] == VOXEL_SOLID:
+                return d / ray_len
+
+            # Foot solid → only blocked if waist is NOT proven empty
+            if has_foot and self.grid[ix, iy, iz_foot] == VOXEL_SOLID:
+                if not has_waist or self.grid[ix, iy, iz_waist] != VOXEL_EMPTY:
                     return d / ray_len
 
         return 1.0
