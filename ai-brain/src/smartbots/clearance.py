@@ -36,6 +36,17 @@ class ClearanceMap:
             int(aid): i for i, aid in enumerate(self._area_ids)
         }
 
+        # Precompute per-area minimum clearance (knee height) for A* cost penalty
+        self._min_clearance: dict[int, float] = {}
+        for i, aid in enumerate(self._area_ids):
+            start, count = int(self._sample_idx[i, 0]), int(self._sample_idx[i, 1])
+            if count <= 0:
+                self._min_clearance[int(aid)] = self._max_range
+                continue
+            # Min clearance across all samples and all azimuths at knee height (h=1)
+            area_clr = self._clearance[start : start + count, 1, :]  # [count, A]
+            self._min_clearance[int(aid)] = float(np.min(area_clr))
+
         log.info(
             "ClearanceMap loaded: %d areas, %d samples, %d heights, %d azimuths from %s",
             len(self._area_ids), len(self._sample_pos),
@@ -103,6 +114,14 @@ class ClearanceMap:
 
         a_bin = self._angle_to_bin(angle)
         return float(self._clearance[s, height, a_bin])
+
+    def get_min_clearance(self, area_id: int) -> float:
+        """Minimum clearance across all samples and azimuths for an area (knee height).
+
+        Used by A* to penalize edges into tight areas.  Returns max_range
+        if the area is unknown (no penalty).
+        """
+        return self._min_clearance.get(area_id, self._max_range)
 
     # ── Private helpers ──
 

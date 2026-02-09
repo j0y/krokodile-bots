@@ -62,6 +62,12 @@ CORNER_BLEND_RANGE = 80.0
 # Max lateral push when wall is at distance 0 (scales down with distance)
 WALL_PUSH = 60.0
 
+# ── Portal clearance optimization ──
+# Number of evenly-spaced samples along the portal to test clearance
+_PORTAL_CLEARANCE_SAMPLES = 8
+# Only shift the portal position if improvement exceeds this (units)
+_PORTAL_CLEARANCE_THRESHOLD = 50.0
+
 
 # ---------------------------------------------------------------------------
 # Data structures
@@ -125,11 +131,15 @@ def compute_path_details(
     segments: list[Segment],
     nav: NavGraph,
     terrain: TerrainAnalyzer,
+    clearance: ClearanceMap | None = None,
 ) -> list[Segment]:
     """Set segment positions via closest-portal and detect climb/drop.
 
     Mirrors ``Path::ComputePathDetails``.  Modifies *segments* in-place and
     may insert additional segments for drop-downs and climb-ups.
+
+    When *clearance* is provided, portal crossing points are shifted along
+    the portal to the position with the best clearance in the travel direction.
     """
     if len(segments) < 2:
         return segments
@@ -172,6 +182,48 @@ def compute_path_details(
             else:
                 # Portal narrower than hull — use center
                 closest = (mid_x, mid_y, mid_z)
+
+            # ── Clearance-aware portal optimization ──
+            # Slide the crossing point along the portal to find the position
+            # with the best clearance in the travel direction.
+            if clearance is not None and portal_len > 2 * HULL_HALF_WIDTH:
+                travel_dx = mid_x - from_seg.pos[0]
+                travel_dy = mid_y - from_seg.pos[1]
+                travel_angle = math.atan2(travel_dy, travel_dx)
+
+                t_min_cl = HULL_HALF_WIDTH / portal_len
+                t_max_cl = 1.0 - t_min_cl
+                n_samples = _PORTAL_CLEARANCE_SAMPLES
+                best_clr = -1.0
+                best_t = (closest[0] - portal_a[0]) * (portal_b[0] - portal_a[0]) + \
+                         (closest[1] - portal_a[1]) * (portal_b[1] - portal_a[1])
+                if portal_len > 0.001:
+                    best_t = best_t / (portal_len * portal_len)
+                else:
+                    best_t = 0.5
+                # Query clearance at the current closest-point position
+                current_clr = clearance.get_clearance_at(
+                    from_seg.area_id, closest[0], closest[1], travel_angle, height=1,
+                )
+                best_clr = current_clr
+
+                for si in range(n_samples):
+                    st = t_min_cl + (t_max_cl - t_min_cl) * si / max(n_samples - 1, 1)
+                    sx = portal_a[0] + st * (portal_b[0] - portal_a[0])
+                    sy = portal_a[1] + st * (portal_b[1] - portal_a[1])
+                    clr = clearance.get_clearance_at(
+                        from_seg.area_id, sx, sy, travel_angle, height=1,
+                    )
+                    if clr > best_clr + _PORTAL_CLEARANCE_THRESHOLD:
+                        best_clr = clr
+                        best_t = st
+
+                sz = portal_a[2] + best_t * (portal_b[2] - portal_a[2])
+                closest = (
+                    portal_a[0] + best_t * (portal_b[0] - portal_a[0]),
+                    portal_a[1] + best_t * (portal_b[1] - portal_a[1]),
+                    sz,
+                )
 
             # ── Push into destination area ──
             # Offset crossing point past the portal edge so the bot aims
@@ -597,7 +649,7 @@ def compute_path(
         post_process(segs)
         return PathFollower(segs, nav, terrain, clearance)
 
-    area_path = nav.find_path(start_area, goal_area)
+    area_path = nav.find_path(start_area, goal_area, clearance)
     if area_path is None:
         return None
 
@@ -614,7 +666,7 @@ def compute_path(
     segments[-1].pos = goal_pos
 
     # Set crossing positions, detect climbs/drops
-    segments = compute_path_details(segments, nav, terrain)
+    segments = compute_path_details(segments, nav, terrain, clearance)
 
     # Compute forward/length/curvature
     post_process(segments)
