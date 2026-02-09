@@ -136,3 +136,67 @@ class ClearanceMap:
         closest_bin = int(np.argmin(ring))
         away_angle = float(self._ray_azimuths[closest_bin]) + math.pi
         return (math.cos(away_angle), math.sin(away_angle))
+
+    def get_repulsion(
+        self, area_id: int, x: float, y: float, height: int = 1,
+    ) -> tuple[float, float, float]:
+        """Weighted repulsion vector pushing away from nearby walls.
+
+        Sums inverse-distance contributions from all azimuth bins at the
+        nearest sample.  Walls closer than REPULSION_RADIUS produce a
+        force; farther walls contribute nothing.
+
+        Returns (dx, dy, strength) where (dx, dy) is a unit vector and
+        strength is in [0, 1].  Strength 0 means no nearby walls.
+        """
+        idx = self._id_to_idx.get(area_id)
+        if idx is None:
+            return (0.0, 0.0, 0.0)
+
+        start, count = int(self._sample_idx[idx, 0]), int(self._sample_idx[idx, 1])
+        if count <= 0:
+            return (0.0, 0.0, 0.0)
+
+        # Find nearest sample
+        if count == 1:
+            s = start
+        else:
+            positions = self._sample_pos[start : start + count, :2]
+            dx = positions[:, 0] - x
+            dy = positions[:, 1] - y
+            dists_sq = dx * dx + dy * dy
+            s = start + int(np.argmin(dists_sq))
+
+        ring = self._clearance[s, height, :].astype(np.float32)  # [A]
+        min_dist = float(np.min(ring))
+
+        # No wall within repulsion radius → no force
+        if min_dist >= _REPULSION_RADIUS:
+            return (0.0, 0.0, 0.0)
+
+        # Weighted sum: each bin contributes a push AWAY from its direction,
+        # weighted by how close the wall is (inverse linear)
+        push_x = 0.0
+        push_y = 0.0
+        for i in range(self._num_azimuths):
+            d = float(ring[i])
+            if d >= _REPULSION_RADIUS:
+                continue
+            # Weight: 1 at distance 0, 0 at REPULSION_RADIUS
+            w = 1.0 - d / _REPULSION_RADIUS
+            # Push AWAY from this direction (negate the azimuth vector)
+            angle = float(self._ray_azimuths[i])
+            push_x -= w * math.cos(angle)
+            push_y -= w * math.sin(angle)
+
+        mag = math.sqrt(push_x * push_x + push_y * push_y)
+        if mag < 0.001:
+            return (0.0, 0.0, 0.0)
+
+        # Strength: how urgently we need to move (0..1 based on closest wall)
+        strength = min(1.0, 1.0 - min_dist / _REPULSION_RADIUS)
+        return (push_x / mag, push_y / mag, strength)
+
+
+# Wall repulsion activates when closest wall is within this distance
+_REPULSION_RADIUS = 80.0

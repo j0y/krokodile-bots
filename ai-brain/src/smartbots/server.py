@@ -10,7 +10,6 @@ from pathlib import Path
 
 from smartbots.behavior import BotManager
 from smartbots.clearance import ClearanceMap
-from smartbots.collision_map import CollisionMap
 from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.spatial_recorder import SpatialRecorder
@@ -88,17 +87,6 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
     strategy = GatheringStrategy()
     log.info("Strategy: gathering")
 
-    # Try loading collision map for runtime avoidance
-    cmap: CollisionMap | None = None
-    collision_path = Path(data_dir) / f"{nav_map}_collision.npz"
-    if collision_path.exists():
-        try:
-            cmap = CollisionMap(collision_path)
-        except Exception:
-            log.exception("Failed to load collision map from %s", collision_path)
-    else:
-        log.info("No collision map at %s, using nav-mesh traces for avoidance", collision_path)
-
     # Try loading precomputed visibility map
     vis: VisibilityMap | None = None
     vis_path = Path(data_dir) / f"{nav_map}_visibility.npz"
@@ -126,7 +114,7 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
         recorder = SpatialRecorder(nav_map, data_dir)
         log.info("Position recording enabled (dir=%s)", data_dir)
 
-    return BotManager(nav, terrain, strategy, cmap, vis, clr), recorder
+    return BotManager(nav, terrain, strategy, vis, clr), recorder
 
 
 async def run_server(host: str, port: int) -> None:

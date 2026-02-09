@@ -16,7 +16,6 @@ from smartbots.terrain import TerrainAnalyzer
 
 if TYPE_CHECKING:
     from smartbots.clearance import ClearanceMap
-    from smartbots.collision_map import CollisionMap
     from smartbots.strategy import Strategy
     from smartbots.visibility import VisibilityMap
 
@@ -83,14 +82,12 @@ class BotManager:
         nav: NavGraph,
         terrain: TerrainAnalyzer,
         strategy: Strategy,
-        collision_map: CollisionMap | None = None,
         visibility: VisibilityMap | None = None,
         clearance: ClearanceMap | None = None,
     ) -> None:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
-        self.collision_map = collision_map
         self.visibility = visibility
         self.clearance = clearance
         self._brains: dict[int, BotBrain] = {}
@@ -157,18 +154,14 @@ class BotManager:
         self, brain: BotBrain, pos: tuple[float, float, float],
         target: tuple[float, float, float], tick: int,
     ) -> BotNavState | None:
-        follower = compute_path(
-            pos, target, self.nav, self.terrain, self.collision_map, self.clearance,
-        )
+        follower = compute_path(pos, target, self.nav, self.terrain, self.clearance)
 
         if follower is None:
             # Fallback: try navigating to nearest large area
             current_area = self.nav.find_area(pos)
             local_target = self.nav.find_gathering_point(current_area)
             local_pos = self.nav.area_center(local_target)
-            follower = compute_path(
-                pos, local_pos, self.nav, self.terrain, self.collision_map, self.clearance,
-            )
+            follower = compute_path(pos, local_pos, self.nav, self.terrain, self.clearance)
 
         if follower is None:
             return None
