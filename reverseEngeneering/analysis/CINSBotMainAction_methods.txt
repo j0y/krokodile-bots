@@ -1,0 +1,21 @@
+00743730 t CINSBotMainAction::OnStart(CINSNextBot*, Action<CINSNextBot>*)
+00743750 t CINSBotMainAction::OnUnStuck(CINSNextBot*)
+00743780 t non-virtual thunk to CINSBotMainAction::ShouldPursue(INextBot const*, CKnownEntity const*) const
+00743790 t CINSBotMainAction::ShouldPursue(INextBot const*, CKnownEntity const*) const
+007437a0 t non-virtual thunk to CINSBotMainAction::SelectTargetPoint(INextBot const*, CBaseCombatCharacter const*) const
+007437b0 t CINSBotMainAction::SelectTargetPoint(INextBot const*, CBaseCombatCharacter const*) const
+00743800 t CINSBotMainAction::InitialContainedAction(CINSNextBot*)
+00743aa0 t CINSBotMainAction::Update(CINSNextBot*, float)
+00743e10 t CINSBotMainAction::OnStuck(CINSNextBot*)
+00744050 t CINSBotMainAction::OnContact(CINSNextBot*, CBaseEntity*, CGameTrace*)
+007440e0 t CINSBotMainAction::OnInjured(CINSNextBot*, CTakeDamageInfo const&)
+00744200 t CINSBotMainAction::IsImmediateThreat(CBaseCombatCharacter const*, CKnownEntity const*) const
+007443b0 t CINSBotMainAction::SelectCloserThreat(CINSNextBot*, CKnownEntity const*, CKnownEntity const*) const
+00744640 t CINSBotMainAction::SelectMoreDangerousThreatInternal(INextBot const*, CBaseCombatCharacter const*, CKnownEntity const*, CKnownEntity const*) const
+00744750 t non-virtual thunk to CINSBotMainAction::SelectMoreDangerousThreat(INextBot const*, CBaseCombatCharacter const*, CKnownEntity const*, CKnownEntity const*) const
+00744760 t CINSBotMainAction::SelectMoreDangerousThreat(INextBot const*, CBaseCombatCharacter const*, CKnownEntity const*, CKnownEntity const*) const
+007447a0 t CINSBotMainAction::GetName() const
+007447c0 t non-virtual thunk to CINSBotMainAction::~CINSBotMainAction()
+007447d0 t CINSBotMainAction::~CINSBotMainAction()
+00744800 t non-virtual thunk to CINSBotMainAction::~CINSBotMainAction()
+00744810 t CINSBotMainAction::~CINSBotMainAction()

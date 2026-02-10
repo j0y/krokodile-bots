@@ -1,0 +1,173 @@
+00732e80 t non-virtual thunk to CINSNextBot::CINSNextBotIntention::~CINSNextBotIntention()
+00732e90 t CINSNextBot::CINSNextBotIntention::~CINSNextBotIntention()
+00732f00 t CINSNextBot::ReleaseSprintButton()
+00732f20 t non-virtual thunk to CINSNextBot::ReleaseWalkButton()
+00732f30 t CINSNextBot::ReleaseWalkButton()
+00732f50 t CINSNextBot::ReleaseProneButton()
+00732f60 t CINSNextBot::ReleaseLeanLeftButton()
+00732f80 t CINSNextBot::ReleaseLeanRightButton()
+00732fa0 t CINSNextBot::ReleaseFiremodeButton()
+00732fc0 t CINSNextBot::ReleaseIronsightButton()
+00732fe0 t CINSNextBot::ReleaseTertiaryAttackButton()
+00733000 t SortBotCoverSpots(CINSNextBot::INSBotCoverContainer const*, CINSNextBot::INSBotCoverContainer const*)
+007330b0 t non-virtual thunk to CINSNextBot::CINSNextBotIntention::~CINSNextBotIntention()
+007330c0 t CINSNextBot::CINSNextBotIntention::~CINSNextBotIntention()
+00733320 t CINSNextBot::AllocatePlayerEntity(edict_t*, char const*)
+00733370 t non-virtual thunk to CINSNextBot::Upkeep()
+00733380 t CINSNextBot::Upkeep()
+00733450 t non-virtual thunk to CINSNextBot::IsDebugging(unsigned int) const
+00733460 t CINSNextBot::IsDebugging(unsigned int) const
+00733600 t non-virtual thunk to CINSNextBot::OnNavAreaChanged(CNavArea*, CNavArea*)
+00733610 t CINSNextBot::OnNavAreaChanged(CNavArea*, CNavArea*)
+007336d0 t CINSNextBot::Touch(CBaseEntity*)
+00733800 t CINSNextBot::PressTertiaryAttackButton(float)
+007338c0 t CINSNextBot::PressIronsightButton(float)
+00733980 t CINSNextBot::PressFiremodeButton(float)
+00733a40 t CINSNextBot::PressLeanRightButton(float)
+00733b00 t CINSNextBot::PressLeanLeftButton(float)
+00733bc0 t CINSNextBot::PressProneButton(float)
+00733c80 t non-virtual thunk to CINSNextBot::PressWalkButton(float)
+00733c90 t CINSNextBot::PressWalkButton(float)
+00733d50 t CINSNextBot::PressSprintButton(float)
+00733e10 t CINSNextBot::Event_Killed(CTakeDamageInfo const&)
+00734290 t non-virtual thunk to CINSNextBot::OnWeaponFired(CBaseCombatCharacter*, CBaseCombatWeapon*)
+007342a0 t CINSNextBot::OnWeaponFired(CBaseCombatCharacter*, CBaseCombatWeapon*)
+00734560 t CINSNextBot::CanActiveWeaponFire() const
+00734570 t CINSNextBot::ChangeDifficulty(CINSNextBot::BotDifficulty_e)
+007346d0 t CINSNextBot::GetDifficulty() const
+007346e0 t CINSNextBot::Chatter(char*, Vector)
+007346f0 t CINSNextBot::ShouldRushToCover()
+00734790 t CINSNextBot::GetHidingCover(bool)
+00734d50 t CINSNextBot::GetClosestPartialCover()
+00734db0 t CINSNextBot::IsInCover()
+00734f50 t CINSNextBot::GetTravelDistance(Vector, float)
+00735170 t CINSNextBot::IsSpotOccupied(Vector)
+007351c0 t CINSNextBot::FindNearbyRetreatArea(float)
+007353f0 t CINSNextBot::FindNearbyRetreatPosition(float)
+00735470 t CINSNextBot::GetDesiredPathLookAheadRange() const
+007354d0 t CINSNextBot::IsLineOfFireClear(Vector const&, Vector const&) const
+00735690 t CINSNextBot::IsLineOfFireClear(Vector const&) const
+007356e0 t CINSNextBot::IsLineOfFireClear(Vector const&, CBaseEntity*) const
+007358d0 t CINSNextBot::IsLineOfFireClear(CBaseEntity*) const
+00735920 t CINSNextBot::IsPointBetweenTargetAndSelf(Vector, Vector)
+00735a30 t CINSNextBot::IsPointBetweenTargetAndSelf(Vector, CBaseEntity*)
+00735ab0 t CINSNextBot::IsEntityBetweenTargetAndSelf(CBaseEntity*, CBaseEntity*)
+00735b70 t CINSNextBot::GetAttackCover(bool)
+007360f0 t CINSNextBot::GetAnyCover()
+00736260 t CINSNextBot::ComputePartPositions(CINSPlayer*)
+00736730 t CINSNextBot::GetPartPosition(CINSPlayer*, CINSNextBot::VisiblePartType) const
+00736950 t CINSNextBot::GetViewPosition(Vector)
+00736a10 t CINSNextBot::GetTargetPosition(CBaseCombatCharacter const*)
+007379a0 t CINSNextBot::GetEntityViewPosition(CBaseEntity*)
+00737a50 t CINSNextBot::TransientlyConsistentRandomValue(float, int) const
+00737ae0 t CINSNextBot::MaxPathLength()
+00737ba0 t CINSNextBot::IsEscorting()
+00737c10 t CINSNextBot::GetEscortTarget()
+00737c80 t CINSNextBot::SetEscortFormation(INSBotEscortFormation*)
+00737cc0 t CINSNextBot::IsInFormation()
+00737db0 t CINSNextBot::IsInvestigating() const
+00737dc0 t CINSNextBot::SetInvestigating(bool)
+00737de0 t CINSNextBot::GetCurrentInvestigationArea()
+00737e00 t CINSNextBot::GetCurrentInvestigationLocation()
+00737e60 t CINSNextBot::GetCurrentInvestigation()
+00737e80 t CINSNextBot::HasInvestigations()
+00737ea0 t CINSNextBot::GetCurrentInvestigationPriority()
+00737ec0 t CINSNextBot::IsFollowingOrder() const
+00737ed0 t CINSNextBot::SetFollowingOrder(bool)
+00737ef0 t CINSNextBot::GetCurrentOrder()
+00737f10 t CINSNextBot::GetCurrentOrderRadialCommand()
+00737f40 t CINSNextBot::GetCurrentOrderIssuer()
+00737f70 t CINSNextBot::GetCurrentOrderTarget()
+00737fd0 t CINSNextBot::GetCurrentOrderMarkedObjective()
+00738000 t CINSNextBot::GetCurrentOrderPriority()
+00738030 t CINSNextBot::HasOrders()
+00738050 t CINSNextBot::BotSpeakIfAllowed(CAI_Concept, SpeechPriorityType, char const*, char*, unsigned int, IRecipientFilter*)
+007380b0 t CINSNextBot::BotSpeakConcept(ResponseRules::CRR_Response&, int)
+007380f0 t CINSNextBot::BotSpeakConceptIfAllowed(int, char const*, char*, unsigned int, IRecipientFilter*)
+00738130 t CINSNextBot::UpdateIdleStatus()
+00738230 t CINSNextBot::IsIdle()
+00738290 t CINSNextBot::GetIdleDuration()
+007382f0 t CINSNextBot::ResetIdleStatus()
+00738360 t CINSNextBot::ChargeTarget(Vector, float)
+00738430 t CINSNextBot::ResetChargeStatus()
+007384b0 t CINSNextBot::CINSNextBotIntention::CINSNextBotIntention(CINSNextBot*)
+00738630 t CINSNextBot::CINSNextBotIntention::Reset()
+00738b30 t CINSNextBot::FindNearbyCoverPosition(float)
+00738c00 t CINSNextBot::CINSNextBot()
+00739db0 t non-virtual thunk to CINSNextBot::~CINSNextBot()
+00739dc0 t CINSNextBot::~CINSNextBot()
+0073a0e0 t non-virtual thunk to CINSNextBot::~CINSNextBot()
+0073a0f0 t CINSNextBot::~CINSNextBot()
+0073a130 t CINSNextBot::SortAndRemoveInvestigations()
+0073a2d0 t CINSNextBot::SortAndRemoveOrders()
+0073a3c0 t CINSNextBot::Spawn()
+0073ac70 t CINSNextBot::UpdateCover()
+0073b430 t non-virtual thunk to CINSNextBot::Update()
+0073b440 t CINSNextBot::Update()
+0073ba60 t CINSNextBot::AddInvestigation(CNavArea*, InvestigatePriority)
+0073bc60 t CINSNextBot::AddInvestigation(Vector, InvestigatePriority)
+0073bce0 t CINSNextBot::AddInvestigation(CBaseEntity*, InvestigatePriority)
+0073bd60 t CINSNextBot::AddOrder(eRadialCommands, int, Vector, OrderPriority, int, float)
+0073beb0 t CINSNextBot::AvoidPlayers(CUserCmd*)
+0073c1e0 t CINSNextBot::CINSNextBotIntention::Update()
+0073c2a0 t CINSNextBot::GetLastKnownArea() const
+0073c2b0 t non-virtual thunk to CINSNextBot::GetLocomotionInterface() const
+0073c2c0 t CINSNextBot::GetLocomotionInterface() const
+0073c2d0 t non-virtual thunk to CINSNextBot::GetBodyInterface() const
+0073c2e0 t CINSNextBot::GetBodyInterface() const
+0073c2f0 t non-virtual thunk to CINSNextBot::GetVisionInterface() const
+0073c300 t CINSNextBot::GetVisionInterface() const
+0073c310 t CINSNextBot::GetChatter()
+0073c320 t CINSNextBot::CINSNextBotIntention::FirstContainedResponder() const
+0073c330 t CINSNextBot::CINSNextBotIntention::NextContainedResponder(INextBotEventResponder*) const
+0073c340 t non-virtual thunk to CINSNextBot::GetIntentionInterface() const
+0073c350 t CINSNextBot::GetIntentionInterface() const
+0073c360 t CINSNextBot::IsDormantWhenDead() const
+0073db00 t CINSNextBot::IsInCombat() const
+0073fa50 t CUtlVector<CINSNextBot::INSBotCoverContainer, CUtlMemory<CINSNextBot::INSBotCoverContainer, int> >::Sort(int (*)(CINSNextBot::INSBotCoverContainer const*, CINSNextBot::INSBotCoverContainer const*))
+00740f80 t CUtlMemory<CINSNextBot::INSBotCoverContainer, int>::~CUtlMemory()
+00740fe0 t CUtlVector<CINSNextBot::INSBotCoverContainer, CUtlMemory<CINSNextBot::INSBotCoverContainer, int> >::~CUtlVector()
+00741a50 t CUtlMemory<CINSNextBot::INSBotCoverContainer, int>::Grow(int)
+00741b40 t CUtlVector<CINSNextBot::INSBotCoverContainer, CUtlMemory<CINSNextBot::INSBotCoverContainer, int> >::InsertBefore(int, CINSNextBot::INSBotCoverContainer const&)
+00749e70 t CINSNextBot::EyePosition()
+00749eb0 t CINSNextBot::CanAttackTarget(CKnownEntity const*)
+00749f60 t CINSNextBot::GetTarget()
+00749f90 t CINSNextBot::ChasePathInvalid()
+00749fc0 t CINSNextBot::PathFollowerInvalid()
+00749ff0 t CINSNextBot::IsLost()
+0074a030 t CINSNextBot::KillSelf()
+0074a0d0 t CINSNextBot::GetHumanSquadmate()
+0074a100 t CINSNextBot::GetNearestEnemy()
+0074a170 t CINSNextBot::UpdateLookingAroundForIncomingPlayers(bool, bool)
+0074a1e0 t CINSNextBot::UpdateLookingAroundForEnemies()
+0074a510 t CINSNextBot::GetSuppressingOffset(CKnownEntity const*)
+0074a800 t CINSNextBot::ShouldSuppressThreat(CKnownEntity const*) const
+0074aa50 t CINSNextBot::GetAimToleranceBloat(CKnownEntity const*)
+0074ae70 t CINSNextBot::FireWeaponAtEnemy()
+0074b860 t CINSNextBot::IsSuppressed()
+0074b8e0 t CINSNextBot::CanCheckRetreat()
+0074b9d0 t CINSNextBot::ApplyAimPenalty(CKnownEntity const*, Vector&)
+0074c3a0 t CINSNextBot::UpdateChasePath(CBaseEntity*)
+0074c600 t CINSNextBot::ComputeChasePath(CBaseEntity*)
+0074c880 t CINSNextBot::ComputePathFollower(Vector)
+0074ca70 t CINSNextBot::UpdatePathFollower(Vector)
+0075dac0 t CINSNextBot::GetPistolFireRate()
+0075db70 t CINSNextBot::ChooseBestWeapon(CINSWeapon*, float)
+0075dc40 t CINSNextBot::GetActiveWeaponAmmoRatio()
+0075dcb0 t CINSNextBot::ShouldReload()
+0075dd80 t CINSNextBot::ShouldOpportunisticReload()
+0075df80 t CINSNextBot::CheckAnyAmmo()
+0075e150 t CINSNextBot::GetMaxAttackRange(CINSWeapon*) const
+0075e310 t CINSNextBot::GetDesiredAttackRange(CINSWeapon*) const
+0075e540 t CINSNextBot::ChooseBestWeapon(CKnownEntity const*)
+0075e920 t CINSNextBot::GetMaxHipFireAttackRange(CINSWeapon*) const
+0075ea60 t CINSNextBot::GetAttackDelay(float, CINSWeapon*, bool)
+0075ee60 t CINSNextBot::FireActiveWeapon(CINSNextBot*, CKnownEntity const*)
+0075f330 t CINSNextBot::CanIAttack()
+0075f3b0 t CINSNextBot::AdjustCombatState()
+0075f3f0 t CINSNextBot::GetTargetNoise(CBaseCombatCharacter const*) const
+0075f920 t CINSNextBot::HasExplosive()
+009733e0 r typeinfo name for CINSNextBot::CINSNextBotIntention
+00b8b130 d typeinfo for CINSNextBot::CINSNextBotIntention
+00b8b180 d vtable for CINSNextBot::CINSNextBotIntention
+00cdd560 b CINSNextBot::m_partInfo

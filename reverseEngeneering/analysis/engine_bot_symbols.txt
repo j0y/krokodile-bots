@@ -1,0 +1,2 @@
+000adda0 t CBaseServer::IsPlayingSoloAgainstBots() const
+0037c160 b sv_stressbots

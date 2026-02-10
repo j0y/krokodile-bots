@@ -1,0 +1,302 @@
+00786bc0 t NextBotCombatCharacter::GetServerClass()
+00786be0 t NextBotCombatCharacter::YouForgotToImplementOrDeclareServerClass()
+00787e30 t int ServerClassInit<DT_NextBot::ignored>(DT_NextBot::ignored*)
+0091d4c7 r typeinfo name for INextBotEventResponder
+0091d5aa r typeinfo name for INextBotComponent
+00958aa9 r typeinfo name for IBotController
+00958c4a r typeinfo name for CBotCmd
+00958d5c r typeinfo name for CPluginBotManager
+00958d70 r typeinfo name for IBotManager
+0096e319 r typeinfo name for CBotCountIssue
+0096e32a r typeinfo name for CBotDifficultyIssue
+0096f380 r typeinfo name for NextBotTraceFilterIgnoreActors
+0096f3c0 r typeinfo name for CINSNextBotCPDistancePathCost
+0096f95c r typeinfo name for CINSNextBotPathCost
+0096f972 r typeinfo name for CINSNextBotChasePathCost
+0096f9dc r typeinfo name for NextBotTraceFilterOnlyActors
+0096fa00 r typeinfo name for NextBotTraversableTraceFilter
+0096fd4f r typeinfo name for CINSBotApproach
+0096fd61 r typeinfo name for Action<CINSNextBot>
+0096ff3e r typeinfo name for CINSBotAttack
+00970048 r typeinfo name for CINSBotAttackAdvance
+009700e4 r typeinfo name for CINSBotAttackCQC
+0097024e r typeinfo name for CINSBotAttackFromCover
+009702f8 r typeinfo name for CINSBotAttackInPlace
+0097043e r typeinfo name for CINSBotAttackIntoCover
+009704ae r typeinfo name for CINSBotAttackLMG
+0097050c r typeinfo name for CINSBotAttackMelee
+00970535 r typeinfo name for CINSBotAttackPistol
+0097055e r typeinfo name for CINSBotAttackRifle
+00970587 r typeinfo name for CINSBotAttackSniper
+0097071f r typeinfo name for CINSBotCaptureCP
+0097079e r typeinfo name for CINSBotCaptureFlag
+00970c2b r typeinfo name for CINSBotCombat
+00970c47 r typeinfo name for CINSBotDead
+00970d8a r typeinfo name for CINSBotDestroyCache
+00970fc0 r typeinfo name for CINSBotEscort
+009711cb r typeinfo name for CINSBotFireRPG
+009711ee r typeinfo name for INextBotReply
+0097121d r typeinfo name for CINSBotFlashed
+0097124f r typeinfo name for CINSBotFollowCommand
+0097130f r typeinfo name for CINSBotGuardCP
+009713a1 r typeinfo name for CINSBotGuardDefensive
+009714fa r typeinfo name for CINSBotInvestigate
+009715a2 r typeinfo name for CINSBotInvestigateGunshot
+00971674 r typeinfo name for CINSBotPatrol
+00971739 r typeinfo name for CINSBotPursue
+0097180f r typeinfo name for CINSBotReload
+00971a72 r typeinfo name for CINSBotRetreat
+00971c0b r typeinfo name for CINSBotRetreatToCover
+00971d52 r typeinfo name for CINSBotRetreatToHidingSpot
+00971d9b r typeinfo name for CINSBotSpecialAction
+00971e37 r typeinfo name for CINSBotStuck
+00971ef8 r typeinfo name for CINSBotSuppressTarget
+00971f98 r typeinfo name for CINSBotSweepArea
+009720fe r typeinfo name for CINSBotThrowGrenade
+00972167 r typeinfo name for CINSBotActionAmbush
+0097223a r typeinfo name for CINSBotActionCheckpoint
+009722c4 r typeinfo name for CINSBotActionConquer
+00972333 r typeinfo name for CINSBotActionFirefight
+00972367 r typeinfo name for CINSBotActionFlashpoint
+0097239f r typeinfo name for CINSBotActionHunt
+00972428 r typeinfo name for CINSBotActionInfiltrate
+009724a7 r typeinfo name for CINSBotActionOccupy
+009726c5 r typeinfo name for CINSBotActionOutpost
+009726dc r typeinfo name for CINSBotActionPush
+009726f0 r typeinfo name for CINSBotActionSkirmish
+0097272c r typeinfo name for CINSBotActionStrike
+00972782 r typeinfo name for CINSBotActionSurvival
+009727f8 r typeinfo name for CINSBotActionTraining
+00972819 r typeinfo name for CINSBotGamemodeMonitor
+00972913 r typeinfo name for CINSBotInvestigationMonitor
+00972ce8 r typeinfo name for CINSBotTacticalMonitor
+009733e0 r typeinfo name for CINSNextBot::CINSNextBotIntention
+00973406 r typeinfo name for CINSNextBot
+00973420 r typeinfo name for PrecacheInsBotPrecache::CResourcePrecacher
+0097344f r typeinfo name for NextBotPlayer<CINSPlayer>
+0097346d r typeinfo name for INextBotPlayerInput
+00973483 r typeinfo name for Behavior<CINSNextBot>
+0097349c r typeinfo name for INSBotSearchForCover
+009734e1 r typeinfo name for INSBotSafeCoverTest
+00973560 r typeinfo name for CEntityFactory<CINSNextBot>
+0097365a r typeinfo name for CINSBotMainAction
+00973880 r typeinfo name for CINSBotBody
+009739d4 r typeinfo name for BotEnemySpottedMeme
+009739ea r typeinfo name for BotFragOut
+009739f7 r typeinfo name for BotMeme
+00976ae4 r typeinfo name for CINSBotLocomotion
+00976f2f r typeinfo name for CINSNextBotManager
+009771dd r typeinfo name for CINSBotVision
+0097ba89 r typeinfo name for NextBotCombatCharacter
+0097bc5c r typeinfo name for NextBotGroundLocomotion
+0097bd2c r typeinfo name for INextBot
+0097c243 r typeinfo name for NextBotManager
+0097c4fc r typeinfo name for NextBotVisionTraceFilter
+0097cd80 r typeinfo name for CSimpleBot::CSimpleBotIntention
+0097cda4 r typeinfo name for CSimpleBot
+0097cdc0 r typeinfo name for simple_botPrecache::CResourcePrecacher
+0097cdeb r typeinfo name for CSimpleBotRoam
+0097cdfc r typeinfo name for Action<CSimpleBot>
+0097ce12 r typeinfo name for CSimpleBotPathCost
+0097ce27 r typeinfo name for Behavior<CSimpleBot>
+0097ce40 r typeinfo name for CEntityFactory<CSimpleBot>
+00b18fa0 d typeinfo for INextBotEventResponder
+00b19000 d vtable for INextBotEventResponder
+00b19bbc d typeinfo for INextBotComponent
+00b19be0 d vtable for INextBotComponent
+00b5d304 d typeinfo for IBotController
+00b5d380 d vtable for IBotController
+00b5d490 d vtable for CBotCmd
+00b5d4a0 d typeinfo for CBotCmd
+00b5d51c d typeinfo for CPluginBotManager
+00b5d538 d vtable for CPluginBotManager
+00b5d548 d typeinfo for IBotManager
+00b83680 d vtable for CBotDifficultyIssue
+00b836e0 d vtable for CBotCountIssue
+00b8373c d typeinfo for CBotCountIssue
+00b83748 d typeinfo for CBotDifficultyIssue
+00b84328 d vtable for NextBotTraceFilterIgnoreActors
+00b84340 d typeinfo for NextBotTraceFilterIgnoreActors
+00b84360 d vtable for CINSNextBotCPDistancePathCost
+00b8436c d typeinfo for CINSNextBotCPDistancePathCost
+00b84538 d vtable for CINSNextBotChasePathCost
+00b84548 d vtable for CINSNextBotPathCost
+00b84554 d typeinfo for CINSNextBotPathCost
+00b84560 d typeinfo for CINSNextBotChasePathCost
+00b845b8 d vtable for NextBotTraceFilterOnlyActors
+00b845d0 d typeinfo for NextBotTraceFilterOnlyActors
+00b845e0 d vtable for NextBotTraversableTraceFilter
+00b845f8 d typeinfo for NextBotTraversableTraceFilter
+00b84604 d typeinfo for CINSBotApproach
+00b84620 d vtable for CINSBotApproach
+00b84800 d typeinfo for Action<CINSNextBot>
+00b84820 d vtable for Action<CINSNextBot>
+00b849f0 d typeinfo for CINSBotAttack
+00b84a00 d vtable for CINSBotAttack
+00b84be0 d typeinfo for CINSBotAttackAdvance
+00b84c00 d vtable for CINSBotAttackAdvance
+00b84de8 d typeinfo for CINSBotAttackCQC
+00b84e00 d vtable for CINSBotAttackCQC
+00b84fe8 d typeinfo for CINSBotAttackFromCover
+00b85000 d vtable for CINSBotAttackFromCover
+00b851e8 d typeinfo for CINSBotAttackInPlace
+00b85200 d vtable for CINSBotAttackInPlace
+00b8540c d typeinfo for CINSBotAttackIntoCover
+00b85420 d vtable for CINSBotAttackIntoCover
+00b8560c d typeinfo for CINSBotAttackLMG
+00b85620 d vtable for CINSBotAttackLMG
+00b85808 d typeinfo for CINSBotAttackMelee
+00b85820 d vtable for CINSBotAttackMelee
+00b85a08 d typeinfo for CINSBotAttackPistol
+00b85a20 d vtable for CINSBotAttackPistol
+00b85c08 d typeinfo for CINSBotAttackRifle
+00b85c20 d vtable for CINSBotAttackRifle
+00b85e08 d typeinfo for CINSBotAttackSniper
+00b85e20 d vtable for CINSBotAttackSniper
+00b86008 d typeinfo for CINSBotCaptureCP
+00b86020 d vtable for CINSBotCaptureCP
+00b861f4 d typeinfo for CINSBotCaptureFlag
+00b86200 d vtable for CINSBotCaptureFlag
+00b863d4 d typeinfo for CINSBotCombat
+00b863e0 d vtable for CINSBotCombat
+00b865b8 d typeinfo for CINSBotDead
+00b865e0 d vtable for CINSBotDead
+00b867b0 d typeinfo for CINSBotDestroyCache
+00b867c0 d vtable for CINSBotDestroyCache
+00b86994 d typeinfo for CINSBotEscort
+00b869a0 d vtable for CINSBotEscort
+00b86b80 d typeinfo for CINSBotFireRPG
+00b86ba0 d vtable for CINSBotFireRPG
+00b86d98 d typeinfo for INextBotReply
+00b86da0 d typeinfo for CINSBotFlashed
+00b86dc0 d vtable for CINSBotFlashed
+00b86f90 d typeinfo for CINSBotFollowCommand
+00b86fa0 d vtable for CINSBotFollowCommand
+00b87170 d typeinfo for CINSBotGuardCP
+00b87180 d vtable for CINSBotGuardCP
+00b87350 d typeinfo for CINSBotGuardDefensive
+00b87360 d vtable for CINSBotGuardDefensive
+00b87530 d typeinfo for CINSBotInvestigate
+00b87540 d vtable for CINSBotInvestigate
+00b87718 d typeinfo for CINSBotInvestigateGunshot
+00b87740 d vtable for CINSBotInvestigateGunshot
+00b87918 d typeinfo for CINSBotPatrol
+00b87940 d vtable for CINSBotPatrol
+00b87b30 d typeinfo for CINSBotPursue
+00b87b40 d vtable for CINSBotPursue
+00b87d18 d typeinfo for CINSBotReload
+00b87d40 d vtable for CINSBotReload
+00b87f10 d typeinfo for CINSBotRetreat
+00b87f20 d vtable for CINSBotRetreat
+00b880f8 d typeinfo for CINSBotRetreatToCover
+00b88120 d vtable for CINSBotRetreatToCover
+00b882f8 d typeinfo for CINSBotRetreatToHidingSpot
+00b88320 d vtable for CINSBotRetreatToHidingSpot
+00b884f8 d typeinfo for CINSBotSpecialAction
+00b88520 d vtable for CINSBotSpecialAction
+00b886f0 d typeinfo for CINSBotStuck
+00b88700 d vtable for CINSBotStuck
+00b888d0 d typeinfo for CINSBotSuppressTarget
+00b888e0 d vtable for CINSBotSuppressTarget
+00b88ab8 d typeinfo for CINSBotSweepArea
+00b88ae0 d vtable for CINSBotSweepArea
+00b88cb0 d typeinfo for CINSBotThrowGrenade
+00b88cc0 d vtable for CINSBotThrowGrenade
+00b88eb8 d typeinfo for CINSBotActionAmbush
+00b88ee0 d vtable for CINSBotActionAmbush
+00b890b4 d typeinfo for CINSBotActionCheckpoint
+00b890c0 d vtable for CINSBotActionCheckpoint
+00b89298 d typeinfo for CINSBotActionConquer
+00b892c0 d vtable for CINSBotActionConquer
+00b89494 d typeinfo for CINSBotActionFirefight
+00b894a0 d vtable for CINSBotActionFirefight
+00b89674 d typeinfo for CINSBotActionFlashpoint
+00b89680 d vtable for CINSBotActionFlashpoint
+00b89854 d typeinfo for CINSBotActionHunt
+00b89860 d vtable for CINSBotActionHunt
+00b89a3c d typeinfo for CINSBotActionInfiltrate
+00b89a60 d vtable for CINSBotActionInfiltrate
+00b89c34 d typeinfo for CINSBotActionOccupy
+00b89c40 d vtable for CINSBotActionOccupy
+00b89e14 d typeinfo for CINSBotActionOutpost
+00b89e20 d vtable for CINSBotActionOutpost
+00b89ffc d typeinfo for CINSBotActionPush
+00b8a020 d vtable for CINSBotActionPush
+00b8a1f4 d typeinfo for CINSBotActionSkirmish
+00b8a200 d vtable for CINSBotActionSkirmish
+00b8a3d4 d typeinfo for CINSBotActionStrike
+00b8a3e0 d vtable for CINSBotActionStrike
+00b8a5b0 d typeinfo for CINSBotActionSurvival
+00b8a5c0 d vtable for CINSBotActionSurvival
+00b8a798 d typeinfo for CINSBotActionTraining
+00b8a7c0 d vtable for CINSBotActionTraining
+00b8a994 d typeinfo for CINSBotGamemodeMonitor
+00b8a9a0 d vtable for CINSBotGamemodeMonitor
+00b8ab70 d typeinfo for CINSBotInvestigationMonitor
+00b8ab80 d vtable for CINSBotInvestigationMonitor
+00b8ad50 d typeinfo for CINSBotTacticalMonitor
+00b8ad80 d vtable for CINSBotTacticalMonitor
+00b8b130 d typeinfo for CINSNextBot::CINSNextBotIntention
+00b8b13c d typeinfo for CINSNextBot
+00b8b148 d typeinfo for PrecacheInsBotPrecache::CResourcePrecacher
+00b8b158 d vtable for PrecacheInsBotPrecache::CResourcePrecacher
+00b8b180 d vtable for CINSNextBot::CINSNextBotIntention
+00b8b2c0 d vtable for CINSNextBot
+00b8be40 d typeinfo for NextBotPlayer<CINSPlayer>
+00b8be68 d typeinfo for INextBotPlayerInput
+00b8be80 d vtable for Behavior<CINSNextBot>
+00b8bfc0 d typeinfo for Behavior<CINSNextBot>
+00b8bfe0 d vtable for INextBotPlayerInput
+00b8c060 d vtable for NextBotPlayer<CINSPlayer>
+00b8cba0 d vtable for INSBotSearchForCover
+00b8cbc0 d typeinfo for INSBotSearchForCover
+00b8cbe8 d vtable for INSBotSafeCoverTest
+00b8cbf4 d typeinfo for INSBotSafeCoverTest
+00b8cc68 d vtable for CEntityFactory<CINSNextBot>
+00b8cc7c d typeinfo for CEntityFactory<CINSNextBot>
+00b8cc88 d typeinfo for CINSBotMainAction
+00b8cca0 d vtable for CINSBotMainAction
+00b8ce7c d typeinfo for CINSBotBody
+00b8cea0 d vtable for CINSBotBody
+00b8d018 d typeinfo for BotEnemySpottedMeme
+00b8d024 d typeinfo for BotFragOut
+00b8d030 d vtable for BotEnemySpottedMeme
+00b8d048 d vtable for BotFragOut
+00b8d060 d vtable for BotMeme
+00b8d074 d typeinfo for BotMeme
+00b8d07c d typeinfo for CINSBotLocomotion
+00b8d0a0 d vtable for CINSBotLocomotion
+00b8d260 d typeinfo for CINSNextBotManager
+00b8d280 d vtable for CINSNextBotManager
+00b8d2e4 d typeinfo for CINSBotVision
+00b8d300 d vtable for CINSBotVision
+00b919a0 d typeinfo for NextBotCombatCharacter
+00b919c0 d vtable for NextBotCombatCharacter
+00b92224 d typeinfo for NextBotGroundLocomotion
+00b92240 d vtable for NextBotGroundLocomotion
+00b92434 d typeinfo for INextBot
+00b92440 d vtable for INextBot
+00b92770 d typeinfo for NextBotManager
+00b92780 d vtable for NextBotManager
+00b92940 d vtable for NextBotVisionTraceFilter
+00b92958 d typeinfo for NextBotVisionTraceFilter
+00b92dbc d typeinfo for CSimpleBot::CSimpleBotIntention
+00b92dc8 d typeinfo for CSimpleBot
+00b92dd4 d typeinfo for simple_botPrecache::CResourcePrecacher
+00b92de0 d vtable for simple_botPrecache::CResourcePrecacher
+00b92e00 d vtable for CSimpleBot
+00b93500 d vtable for CSimpleBot::CSimpleBotIntention
+00b93640 d vtable for Action<CSimpleBot>
+00b93820 d vtable for CSimpleBotRoam
+00b939f0 d typeinfo for CSimpleBotRoam
+00b93a00 d typeinfo for Action<CSimpleBot>
+00b93a20 d vtable for CSimpleBotPathCost
+00b93a2c d typeinfo for CSimpleBotPathCost
+00b93a40 d vtable for Behavior<CSimpleBot>
+00b93b80 d typeinfo for Behavior<CSimpleBot>
+00b93ba0 d vtable for CEntityFactory<CSimpleBot>
+00b93bb4 d typeinfo for CEntityFactory<CSimpleBot>
+00bfe5a0 d NextBotCombatCharacter::m_pClassSendTable
+00ce73e0 b g_NextBotCombatCharacter_ClassReg
+00ce7400 b guard variable for ServerClassInit<DT_NextBot::ignored>(DT_NextBot::ignored*)::g_SendProps
+00ce7420 b ServerClassInit<DT_NextBot::ignored>(DT_NextBot::ignored*)::g_SendProps

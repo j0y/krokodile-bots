@@ -1,0 +1,20 @@
+0072fcc0 t non-virtual thunk to CINSBotTacticalMonitor::ShouldWalk(INextBot const*) const
+0072fcd0 t CINSBotTacticalMonitor::ShouldWalk(INextBot const*) const
+0072fd10 t CINSBotTacticalMonitor::OnCommandApproach(CINSNextBot*, Vector const&, float)
+0072fd40 t CINSBotTacticalMonitor::InitialContainedAction(CINSNextBot*)
+0072fe70 t CINSBotTacticalMonitor::OnStart(CINSNextBot*, Action<CINSNextBot>*)
+0072ff10 t CINSBotTacticalMonitor::OnLostSight(CINSNextBot*, CBaseEntity*)
+0072ffb0 t non-virtual thunk to CINSBotTacticalMonitor::ShouldAttack(INextBot const*, CKnownEntity const*) const
+0072ffc0 t CINSBotTacticalMonitor::ShouldAttack(INextBot const*, CKnownEntity const*) const
+00730060 t CINSBotTacticalMonitor::OnSeeSomethingSuspicious(CINSNextBot*, CBaseCombatCharacter*, Vector const&)
+007302a0 t CINSBotTacticalMonitor::OnHeardFootsteps(CINSNextBot*, CBaseCombatCharacter*, Vector const&)
+00730730 t CINSBotTacticalMonitor::OnWeaponFired(CINSNextBot*, CBaseCombatCharacter*, CBaseCombatWeapon*)
+00730a40 t CINSBotTacticalMonitor::OnSight(CINSNextBot*, CBaseEntity*)
+00730bf0 t CINSBotTacticalMonitor::OnInjured(CINSNextBot*, CTakeDamageInfo const&)
+007316a0 t CINSBotTacticalMonitor::CheckPosture(CINSNextBot*, CKnownEntity const*)
+00731bc0 t CINSBotTacticalMonitor::Update(CINSNextBot*, float)
+00732c70 t CINSBotTacticalMonitor::GetName() const
+00732cc0 t non-virtual thunk to CINSBotTacticalMonitor::~CINSBotTacticalMonitor()
+00732cd0 t CINSBotTacticalMonitor::~CINSBotTacticalMonitor()
+00732d70 t non-virtual thunk to CINSBotTacticalMonitor::~CINSBotTacticalMonitor()
+00732d80 t CINSBotTacticalMonitor::~CINSBotTacticalMonitor()
