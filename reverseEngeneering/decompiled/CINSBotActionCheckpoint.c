@@ -25,7 +25,7 @@ CINSBotActionCheckpoint::OnStart(CINSBotActionCheckpoint *this,CINSNextBot *para
   *(undefined4 *)(param_1 + 8) = 0;
   param_2[0x38] = AVar1;
   *(undefined1 *)(in_stack_0000000c + 0x228f) = 0;
-  *(undefined4 *)(param_2 + 0x3c) = 0xbf800000;
+  *(undefined4 *)(param_2 + 0x3c) = 0xbf800000 /* -1.0f */;
   return;
 }
 
@@ -233,7 +233,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       return param_1;
     }
-    *(undefined4 *)((int)param_2 + 0x3c) = 0xbf800000;
+    *(undefined4 *)((int)param_2 + 0x3c) = 0xbf800000 /* -1.0f */;
     if (((0 < local_34) && ((uint)fVar10 < 0x10)) &&
        ((pCVar9 = (CINSNextBot *)
                   (**(int **)(&LAB_0046fc5d + unaff_EBX) + 0x830 + (int)fVar10 * 0x14),
@@ -268,9 +268,9 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
     }
     uVar7 = 0;
     fVar11 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                (pCVar9,(float)in_stack_0000000c,0x40800000);
+                                (pCVar9,(float)in_stack_0000000c,0x40800000 /* 4.0f */);
     if ((float)fVar11 < *(float *)(unaff_EBX + 0x1edcfd /* typeinfo name for CBaseGameSystem+0x1e */)) {
-      RandomFloat(0x40a00000,0x41700000,uVar7);
+      RandomFloat(0x40a00000 /* 5.0f */,0x41700000 /* 15.0f */,uVar7);
       pvVar6 = ::operator_new(0x48fc);
       CINSBotGuardCP::CINSBotGuardCP(this_15,(int)pvVar6,fVar10);
       *(undefined4 *)param_1 = 2;

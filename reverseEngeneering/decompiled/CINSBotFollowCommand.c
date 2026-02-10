@@ -37,7 +37,7 @@ CINSBotFollowCommand::CINSBotFollowCommand(undefined4 param_1,int *param_2,int p
   param_2[0xd] = 0;
   param_2[0x11] = 0;
   CountdownTimer::NetworkStateChanged(param_2 + 0x10);
-  param_2[0x12] = -0x40800000;
+  param_2[0x12] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x10] + 4))(param_2 + 0x10,param_2 + 0x12);
   param_2[0xe] = param_3;
   return;

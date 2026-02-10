@@ -119,7 +119,7 @@ CINSBotActionInfiltrate::Update(CINSBotActionInfiltrate *this,CINSNextBot *param
     }
     uVar16 = 0;
     fVar12 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                (this_04,(float)in_stack_0000000c,0x41f00000);
+                                (this_04,(float)in_stack_0000000c,0x41f00000 /* 30.0f */);
     *(bool *)((int)param_2 + 0x38) = (float)fVar12 < *(float *)(unaff_EBX + 0x1ea421 /* typeinfo name for ISaveRestoreOps+0x67 */);
     iVar8 = GetTargetObjective((CINSNextBot *)param_2);
     bVar11 = *(int *)(**(int **)(unaff_EBX + 0x46d6b1 /* &g_pObjectiveResource */) + 0x6f0 + iVar8 * 4) == 5;

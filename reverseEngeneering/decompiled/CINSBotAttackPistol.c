@@ -40,21 +40,21 @@ void __thiscall CINSBotAttackPistol::CINSBotAttackPistol(CINSBotAttackPistol *th
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
   (*(code *)(unaff_EBX + -0x4dfc5b /* CountdownTimer::NetworkStateChanged */))(piVar1,in_stack_00000004 + 0xf);
-  in_stack_00000004[0x10] = -0x40800000;
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0xe] + 4))(piVar1,in_stack_00000004 + 0x10);
   piVar2 = in_stack_00000004 + 0x11;
   in_stack_00000004[0x12] = 0;
   in_stack_00000004[0x11] = unaff_EBX + 0x417ded /* vtable for CountdownTimer+0x8 */;
   (*(code *)(unaff_EBX + -0x4dfc5b /* CountdownTimer::NetworkStateChanged */))(piVar2,in_stack_00000004 + 0x12);
-  in_stack_00000004[0x13] = -0x40800000;
+  in_stack_00000004[0x13] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x11] + 4))(piVar2,in_stack_00000004 + 0x13);
-  if (in_stack_00000004[0x10] != -0x40800000) {
+  if (in_stack_00000004[0x10] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0xe] + 4))(piVar1,in_stack_00000004 + 0x10);
-    in_stack_00000004[0x10] = -0x40800000;
+    in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
   }
-  if (in_stack_00000004[0x13] != -0x40800000) {
+  if (in_stack_00000004[0x13] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0x11] + 4))(piVar2,in_stack_00000004 + 0x13);
-    in_stack_00000004[0x13] = -0x40800000;
+    in_stack_00000004[0x13] = -0x40800000 /* -1.0f */;
   }
   return;
 }
@@ -299,7 +299,7 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
                               (this_07,(CBaseEntity *)in_stack_0000000c,fVar2);
             if (cVar1 == '\0') {
               (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-              uVar8 = 0x3f0ccccd;
+              uVar8 = 0x3f0ccccd /* 0.55f */;
               uVar7 = 7;
               iVar4 = unaff_EBX + 0x27026a /* "Walking At Target" */;
               CINSBotBody::SetPosture();
@@ -307,7 +307,7 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
             }
             else {
               (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-              uVar8 = 0x3f0ccccd;
+              uVar8 = 0x3f0ccccd /* 0.55f */;
               uVar7 = 7;
               iVar4 = unaff_EBX + 0x270236 /* "Crouching From Suppression" */;
               CINSBotBody::SetPosture();
@@ -323,14 +323,14 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
               local_24 = *(float *)(unaff_EBX + 0x214904 /* typeinfo name for CBaseGameSystem+0x1e */);
               if ((float)fVar6 <= local_24) {
                 (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-                uVar8 = 0x3f0ccccd;
+                uVar8 = 0x3f0ccccd /* 0.55f */;
                 uVar7 = 7;
                 iVar4 = unaff_EBX + 0x270236 /* "Crouching From Suppression" */;
                 CINSBotBody::SetPosture();
               }
               else {
                 (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-                uVar8 = 0x3f0ccccd;
+                uVar8 = 0x3f0ccccd /* 0.55f */;
                 uVar7 = 7;
                 iVar4 = unaff_EBX + 0x27021c /* "Crawling From Suppression" */;
                 CINSBotBody::SetPosture();
@@ -338,7 +338,7 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
             }
             else {
               (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-              uVar8 = 0x3f0ccccd;
+              uVar8 = 0x3f0ccccd /* 0.55f */;
               uVar7 = 7;
               iVar4 = unaff_EBX + 0x270251 /* "Walking From Suppression" */;
               CINSBotBody::SetPosture();
@@ -348,7 +348,7 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
         }
         else {
           (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-          uVar8 = 0x3f0ccccd;
+          uVar8 = 0x3f0ccccd /* 0.55f */;
           uVar7 = 7;
           iVar4 = unaff_EBX + 0x27027c /* "Sprinting At Target" */;
           CINSBotBody::SetPosture();
@@ -364,9 +364,9 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
           (**(code **)(*(int *)((int)param_2 + 0x44) + 4))((int)param_2 + 0x44,(int)param_2 + 0x4c);
           *(float *)((int)param_2 + 0x4c) = (float)fVar6 + local_24;
         }
-        if (*(int *)((int)param_2 + 0x48) != 0x3f000000) {
+        if (*(int *)((int)param_2 + 0x48) != 0x3f000000 /* 0.5f */) {
           (**(code **)(*(int *)((int)param_2 + 0x44) + 4))((int)param_2 + 0x44,(int)param_2 + 0x48);
-          *(undefined4 *)((int)param_2 + 0x48) = 0x3f000000;
+          *(undefined4 *)((int)param_2 + 0x48) = 0x3f000000 /* 0.5f */;
         }
       }
     }

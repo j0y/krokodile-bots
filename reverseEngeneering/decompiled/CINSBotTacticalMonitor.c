@@ -69,12 +69,12 @@ int * __cdecl CINSBotTacticalMonitor::InitialContainedAction(CINSNextBot *param_
   piVar2[0xe] = (int)(&UNK_003e846d + unaff_EBX);
   *piVar2 = iVar1 + 8;
   (*(code *)(unaff_EBX + -0x50f5db /* CountdownTimer::NetworkStateChanged */))(piVar2 + 0xe,piVar2 + 0xf);
-  piVar2[0x10] = -0x40800000;
+  piVar2[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
   piVar2[0x15] = 0;
   piVar2[0x14] = (int)(&UNK_003e846d + unaff_EBX);
   (*(code *)(unaff_EBX + -0x50f5db /* CountdownTimer::NetworkStateChanged */))(piVar2 + 0x14,piVar2 + 0x15);
-  piVar2[0x16] = -0x40800000;
+  piVar2[0x16] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0x14] + 4))(piVar2 + 0x14,piVar2 + 0x16);
   piVar2[0x17] = -1;
   return piVar2;
@@ -240,9 +240,9 @@ LAB_00741c53:
         *(CINSNextBot **)((int)param_2 + 0x40) = this_08;
         this_08 = extraout_ECX_03;
       }
-      if (*(int *)((int)param_2 + 0x3c) != 0x40800000) {
+      if (*(int *)((int)param_2 + 0x3c) != 0x40800000 /* 4.0f */) {
         (**(code **)(*(int *)((int)param_2 + 0x38) + 4))(iVar9,(int)param_2 + 0x3c);
-        *(undefined4 *)((int)param_2 + 0x3c) = 0x40800000;
+        *(undefined4 *)((int)param_2 + 0x3c) = 0x40800000 /* 4.0f */;
         this_08 = extraout_ECX_04;
       }
     }
@@ -254,9 +254,9 @@ LAB_00741c53:
         *(CINSNextBot **)((int)param_2 + 0x40) = this_08;
         this_08 = extraout_ECX_00;
       }
-      if (*(int *)((int)param_2 + 0x3c) != 0x3f800000) {
+      if (*(int *)((int)param_2 + 0x3c) != 0x3f800000 /* 1.0f */) {
         (**(code **)(*(int *)((int)param_2 + 0x38) + 4))(iVar9,(int)param_2 + 0x3c);
-        *(undefined4 *)((int)param_2 + 0x3c) = 0x3f800000;
+        *(undefined4 *)((int)param_2 + 0x3c) = 0x3f800000 /* 1.0f */;
         this_08 = extraout_ECX_01;
       }
     }
@@ -302,9 +302,9 @@ LAB_00741d1f:
           *(CINSNextBot **)((int)param_2 + 0x7c) = this_08;
           this_08 = extraout_ECX_09;
         }
-        if (*(int *)((int)param_2 + 0x78) != 0x41200000) {
+        if (*(int *)((int)param_2 + 0x78) != 0x41200000 /* 10.0f */) {
           (**(code **)(*(int *)((int)param_2 + 0x74) + 4))((int)param_2 + 0x74,(int)param_2 + 0x78);
-          *(undefined4 *)((int)param_2 + 0x78) = 0x41200000;
+          *(undefined4 *)((int)param_2 + 0x78) = 0x41200000 /* 10.0f */;
           this_08 = extraout_ECX_10;
         }
       }
@@ -335,17 +335,17 @@ LAB_00741d1f:
     pcVar2 = (code *)(unaff_EBX + -0x51145b /* CountdownTimer::NetworkStateChanged */);
     piVar4[0xe] = iVar9;
     (*pcVar2)(piVar4 + 0xe,piVar4 + 0xf);
-    piVar4[0x10] = -0x40800000;
+    piVar4[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
     piVar4[0x12] = 0;
     piVar4[0x11] = iVar9;
     (*pcVar2)(piVar4 + 0x11,piVar4 + 0x12);
-    piVar4[0x13] = -0x40800000;
+    piVar4[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
     piVar4[0x15] = 0;
     piVar4[0x14] = iVar9;
     (*pcVar2)(piVar4 + 0x14,piVar4 + 0x15);
-    piVar4[0x16] = -0x40800000;
+    piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
     *(undefined4 *)((int)param_2 + 0x20) = 0;
     *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -367,9 +367,9 @@ LAB_00741d1f:
       (**(code **)(*(int *)((int)param_2 + 0x88) + 4))((int)param_2 + 0x88,(int)param_2 + 0x90);
       *(float *)((int)param_2 + 0x90) = fVar15;
     }
-    if (*(int *)((int)param_2 + 0x8c) != 0x3f000000) {
+    if (*(int *)((int)param_2 + 0x8c) != 0x3f000000 /* 0.5f */) {
       (**(code **)(*(int *)((int)param_2 + 0x88) + 4))((int)param_2 + 0x88,(int)param_2 + 0x8c);
-      *(undefined4 *)((int)param_2 + 0x8c) = 0x3f000000;
+      *(undefined4 *)((int)param_2 + 0x8c) = 0x3f000000 /* 0.5f */;
     }
   }
 LAB_00741de8:
@@ -619,7 +619,7 @@ LAB_00740c78:
         CBaseEntity::CalcAbsolutePosition(pCVar9);
       }
       CINSNextBot::GetViewPosition(local_28);
-      (*pcVar2)(piVar7,local_28,3,0x3f800000,0,unaff_EBX + 0x241e51 /* "Looking at attacker who just injured me" */);
+      (*pcVar2)(piVar7,local_28,3,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x241e51 /* "Looking at attacker who just injured me" */);
     }
   }
 LAB_00740fb0:
@@ -820,7 +820,7 @@ CINSBotTacticalMonitor::OnWeaponFired
           CBaseEntity::CalcAbsolutePosition(this_02);
         }
         CINSNextBot::GetViewPosition(local_28);
-        (*pcVar1)(piVar3,local_28,3,0x3f400000,0,unaff_EBX + 0x24221f /* "Looking at Weapon Fire" */);
+        (*pcVar1)(piVar3,local_28,3,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x24221f /* "Looking at Weapon Fire" */);
       }
     }
   }
@@ -935,28 +935,28 @@ CINSBotTacticalMonitor::CheckPosture
     uVar17 = 0;
     if (bVar8) {
       fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                  (this_00,(float)param_2,0x3f800000);
+                                  (this_00,(float)param_2,0x3f800000 /* 1.0f */);
       if (*(float *)(unaff_EBX + 0x1f6635 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0xa0 */) <= (float)fVar14 &&
           (float)fVar14 != *(float *)(unaff_EBX + 0x1f6635 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0xa0 */)) {
-        RandomFloat(0x40a00000,0x41200000,uVar17);
+        RandomFloat(0x40a00000 /* 5.0f */,0x41200000 /* 10.0f */,uVar17);
         (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
         CINSBotBody::SetPosture();
         return;
       }
-      RandomFloat(0x40a00000,0x41000000,uVar17);
+      RandomFloat(0x40a00000 /* 5.0f */,0x41000000 /* 8.0f */,uVar17);
       (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
       CINSBotBody::SetPosture();
       return;
     }
     fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                (this_00,(float)param_2,0x3f800000);
+                                (this_00,(float)param_2,0x3f800000 /* 1.0f */);
     if (*(float *)(unaff_EBX + 0x1e30a1 /* typeinfo name for CBaseGameSystem+0x12 */) <= (float)fVar14 &&
         (float)fVar14 != *(float *)(unaff_EBX + 0x1e30a1 /* typeinfo name for CBaseGameSystem+0x12 */)) {
-      RandomFloat(0x41000000,0x41400000,uVar17);
+      RandomFloat(0x41000000 /* 8.0f */,0x41400000 /* 12.0f */,uVar17);
       (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
       goto LAB_007418a7;
     }
-    RandomFloat(0x41000000,0x41400000,uVar17);
+    RandomFloat(0x41000000 /* 8.0f */,0x41400000 /* 12.0f */,uVar17);
     (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
   }
   else {
@@ -966,20 +966,20 @@ CINSBotTacticalMonitor::CheckPosture
       uVar17 = 0;
       if (bVar8) {
         fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                    (this_00,(float)param_2,0x3f800000);
+                                    (this_00,(float)param_2,0x3f800000 /* 1.0f */);
         if ((float)fVar14 < *(float *)(unaff_EBX + 0x1e23e1 /* typeinfo name for ISaveRestoreOps+0x67 */) ||
             (float)fVar14 == *(float *)(unaff_EBX + 0x1e23e1 /* typeinfo name for ISaveRestoreOps+0x67 */)) {
           return;
         }
-        uVar16 = 0x40c00000;
-        uVar15 = 0x40400000;
+        uVar16 = 0x40c00000 /* 6.0f */;
+        uVar15 = 0x40400000 /* 3.0f */;
       }
       else {
         fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                    (this_00,(float)param_2,0x3f800000);
+                                    (this_00,(float)param_2,0x3f800000 /* 1.0f */);
         if (*(float *)(unaff_EBX + 0x1e30a5 /* typeinfo name for CBaseGameSystem+0x16 */) <= (float)fVar14 &&
             (float)fVar14 != *(float *)(unaff_EBX + 0x1e30a5 /* typeinfo name for CBaseGameSystem+0x16 */)) {
-          RandomFloat(0x40400000,0x40c00000,uVar17);
+          RandomFloat(0x40400000 /* 3.0f */,0x40c00000 /* 6.0f */,uVar17);
           (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
 LAB_007418a7:
           CINSBotBody::SetPosture();
@@ -988,16 +988,16 @@ LAB_007418a7:
         if (bVar9) {
           uVar17 = 0;
           fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                      (this_01,(float)param_2,0x3f800000);
+                                      (this_01,(float)param_2,0x3f800000 /* 1.0f */);
           if (*(float *)(unaff_EBX + 0x1e7b09 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */) <= (float)fVar14 &&
               (float)fVar14 != *(float *)(unaff_EBX + 0x1e7b09 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */)) {
-            RandomFloat(0x40400000,0x40c00000,uVar17);
+            RandomFloat(0x40400000 /* 3.0f */,0x40c00000 /* 6.0f */,uVar17);
             (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
             goto LAB_007418a7;
           }
         }
-        uVar16 = 0x41000000;
-        uVar15 = 0x40800000;
+        uVar16 = 0x41000000 /* 8.0f */;
+        uVar15 = 0x40800000 /* 4.0f */;
       }
       RandomFloat(uVar15,uVar16,uVar17);
       (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
@@ -1008,7 +1008,7 @@ LAB_007418a7:
       }
       if (bVar8) {
         fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                    (this_00,(float)param_2,0x3f800000);
+                                    (this_00,(float)param_2,0x3f800000 /* 1.0f */);
         if ((float)fVar14 < *(float *)(unaff_EBX + 0x1e30ad /* typeinfo name for CBaseGameSystem+0x1e */) ||
             (float)fVar14 == *(float *)(unaff_EBX + 0x1e30ad /* typeinfo name for CBaseGameSystem+0x1e */)) {
           return;
@@ -1017,15 +1017,15 @@ LAB_007418a7:
       else if (bVar9) {
         uVar17 = 0;
         fVar14 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                    (this_00,(float)param_2,0x3f800000);
+                                    (this_00,(float)param_2,0x3f800000 /* 1.0f */);
         if (*(float *)(unaff_EBX + 0x1e30ad /* typeinfo name for CBaseGameSystem+0x1e */) <= (float)fVar14 &&
             (float)fVar14 != *(float *)(unaff_EBX + 0x1e30ad /* typeinfo name for CBaseGameSystem+0x1e */)) {
-          RandomFloat(0x40400000,0x40c00000,uVar17);
+          RandomFloat(0x40400000 /* 3.0f */,0x40c00000 /* 6.0f */,uVar17);
           (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
           goto LAB_007418a7;
         }
       }
-      RandomFloat(0x40400000,0x40c00000);
+      RandomFloat(0x40400000 /* 3.0f */,0x40c00000 /* 6.0f */);
       (**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
     }
   }
@@ -1093,7 +1093,7 @@ CINSBotTacticalMonitor::OnHeardFootsteps
               piVar5 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
               pcVar1 = *(code **)(*piVar5 + 0xd4);
               CINSNextBot::GetViewPosition(local_28);
-              (*pcVar1)(piVar5,local_28,2,0x3f800000,0,unaff_EBX + 0x242694 /* "Looking at footsteps" */);
+              (*pcVar1)(piVar5,local_28,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x242694 /* "Looking at footsteps" */);
               goto LAB_007402c7;
             }
           }
@@ -1177,7 +1177,7 @@ CINSBotTacticalMonitor::OnSeeSomethingSuspicious
               piVar4 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
               pcVar1 = *(code **)(*piVar4 + 0xd4);
               CINSNextBot::GetViewPosition(local_28);
-              (*pcVar1)(piVar4,local_28,2,0x3f800000,0,unaff_EBX + 0x242997 /* "Looking at footsteps in Tac Monitor" */);
+              (*pcVar1)(piVar4,local_28,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x242997 /* "Looking at footsteps in Tac Monitor" */);
             }
           }
         }

@@ -53,9 +53,9 @@ CINSBotActionOutpost::OnStart(CINSBotActionOutpost *this,CINSNextBot *param_1,Ac
   *(undefined4 *)(param_2 + 0x54) = uVar7;
   if (*(char *)(**(int **)(unaff_EBX + 0x46c52d /* &g_pGameRules */) + 0x40c) != '\0') {
     uVar8 = 0;
-    uVar7 = 0x3f800000;
+    uVar7 = 0x3f800000 /* 1.0f */;
     fVar6 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                               (this_00,(float)in_stack_0000000c,0x3f800000);
+                               (this_00,(float)in_stack_0000000c,0x3f800000 /* 1.0f */);
     if (*(float *)(unaff_EBX + 0x1eede9 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */) <= (float)fVar6 &&
         (float)fVar6 != *(float *)(unaff_EBX + 0x1eede9 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */)) {
       cVar4 = (**(code **)(*in_stack_0000000c + 0x158))(in_stack_0000000c,uVar7,uVar8);

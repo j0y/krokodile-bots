@@ -46,23 +46,23 @@ CINSBotRetreatToHidingSpot::CINSBotRetreatToHidingSpot
   _param_1[0x122e] = 0;
   _param_1[0x122d] = (int)(&UNK_003f766d + unaff_EBX);
   (*(code *)(unaff_EBX + -0x5003db /* CountdownTimer::NetworkStateChanged */))(_param_1 + 0x122d,_param_1 + 0x122e);
-  _param_1[0x122f] = -0x40800000;
+  _param_1[0x122f] = -0x40800000 /* -1.0f */;
   (**(code **)(_param_1[0x122d] + 4))(_param_1 + 0x122d,_param_1 + 0x122f);
   piVar1 = _param_1 + 0x1230;
   _param_1[0x1231] = 0;
   _param_1[0x1230] = (int)(&UNK_003f766d + unaff_EBX);
   (*(code *)(unaff_EBX + -0x5003db /* CountdownTimer::NetworkStateChanged */))(piVar1,_param_1 + 0x1231);
-  _param_1[0x1232] = -0x40800000;
+  _param_1[0x1232] = -0x40800000 /* -1.0f */;
   (**(code **)(_param_1[0x1230] + 4))(piVar1,_param_1 + 0x1232);
-  _param_1[0x1236] = -0x40800000;
+  _param_1[0x1236] = -0x40800000 /* -1.0f */;
   iVar3 = *(int *)(unaff_EBX + 0x476105 /* &vtable for IntervalTimer */);
   _param_1[0x1235] = iVar3 + 8;
   (**(code **)(iVar3 + 0x10))(_param_1 + 0x1235,_param_1 + 0x1236);
   *(undefined1 *)(_param_1 + 0x1233) = param_2._0_1_;
   _param_1[0x1234] = in_stack_0000000c;
-  if (_param_1[0x1236] != -0x40800000) {
+  if (_param_1[0x1236] != -0x40800000 /* -1.0f */) {
     (**(code **)(_param_1[0x1235] + 8))(_param_1 + 0x1235,_param_1 + 0x1236);
-    _param_1[0x1236] = -0x40800000;
+    _param_1[0x1236] = -0x40800000 /* -1.0f */;
   }
   fVar4 = (float10)CountdownTimer::Now();
   fVar2 = (float)_param_1[0x1231];
@@ -205,17 +205,17 @@ CINSBotRetreatToHidingSpot::Update
       pcVar1 = (code *)(unaff_EBX + -0x4ffc5b /* CountdownTimer::NetworkStateChanged */);
       piVar4[0xe] = iVar5;
       (*pcVar1)(piVar4 + 0xe,piVar4 + 0xf);
-      piVar4[0x10] = -0x40800000;
+      piVar4[0x10] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
       piVar4[0x12] = 0;
       piVar4[0x11] = iVar5;
       (*pcVar1)(piVar4 + 0x11,piVar4 + 0x12);
-      piVar4[0x13] = -0x40800000;
+      piVar4[0x13] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
       piVar4[0x15] = 0;
       piVar4[0x14] = iVar5;
       (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
-      piVar4[0x16] = -0x40800000;
+      piVar4[0x16] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
       *(undefined4 *)param_1 = 1;
       *(int *)(param_1 + 8) = unaff_EBX + 0x251909 /* "Timer elapsed, changing to reload action" */;
@@ -260,27 +260,27 @@ CINSBotRetreatToHidingSpot::Update
           iVar5 = unaff_EBX + 0x3f7ded /* vtable for CountdownTimer+0x8 */;
           piVar4[0xe] = iVar5;
           (*pcVar1)(piVar4 + 0xe,piVar4 + 0xf);
-          piVar4[0x10] = -0x40800000;
+          piVar4[0x10] = -0x40800000 /* -1.0f */;
           (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
           piVar4[0x12] = 0;
           piVar4[0x11] = iVar5;
           (*pcVar1)(piVar4 + 0x11,piVar4 + 0x12);
-          piVar4[0x13] = -0x40800000;
+          piVar4[0x13] = -0x40800000 /* -1.0f */;
           (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
           piVar4[0x15] = 0;
           piVar4[0x14] = iVar5;
           (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
-          piVar4[0x16] = -0x40800000;
+          piVar4[0x16] = -0x40800000 /* -1.0f */;
           (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
           *(undefined4 *)param_1 = 1;
           *(int **)(param_1 + 4) = piVar4;
           *(int *)(param_1 + 8) = unaff_EBX + 0x251935 /* "Failed finding another cover, doing reload." */;
           return param_1;
         }
-        if (*(int *)((int)param_2 + 0x48d8) != -0x40800000) {
+        if (*(int *)((int)param_2 + 0x48d8) != -0x40800000 /* -1.0f */) {
           (**(code **)(*(int *)((int)param_2 + 0x48d4) + 8))
                     ((int)param_2 + 0x48d4,(int)param_2 + 0x48d8);
-          *(undefined4 *)((int)param_2 + 0x48d8) = 0xbf800000;
+          *(undefined4 *)((int)param_2 + 0x48d8) = 0xbf800000 /* -1.0f */;
         }
         *(undefined4 *)((int)param_2 + 0x48a8) = *puVar7;
         *(undefined4 *)((int)param_2 + 0x48ac) = puVar7[1];
@@ -292,7 +292,7 @@ CINSBotRetreatToHidingSpot::Update
   fVar9 = (float10)CountdownTimer::Now();
   if (*(float *)((int)param_2 + 0x48bc) <= (float)fVar9 &&
       (float)fVar9 != *(float *)((int)param_2 + 0x48bc)) {
-    fVar9 = (float10)RandomFloat(0x40200000,0x40a00000);
+    fVar9 = (float10)RandomFloat(0x40200000 /* 2.5f */,0x40a00000 /* 5.0f */);
     fVar2 = (float)fVar9;
     fVar9 = (float10)CountdownTimer::Now();
     this_01 = extraout_ECX;
@@ -501,17 +501,17 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnMoveToSuccess(CINSNextBot *param_1,P
     pcVar2 = (code *)(unaff_EBX + -0x4ff5ee /* CountdownTimer::NetworkStateChanged */);
     piVar4[0xe] = iVar1;
     (*pcVar2)(piVar4 + 0xe,piVar4 + 0xf);
-    piVar4[0x10] = -0x40800000;
+    piVar4[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
     piVar4[0x12] = 0;
     piVar4[0x11] = iVar1;
     (*pcVar2)(piVar4 + 0x11,piVar4 + 0x12);
-    piVar4[0x13] = -0x40800000;
+    piVar4[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
     piVar4[0x15] = 0;
     piVar4[0x14] = iVar1;
     (*pcVar2)(piVar4 + 0x14,piVar4 + 0x15);
-    piVar4[0x16] = -0x40800000;
+    piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
     *(undefined4 *)param_1 = 1;
     *(int **)(param_1 + 4) = piVar4;
@@ -568,17 +568,17 @@ undefined4 * CINSBotRetreatToHidingSpot::OnMoveToFailure(undefined4 *param_1)
     pcVar1 = (code *)(unaff_EBX + -0x4ff811 /* CountdownTimer::NetworkStateChanged */);
     piVar3[0xe] = iVar2;
     (*pcVar1)(piVar3 + 0xe,piVar3 + 0xf);
-    piVar3[0x10] = -0x40800000;
+    piVar3[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0xe] + 4))(piVar3 + 0xe,piVar3 + 0x10);
     piVar3[0x12] = 0;
     piVar3[0x11] = iVar2;
     (*pcVar1)(piVar3 + 0x11,piVar3 + 0x12);
-    piVar3[0x13] = -0x40800000;
+    piVar3[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x11] + 4))(piVar3 + 0x11,piVar3 + 0x13);
     piVar3[0x15] = 0;
     piVar3[0x14] = iVar2;
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
-    piVar3[0x16] = -0x40800000;
+    piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
     *param_1 = 1;
     param_1[1] = piVar3;
@@ -619,7 +619,7 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnStuck(CINSNextBot *param_1)
   }
   cVar2 = CINSPathFollower::ComputePath
                     ((CINSPathFollower *)(in_stack_00000008 + 0x48a8),in_stack_00000008 + 0x38,iVar3
-                     ,(CINSPathFollower *)(in_stack_00000008 + 0x48a8),3,(float)fVar5,0,0x41f00000);
+                     ,(CINSPathFollower *)(in_stack_00000008 + 0x48a8),3,(float)fVar5,0,0x41f00000 /* 30.0f */);
   if (cVar2 != '\0') {
     if (*(char *)(in_stack_00000008 + 0x48cc) == '\0') {
       *(undefined4 *)param_1 = 0;
@@ -650,17 +650,17 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnStuck(CINSNextBot *param_1)
     piVar4[0xe] = iVar3;
     pcVar1 = (code *)(unaff_EBX + -0x4ff9eb /* CountdownTimer::NetworkStateChanged */);
     (*pcVar1)(piVar4 + 0xe,piVar4 + 0xf);
-    piVar4[0x10] = -0x40800000;
+    piVar4[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
     piVar4[0x12] = 0;
     piVar4[0x11] = iVar3;
     (*pcVar1)(piVar4 + 0x11,piVar4 + 0x12);
-    piVar4[0x13] = -0x40800000;
+    piVar4[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
     piVar4[0x15] = 0;
     piVar4[0x14] = iVar3;
     (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
-    piVar4[0x16] = -0x40800000;
+    piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
     *(undefined4 *)param_1 = 1;
     *(undefined **)(param_1 + 8) = &UNK_0025178d + unaff_EBX;

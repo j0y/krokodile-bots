@@ -131,7 +131,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       return param_1;
     }
     fVar6 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                               (this_03,(float)in_stack_0000000c,0x42480000);
+                               (this_03,(float)in_stack_0000000c,0x42480000 /* 50.0f */);
     *(bool *)((int)param_2 + 0x38) = (float)fVar6 < *(float *)(unaff_EBX + 0x1eb381 /* typeinfo name for ISaveRestoreOps+0x67 */);
     this_00 = (CFmtStrN<256,false> *)GetDesiredObjective((CINSNextBot *)param_2);
     iVar3 = CBaseEntity::GetTeamNumber(this_06);

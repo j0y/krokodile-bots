@@ -35,40 +35,40 @@ void __thiscall CINSBotLocomotion::CINSBotLocomotion(CINSBotLocomotion *this,INe
   *(undefined4 *)(param_1 + 0x492c) = 0;
   *(undefined4 *)(param_1 + 0x4934) = 0;
   (*pcVar1)(param_1 + 0x4930,param_1 + 0x4934);
-  *(undefined4 *)(param_1 + 0x4938) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4938) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x4930) + 4))(param_1 + 0x4930,param_1 + 0x4938);
   *(int *)(param_1 + 0x493c) = iVar2;
   *(undefined4 *)(param_1 + 0x4940) = 0;
   (*pcVar1)(param_1 + 0x493c,param_1 + 0x4940);
-  *(undefined4 *)(param_1 + 0x4944) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4944) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x493c) + 4))(param_1 + 0x493c,param_1 + 0x4944);
   *(int *)(param_1 + 0x4948) = iVar2;
   *(undefined4 *)(param_1 + 0x494c) = 0;
   (*pcVar1)(param_1 + 0x4948,param_1 + 0x494c);
-  *(undefined4 *)(param_1 + 0x4950) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4950) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x4948) + 4))(param_1 + 0x4948,param_1 + 0x4950);
   *(int *)(param_1 + 0x4954) = iVar2;
   *(undefined4 *)(param_1 + 0x4958) = 0;
   (*pcVar1)(param_1 + 0x4954,param_1 + 0x4958);
-  *(undefined4 *)(param_1 + 0x495c) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x495c) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x4954) + 4))(param_1 + 0x4954,param_1 + 0x495c);
   *(int *)(param_1 + 0x4960) = iVar2;
   *(undefined4 *)(param_1 + 0x4964) = 0;
   (*pcVar1)(param_1 + 0x4960,param_1 + 0x4964);
-  *(undefined4 *)(param_1 + 0x4968) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4968) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x4960) + 4))(param_1 + 0x4960,param_1 + 0x4968);
   *(int *)(param_1 + 0x496c) = iVar2;
   *(undefined4 *)(param_1 + 0x4970) = 0;
   (*pcVar1)(param_1 + 0x496c,param_1 + 0x4970);
-  *(undefined4 *)(param_1 + 0x4974) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4974) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x496c) + 4))(param_1 + 0x496c,param_1 + 0x4974);
   *(int *)(param_1 + 0x4978) = iVar2;
   *(undefined4 *)(param_1 + 0x497c) = 0;
   (*pcVar1)(param_1 + 0x4978,param_1 + 0x497c);
-  *(undefined4 *)(param_1 + 0x4980) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4980) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x4978) + 4))(param_1 + 0x4978,param_1 + 0x4980);
   iVar2 = *(int *)(unaff_EBX + 0x446325 /* &vtable for IntervalTimer */);
-  *(undefined4 *)(param_1 + 0x4988) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x4988) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x4984) = iVar2 + 8;
   (**(code **)(iVar2 + 0x10))(param_1 + 0x4984,param_1 + 0x4988);
   return;
@@ -104,10 +104,10 @@ void __thiscall CINSBotLocomotion::Update(CINSBotLocomotion *this)
       }
     }
   }
-  else if (in_stack_00000004[0x1262] != -0x40800000) {
+  else if (in_stack_00000004[0x1262] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0x1261] + 8))
               (in_stack_00000004 + 0x1261,in_stack_00000004 + 0x1262);
-    in_stack_00000004[0x1262] = -0x40800000;
+    in_stack_00000004[0x1262] = -0x40800000 /* -1.0f */;
   }
   return;
 }
@@ -347,11 +347,11 @@ void __cdecl CINSBotLocomotion::AdjustPosture(Vector *param_1)
       }
       else if ((iVar4 == 2) || (iVar4 == 0xc)) {
         (**(code **)(*piVar2 + 0x110 /* CINSPlayer::OnTakeDamage */))(piVar2,0xc);
-        if (*(int *)(param_1 + 0x4974) == -0x40800000) {
+        if (*(int *)(param_1 + 0x4974) == -0x40800000 /* -1.0f */) {
           return;
         }
         (**(code **)(*(int *)(param_1 + 0x496c) + 4))(param_1 + 0x496c,param_1 + 0x4974);
-        *(undefined4 *)(param_1 + 0x4974) = 0xbf800000;
+        *(undefined4 *)(param_1 + 0x4974) = 0xbf800000 /* -1.0f */;
         return;
       }
       (**(code **)(*piVar2 + 0x110 /* CINSPlayer::OnTakeDamage */))(piVar2,6);
@@ -361,9 +361,9 @@ void __cdecl CINSBotLocomotion::AdjustPosture(Vector *param_1)
         (**(code **)(*(int *)(param_1 + 0x496c) + 4))(param_1 + 0x496c,param_1 + 0x4974);
         *(float *)(param_1 + 0x4974) = fVar7;
       }
-      if (*(int *)(param_1 + 0x4970) != 0x40800000) {
+      if (*(int *)(param_1 + 0x4970) != 0x40800000 /* 4.0f */) {
         (**(code **)(*(int *)(param_1 + 0x496c) + 4))(param_1 + 0x496c,param_1 + 0x4970);
-        *(undefined4 *)(param_1 + 0x4970) = 0x40800000;
+        *(undefined4 *)(param_1 + 0x4970) = 0x40800000 /* 4.0f */;
       }
     }
   }
@@ -491,9 +491,9 @@ void __thiscall CINSBotLocomotion::Approach(CINSBotLocomotion *this,Vector *para
         (**(code **)(*(int *)(param_1 + 0x4960) + 4))(param_1 + 0x4960,param_1 + 0x4968);
         *(float *)(param_1 + 0x4968) = fVar9;
       }
-      if (*(int *)(param_1 + 0x4964) != 0x3f000000) {
+      if (*(int *)(param_1 + 0x4964) != 0x3f000000 /* 0.5f */) {
         (**(code **)(*(int *)(param_1 + 0x4960) + 4))(param_1 + 0x4960,param_1 + 0x4964);
-        *(undefined4 *)(param_1 + 0x4964) = 0x3f000000;
+        *(undefined4 *)(param_1 + 0x4964) = 0x3f000000 /* 0.5f */;
       }
     }
     piVar4 = (int *)(**(code **)(*(int *)param_1 + 0xc4))(param_1);
@@ -822,7 +822,7 @@ void __thiscall CINSBotLocomotion::FaceTowards(CINSBotLocomotion *this,Vector *p
   local_28 = *in_stack_00000008;
   piVar1 = (int *)(**(code **)(*(int *)param_1 + 0xc4))(param_1);
   piVar1 = (int *)(**(code **)(*piVar1 + 0xd4))(piVar1);
-  (**(code **)(*piVar1 + 0xd4))(piVar1,&local_28,0,0x3f800000,0,unaff_EBX + 0x22925d /* "Body facing" */);
+  (**(code **)(*piVar1 + 0xd4))(piVar1,&local_28,0,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x22925d /* "Body facing" */);
   return;
 }
 
@@ -1602,11 +1602,11 @@ LAB_0075ffec:
         (**(code **)(in_stack_00000004[0x1252] + 4))(piVar3,in_stack_00000004 + 0x1254);
         in_stack_00000004[0x1254] = (int)fVar12;
 LAB_00760020:
-        if (in_stack_00000004[0x1253] == 0x3e800000) {
+        if (in_stack_00000004[0x1253] == 0x3e800000 /* 0.25f */) {
           return;
         }
         (**(code **)(in_stack_00000004[0x1252] + 4))(piVar3,in_stack_00000004 + 0x1253);
-        in_stack_00000004[0x1253] = 0x3e800000;
+        in_stack_00000004[0x1253] = 0x3e800000 /* 0.25f */;
         return;
       }
     }
@@ -1684,9 +1684,9 @@ LAB_0075fcad:
       (**(code **)(in_stack_00000004[0x1252] + 4))(piVar3);
       in_stack_00000004[0x1254] = (int)fVar12;
     }
-    if (in_stack_00000004[0x1253] != 0x3e800000) {
+    if (in_stack_00000004[0x1253] != 0x3e800000 /* 0.25f */) {
       (**(code **)(in_stack_00000004[0x1252] + 4))(piVar3);
-      in_stack_00000004[0x1253] = 0x3e800000;
+      in_stack_00000004[0x1253] = 0x3e800000 /* 0.25f */;
     }
   }
   piVar3 = in_stack_00000004 + 0x1255;
@@ -1726,9 +1726,9 @@ LAB_0075fcad:
     in_stack_00000004[0x1257] = (int)pCVar10;
     pCVar10 = extraout_ECX_01;
   }
-  if (in_stack_00000004[0x1256] != 0x400ccccd) {
+  if (in_stack_00000004[0x1256] != 0x400ccccd /* 2.2f */) {
     (**(code **)(in_stack_00000004[0x1255] + 4))(piVar3);
-    in_stack_00000004[0x1256] = 0x400ccccd;
+    in_stack_00000004[0x1256] = 0x400ccccd /* 2.2f */;
     pCVar10 = extraout_ECX_02;
   }
   iVar4 = GetCurrentMovementRequest(pCVar10);
@@ -1818,19 +1818,19 @@ LAB_0075fdb4:
                 (in_stack_00000004 + 0x1258,in_stack_00000004 + 0x125a);
       in_stack_00000004[0x125a] = (int)fVar12;
     }
-    if (in_stack_00000004[0x1259] == 0x3f800000) {
+    if (in_stack_00000004[0x1259] == 0x3f800000 /* 1.0f */) {
       return;
     }
     (**(code **)(in_stack_00000004[0x1258] + 4))
               (in_stack_00000004 + 0x1258,in_stack_00000004 + 0x1259);
-    in_stack_00000004[0x1259] = 0x3f800000;
+    in_stack_00000004[0x1259] = 0x3f800000 /* 1.0f */;
     return;
   }
   fVar11 = (float10)CINSNextBot::MaxPathLength();
   this_00 = (CINSPathFollower *)(in_stack_00000004 + 0x2b);
   cVar2 = CINSPathFollower::ComputePath
                     (this_01,this_00,this_01 + 0x2060,iVar5 + in_stack_00000004[0x1247],local_14c,
-                     (float)fVar11,0,0x41f00000);
+                     (float)fVar11,0,0x41f00000 /* 30.0f */);
   if (cVar2 == '\0') {
     iVar4 = *(int *)(iVar5 + in_stack_00000004[0x1247] + 0x20);
     if (2 < iVar4) {
@@ -1856,11 +1856,11 @@ LAB_007603c7:
   (**(code **)(in_stack_00000004[0x1255] + 4))(piVar3,in_stack_00000004 + 0x1257);
   in_stack_00000004[0x1257] = (int)fVar12;
 LAB_0076041f:
-  if (in_stack_00000004[0x1256] == 0x400ccccd) {
+  if (in_stack_00000004[0x1256] == 0x400ccccd /* 2.2f */) {
     return;
   }
   (**(code **)(in_stack_00000004[0x1255] + 4))(piVar3,in_stack_00000004 + 0x1256);
-  in_stack_00000004[0x1256] = 0x400ccccd;
+  in_stack_00000004[0x1256] = 0x400ccccd /* 2.2f */;
   return;
 }
 

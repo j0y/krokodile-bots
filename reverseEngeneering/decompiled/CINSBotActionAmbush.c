@@ -119,7 +119,7 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
   __i686_get_pc_thunk_bx();
   uVar13 = 0;
   fVar9 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                             (this_00,(float)in_stack_0000000c,0x42480000);
+                             (this_00,(float)in_stack_0000000c,0x42480000 /* 50.0f */);
   *(bool *)((int)param_2 + 0x38) = (float)fVar9 < *(float *)(unaff_EBX + 0x1ed761 /* typeinfo name for ISaveRestoreOps+0x67 */);
   uVar3 = CBaseEntity::GetTeamNumber(in_stack_0000000c);
   cVar2 = CINSRules::IsAttackingTeam(this_01,**(int **)(unaff_EBX + 0x4705cd /* &g_pGameRules */));

@@ -48,52 +48,52 @@ void __thiscall CINSBotDestroyCache::CINSBotDestroyCache(CINSBotDestroyCache *th
   *(int *)(param_1 + 0x3c) = iVar2;
   *(undefined4 *)(param_1 + 0x40) = 0;
   (*pcVar3)(iVar1,param_1 + 0x40);
-  *(undefined4 *)(param_1 + 0x44) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x44) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x3c) + 4))(iVar1,param_1 + 0x44);
   CINSPathFollower::CINSPathFollower(this_00);
   *(int *)(param_1 + 0x48b8) = iVar2;
   *(undefined4 *)(param_1 + 0x48bc) = 0;
   (*pcVar3)(param_1 + 0x48b8,param_1 + 0x48bc);
-  *(undefined4 *)(param_1 + 0x48c0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48c0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48b8) + 4))(param_1 + 0x48b8,param_1 + 0x48c0);
-  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   iVar6 = *(int *)(unaff_EBX + 0x48ea75 /* &vtable for IntervalTimer */);
   *(int *)(param_1 + 0x48d4) = iVar6 + 8;
   (**(code **)(iVar6 + 0x10))(param_1 + 0x48d4,param_1 + 0x48d8);
   *(int *)(param_1 + 0x48dc) = iVar2;
   *(undefined4 *)(param_1 + 0x48e0) = 0;
   (*pcVar3)(param_1 + 0x48dc,param_1 + 0x48e0);
-  *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48dc) + 4))(param_1 + 0x48dc,param_1 + 0x48e4);
   iVar6 = param_1 + 0x48e8;
   *(int *)(param_1 + 0x48e8) = iVar2;
   *(undefined4 *)(param_1 + 0x48ec) = 0;
   (*pcVar3)(iVar6,param_1 + 0x48ec);
-  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48e8) + 4))(iVar6,param_1 + 0x48f0);
   iVar4 = param_1 + 0x48f4;
   *(int *)(param_1 + 0x48f4) = iVar2;
   *(undefined4 *)(param_1 + 0x48f8) = 0;
   (*pcVar3)(iVar4,param_1 + 0x48f8);
-  *(undefined4 *)(param_1 + 0x48fc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48fc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48f4) + 4))(iVar4,param_1 + 0x48fc);
   CINSPathFollower::Invalidate(this_01);
   *(undefined4 *)(param_1 + 0x38) = in_stack_00000008;
-  if (*(int *)(param_1 + 0x48d8) != -0x40800000) {
+  if (*(int *)(param_1 + 0x48d8) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)(param_1 + 0x48d4) + 8))(param_1 + 0x48d4,param_1 + 0x48d8);
-    *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
+    *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   }
-  if (*(int *)(param_1 + 0x48fc) != -0x40800000) {
+  if (*(int *)(param_1 + 0x48fc) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)(param_1 + 0x48f4) + 4))(iVar4,param_1 + 0x48fc);
-    *(undefined4 *)(param_1 + 0x48fc) = 0xbf800000;
+    *(undefined4 *)(param_1 + 0x48fc) = 0xbf800000 /* -1.0f */;
   }
-  if (*(int *)(param_1 + 0x48f0) != -0x40800000) {
+  if (*(int *)(param_1 + 0x48f0) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)(param_1 + 0x48e8) + 4))(iVar6,param_1 + 0x48f0);
-    *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000;
+    *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000 /* -1.0f */;
   }
-  if (*(int *)(param_1 + 0x44) != -0x40800000) {
+  if (*(int *)(param_1 + 0x44) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)(param_1 + 0x3c) + 4))(iVar1,param_1 + 0x44);
-    *(undefined4 *)(param_1 + 0x44) = 0xbf800000;
+    *(undefined4 *)(param_1 + 0x44) = 0xbf800000 /* -1.0f */;
   }
   piVar5 = (int *)(unaff_EBX + 0x5d42c5 /* CINSBotDestroyCache::m_nTotalDestroyers */ + *(int *)(param_1 + 0x38) * 4);
   *piVar5 = *piVar5 + 1;
@@ -141,7 +141,7 @@ CINSBotDestroyCache::OnStart(CINSBotDestroyCache *this,CINSNextBot *param_1,Acti
     uVar3 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c,uVar4,uVar3);
     CINSBotLocomotion::AddMovementRequest
               (uVar3,*(undefined4 *)(param_2 + 0x48c4),*(undefined4 *)(param_2 + 0x48c8),
-               *(undefined4 *)(param_2 + 0x48cc),8,3,0x40a00000);
+               *(undefined4 *)(param_2 + 0x48cc),8,3,0x40a00000 /* 5.0f */);
     *(undefined4 *)param_1 = 0;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
@@ -225,9 +225,9 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
       (**(code **)(*(int *)((int)param_2 + 0x3c) + 4))((int)param_2 + 0x3c);
       *(float *)((int)param_2 + 0x44) = local_9c;
     }
-    if (*(int *)((int)param_2 + 0x40) != 0x3f000000) {
+    if (*(int *)((int)param_2 + 0x40) != 0x3f000000 /* 0.5f */) {
       (**(code **)(*(int *)((int)param_2 + 0x3c) + 4))((int)param_2 + 0x3c);
-      *(undefined4 *)((int)param_2 + 0x40) = 0x3f000000;
+      *(undefined4 *)((int)param_2 + 0x40) = 0x3f000000 /* 0.5f */;
     }
     piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
     iVar6 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5);
@@ -404,9 +404,9 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
         *(undefined4 *)((int)param_2 + 0x48c4) = local_34;
         *(undefined4 *)((int)param_2 + 0x48c8) = local_30;
         *(undefined4 *)((int)param_2 + 0x48cc) = local_2c;
-        if (*(int *)((int)param_2 + 0x48d8) != -0x40800000) {
+        if (*(int *)((int)param_2 + 0x48d8) != -0x40800000 /* -1.0f */) {
           (**(code **)(*(int *)((int)param_2 + 0x48d4) + 8))((int)param_2 + 0x48d4);
-          *(undefined4 *)((int)param_2 + 0x48d8) = 0xbf800000;
+          *(undefined4 *)((int)param_2 + 0x48d8) = 0xbf800000 /* -1.0f */;
         }
       }
     }

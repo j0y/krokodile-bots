@@ -48,31 +48,31 @@ CINSBotCaptureFlag::CINSBotCaptureFlag(CINSBotCaptureFlag *this,CINSPlayer *para
   iVar2 = unaff_EBX + 0x413bed /* vtable for CountdownTimer+0x8 */;
   *(int *)(param_1 + 0x48ac) = iVar2;
   (*pcVar1)(param_1 + 0x48ac,param_1 + 0x48b0);
-  *(undefined4 *)(param_1 + 0x48b4) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48b4) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48ac) + 4))(param_1 + 0x48ac,param_1 + 0x48b4);
   iVar4 = *(int *)(unaff_EBX + 0x492685 /* &vtable for IntervalTimer */);
-  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x48c8) = iVar4 + 8;
   (**(code **)(iVar4 + 0x10))(param_1 + 0x48c8,param_1 + 0x48cc);
   *(int *)(param_1 + 0x48d0) = iVar2;
   *(undefined4 *)(param_1 + 0x48d4) = 0;
   (*pcVar1)(param_1 + 0x48d0,param_1 + 0x48d4);
-  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48d0) + 4))(param_1 + 0x48d0,param_1 + 0x48d8);
   *(int *)(param_1 + 0x48dc) = iVar2;
   *(undefined4 *)(param_1 + 0x48e0) = 0;
   (*pcVar1)(param_1 + 0x48dc,param_1 + 0x48e0);
-  *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48dc) + 4))(param_1 + 0x48dc,param_1 + 0x48e4);
   *(int *)(param_1 + 0x48e8) = iVar2;
   *(undefined4 *)(param_1 + 0x48ec) = 0;
   (*pcVar1)(param_1 + 0x48e8,param_1 + 0x48ec);
-  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48e8) + 4))(param_1 + 0x48e8,param_1 + 0x48f0);
   *(int *)(param_1 + 0x48f4) = iVar2;
   *(undefined4 *)(param_1 + 0x48f8) = 0;
   (*pcVar1)(param_1 + 0x48f4,param_1 + 0x48f8);
-  *(undefined4 *)(param_1 + 0x48fc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48fc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48f4) + 4))(param_1 + 0x48f4,param_1 + 0x48fc);
   CINSPathFollower::Invalidate(this_01);
   param_1[0x48c4] = (CINSPlayer)0x0;
@@ -115,7 +115,7 @@ CINSBotCaptureFlag::OnStart(CINSBotCaptureFlag *this,CINSNextBot *param_1,Action
   }
   CINSPathFollower::ComputePath
             ((CINSPathFollower *)(in_stack_0000000c + 0x2060),param_2 + 0x3c,pCVar1,param_2 + 0x48b8
-             ,1,(float)fVar2,0,0x41f00000);
+             ,1,(float)fVar2,0,0x41f00000 /* 30.0f */);
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
@@ -189,9 +189,9 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   }
   cVar4 = *(char *)((int)param_2 + 0x48c4);
   *(bool *)((int)param_2 + 0x48c4) = bVar8;
-  if ((bVar8 != (bool)cVar4) && (*(int *)((int)param_2 + 0x48b4) != -0x40800000)) {
+  if ((bVar8 != (bool)cVar4) && (*(int *)((int)param_2 + 0x48b4) != -0x40800000 /* -1.0f */)) {
     (**(code **)(*(int *)((int)param_2 + 0x48ac) + 4))((int)param_2 + 0x48ac,(int)param_2 + 0x48b4);
-    *(undefined4 *)((int)param_2 + 0x48b4) = 0xbf800000;
+    *(undefined4 *)((int)param_2 + 0x48b4) = 0xbf800000 /* -1.0f */;
   }
   pCVar6 = (CINSBotCaptureFlag *)0x0;
   if (in_stack_0000000c != (CINSBotCaptureFlag *)0x0) {
@@ -212,7 +212,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   fVar9 = (float10)CountdownTimer::Now();
   if (*(float *)((int)param_2 + 0x48b4) <= (float)fVar9 &&
       (float)fVar9 != *(float *)((int)param_2 + 0x48b4)) {
-    fVar9 = (float10)RandomFloat(0x40a00000,0x40f00000,pCVar6);
+    fVar9 = (float10)RandomFloat(0x40a00000 /* 5.0f */,0x40f00000 /* 7.5f */,pCVar6);
     pCVar2 = (CBaseEntity *)(float)fVar9;
     fVar9 = (float10)CountdownTimer::Now();
     if (*(float *)((int)param_2 + 0x48b4) != (float)fVar9 + (float)pCVar2) {
@@ -238,7 +238,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
       }
       CINSPathFollower::ComputePath
                 ((CINSPathFollower *)((int)param_2 + 0x48b8),(int)param_2 + 0x3c,pCVar6,
-                 (CINSPathFollower *)((int)param_2 + 0x48b8),1,(float)fVar9,0,0x41f00000);
+                 (CINSPathFollower *)((int)param_2 + 0x48b8),1,(float)fVar9,0,0x41f00000 /* 30.0f */);
     }
   }
   local_60 = (int)param_2 + 0x48b8;
@@ -251,7 +251,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
        SQRT(local_48 * local_48 + local_4c * local_4c + local_44 * local_44) <
        *(float *)(unaff_EBX + 0x238570 /* typeinfo name for CEntityFactory<CFuncWall>+0x20 */))) {
       piVar7 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-      (**(code **)(*piVar7 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar7,local_60,5,0x3f800000,0,unaff_EBX + 0x26bdec /* "Look at object to use" */);
+      (**(code **)(*piVar7 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar7,local_60,5,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x26bdec /* "Look at object to use" */);
       (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_34,in_stack_0000000c);
       local_40 = *(float *)((int)param_2 + 0x48b8) - local_34;
       local_3c = *(float *)((int)param_2 + 0x48bc) - local_30;
@@ -264,7 +264,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
          fVar10 = local_24 * local_3c + local_28 * local_40 + local_20 * local_38,
          *(float *)(unaff_EBX + 0x210694 /* typeinfo name for ITraceFilter+0x18 */) <= fVar10 && fVar10 != *(float *)(unaff_EBX + 0x210694 /* typeinfo name for ITraceFilter+0x18 */)))
       {
-        (**(code **)(*(int *)in_stack_0000000c + 0x8d8 /* NextBotPlayer::PressUseButton */))(in_stack_0000000c,0x3f000000);
+        (**(code **)(*(int *)in_stack_0000000c + 0x8d8 /* NextBotPlayer::PressUseButton */))(in_stack_0000000c,0x3f000000 /* 0.5f */);
         fVar9 = (float10)CountdownTimer::Now();
         fVar10 = (float)fVar9 + *(float *)(unaff_EBX + 0x1a41a0 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
         if (*(float *)((int)param_2 + 0x48fc) != fVar10) {
@@ -272,10 +272,10 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
                     ((int)param_2 + 0x48f4,(int)param_2 + 0x48fc);
           *(float *)((int)param_2 + 0x48fc) = fVar10;
         }
-        if (*(int *)((int)param_2 + 0x48f8) != 0x3f800000) {
+        if (*(int *)((int)param_2 + 0x48f8) != 0x3f800000 /* 1.0f */) {
           (**(code **)(*(int *)((int)param_2 + 0x48f4) + 4))
                     ((int)param_2 + 0x48f4,(int)param_2 + 0x48f8);
-          *(undefined4 *)((int)param_2 + 0x48f8) = 0x3f800000;
+          *(undefined4 *)((int)param_2 + 0x48f8) = 0x3f800000 /* 1.0f */;
         }
       }
       goto LAB_00714b53;

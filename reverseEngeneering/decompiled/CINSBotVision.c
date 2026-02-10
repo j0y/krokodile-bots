@@ -40,32 +40,32 @@ void __thiscall CINSBotVision::CINSBotVision(CINSBotVision *this,INextBot *param
   *(int *)(param_1 + 0x158) = iVar7;
   *(undefined4 *)(param_1 + 0x15c) = 0;
   (*pcVar1)(param_1 + 0x158,param_1 + 0x15c);
-  *(undefined4 *)(param_1 + 0x160) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x160) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x158) + 4))(param_1 + 0x158,param_1 + 0x160);
   *(int *)(param_1 + 0x164) = iVar7;
   *(undefined4 *)(param_1 + 0x168) = 0;
   (*pcVar1)(param_1 + 0x164,param_1 + 0x168);
-  *(undefined4 *)(param_1 + 0x16c) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x16c) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x164) + 4))(param_1 + 0x164,param_1 + 0x16c);
   *(int *)(param_1 + 0x170) = iVar7;
   *(undefined4 *)(param_1 + 0x174) = 0;
   (*pcVar1)(param_1 + 0x170,param_1 + 0x174);
-  *(undefined4 *)(param_1 + 0x178) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x178) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x170) + 4))(param_1 + 0x170,param_1 + 0x178);
   *(int *)(param_1 + 0x17c) = iVar7;
   *(undefined4 *)(param_1 + 0x180) = 0;
   (*pcVar1)(param_1 + 0x17c,param_1 + 0x180);
-  *(undefined4 *)(param_1 + 0x184) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x184) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x17c) + 4))(param_1 + 0x17c,param_1 + 0x184);
   *(int *)(param_1 + 0x188) = iVar7;
   *(undefined4 *)(param_1 + 0x18c) = 0;
   (*pcVar1)(param_1 + 0x188,param_1 + 0x18c);
-  *(undefined4 *)(param_1 + 400) = 0xbf800000;
+  *(undefined4 *)(param_1 + 400) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x188) + 4))(param_1 + 0x188,param_1 + 400);
   *(int *)(param_1 + 0x25c) = iVar7;
   *(undefined4 *)(param_1 + 0x260) = 0;
   (*pcVar1)(param_1 + 0x25c,param_1 + 0x260);
-  *(undefined4 *)(param_1 + 0x264) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x264) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x25c) + 4))(param_1 + 0x25c,param_1 + 0x264);
   *(undefined4 *)(param_1 + 0x268) = 0xffffffff;
   *(undefined4 *)(param_1 + 0x26c) = 0xffffffff;
@@ -176,7 +176,7 @@ void __thiscall CINSBotVision::Update(CINSBotVision *this)
     piVar4 = (int *)(**(code **)(*(int *)in_stack_00000004 + 0xc4))(in_stack_00000004);
     (**(code **)(*piVar4 + 200))(piVar4);
     iVar5 = CBaseEntity::GetTeamNumber(this_03);
-    iVar5 = (*pcVar11)(in_stack_00000004,(iVar5 == 2) + '\x02',0,0xbf800000);
+    iVar5 = (*pcVar11)(in_stack_00000004,(iVar5 == 2) + '\x02',0,0xbf800000 /* -1.0f */);
     if ((float)iVar5 < *(float *)(unaff_EBX + 0x14dd4d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */) ||
         (float)iVar5 == *(float *)(unaff_EBX + 0x14dd4d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) goto LAB_0076ae0c;
 LAB_0076ae3b:
@@ -188,10 +188,10 @@ LAB_0076ae3b:
                 (in_stack_00000004 + 0x25c,in_stack_00000004 + 0x264);
       *(float *)(in_stack_00000004 + 0x264) = fVar15;
     }
-    if (*(int *)(in_stack_00000004 + 0x260) != 0x3e800000) {
+    if (*(int *)(in_stack_00000004 + 0x260) != 0x3e800000 /* 0.25f */) {
       (**(code **)(*(int *)(in_stack_00000004 + 0x25c) + 4))
                 (in_stack_00000004 + 0x25c,in_stack_00000004 + 0x260);
-      *(undefined4 *)(in_stack_00000004 + 0x260) = 0x3e800000;
+      *(undefined4 *)(in_stack_00000004 + 0x260) = 0x3e800000 /* 0.25f */;
     }
   }
   else {
@@ -210,7 +210,7 @@ LAB_0076ae0c:
       (**(code **)(*(int *)in_stack_00000004 + 0xc4))(in_stack_00000004);
       pcVar11 = *(code **)(*(int *)in_stack_00000004 + 0xdc);
       iVar5 = CBaseEntity::GetTeamNumber((CBaseEntity *)in_stack_00000004);
-      uVar6 = (*pcVar11)(in_stack_00000004,(iVar5 == 2) + '\x02',0,0xbf800000);
+      uVar6 = (*pcVar11)(in_stack_00000004,(iVar5 == 2) + '\x02',0,0xbf800000 /* -1.0f */);
       uVar2 = *(uint *)(in_stack_00000004 + 0x26c);
       fVar15 = *(float *)(in_stack_00000004 + 0x274);
       iVar5 = 0;
@@ -2490,9 +2490,9 @@ LAB_00768205:
   }
 LAB_007680c6:
   pCVar1 = param_1 + 0x164;
-  if (*(int *)(param_1 + 0x16c) != -0x40800000) {
+  if (*(int *)(param_1 + 0x16c) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)(param_1 + 0x164) + 4))(pCVar1,param_1 + 0x16c);
-    *(undefined4 *)(param_1 + 0x16c) = 0xbf800000;
+    *(undefined4 *)(param_1 + 0x16c) = 0xbf800000 /* -1.0f */;
   }
   fVar6 = (float10)CountdownTimer::Now();
   if (*(float *)(param_1 + 0x16c) != (float)fVar6 + local_20) {
@@ -2595,9 +2595,9 @@ void __thiscall CINSBotVision::UpdatePotentiallyVisibleNPCVector(CINSBotVision *
       (**(code **)(*(int *)(in_stack_00000004 + 0x158) + 4))(iVar8,in_stack_00000004 + 0x160);
       *(float *)(in_stack_00000004 + 0x160) = fVar10;
     }
-    if (*(int *)(in_stack_00000004 + 0x15c) != 0x3e800000) {
+    if (*(int *)(in_stack_00000004 + 0x15c) != 0x3e800000 /* 0.25f */) {
       (**(code **)(*(int *)(in_stack_00000004 + 0x158) + 4))(iVar8,in_stack_00000004 + 0x15c);
-      *(undefined4 *)(in_stack_00000004 + 0x15c) = 0x3e800000;
+      *(undefined4 *)(in_stack_00000004 + 0x15c) = 0x3e800000 /* 0.25f */;
     }
     *(undefined4 *)(in_stack_00000004 + 0x150) = 0;
     iVar8 = 0;

@@ -60,21 +60,21 @@ CINSBotGuardDefensive::CINSBotGuardDefensive(CINSBotGuardDefensive *this,int par
   puVar2 = &UNK_0040643d + unaff_EBX;
   *(undefined **)(param_1 + 0x48c4) = puVar2;
   (*pcVar1)(param_1 + 0x48c4,param_1 + 0x48c8);
-  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48c4) + 4))(param_1 + 0x48c4,param_1 + 0x48cc);
   *(undefined **)(param_1 + 0x48d0) = puVar2;
   *(undefined4 *)(param_1 + 0x48d4) = 0;
   (*pcVar1)(param_1 + 0x48d0,param_1 + 0x48d4);
-  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48d0) + 4))(param_1 + 0x48d0,param_1 + 0x48d8);
   iVar6 = *(int *)(unaff_EBX + 0x484ed5 /* &vtable for IntervalTimer */);
-  *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x48e0) = iVar6 + 8;
   (**(code **)(iVar6 + 0x10))(param_1 + 0x48e0,param_1 + 0x48e4);
   *(undefined **)(param_1 + 0x48e8) = puVar2;
   *(undefined4 *)(param_1 + 0x48ec) = 0;
   (*pcVar1)(param_1 + 0x48e8,param_1 + 0x48ec);
-  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48e8) + 4))(param_1 + 0x48e8,param_1 + 0x48f0);
   *(undefined1 *)(param_1 + 0x48dc) = 0;
   *(undefined4 *)(param_1 + 0x38) = in_stack_00000008;
@@ -219,7 +219,7 @@ LAB_007228df:
       uVar11 = 0;
       piVar5 = (int *)0x41000000;
       fVar10 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                  (pCVar7,(float)in_stack_0000000c,0x41000000);
+                                  (pCVar7,(float)in_stack_0000000c,0x41000000 /* 8.0f */);
       if ((double)(float)fVar10 < *(double *)(&LAB_002022cd + unaff_EBX)) {
         if ((*(char *)((int)param_2 + 0x48dc) != '\0') &&
            (fVar10 = (float10)CountdownTimer::Now(),
@@ -231,7 +231,7 @@ LAB_007228df:
           return param_1;
         }
         piVar5 = (int *)0x41000000;
-        fVar10 = (float10)RandomFloat(0,0x41000000,uVar11);
+        fVar10 = (float10)RandomFloat(0,0x41000000 /* 8.0f */,uVar11);
         fVar1 = (float)fVar10;
         fVar10 = (float10)CountdownTimer::Now();
         if (*(float *)((int)param_2 + 0x48d8) != (float)fVar10 + fVar1) {
@@ -317,7 +317,7 @@ LAB_007228df:
             pcVar3 = *(code **)(*piVar5 + 0xd4);
             CNavArea::GetRandomPoint();
             CINSNextBot::GetViewPosition(local_38);
-            (*pcVar3)(piVar5,local_38,0,0x3dcccccd,0,unaff_EBX + 0x25ee00 /* "Guard Aiming" */);
+            (*pcVar3)(piVar5,local_38,0,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x25ee00 /* "Guard Aiming" */);
           }
         }
         local_6c = (CNavArea **)0x0;
@@ -334,7 +334,7 @@ LAB_007228df:
         }
       }
       local_68 = iVar6;
-      fVar10 = (float10)RandomFloat(0x3f800000,0x40a00000);
+      fVar10 = (float10)RandomFloat(0x3f800000 /* 1.0f */,0x40a00000 /* 5.0f */);
       fVar1 = (float)fVar10;
       fVar10 = (float10)CountdownTimer::Now();
       pCVar7 = extraout_ECX_00;
@@ -353,9 +353,9 @@ LAB_007228df:
     }
     uVar11 = 0;
     fVar10 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                (pCVar7,(float)in_stack_0000000c,0x41000000);
+                                (pCVar7,(float)in_stack_0000000c,0x41000000 /* 8.0f */);
     if ((double)(float)fVar10 < *(double *)(unaff_EBX + 0x25ee75 /* typeinfo name for CINSBotGuardCP+0x11 */)) {
-      (**(code **)(*in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,0x3e800000,uVar11);
+      (**(code **)(*in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,0x3e800000 /* 0.25f */,uVar11);
     }
     goto LAB_00722894;
   }
@@ -371,10 +371,10 @@ LAB_007228df:
       *(float *)((int)param_2 + 0x48cc) = (float)fVar10 + fVar1;
     }
     this_00 = (CINSBotGuardDefensive *)param_2;
-    if (*(int *)((int)param_2 + 0x48c8) != 0x3fc00000) {
+    if (*(int *)((int)param_2 + 0x48c8) != 0x3fc00000 /* 1.5f */) {
       (**(code **)(*(int *)((int)param_2 + 0x48c4) + 4))
                 ((int)param_2 + 0x48c4,(int)param_2 + 0x48c8);
-      *(undefined4 *)((int)param_2 + 0x48c8) = 0x3fc00000;
+      *(undefined4 *)((int)param_2 + 0x48c8) = 0x3fc00000 /* 1.5f */;
       this_00 = extraout_ECX_03;
     }
     pfVar4 = *(float **)(unaff_EBX + 0x484121 /* &vec3_origin */);
@@ -472,9 +472,9 @@ CINSNextBot * CINSBotGuardDefensive::OnMoveToSuccess(CINSNextBot *param_1,Path *
     (**(code **)(*(int *)(param_2 + 0x48e8) + 4))(param_2 + 0x48e8,param_2 + 0x48f0);
     *(float *)(param_2 + 0x48f0) = fVar2;
   }
-  if (*(int *)(param_2 + 0x48ec) != 0x3f000000) {
+  if (*(int *)(param_2 + 0x48ec) != 0x3f000000 /* 0.5f */) {
     (**(code **)(*(int *)(param_2 + 0x48e8) + 4))(param_2 + 0x48e8,param_2 + 0x48ec);
-    *(undefined4 *)(param_2 + 0x48ec) = 0x3f000000;
+    *(undefined4 *)(param_2 + 0x48ec) = 0x3f000000 /* 0.5f */;
   }
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -546,7 +546,7 @@ CINSBotGuardDefensive::OnWeaponFired
       cVar1 = (**(code **)(*piVar2 + 0x104 /* CINSBotVision::IsAbleToSee */))(piVar2,in_stack_00000010,1,0);
       if (cVar1 != '\0') {
         piVar2 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
-        (**(code **)(*piVar2 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar2,in_stack_00000010,2,0x41200000,0,unaff_EBX + 0x25f9ed /* "Heard some gunshots." */);
+        (**(code **)(*piVar2 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar2,in_stack_00000010,2,0x41200000 /* 10.0f */,0,unaff_EBX + 0x25f9ed /* "Heard some gunshots." */);
       }
     }
   }

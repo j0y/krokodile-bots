@@ -46,9 +46,9 @@ CINSBotActionHunt::OnStart(CINSBotActionHunt *this,CINSNextBot *param_1,Action *
     *(undefined4 *)(this_00 + 0x3c) = uVar3;
     if (*(char *)(*piVar1 + 0x40c) != '\0') {
       uVar6 = 0;
-      uVar3 = 0x3f800000;
+      uVar3 = 0x3f800000 /* 1.0f */;
       fVar5 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                                 ((CINSNextBot *)this_00,(float)in_stack_0000000c,0x3f800000);
+                                 ((CINSNextBot *)this_00,(float)in_stack_0000000c,0x3f800000 /* 1.0f */);
       if (*(float *)(unaff_EBX + 0x1f0423 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */) <= (float)fVar5 &&
           (float)fVar5 != *(float *)(unaff_EBX + 0x1f0423 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */)) {
         cVar2 = (**(code **)(*in_stack_0000000c + 0x158))(in_stack_0000000c,uVar3,uVar6);

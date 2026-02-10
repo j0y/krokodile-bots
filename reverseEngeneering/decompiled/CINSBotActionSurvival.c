@@ -47,9 +47,9 @@ CINSBotActionSurvival::OnStart(CINSBotActionSurvival *this,CINSNextBot *param_1,
   *(undefined1 *)((int)in_stack_0000000c + 0x228f) = 0;
   if (*(char *)(*piVar1 + 0x40c) != '\0') {
     uVar6 = 0;
-    uVar5 = 0x3f800000;
+    uVar5 = 0x3f800000 /* 1.0f */;
     fVar4 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                               (this_06,(float)in_stack_0000000c,0x3f800000);
+                               (this_06,(float)in_stack_0000000c,0x3f800000 /* 1.0f */);
     if (*(float *)(unaff_EBX + 0x1ec733 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */) <= (float)fVar4 &&
         (float)fVar4 != *(float *)(unaff_EBX + 0x1ec733 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */)) {
       cVar2 = (**(code **)(*in_stack_0000000c + 0x158))(in_stack_0000000c,uVar5,uVar6);

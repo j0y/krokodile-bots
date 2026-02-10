@@ -45,17 +45,17 @@ CINSBotSuppressTarget::CINSBotSuppressTarget
   param_2[0x15] = iVar1;
   param_2[0x16] = 0;
   (*pcVar2)(param_2 + 0x15,param_2 + 0x16);
-  param_2[0x17] = -0x40800000;
+  param_2[0x17] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x15] + 4))(param_2 + 0x15,param_2 + 0x17);
   param_2[0x18] = iVar1;
   param_2[0x19] = 0;
   (*pcVar2)(param_2 + 0x18,param_2 + 0x19);
-  param_2[0x1a] = -0x40800000;
+  param_2[0x1a] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x18] + 4))(param_2 + 0x18,param_2 + 0x1a);
   param_2[0x1b] = iVar1;
   param_2[0x1c] = 0;
   (*pcVar2)(param_2 + 0x1b,param_2 + 0x1c);
-  param_2[0x1d] = -0x40800000;
+  param_2[0x1d] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x1b] + 4))(param_2 + 0x1b,param_2 + 0x1d);
   if (param_6 == (int *)0x0) {
     param_2[0xe] = -1;
@@ -87,7 +87,7 @@ CINSNextBot * CINSBotSuppressTarget::OnStart(CINSNextBot *param_1,Action *param_
   float10 fVar2;
   
   __i686_get_pc_thunk_bx();
-  fVar2 = (float10)RandomFloat(0x40400000,0x40c00000);
+  fVar2 = (float10)RandomFloat(0x40400000 /* 3.0f */,0x40c00000 /* 6.0f */);
   fVar1 = (float)fVar2;
   fVar2 = (float10)CountdownTimer::Now();
   if (*(float *)(param_2 + 0x5c) != (float)fVar2 + fVar1) {
@@ -217,18 +217,18 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
           local_3c = local_48 * fVar13 + fVar10 + fVar3;
           local_38 = local_44 * fVar13 + fVar11 + fVar4;
           local_40 = fVar12 * local_58 + fVar13 * local_4c + local_40;
-          fVar9 = (float10)RandomFloat(0xc0a00000,0x40a00000);
+          fVar9 = (float10)RandomFloat(0xc0a00000 /* -5.0f */,0x40a00000 /* 5.0f */);
           fVar13 = (float)fVar9;
           local_3c = local_54 * fVar13 + local_3c;
           local_38 = local_50 * fVar13 + local_38;
           local_40 = fVar13 * local_58 + local_40;
-          fVar9 = (float10)RandomFloat(0xc0a00000,0x40a00000);
+          fVar9 = (float10)RandomFloat(0xc0a00000 /* -5.0f */,0x40a00000 /* 5.0f */);
           fVar13 = (float)fVar9;
           local_3c = local_48 * fVar13 + local_3c;
           local_38 = local_44 * fVar13 + local_38;
           local_40 = fVar13 * local_4c + local_40;
           piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
-          (**(code **)(*piVar6 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar6,&local_40,3,0x3dcccccd,0,unaff_EBX + 0x24f3e2 /* "Aiming at suppression area" */);
+          (**(code **)(*piVar6 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar6,&local_40,3,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x24f3e2 /* "Aiming at suppression area" */);
           (**(code **)(*in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_28);
           local_34 = local_40 - local_28;
           local_30 = local_3c - local_24;
@@ -240,7 +240,7 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
           pfVar7 = (float *)(**(code **)(*piVar6 + 0xd0 /* CINSBotBody::GetViewVector */))(piVar6);
           if ((float)dVar14 <= pfVar7[1] * local_30 + *pfVar7 * local_34 + pfVar7[2] * local_2c) {
             pcVar2 = *(code **)(*in_stack_0000000c + 0x8c0);
-            RandomFloat(0x3dcccccd,0x3eb33333);
+            RandomFloat(0x3dcccccd /* 0.1f */,0x3eb33333 /* 0.35f */);
             (*pcVar2)();
           }
           *(undefined4 *)param_1 = 0;

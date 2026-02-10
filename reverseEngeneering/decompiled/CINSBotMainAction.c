@@ -62,41 +62,41 @@ int * __cdecl CINSBotMainAction::InitialContainedAction(CINSNextBot *param_1)
   *piVar4 = iVar3 + 8;
   pcVar2 = (code *)(unaff_EBX + -0x52309b /* CountdownTimer::NetworkStateChanged */);
   (*pcVar2)(piVar4 + 0xe,piVar4 + 0xf);
-  piVar4[0x10] = -0x40800000;
+  piVar4[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
   piVar4[0x11] = iVar1;
   piVar4[0x12] = 0;
   (*pcVar2)(piVar4 + 0x11,piVar4 + 0x12);
-  piVar4[0x13] = -0x40800000;
+  piVar4[0x13] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
   piVar4[0x14] = iVar1;
   piVar4[0x15] = 0;
   (*pcVar2)(piVar4 + 0x14,piVar4 + 0x15);
-  piVar4[0x16] = -0x40800000;
+  piVar4[0x16] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
   piVar4[0x17] = iVar1;
   piVar4[0x18] = 0;
   (*pcVar2)(piVar4 + 0x17,piVar4 + 0x18);
-  piVar4[0x19] = -0x40800000;
+  piVar4[0x19] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0x17] + 4))(piVar4 + 0x17,piVar4 + 0x19);
   piVar4[0x1a] = iVar1;
   piVar4[0x1b] = 0;
   (*pcVar2)(piVar4 + 0x1a,piVar4 + 0x1b);
-  piVar4[0x1c] = -0x40800000;
+  piVar4[0x1c] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0x1a] + 4))(piVar4 + 0x1a,piVar4 + 0x1c);
   piVar4[0x1d] = iVar1;
   piVar4[0x1e] = 0;
   (*pcVar2)(piVar4 + 0x1d,piVar4 + 0x1e);
-  piVar4[0x1f] = -0x40800000;
+  piVar4[0x1f] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0x1d] + 4))(piVar4 + 0x1d,piVar4 + 0x1f);
   iVar3 = *(int *)(unaff_EBX + 0x453445 /* &vtable for IntervalTimer */);
-  piVar4[0x21] = -0x40800000;
+  piVar4[0x21] = -0x40800000 /* -1.0f */;
   piVar4[0x20] = iVar3 + 8;
   (**(code **)(iVar3 + 0x10))(piVar4 + 0x20,piVar4 + 0x21);
   piVar4[0x22] = iVar1;
   piVar4[0x23] = 0;
   (*pcVar2)(piVar4 + 0x22,piVar4 + 0x23);
-  piVar4[0x24] = -0x40800000;
+  piVar4[0x24] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar4[0x22] + 4))(piVar4 + 0x22,piVar4 + 0x24);
   return piVar4;
 }
@@ -148,7 +148,7 @@ CINSBotMainAction::Update(CINSBotMainAction *this,CINSNextBot *param_1,float par
       piVar4[0xb] = 0;
       piVar4[0xd] = 0;
       iVar5 = *(int *)(unaff_EBX + 0x453296 /* &vtable for CINSBotDead */);
-      piVar4[0xf] = -0x40800000;
+      piVar4[0xf] = -0x40800000 /* -1.0f */;
       piVar4[1] = iVar5 + 0x198;
       iVar2 = *(int *)(unaff_EBX + 0x4531a2 /* &vtable for IntervalTimer */);
       *piVar4 = iVar5 + 8;
@@ -256,7 +256,7 @@ CINSBotMainAction::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrac
       cVar1 = CBaseEntity::ClassMatchesComplex(this,pcVar2);
       if (cVar1 == '\0') goto LAB_00754092;
     }
-    (**(code **)(*(int *)param_3 + 0x8d8 /* NextBotPlayer::PressUseButton */))(param_3,0x3dcccccd);
+    (**(code **)(*(int *)param_3 + 0x8d8 /* NextBotPlayer::PressUseButton */))(param_3,0x3dcccccd /* 0.1f */);
   }
 LAB_00754092:
   *(undefined4 *)param_1 = 0;

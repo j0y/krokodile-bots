@@ -158,9 +158,9 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
       (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40);
       *(float *)((int)param_2 + 0x40) = fVar5;
     }
-    if (*(int *)((int)param_2 + 0x3c) != 0x3f000000) {
+    if (*(int *)((int)param_2 + 0x3c) != 0x3f000000 /* 0.5f */) {
       (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c);
-      *(undefined4 *)((int)param_2 + 0x3c) = 0x3f000000;
+      *(undefined4 *)((int)param_2 + 0x3c) = 0x3f000000 /* 0.5f */;
     }
     fVar4 = (float10)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x134))
                                (in_stack_0000000c + 0x2060,(int)param_2 + 0x4c);
@@ -294,10 +294,10 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
                       ((int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */),local_7c);
             return param_1;
           }
-          (**(code **)(*(int *)in_stack_0000000c + 0x8f8 /* NextBotPlayer::PressLeftButton */))(in_stack_0000000c,0x40000000);
+          (**(code **)(*(int *)in_stack_0000000c + 0x8f8 /* NextBotPlayer::PressLeftButton */))(in_stack_0000000c,0x40000000 /* 2.0f */);
         }
         else {
-          (**(code **)(*(int *)in_stack_0000000c + 0x900 /* NextBotPlayer::PressRightButton */))(in_stack_0000000c,0x40000000);
+          (**(code **)(*(int *)in_stack_0000000c + 0x900 /* NextBotPlayer::PressRightButton */))(in_stack_0000000c,0x40000000 /* 2.0f */);
         }
         local_70 = 0;
         *(undefined4 *)((int)param_2 + 0x48) =
@@ -326,7 +326,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
       local_88 = piVar3[1];
       local_84 = piVar3[2];
       uVar10 = (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
-      CINSBotLocomotion::AddMovementRequest(uVar10,local_8c,local_88,local_84,0,9,0x40400000);
+      CINSBotLocomotion::AddMovementRequest(uVar10,local_8c,local_88,local_84,0,9,0x40400000 /* 3.0f */);
       iVar2 = *(int *)((int)param_2 + 100) + -1;
       if (0 < iVar2) {
         _V_memmove(*(void **)((int)param_2 + 0x58),

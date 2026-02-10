@@ -39,12 +39,12 @@ CINSBotApproach::CINSBotApproach
   param_2[0xd] = 0;
   param_2[0xf] = 0;
   (*(code *)(unaff_EBX + -0x4c6d2b /* CountdownTimer::NetworkStateChanged */))(param_2 + 0xe,param_2 + 0xf);
-  param_2[0x10] = 0xbf800000;
+  param_2[0x10] = 0xbf800000 /* -1.0f */;
   (**(code **)(param_2[0xe] + 4))(param_2 + 0xe,param_2 + 0x10);
   param_2[0x16] = 0;
   param_2[0x15] = unaff_EBX + 0x430d1d /* vtable for CountdownTimer+0x8 */;
   (*(code *)(unaff_EBX + -0x4c6d2b /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x15,param_2 + 0x16);
-  param_2[0x17] = 0xbf800000;
+  param_2[0x17] = 0xbf800000 /* -1.0f */;
   (**(code **)(param_2[0x15] + 4))(param_2 + 0x15,param_2 + 0x17);
   *(undefined1 *)(param_2 + 0x14) = 0;
   *(undefined1 *)(param_2 + 0x18) = 0;
@@ -89,7 +89,7 @@ void __thiscall CINSBotApproach::OnStart(CINSBotApproach *this,CINSNextBot *para
   uVar3 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
   CINSBotLocomotion::AddMovementRequest
             (uVar3,*(undefined4 *)(param_2 + 0x44),*(undefined4 *)(param_2 + 0x48),
-             *(undefined4 *)(param_2 + 0x4c),6,8,0x40a00000);
+             *(undefined4 *)(param_2 + 0x4c),6,8,0x40a00000 /* 5.0f */);
   CINSNextBot::ResetIdleStatus(this_02);
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -139,9 +139,9 @@ CINSBotApproach::Update(CINSBotApproach *this,CINSNextBot *param_1,float param_2
       (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40);
       *(float *)((int)param_2 + 0x40) = fVar6;
     }
-    if (*(int *)((int)param_2 + 0x3c) != 0x3f000000) {
+    if (*(int *)((int)param_2 + 0x3c) != 0x3f000000 /* 0.5f */) {
       (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c);
-      *(undefined4 *)((int)param_2 + 0x3c) = 0x3f000000;
+      *(undefined4 *)((int)param_2 + 0x3c) = 0x3f000000 /* 0.5f */;
     }
     piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
     iVar3 = (**(code **)(*piVar2 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar2,0);
@@ -162,7 +162,7 @@ CINSBotApproach::Update(CINSBotApproach *this,CINSNextBot *param_1,float param_2
       uVar4 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
       CINSBotLocomotion::AddMovementRequest
                 (uVar4,*(undefined4 *)((int)param_2 + 0x44),*(undefined4 *)((int)param_2 + 0x48),
-                 *(undefined4 *)((int)param_2 + 0x4c),6,8,0x40a00000);
+                 *(undefined4 *)((int)param_2 + 0x4c),6,8,0x40a00000 /* 5.0f */);
     }
   }
   fVar5 = (float10)CountdownTimer::Now();
@@ -241,7 +241,7 @@ CINSNextBot * CINSBotApproach::OnResume(CINSNextBot *param_1,Action *param_2)
   uVar2 = (**(code **)(*piVar1 + 0x96c /* CINSNextBot::GetLocomotionInterface */))(piVar1);
   CINSBotLocomotion::AddMovementRequest
             (uVar2,*(undefined4 *)(param_2 + 0x44),*(undefined4 *)(param_2 + 0x48),
-             *(undefined4 *)(param_2 + 0x4c),6,8,0x40a00000);
+             *(undefined4 *)(param_2 + 0x4c),6,8,0x40a00000 /* 5.0f */);
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
@@ -413,7 +413,7 @@ CINSNextBot * CINSBotApproach::OnStuck(CINSNextBot *param_1)
   *piVar2 = iVar1 + 8;
   piVar2[0xe] = unaff_EBX + 0x4314bd /* vtable for CountdownTimer+0x8 */;
   CountdownTimer::NetworkStateChanged(piVar2 + 0xe);
-  piVar2[0x10] = -0x40800000;
+  piVar2[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
   piVar2[0x16] = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x288d56 /* "I'm Stuck" */;
@@ -592,9 +592,9 @@ CINSBotApproach::OnNavAreaChanged
                 (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x5c);
                 *(float *)(param_2 + 0x5c) = fVar4;
               }
-              if (*(int *)(param_2 + 0x58) != 0x40400000) {
+              if (*(int *)(param_2 + 0x58) != 0x40400000 /* 3.0f */) {
                 (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x58);
-                *(undefined4 *)(param_2 + 0x58) = 0x40400000;
+                *(undefined4 *)(param_2 + 0x58) = 0x40400000 /* 3.0f */;
                 param_2 = (CNavArea *)extraout_ECX;
               }
               CINSWeapon::ToggleFlashlight((CINSWeapon *)param_2);

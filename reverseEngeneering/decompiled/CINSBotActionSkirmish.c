@@ -143,7 +143,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
       return param_1;
     }
     fVar7 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                               (this_03,(float)in_stack_0000000c,0x42480000);
+                               (this_03,(float)in_stack_0000000c,0x42480000 /* 50.0f */);
     *(bool *)((int)param_2 + 0x38) = (float)fVar7 < *(float *)(unaff_EBX + 0x1e8171 /* typeinfo name for ISaveRestoreOps+0x67 */);
     this_00 = (CFmtStrN<256,false> *)GetDesiredObjective(in_stack_0000000c,(CINSNextBot *)param_2);
     iVar4 = CBaseEntity::GetTeamNumber(this_05);
@@ -372,7 +372,7 @@ CINSBotActionSkirmish::GetDesiredObjective(CINSBotActionSkirmish *this,CINSNextB
   }
 LAB_0073b7b6:
   fVar11 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                              (in_stack_00000008,(float)in_stack_00000008,0x42480000);
+                              (in_stack_00000008,(float)in_stack_00000008,0x42480000 /* 50.0f */);
   iVar6 = iVar7;
   if (((double)(float)fVar11 < *(double *)(unaff_EBX + 0x245c65 /* typeinfo name for CINSBotGuardCP+0x11 */)) && (iVar6 = -1, iVar7 != -1)) {
     iVar6 = (uint)(iVar4 == 2) * 2 + -1 + iVar7;

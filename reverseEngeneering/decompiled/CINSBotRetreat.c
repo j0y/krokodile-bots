@@ -47,28 +47,28 @@ void __thiscall CINSBotRetreat::CINSBotRetreat(CINSBotRetreat *this,bool param_1
   _param_1[0x122a] = iVar2;
   pcVar3 = (code *)(unaff_EBX + -0x4fba2b /* CountdownTimer::NetworkStateChanged */);
   (*pcVar3)(puVar1,_param_1 + 0x122b);
-  _param_1[0x122c] = 0xbf800000;
+  _param_1[0x122c] = 0xbf800000 /* -1.0f */;
   (**(code **)(_param_1[0x122a] + 4))(puVar1,_param_1 + 0x122c);
   _param_1[0x122d] = 0xffffffff;
-  if (_param_1[0x122c] != -0x40800000) {
+  if (_param_1[0x122c] != -0x40800000 /* -1.0f */) {
     (**(code **)(_param_1[0x122a] + 4))(puVar1,_param_1 + 0x122c);
-    _param_1[0x122c] = 0xbf800000;
+    _param_1[0x122c] = 0xbf800000 /* -1.0f */;
   }
   _param_1[0x1231] = iVar2;
   _param_1[0x122d] = 0xffffffff;
   _param_1[0x1232] = 0;
   (*pcVar3)(_param_1 + 0x1231,_param_1 + 0x1232);
-  _param_1[0x1233] = 0xbf800000;
+  _param_1[0x1233] = 0xbf800000 /* -1.0f */;
   (**(code **)(_param_1[0x1231] + 4))(_param_1 + 0x1231,_param_1 + 0x1233);
   _param_1[0x1236] = iVar2;
   _param_1[0x1237] = 0;
   (*pcVar3)(_param_1 + 0x1236,_param_1 + 0x1237);
-  _param_1[0x1238] = 0xbf800000;
+  _param_1[0x1238] = 0xbf800000 /* -1.0f */;
   (**(code **)(_param_1[0x1236] + 4))(_param_1 + 0x1236,_param_1 + 0x1238);
   _param_1[0x1239] = iVar2;
   _param_1[0x123a] = 0;
   (*pcVar3)(_param_1 + 0x1239,_param_1 + 0x123a);
-  _param_1[0x123b] = 0xbf800000;
+  _param_1[0x123b] = 0xbf800000 /* -1.0f */;
   (**(code **)(_param_1[0x1239] + 4))(_param_1 + 0x1239,_param_1 + 0x123b);
   *(undefined1 *)(_param_1 + 0x123c) = 0;
   _param_1[0x123d] = 0xffffffff;
@@ -120,28 +120,28 @@ void __thiscall CINSBotRetreat::CINSBotRetreat(CINSBotRetreat *this,float param_
   iVar3 = unaff_EBX + 0x3fbd8d /* vtable for CountdownTimer+0x8 */;
   *(int *)((int)param_1 + 0x48a8) = iVar3;
   (*pcVar1)(iVar2,(int)param_1 + 0x48ac);
-  *(undefined4 *)((int)param_1 + 0x48b0) = 0xbf800000;
+  *(undefined4 *)((int)param_1 + 0x48b0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)((int)param_1 + 0x48a8) + 4))(iVar2,(int)param_1 + 0x48b0);
   *(undefined4 *)((int)param_1 + 0x48b4) = 0xffffffff;
-  if (*(int *)((int)param_1 + 0x48b0) != -0x40800000) {
+  if (*(int *)((int)param_1 + 0x48b0) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)((int)param_1 + 0x48a8) + 4))(iVar2,(int)param_1 + 0x48b0);
-    *(undefined4 *)((int)param_1 + 0x48b0) = 0xbf800000;
+    *(undefined4 *)((int)param_1 + 0x48b0) = 0xbf800000 /* -1.0f */;
   }
   *(int *)((int)param_1 + 0x48c4) = iVar3;
   *(undefined4 *)((int)param_1 + 0x48b4) = 0xffffffff;
   *(undefined4 *)((int)param_1 + 0x48c8) = 0;
   (*pcVar1)((int)param_1 + 0x48c4,(int)param_1 + 0x48c8);
-  *(undefined4 *)((int)param_1 + 0x48cc) = 0xbf800000;
+  *(undefined4 *)((int)param_1 + 0x48cc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)((int)param_1 + 0x48c4) + 4))((int)param_1 + 0x48c4,(int)param_1 + 0x48cc);
   *(int *)((int)param_1 + 0x48d8) = iVar3;
   *(undefined4 *)((int)param_1 + 0x48dc) = 0;
   (*pcVar1)((int)param_1 + 0x48d8,(int)param_1 + 0x48dc);
-  *(undefined4 *)((int)param_1 + 0x48e0) = 0xbf800000;
+  *(undefined4 *)((int)param_1 + 0x48e0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)((int)param_1 + 0x48d8) + 4))((int)param_1 + 0x48d8,(int)param_1 + 0x48e0);
   *(int *)((int)param_1 + 0x48e4) = iVar3;
   *(undefined4 *)((int)param_1 + 0x48e8) = 0;
   (*pcVar1)((int)param_1 + 0x48e4,(int)param_1 + 0x48e8);
-  *(undefined4 *)((int)param_1 + 0x48ec) = 0xbf800000;
+  *(undefined4 *)((int)param_1 + 0x48ec) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)((int)param_1 + 0x48e4) + 4))((int)param_1 + 0x48e4,(int)param_1 + 0x48ec);
   *(undefined1 *)((int)param_1 + 0x48d0) = 0;
   *(undefined4 *)((int)param_1 + 0x48f4) = 0xffffffff;
@@ -193,31 +193,31 @@ void __thiscall CINSBotRetreat::CINSBotRetreat(CINSBotRetreat *this,int param_1)
   iVar3 = unaff_EBX + 0x3fbb0d /* vtable for CountdownTimer+0x8 */;
   *(int *)(param_1 + 0x48a8) = iVar3;
   (*pcVar1)(iVar2,param_1 + 0x48ac);
-  *(undefined4 *)(param_1 + 0x48b0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48b0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48a8) + 4))(iVar2,param_1 + 0x48b0);
   *(undefined4 *)(param_1 + 0x48b4) = 0xffffffff;
-  if (*(int *)(param_1 + 0x48b0) != -0x40800000) {
+  if (*(int *)(param_1 + 0x48b0) != -0x40800000 /* -1.0f */) {
     (**(code **)(*(int *)(param_1 + 0x48a8) + 4))(iVar2,param_1 + 0x48b0);
-    *(undefined4 *)(param_1 + 0x48b0) = 0xbf800000;
+    *(undefined4 *)(param_1 + 0x48b0) = 0xbf800000 /* -1.0f */;
   }
   *(int *)(param_1 + 0x48c4) = iVar3;
   *(undefined4 *)(param_1 + 0x48b4) = 0xffffffff;
   *(undefined4 *)(param_1 + 0x48c8) = 0;
   (*pcVar1)(param_1 + 0x48c4,param_1 + 0x48c8);
-  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48c4) + 4))(param_1 + 0x48c4,param_1 + 0x48cc);
   *(int *)(param_1 + 0x48d8) = iVar3;
   *(undefined4 *)(param_1 + 0x48dc) = 0;
   (*pcVar1)(param_1 + 0x48d8,param_1 + 0x48dc);
-  *(undefined4 *)(param_1 + 0x48e0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48e0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48d8) + 4))(param_1 + 0x48d8,param_1 + 0x48e0);
   *(int *)(param_1 + 0x48e4) = iVar3;
   *(undefined4 *)(param_1 + 0x48e8) = 0;
   (*pcVar1)(param_1 + 0x48e4,param_1 + 0x48e8);
-  *(undefined4 *)(param_1 + 0x48ec) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48ec) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48e4) + 4))(param_1 + 0x48e4,param_1 + 0x48ec);
   *(undefined1 *)(param_1 + 0x48d0) = 0;
-  *(undefined4 *)(param_1 + 0x48d4) = 0x40a00000;
+  *(undefined4 *)(param_1 + 0x48d4) = 0x40a00000 /* 5.0f */;
   *(undefined1 *)(param_1 + 0x48f0) = 0;
   *(undefined4 *)(param_1 + 0x48f4) = in_stack_00000008;
   return;
@@ -279,7 +279,7 @@ CINSBotRetreat::OnStart(CINSBotRetreat *this,CINSNextBot *param_1,Action *param_
   }
   (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
   CINSBotLocomotion::ClearMovementRequests();
-  *(undefined4 *)(param_2 + 0x4814) = 0x428a0000;
+  *(undefined4 *)(param_2 + 0x4814) = 0x428a0000 /* 69.0f */;
   if ((in_stack_0000000c[0x2cce] == -1) ||
      (local_30 = (int *)UTIL_EntityByIndex(in_stack_0000000c[0x2cce]), local_30 == (int *)0x0)) {
     piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
@@ -292,9 +292,9 @@ CINSBotRetreat::OnStart(CINSBotRetreat *this,CINSNextBot *param_1,Action *param_
         (**(code **)(*(int *)(param_2 + 0x48e4) + 4))(param_2 + 0x48e4,param_2 + 0x48ec);
         *(float *)(param_2 + 0x48ec) = fVar12;
       }
-      if (*(int *)(param_2 + 0x48e8) != 0x3f000000) {
+      if (*(int *)(param_2 + 0x48e8) != 0x3f000000 /* 0.5f */) {
         (**(code **)(*(int *)(param_2 + 0x48e4) + 4))(param_2 + 0x48e4,param_2 + 0x48e8);
-        *(undefined4 *)(param_2 + 0x48e8) = 0x3f000000;
+        *(undefined4 *)(param_2 + 0x48e8) = 0x3f000000 /* 0.5f */;
       }
       param_2[0x48f0] = (Action)0x1;
       *(undefined4 *)param_1 = 0;
@@ -471,17 +471,17 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
     pcVar1 = (code *)(unaff_EBX + -0x4fb024 /* CountdownTimer::NetworkStateChanged */);
     piVar3[0xe] = iVar4;
     (*pcVar1)(piVar3 + 0xe,piVar3 + 0xf);
-    piVar3[0x10] = -0x40800000;
+    piVar3[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0xe] + 4))(piVar3 + 0xe,piVar3 + 0x10);
     piVar3[0x12] = 0;
     piVar3[0x11] = iVar4;
     (*pcVar1)(piVar3 + 0x11,piVar3 + 0x12);
-    piVar3[0x13] = -0x40800000;
+    piVar3[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x11] + 4))(piVar3 + 0x11,piVar3 + 0x13);
     piVar3[0x15] = 0;
     piVar3[0x14] = iVar4;
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
-    piVar3[0x16] = -0x40800000;
+    piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
     *(undefined4 *)param_1 = 1;
     *(int **)(param_1 + 4) = piVar3;
@@ -499,7 +499,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
       if ((piVar3 == (int *)0x0) ||
          (iVar4 = (**(code **)(*piVar3 + 0x10))(piVar3), this_02 = extraout_ECX_02, iVar4 == 0)) {
         *(undefined1 *)((int)param_2 + 0x48f0) = 1;
-        RandomFloat(0x3ecccccd,0x3f19999a);
+        RandomFloat(0x3ecccccd /* 0.4f */,0x3f19999a /* 0.6f */);
         CountdownTimer::Start(this_03,(float)((int)param_2 + 0x48e4));
         *(undefined4 *)param_1 = 0;
         *(undefined4 *)(param_1 + 4) = 0;
@@ -681,17 +681,17 @@ CINSNextBot * CINSBotRetreat::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2
     pcVar1 = (code *)(unaff_EBX + -0x4faa21 /* CountdownTimer::NetworkStateChanged */);
     piVar3[0xe] = iVar2;
     (*pcVar1)(piVar3 + 0xe,piVar3 + 0xf);
-    piVar3[0x10] = -0x40800000;
+    piVar3[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0xe] + 4))(piVar3 + 0xe,piVar3 + 0x10);
     piVar3[0x12] = 0;
     piVar3[0x11] = iVar2;
     (*pcVar1)(piVar3 + 0x11,piVar3 + 0x12);
-    piVar3[0x13] = -0x40800000;
+    piVar3[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x11] + 4))(piVar3 + 0x11,piVar3 + 0x13);
     piVar3[0x15] = 0;
     piVar3[0x14] = iVar2;
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
-    piVar3[0x16] = -0x40800000;
+    piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
     *(undefined4 *)param_1 = 1;
     *(int **)(param_1 + 4) = piVar3;
@@ -748,17 +748,17 @@ undefined4 * CINSBotRetreat::OnMoveToFailure(undefined4 *param_1)
     pcVar1 = (code *)(unaff_EBX + -0x4fadc1 /* CountdownTimer::NetworkStateChanged */);
     piVar3[0xe] = iVar2;
     (*pcVar1)(piVar3 + 0xe,piVar3 + 0xf);
-    piVar3[0x10] = -0x40800000;
+    piVar3[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0xe] + 4))(piVar3 + 0xe,piVar3 + 0x10);
     piVar3[0x12] = 0;
     piVar3[0x11] = iVar2;
     (*pcVar1)(piVar3 + 0x11,piVar3 + 0x12);
-    piVar3[0x13] = -0x40800000;
+    piVar3[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x11] + 4))(piVar3 + 0x11,piVar3 + 0x13);
     piVar3[0x15] = 0;
     piVar3[0x14] = iVar2;
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
-    piVar3[0x16] = -0x40800000;
+    piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
     *param_1 = 1;
     param_1[1] = piVar3;
@@ -816,17 +816,17 @@ CINSNextBot * CINSBotRetreat::OnStuck(CINSNextBot *param_1)
     pcVar2 = (code *)(unaff_EBX + -0x4fabf1 /* CountdownTimer::NetworkStateChanged */);
     piVar4[0xe] = (int)puVar1;
     (*pcVar2)(piVar4 + 0xe,piVar4 + 0xf);
-    piVar4[0x10] = -0x40800000;
+    piVar4[0x10] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
     piVar4[0x12] = 0;
     piVar4[0x11] = (int)puVar1;
     (*pcVar2)(piVar4 + 0x11,piVar4 + 0x12);
-    piVar4[0x13] = -0x40800000;
+    piVar4[0x13] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x11] + 4))(piVar4 + 0x11,piVar4 + 0x13);
     piVar4[0x15] = 0;
     piVar4[0x14] = (int)puVar1;
     (*pcVar2)(piVar4 + 0x14,piVar4 + 0x15);
-    piVar4[0x16] = -0x40800000;
+    piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
     *(undefined4 *)param_1 = 1;
     *(int **)(param_1 + 4) = piVar4;

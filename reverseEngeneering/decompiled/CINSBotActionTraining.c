@@ -228,10 +228,10 @@ LAB_0073d391:
                     ((int)param_2 + 0x48ac,(int)param_2 + 0x48b4);
           *(float *)((int)param_2 + 0x48b4) = (float)fVar16 + fVar19;
         }
-        if (*(int *)((int)param_2 + 0x48b0) != 0x3f000000) {
+        if (*(int *)((int)param_2 + 0x48b0) != 0x3f000000 /* 0.5f */) {
           (**(code **)(*(int *)((int)param_2 + 0x48ac) + 4))
                     ((int)param_2 + 0x48ac,(int)param_2 + 0x48b0);
-          *(undefined4 *)((int)param_2 + 0x48b0) = 0x3f000000;
+          *(undefined4 *)((int)param_2 + 0x48b0) = 0x3f000000 /* 0.5f */;
         }
         local_58 = *(undefined4 *)((int)param_2 + 0x48b8);
         pVVar21 = (Vector *)(in_stack_0000000c + 0x818);
@@ -242,7 +242,7 @@ LAB_0073d391:
         local_4c = 0xffffffff;
         local_60 = pVVar21;
         iVar7 = CNavMesh::GetNearestNavArea
-                          (local_54,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),&local_58,0,0x461c4000,0
+                          (local_54,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),&local_58,0,0x461c4000 /* 10000.0f */,0
                            ,1,0);
         if ((iVar7 != 0) && (iVar7 = CINSNavArea::GetAssociatedControlPoint(this_02), iVar7 != -1))
         {
@@ -288,10 +288,10 @@ LAB_0073db65:
         }
         else {
           this_08 = (CNavMesh *)((int)param_2 + 0x48b8);
-          uVar25 = 0x43480000;
+          uVar25 = 0x43480000 /* 200.0f */;
           pVVar10 = (Vector *)
                     CNavMesh::GetNearestNavArea
-                              (this_08,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),this_08,1,0x43480000,
+                              (this_08,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),this_08,1,0x43480000 /* 200.0f */,
                                1,1,1);
           if (pCVar9 == (CNavArea *)pVVar10) {
 LAB_0073ddaa:
@@ -432,7 +432,7 @@ LAB_0073d4ea:
                )) {
               uVar13 = *(undefined4 *)(iVar7 + 4);
             }
-            (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,uVar13,2,0x3f800000,0,unaff_EBX + 0x2454e3 /* "Watching the driver." */);
+            (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454e3 /* "Watching the driver." */);
             goto LAB_0073d622;
           }
           iVar7 = *(int *)((int)param_2 + 0x38);
@@ -459,7 +459,7 @@ LAB_0073d547:
         (iVar7 = *local_74 + (uVar14 & 0xffff) * 0x18, *(uint *)(iVar7 + 8) == uVar14 >> 0x10)) &&
        (iVar7 = *(int *)(iVar7 + 4), iVar7 != 0)) {
       piVar20 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-      (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,iVar7,2,0x3f800000,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
+      (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,iVar7,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
       goto LAB_0073d622;
     }
   }
@@ -467,7 +467,7 @@ LAB_0073dd60:
   piVar20 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c,piVar6);
   pcVar3 = *(code **)(*piVar20 + 0xd8);
   uVar13 = UTIL_GetListenServerHost();
-  (*pcVar3)(piVar20,uVar13,2,0x3f800000,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
+  (*pcVar3)(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
 LAB_0073d622:
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;

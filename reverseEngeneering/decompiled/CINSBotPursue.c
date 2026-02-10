@@ -37,10 +37,10 @@ void __thiscall CINSBotPursue::CINSBotPursue(CINSBotPursue *this)
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
   CountdownTimer::NetworkStateChanged(in_stack_00000004 + 0xe);
-  in_stack_00000004[0x10] = -0x40800000;
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10);
   *(undefined1 *)(in_stack_00000004 + 0x16) = 0;
-  in_stack_00000004[0x15] = -0x40800000;
+  in_stack_00000004[0x15] = -0x40800000 /* -1.0f */;
   in_stack_00000004[0x14] = -1;
   return;
 }
@@ -78,7 +78,7 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
   }
   puVar3 = (undefined4 *)(**(code **)(*piVar2 + 0x14))(piVar2);
   uVar4 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
-  CINSBotLocomotion::AddMovementRequest(uVar4,*puVar3,puVar3[1],puVar3[2],9,3,0x40a00000);
+  CINSBotLocomotion::AddMovementRequest(uVar4,*puVar3,puVar3[1],puVar3[2],9,3,0x40a00000 /* 5.0f */);
   CINSNextBot::ResetIdleStatus(this_00);
   *(int *)(param_2 + 0x50) = in_stack_0000000c[0x2cce];
   cVar1 = CINSNextBot::IsEscorting(this_01);
@@ -200,7 +200,7 @@ LAB_0072a5b0:
 LAB_0072a67c:
     puVar8 = (undefined4 *)(**(code **)(*piVar5 + 0x14))(piVar5);
     uVar9 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
-    CINSBotLocomotion::AddMovementRequest(uVar9,*puVar8,puVar8[1],puVar8[2],9,3,0x40a00000);
+    CINSBotLocomotion::AddMovementRequest(uVar9,*puVar8,puVar8[1],puVar8[2],9,3,0x40a00000 /* 5.0f */);
     puVar8 = (undefined4 *)(**(code **)(*piVar5 + 0x14))(piVar5);
     *(undefined4 *)((int)param_2 + 0x44) = *puVar8;
     *(undefined4 *)((int)param_2 + 0x48) = puVar8[1];
@@ -213,9 +213,9 @@ LAB_0072a67c:
     (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40);
     *(float *)((int)param_2 + 0x40) = fVar11;
   }
-  if (*(int *)((int)param_2 + 0x3c) != 0x3f800000) {
+  if (*(int *)((int)param_2 + 0x3c) != 0x3f800000 /* 1.0f */) {
     (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c);
-    *(undefined4 *)((int)param_2 + 0x3c) = 0x3f800000;
+    *(undefined4 *)((int)param_2 + 0x3c) = 0x3f800000 /* 1.0f */;
   }
 LAB_0072a550:
   *(undefined4 *)param_1 = 0;

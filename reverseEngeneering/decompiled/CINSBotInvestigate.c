@@ -50,24 +50,24 @@ void __thiscall CINSBotInvestigate::CINSBotInvestigate(CINSBotInvestigate *this,
   puVar2 = &UNK_0040420d + unaff_EBX;
   *(undefined **)(param_1 + 0x48b8) = puVar2;
   (*pcVar1)(param_1 + 0x48b8,param_1 + 0x48bc);
-  *(undefined4 *)(param_1 + 0x48c0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48c0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48b8) + 4))(param_1 + 0x48b8,param_1 + 0x48c0);
   *(undefined **)(param_1 + 0x48c4) = puVar2;
   *(undefined4 *)(param_1 + 0x48c8) = 0;
   (*pcVar1)(param_1 + 0x48c4,param_1 + 0x48c8);
-  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48c4) + 4))(param_1 + 0x48c4,param_1 + 0x48cc);
   pCVar3 = param_1 + 0x48d0;
   *(undefined **)(param_1 + 0x48d0) = puVar2;
   *(undefined4 *)(param_1 + 0x48d4) = 0;
   (*pcVar1)(pCVar3,param_1 + 0x48d4);
-  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48d0) + 4))(pCVar3,param_1 + 0x48d8);
   pCVar4 = param_1 + 0x48e8;
   *(undefined **)(param_1 + 0x48e8) = puVar2;
   *(undefined4 *)(param_1 + 0x48ec) = 0;
   (*pcVar1)(pCVar4,param_1 + 0x48ec);
-  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48f0) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48e8) + 4))(pCVar4,param_1 + 0x48f0);
   CINSPathFollower::Invalidate(this_01);
   fVar8 = (float10)CountdownTimer::Now();
@@ -83,7 +83,7 @@ void __thiscall CINSBotInvestigate::CINSBotInvestigate(CINSBotInvestigate *this,
     *(float *)(param_1 + 0x48f0) = (float)fVar8 + fVar5;
   }
   param_1[0x48f8] = (CNavArea)0x0;
-  *(undefined4 *)(param_1 + 0x48f4) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48f4) = 0xbf800000 /* -1.0f */;
   param_1[0x48fa] = (CNavArea)0x0;
   *(undefined4 *)(param_1 + 0x48fc) = 0;
   *(undefined4 *)(param_1 + 0x38) = in_stack_00000008;
@@ -139,24 +139,24 @@ void __thiscall CINSBotInvestigate::CINSBotInvestigate(undefined4 param_1,int *p
   iVar5 = unaff_EBX + 0x403f1d /* vtable for CountdownTimer+0x8 */;
   param_2[0x122e] = iVar5;
   (*pcVar1)(param_2 + 0x122e,param_2 + 0x122f);
-  param_2[0x1230] = -0x40800000;
+  param_2[0x1230] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x122e] + 4))(param_2 + 0x122e,param_2 + 0x1230);
   param_2[0x1231] = iVar5;
   param_2[0x1232] = 0;
   (*pcVar1)(param_2 + 0x1231,param_2 + 0x1232);
-  param_2[0x1233] = -0x40800000;
+  param_2[0x1233] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x1231] + 4))(param_2 + 0x1231,param_2 + 0x1233);
   piVar4 = param_2 + 0x1234;
   param_2[0x1234] = iVar5;
   param_2[0x1235] = 0;
   (*pcVar1)(piVar4,param_2 + 0x1235);
-  param_2[0x1236] = -0x40800000;
+  param_2[0x1236] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x1234] + 4))(piVar4,param_2 + 0x1236);
   piVar2 = param_2 + 0x123a;
   param_2[0x123a] = iVar5;
   param_2[0x123b] = 0;
   (*pcVar1)(piVar2,param_2 + 0x123b);
-  param_2[0x123c] = -0x40800000;
+  param_2[0x123c] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x123a] + 4))(piVar2,param_2 + 0x123c);
   CINSPathFollower::Invalidate(this_00);
   fVar6 = (float10)CountdownTimer::Now();
@@ -175,7 +175,7 @@ void __thiscall CINSBotInvestigate::CINSBotInvestigate(undefined4 param_1,int *p
   param_2[0xe] = iVar5;
   piVar4 = *(int **)(unaff_EBX + 0x482331 /* &vec3_origin */);
   *(undefined1 *)(param_2 + 0x123e) = 0;
-  param_2[0x123d] = -0x40800000;
+  param_2[0x123d] = -0x40800000 /* -1.0f */;
   *(undefined1 *)((int)param_2 + 0x48fa) = 0;
   param_2[0x123f] = 0;
   param_2[0xf] = *piVar4;
@@ -231,26 +231,26 @@ void __thiscall CINSBotInvestigate::CINSBotInvestigate(CINSBotInvestigate *this)
   puVar2 = &UNK_00403bfd + unaff_EBX;
   in_stack_00000004[0x122e] = (int)puVar2;
   (*pcVar1)(in_stack_00000004 + 0x122e,in_stack_00000004 + 0x122f);
-  in_stack_00000004[0x1230] = -0x40800000;
+  in_stack_00000004[0x1230] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x122e] + 4))
             (in_stack_00000004 + 0x122e,in_stack_00000004 + 0x1230);
   in_stack_00000004[0x1231] = (int)puVar2;
   in_stack_00000004[0x1232] = 0;
   (*pcVar1)(in_stack_00000004 + 0x1231,in_stack_00000004 + 0x1232);
-  in_stack_00000004[0x1233] = -0x40800000;
+  in_stack_00000004[0x1233] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x1231] + 4))
             (in_stack_00000004 + 0x1231,in_stack_00000004 + 0x1233);
   piVar5 = in_stack_00000004 + 0x1234;
   in_stack_00000004[0x1234] = (int)puVar2;
   in_stack_00000004[0x1235] = 0;
   (*pcVar1)(piVar5,in_stack_00000004 + 0x1235);
-  in_stack_00000004[0x1236] = -0x40800000;
+  in_stack_00000004[0x1236] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x1234] + 4))(piVar5,in_stack_00000004 + 0x1236);
   piVar3 = in_stack_00000004 + 0x123a;
   in_stack_00000004[0x123a] = (int)puVar2;
   in_stack_00000004[0x123b] = 0;
   (*pcVar1)(piVar3,in_stack_00000004 + 0x123b);
-  in_stack_00000004[0x123c] = -0x40800000;
+  in_stack_00000004[0x123c] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x123a] + 4))(piVar3,in_stack_00000004 + 0x123c);
   CINSPathFollower::Invalidate(this_01);
   fVar7 = (float10)CountdownTimer::Now();
@@ -267,7 +267,7 @@ void __thiscall CINSBotInvestigate::CINSBotInvestigate(CINSBotInvestigate *this)
   }
   piVar5 = *(int **)(unaff_EBX + 0x482011 /* &vec3_origin */);
   *(undefined1 *)(in_stack_00000004 + 0x123e) = 0;
-  in_stack_00000004[0x123d] = -0x40800000;
+  in_stack_00000004[0x123d] = -0x40800000 /* -1.0f */;
   *(undefined1 *)((int)in_stack_00000004 + 0x48fa) = 0;
   in_stack_00000004[0x123f] = 0;
   in_stack_00000004[0xf] = *piVar5;
@@ -329,7 +329,7 @@ CINSBotInvestigate::OnStart(CINSBotInvestigate *this,CINSNextBot *param_1,Action
   *(undefined4 *)(param_2 + 0x3c) = *(undefined4 *)(iVar3 + 0xc);
   *(undefined4 *)(param_2 + 0x40) = *(undefined4 *)(iVar3 + 0x10);
   *(undefined4 *)(param_2 + 0x44) = *(undefined4 *)(iVar3 + 0x14);
-  fVar6 = (float10)RandomFloat(0,0x3f800000);
+  fVar6 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
   this_01 = extraout_ECX;
   if (*(float *)(unaff_EBX + 0x201205 /* typeinfo name for CBaseGameSystem+0x16 */) <= (float)fVar6 &&
       (float)fVar6 != *(float *)(unaff_EBX + 0x201205 /* typeinfo name for CBaseGameSystem+0x16 */)) {
@@ -359,9 +359,9 @@ LAB_007235e5:
     (**(code **)(*(int *)(param_2 + 0x48b8) + 4))(param_2 + 0x48b8,param_2 + 0x48c0);
     *(float *)(param_2 + 0x48c0) = fVar7;
   }
-  if (*(int *)(param_2 + 0x48bc) != 0x40a00000) {
+  if (*(int *)(param_2 + 0x48bc) != 0x40a00000 /* 5.0f */) {
     (**(code **)(*(int *)(param_2 + 0x48b8) + 4))(param_2 + 0x48b8,param_2 + 0x48bc);
-    *(undefined4 *)(param_2 + 0x48bc) = 0x40a00000;
+    *(undefined4 *)(param_2 + 0x48bc) = 0x40a00000 /* 5.0f */;
   }
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -431,10 +431,10 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
         *(undefined4 *)((int)param_2 + 0x40) = local_24;
         *(undefined4 *)((int)param_2 + 0x44) = local_20;
         this_01 = extraout_ECX_00;
-        if (*(int *)((int)param_2 + 0x48cc) != -0x40800000) {
+        if (*(int *)((int)param_2 + 0x48cc) != -0x40800000 /* -1.0f */) {
           (**(code **)(*(int *)((int)param_2 + 0x48c4) + 4))
                     ((int)param_2 + 0x48c4,(int)param_2 + 0x48cc);
-          *(undefined4 *)((int)param_2 + 0x48cc) = 0xbf800000;
+          *(undefined4 *)((int)param_2 + 0x48cc) = 0xbf800000 /* -1.0f */;
           this_01 = extraout_ECX_01;
         }
       }
@@ -489,10 +489,10 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
                         ((int)param_2 + 0x48b8,(int)param_2 + 0x48c0);
               *(float *)((int)param_2 + 0x48c0) = fVar11;
             }
-            if (*(int *)((int)param_2 + 0x48bc) != 0x40a00000) {
+            if (*(int *)((int)param_2 + 0x48bc) != 0x40a00000 /* 5.0f */) {
               (**(code **)(*(int *)((int)param_2 + 0x48b8) + 4))
                         ((int)param_2 + 0x48b8,(int)param_2 + 0x48bc);
-              *(undefined4 *)((int)param_2 + 0x48bc) = 0x40a00000;
+              *(undefined4 *)((int)param_2 + 0x48bc) = 0x40a00000 /* 5.0f */;
             }
           }
           fVar9 = (float10)CountdownTimer::Now();
@@ -502,7 +502,7 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
             CINSBotLocomotion::AddMovementRequest
                       (uVar5,*(undefined4 *)((int)param_2 + 0x3c),
                        *(undefined4 *)((int)param_2 + 0x40),*(undefined4 *)((int)param_2 + 0x44),2,5
-                       ,0x3f19999a);
+                       ,0x3f19999a /* 0.6f */);
             piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
             uVar3 = (**(code **)(*piVar6 + 0x108 /* CINSBotVision::IsAbleToSee */))(piVar6,(int)param_2 + 0x3c,0);
             *(undefined1 *)((int)param_2 + 0x48f8) = uVar3;
@@ -529,10 +529,10 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
                         ((int)param_2 + 0x48c4,(int)param_2 + 0x48cc);
               *(float *)((int)param_2 + 0x48cc) = fVar11;
             }
-            if (*(int *)((int)param_2 + 0x48c8) != 0x3f000000) {
+            if (*(int *)((int)param_2 + 0x48c8) != 0x3f000000 /* 0.5f */) {
               (**(code **)(*(int *)((int)param_2 + 0x48c4) + 4))
                         ((int)param_2 + 0x48c4,(int)param_2 + 0x48c8);
-              *(undefined4 *)((int)param_2 + 0x48c8) = 0x3f000000;
+              *(undefined4 *)((int)param_2 + 0x48c8) = 0x3f000000 /* 0.5f */;
             }
           }
           if ((*(char *)((int)param_2 + 0x48fa) == '\0') ||
@@ -588,9 +588,9 @@ void __cdecl CINSBotInvestigate::OnEnd(CINSNextBot *param_1,Action *param_2)
   __i686_get_pc_thunk_bx();
   cVar2 = CINSNextBot::HasInvestigations(this);
   this_00 = extraout_ECX;
-  if ((cVar2 != '\0') && (piVar1 = *(int **)(param_2 + 0xb45c), piVar1[2] != -0x40800000)) {
+  if ((cVar2 != '\0') && (piVar1 = *(int **)(param_2 + 0xb45c), piVar1[2] != -0x40800000 /* -1.0f */)) {
     (**(code **)(*piVar1 + 4))(piVar1,piVar1 + 2);
-    piVar1[2] = -0x40800000;
+    piVar1[2] = -0x40800000 /* -1.0f */;
     this_00 = extraout_ECX_00;
   }
   CINSNextBot::SortAndRemoveInvestigations(this_00);
@@ -669,9 +669,9 @@ CINSBotInvestigate::OnResume(CINSBotInvestigate *this,CINSNextBot *param_1,Actio
       *(float *)(param_2 + 0x48c0) = (float)fVar4 + fVar1;
       this_03 = extraout_ECX_00;
     }
-    if (*(int *)(param_2 + 0x48bc) != 0x40a00000) {
+    if (*(int *)(param_2 + 0x48bc) != 0x40a00000 /* 5.0f */) {
       (**(code **)(*(int *)(param_2 + 0x48b8) + 4))(param_2 + 0x48b8,param_2 + 0x48bc);
-      *(undefined4 *)(param_2 + 0x48bc) = 0x40a00000;
+      *(undefined4 *)(param_2 + 0x48bc) = 0x40a00000 /* 5.0f */;
       this_03 = extraout_ECX_01;
     }
     CINSNextBot::ResetIdleStatus(this_03);
@@ -856,7 +856,7 @@ CINSNextBot * CINSBotInvestigate::OnStuck(CINSNextBot *param_1)
   *piVar2 = iVar1 + 8;
   piVar2[0xe] = (int)(&UNK_00404fbd + unaff_EBX);
   CountdownTimer::NetworkStateChanged(piVar2 + 0xe);
-  piVar2[0x10] = -0x40800000;
+  piVar2[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
   piVar2[0x16] = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x25c856 /* "I'm Stuck" */;

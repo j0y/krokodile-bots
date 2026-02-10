@@ -110,7 +110,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
         piVar5[0xf] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
         *piVar5 = iVar2 + 8;
         CountdownTimer::NetworkStateChanged(piVar5 + 0xf);
-        piVar5[0x11] = -0x40800000;
+        piVar5[0x11] = -0x40800000 /* -1.0f */;
         (**(code **)(piVar5[0xf] + 4))(piVar5 + 0xf,piVar5 + 0x11);
         return piVar5;
       }
@@ -207,7 +207,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
             piVar5[0x122c] = 0;
             piVar5[0x122b] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
             CountdownTimer::NetworkStateChanged(piVar5 + 0x122b);
-            piVar5[0x122d] = -0x40800000;
+            piVar5[0x122d] = -0x40800000 /* -1.0f */;
             (**(code **)(piVar5[0x122b] + 4))(piVar5 + 0x122b,piVar5 + 0x122d);
             return piVar5;
           }
@@ -256,7 +256,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
           piVar5[0xf] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
           *piVar5 = iVar2 + 8;
           CountdownTimer::NetworkStateChanged(piVar5 + 0xf);
-          piVar5[0x11] = -0x40800000;
+          piVar5[0x11] = -0x40800000 /* -1.0f */;
           (**(code **)(piVar5[0xf] + 4))(piVar5 + 0xf,piVar5 + 0x11);
           return piVar5;
         }
@@ -321,17 +321,17 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
       *piVar5 = iVar3 + 8;
       pcVar1 = (code *)(unaff_EBX + -0x50d89b /* CountdownTimer::NetworkStateChanged */);
       (*pcVar1)(piVar5 + 0x10,piVar5 + 0x11);
-      piVar5[0x12] = -0x40800000;
+      piVar5[0x12] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar5[0x10] + 4))(piVar5 + 0x10,piVar5 + 0x12);
       piVar5[0x13] = iVar2;
       piVar5[0x14] = 0;
       (*pcVar1)(piVar5 + 0x13,piVar5 + 0x14);
-      piVar5[0x15] = -0x40800000;
+      piVar5[0x15] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar5[0x13] + 4))(piVar5 + 0x13,piVar5 + 0x15);
       piVar5[0x16] = iVar2;
       piVar5[0x17] = 0;
       (*pcVar1)(piVar5 + 0x16,piVar5 + 0x17);
-      piVar5[0x18] = -0x40800000;
+      piVar5[0x18] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar5[0x16] + 4))(piVar5 + 0x16,piVar5 + 0x18);
     }
   }

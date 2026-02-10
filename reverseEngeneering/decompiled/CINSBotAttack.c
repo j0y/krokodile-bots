@@ -37,7 +37,7 @@ void __thiscall CINSBotAttack::CINSBotAttack(CINSBotAttack *this)
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
   CountdownTimer::NetworkStateChanged(in_stack_00000004 + 0xe);
-  in_stack_00000004[0x10] = -0x40800000;
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10);
   in_stack_00000004[0x12] = -1;
   return;
@@ -332,9 +332,9 @@ LAB_00705121:
           pcVar1 = *(code **)(*piVar3 + 0xd4);
           uVar7 = (**(code **)(*piVar5 + 0x14 /* INextBotEventResponder::OnLandOnGround */))(piVar5);
           iVar4 = 0;
-          uVar12 = 0x3e99999a;
+          uVar12 = 0x3e99999a /* 0.3f */;
           uVar11 = 3;
-          (*pcVar1)(piVar3,uVar7,3,0x3e99999a,0,&UNK_0027aea6 + unaff_EBX);
+          (*pcVar1)(piVar3,uVar7,3,0x3e99999a /* 0.3f */,0,&UNK_0027aea6 + unaff_EBX);
           this_01 = extraout_ECX_00;
         }
         else {
@@ -342,9 +342,9 @@ LAB_007053fc:
           piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
           uVar7 = CBaseHandle::Get((CBaseHandle *)((int)param_2 + 0x48));
           iVar4 = 0;
-          uVar12 = 0x3e99999a;
+          uVar12 = 0x3e99999a /* 0.3f */;
           uVar11 = 4;
-          (**(code **)(*piVar3 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar3,uVar7,4,0x3e99999a,0,unaff_EBX + 0x27ada6 /* "Aiming at active enemy" */);
+          (**(code **)(*piVar3 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar3,uVar7,4,0x3e99999a /* 0.3f */,0,unaff_EBX + 0x27ada6 /* "Aiming at active enemy" */);
           this_01 = extraout_ECX;
         }
         cVar2 = CINSPlayer::IsProned(this_01);
@@ -355,7 +355,7 @@ LAB_007053fc:
           if (cVar2 == '\0') {
             (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
             iVar4 = unaff_EBX + 0x254a1d /* typeinfo name for CGlobalState+0x5c */;
-            uVar12 = 0x3f800000;
+            uVar12 = 0x3f800000 /* 1.0f */;
             uVar11 = 7;
             uVar7 = 0xd;
             CINSBotBody::SetPosture();
@@ -363,7 +363,7 @@ LAB_007053fc:
           else {
             (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
             iVar4 = unaff_EBX + 0x254a1d /* typeinfo name for CGlobalState+0x5c */;
-            uVar12 = 0x3f800000;
+            uVar12 = 0x3f800000 /* 1.0f */;
             uVar11 = 7;
             uVar7 = 1;
             CINSBotBody::SetPosture();
@@ -377,7 +377,7 @@ LAB_007053fc:
           iVar8 = CINSRules::GetHumanTeam(this_02);
           if (iVar4 == iVar8) {
             CountdownTimer::Start(this_03,(float)(in_stack_0000000c + 0xb388));
-            *(undefined4 *)(in_stack_0000000c + 0xb344) = 0x41200000;
+            *(undefined4 *)(in_stack_0000000c + 0xb344) = 0x41200000 /* 10.0f */;
           }
         }
         CountdownTimer::Start((CountdownTimer *)((int)param_2 + 0x38),(float)((int)param_2 + 0x38));
@@ -552,7 +552,7 @@ char __thiscall CINSBotAttack::ShouldRetreat(CINSBotAttack *this,INextBot *param
         piVar6 = (int *)(**(code **)(*in_stack_00000008 + 0xdc))(in_stack_00000008);
         pcVar1 = *(code **)(*piVar6 + 0xdc);
         iVar5 = CBaseEntity::GetTeamNumber(this_01);
-        iVar5 = (*pcVar1)(piVar6,(iVar5 == 2) + '\x02',1,0xbf800000);
+        iVar5 = (*pcVar1)(piVar6,(iVar5 == 2) + '\x02',1,0xbf800000 /* -1.0f */);
         fVar8 = (float10)CINSPlayer::GetHealthFraction(this_02);
         if (((*(float *)(unaff_EBX + 0x21fef7 /* typeinfo name for CBaseGameSystem+0x1e */) <= (float)fVar8) || (iVar5 < 2)) ||
            (cVar7 = '\x01', 1 < *(int *)(iVar4 + 0x1e94))) {
@@ -607,7 +607,7 @@ CINSNextBot * CINSBotAttack::OnStuck(CINSNextBot *param_1)
   *piVar2 = iVar1 + 8;
   piVar2[0xe] = unaff_EBX + 0x423bbd /* vtable for CountdownTimer+0x8 */;
   CountdownTimer::NetworkStateChanged(piVar2 + 0xe);
-  piVar2[0x10] = -0x40800000;
+  piVar2[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
   piVar2[0x16] = 0;
   *(undefined **)(param_1 + 8) = &UNK_0027b77d + unaff_EBX;

@@ -43,17 +43,17 @@ void __thiscall CINSBotReload::CINSBotReload(CINSBotReload *this)
   in_stack_00000004[0xe] = iVar1;
   in_stack_00000004[0xf] = 0;
   (*pcVar2)(in_stack_00000004 + 0xe,in_stack_00000004 + 0xf);
-  in_stack_00000004[0x10] = -0x40800000;
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10);
   in_stack_00000004[0x11] = iVar1;
   in_stack_00000004[0x12] = 0;
   (*pcVar2)(in_stack_00000004 + 0x11,in_stack_00000004 + 0x12);
-  in_stack_00000004[0x13] = -0x40800000;
+  in_stack_00000004[0x13] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x11] + 4))(in_stack_00000004 + 0x11,in_stack_00000004 + 0x13);
   in_stack_00000004[0x14] = iVar1;
   in_stack_00000004[0x15] = 0;
   (*pcVar2)(in_stack_00000004 + 0x14,in_stack_00000004 + 0x15);
-  in_stack_00000004[0x16] = -0x40800000;
+  in_stack_00000004[0x16] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x14] + 4))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x16);
   return;
 }
@@ -123,17 +123,17 @@ LAB_0072aa7a:
         this_01 = extraout_ECX_02;
       }
     }
-    uVar7 = 0x3f4ccccd;
+    uVar7 = 0x3f4ccccd /* 0.8f */;
     cVar1 = CINSPlayer::IsThreatAimingTowardMe(this_01,in_stack_0000000c,fVar4);
     if (cVar1 != '\0') {
-      RandomFloat(0x40000000,0x40800000,uVar7);
+      RandomFloat(0x40000000 /* 2.0f */,0x40800000 /* 4.0f */,uVar7);
       (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
       CINSBotBody::SetPosture();
       this_02 = extraout_ECX_03;
       goto LAB_0072ab00;
     }
   }
-  RandomFloat(0x40000000,0x40800000);
+  RandomFloat(0x40000000 /* 2.0f */,0x40800000 /* 4.0f */);
   (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
   CINSBotBody::SetPosture();
   this_02 = extraout_ECX_00;
@@ -143,16 +143,16 @@ LAB_0072ab00:
   bVar2 = (bool)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
   CINSBotBody::CheckBadViewTarget(this_03,bVar2);
   CINSNextBot::ResetIdleStatus(this_04);
-  (**(code **)(*(int *)in_stack_0000000c + 0x8e0 /* NextBotPlayer::PressReloadButton */))(in_stack_0000000c,0x3f800000);
+  (**(code **)(*(int *)in_stack_0000000c + 0x8e0 /* NextBotPlayer::PressReloadButton */))(in_stack_0000000c,0x3f800000 /* 1.0f */);
   fVar6 = (float10)CountdownTimer::Now();
   fVar4 = (float)fVar6 + *(float *)(unaff_EBX + 0x1f9d5d /* typeinfo name for CBaseGameSystem+0x1e */);
   if (*(float *)(param_2 + 0x58) != fVar4) {
     (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58);
     *(float *)(param_2 + 0x58) = fVar4;
   }
-  if (*(int *)(param_2 + 0x54) != 0x3f000000) {
+  if (*(int *)(param_2 + 0x54) != 0x3f000000 /* 0.5f */) {
     (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54);
-    *(undefined4 *)(param_2 + 0x54) = 0x3f000000;
+    *(undefined4 *)(param_2 + 0x54) = 0x3f000000 /* 0.5f */;
   }
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -235,9 +235,9 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
       (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x58);
       *(float *)((int)param_2 + 0x58) = fVar5;
     }
-    if (*(int *)((int)param_2 + 0x54) != 0x3e800000) {
+    if (*(int *)((int)param_2 + 0x54) != 0x3e800000 /* 0.25f */) {
       (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x54);
-      *(undefined4 *)((int)param_2 + 0x54) = 0x3e800000;
+      *(undefined4 *)((int)param_2 + 0x54) = 0x3e800000 /* 0.25f */;
     }
   }
   *(undefined4 *)param_1 = 0;

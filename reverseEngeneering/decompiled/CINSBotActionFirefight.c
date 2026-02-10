@@ -272,14 +272,14 @@ int __thiscall CINSBotActionFirefight::GetTargetObjective(CINSBotActionFirefight
       return 2;
     }
     if ((in_stack_00000008 != *(int *)(iVar1 + 0x494)) &&
-       (fVar2 = (float10)RandomFloat(0,0x3f800000),
+       (fVar2 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */),
        (float)fVar2 < *(float *)(unaff_EBX + 0x1ec9df /* typeinfo name for CBaseGameSystem+0x1e */) ||
        (float)fVar2 == *(float *)(unaff_EBX + 0x1ec9df /* typeinfo name for CBaseGameSystem+0x1e */))) {
       return 1;
     }
   }
   else {
-    fVar2 = (float10)RandomFloat(0,0x3f800000);
+    fVar2 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
     if (*(double *)(unaff_EBX + 0x1eca07 /* typeinfo name for CBaseGameSystem+0x46 */) <= (double)(float)fVar2) {
       return 1;
     }

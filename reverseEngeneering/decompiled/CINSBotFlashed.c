@@ -24,7 +24,7 @@ CINSBotFlashed::OnStart(CINSBotFlashed *this,CINSNextBot *param_1,Action *param_
   iVar1 = 0;
   __i686_get_pc_thunk_bx();
   do {
-    fVar2 = (float10)RandomFloat(0x3dcccccd,0x3f800000);
+    fVar2 = (float10)RandomFloat(0x3dcccccd /* 0.1f */,0x3f800000 /* 1.0f */);
     *(float *)(param_2 + iVar1 * 4 + 0x38) = (float)fVar2;
     iVar1 = iVar1 + 1;
   } while (iVar1 != 4);

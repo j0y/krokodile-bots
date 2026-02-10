@@ -38,12 +38,12 @@ CINSBotSpecialAction::CINSBotSpecialAction
   param_2[0xd] = 0;
   param_2[0x10] = 0;
   (*(code *)(unaff_EBX + -0x500c0b /* CountdownTimer::NetworkStateChanged */))(param_2 + 0xf,param_2 + 0x10);
-  param_2[0x11] = -0x40800000;
+  param_2[0x11] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0xf] + 4))(param_2 + 0xf,param_2 + 0x11);
   param_2[0x13] = 0;
   param_2[0x12] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */;
   (*(code *)(unaff_EBX + -0x500c0b /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x12,param_2 + 0x13);
-  param_2[0x14] = -0x40800000;
+  param_2[0x14] = -0x40800000 /* -1.0f */;
   (**(code **)(param_2[0x12] + 4))(param_2 + 0x12,param_2 + 0x14);
   param_2[0xe] = param_3;
   *(undefined1 *)(param_2 + 0x15) = param_4;
@@ -74,9 +74,9 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
       (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x44);
       *(float *)(param_2 + 0x44) = fVar2;
     }
-    if (*(int *)(param_2 + 0x40) != 0x40a00000) {
+    if (*(int *)(param_2 + 0x40) != 0x40a00000 /* 5.0f */) {
       (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x40);
-      *(undefined4 *)(param_2 + 0x40) = 0x40a00000;
+      *(undefined4 *)(param_2 + 0x40) = 0x40a00000 /* 5.0f */;
     }
     fVar1 = (float10)CountdownTimer::Now();
     fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187ea1 /* typeinfo name for IServerBenchmark+0x13 */);
@@ -84,14 +84,14 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
       (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50);
       *(float *)(param_2 + 0x50) = fVar2;
     }
-    if (*(int *)(param_2 + 0x4c) != 0x40400000) {
+    if (*(int *)(param_2 + 0x4c) != 0x40400000 /* 3.0f */) {
       (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x4c);
-      *(undefined4 *)(param_2 + 0x4c) = 0x40400000;
+      *(undefined4 *)(param_2 + 0x4c) = 0x40400000 /* 3.0f */;
     }
     param_2[0x54] = (Action)0x0;
   }
   else {
-    fVar1 = (float10)RandomFloat(0x3f800000,0x40a00000);
+    fVar1 = (float10)RandomFloat(0x3f800000 /* 1.0f */,0x40a00000 /* 5.0f */);
     fVar2 = (float)fVar1;
     fVar1 = (float10)CountdownTimer::Now();
     if (*(float *)(param_2 + 0x44) != (float)fVar1 + fVar2) {
@@ -108,9 +108,9 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
       (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50);
       *(float *)(param_2 + 0x50) = fVar2;
     }
-    if (*(int *)(param_2 + 0x4c) != 0x3f800000) {
+    if (*(int *)(param_2 + 0x4c) != 0x3f800000 /* 1.0f */) {
       (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x4c);
-      *(undefined4 *)(param_2 + 0x4c) = 0x3f800000;
+      *(undefined4 *)(param_2 + 0x4c) = 0x3f800000 /* 1.0f */;
     }
   }
   *(undefined4 *)param_1 = 0;

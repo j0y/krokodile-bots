@@ -59,21 +59,21 @@ void __thiscall CINSBotGuardCP::CINSBotGuardCP(CINSBotGuardCP *this,int param_1,
   iVar2 = unaff_EBX + 0x4078dd /* vtable for CountdownTimer+0x8 */;
   *(int *)(param_1 + 0x48c4) = iVar2;
   (*pcVar1)(param_1 + 0x48c4,param_1 + 0x48c8);
-  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48c4) + 4))(param_1 + 0x48c4,param_1 + 0x48cc);
   *(int *)(param_1 + 0x48d0) = iVar2;
   *(undefined4 *)(param_1 + 0x48d4) = 0;
   (*pcVar1)(param_1 + 0x48d0,param_1 + 0x48d4);
-  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48d0) + 4))(param_1 + 0x48d0,param_1 + 0x48d8);
   iVar6 = *(int *)(unaff_EBX + 0x486375 /* &vtable for IntervalTimer */);
-  *(undefined4 *)(param_1 + 0x48e8) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48e8) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x48e4) = iVar6 + 8;
   (**(code **)(iVar6 + 0x10))(param_1 + 0x48e4,param_1 + 0x48e8);
   *(int *)(param_1 + 0x48ec) = iVar2;
   *(undefined4 *)(param_1 + 0x48f0) = 0;
   (*pcVar1)(param_1 + 0x48ec,param_1 + 0x48f0);
-  *(undefined4 *)(param_1 + 0x48f4) = 0xbf800000;
+  *(undefined4 *)(param_1 + 0x48f4) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48ec) + 4))(param_1 + 0x48ec,param_1 + 0x48f4);
   *(undefined1 *)(param_1 + 0x48dc) = 0;
   *(float *)(param_1 + 0x38) = param_2;
@@ -201,7 +201,7 @@ LAB_00721127:
         *(int *)(param_1 + 8) = unaff_EBX + 0x26035d /* "Exiting guard state, enemy entering CP" */;
         return param_1;
       }
-      fVar7 = (float10)RandomFloat(0,0x41000000);
+      fVar7 = (float10)RandomFloat(0,0x41000000 /* 8.0f */);
       fVar1 = (float)fVar7;
       fVar7 = (float10)CountdownTimer::Now();
       if (*(float *)((int)param_2 + 0x48d8) != (float)fVar7 + fVar1) {
@@ -241,8 +241,8 @@ LAB_00721127:
       local_20 = local_2c * fVar1 + *(float *)((int)param_2 + 0x44) +
                  *(float *)(unaff_EBX + 0x197b81 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x2c */);
       piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-      (**(code **)(*piVar5 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar5,&local_28,0,0x3dcccccd,0,unaff_EBX + 0x260320 /* "Guard Aiming" */);
-      fVar7 = (float10)RandomFloat(0x3f800000,0x40a00000);
+      (**(code **)(*piVar5 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar5,&local_28,0,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x260320 /* "Guard Aiming" */);
+      fVar7 = (float10)RandomFloat(0x3f800000 /* 1.0f */,0x40a00000 /* 5.0f */);
       fVar1 = (float)fVar7;
       fVar7 = (float10)CountdownTimer::Now();
       this_00 = extraout_ECX_00;
@@ -261,9 +261,9 @@ LAB_00721127:
     }
     uVar8 = 0;
     fVar7 = (float10)CINSNextBot::TransientlyConsistentRandomValue
-                               (this_00,(float)in_stack_0000000c,0x41000000);
+                               (this_00,(float)in_stack_0000000c,0x41000000 /* 8.0f */);
     if ((double)(float)fVar7 < *(double *)(unaff_EBX + 0x260395 /* typeinfo name for CINSBotGuardCP+0x11 */)) {
-      (**(code **)(*in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,0x3e800000,uVar8);
+      (**(code **)(*in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,0x3e800000 /* 0.25f */,uVar8);
     }
     goto LAB_007210f5;
   }
@@ -280,10 +280,10 @@ LAB_00721127:
       *(float *)((int)param_2 + 0x48cc) = (float)fVar7 + fVar1;
       this_01 = extraout_ECX_05;
     }
-    if (*(int *)((int)param_2 + 0x48c8) != 0x3fc00000) {
+    if (*(int *)((int)param_2 + 0x48c8) != 0x3fc00000 /* 1.5f */) {
       (**(code **)(*(int *)((int)param_2 + 0x48c4) + 4))
                 ((int)param_2 + 0x48c4,(int)param_2 + 0x48c8);
-      *(undefined4 *)((int)param_2 + 0x48c8) = 0x3fc00000;
+      *(undefined4 *)((int)param_2 + 0x48c8) = 0x3fc00000 /* 1.5f */;
       this_01 = extraout_ECX_06;
     }
     pfVar4 = *(float **)(unaff_EBX + 0x485641 /* &vec3_origin */);
@@ -384,9 +384,9 @@ CINSBotGuardCP::OnMoveToSuccess(CINSBotGuardCP *this,CINSNextBot *param_1,Path *
     (**(code **)(*(int *)(param_2 + 0x48ec) + 4))(param_2 + 0x48ec,param_2 + 0x48f4);
     *(float *)(param_2 + 0x48f4) = fVar2;
   }
-  if (*(int *)(param_2 + 0x48f0) != 0x3f000000) {
+  if (*(int *)(param_2 + 0x48f0) != 0x3f000000 /* 0.5f */) {
     (**(code **)(*(int *)(param_2 + 0x48ec) + 4))(param_2 + 0x48ec,param_2 + 0x48f0);
-    *(undefined4 *)(param_2 + 0x48f0) = 0x3f000000;
+    *(undefined4 *)(param_2 + 0x48f0) = 0x3f000000 /* 0.5f */;
   }
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;

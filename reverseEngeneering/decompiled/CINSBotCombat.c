@@ -46,25 +46,25 @@ void __thiscall CINSBotCombat::CINSBotCombat(CINSBotCombat *this)
   in_stack_00000004[0x15] = iVar5;
   in_stack_00000004[0x16] = 0;
   (*pcVar6)(piVar1,in_stack_00000004 + 0x16);
-  in_stack_00000004[0x17] = -0x40800000;
+  in_stack_00000004[0x17] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x15] + 4))(piVar1,in_stack_00000004 + 0x17);
   piVar2 = in_stack_00000004 + 0x18;
   in_stack_00000004[0x18] = iVar5;
   in_stack_00000004[0x19] = 0;
   (*pcVar6)(piVar2,in_stack_00000004 + 0x19);
-  in_stack_00000004[0x1a] = -0x40800000;
+  in_stack_00000004[0x1a] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x18] + 4))(piVar2,in_stack_00000004 + 0x1a);
   piVar3 = in_stack_00000004 + 0x1b;
   in_stack_00000004[0x1b] = iVar5;
   in_stack_00000004[0x1c] = 0;
   (*pcVar6)(piVar3,in_stack_00000004 + 0x1c);
-  in_stack_00000004[0x1d] = -0x40800000;
+  in_stack_00000004[0x1d] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x1b] + 4))(piVar3,in_stack_00000004 + 0x1d);
   piVar4 = in_stack_00000004 + 0x1e;
   in_stack_00000004[0x1e] = iVar5;
   in_stack_00000004[0x1f] = 0;
   (*pcVar6)(piVar4,in_stack_00000004 + 0x1f);
-  in_stack_00000004[0x20] = -0x40800000;
+  in_stack_00000004[0x20] = -0x40800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x1e] + 4))(piVar4,in_stack_00000004 + 0x20);
   in_stack_00000004[0xe] = -1;
   in_stack_00000004[0xf] = 0;
@@ -72,21 +72,21 @@ void __thiscall CINSBotCombat::CINSBotCombat(CINSBotCombat *this)
   in_stack_00000004[0x11] = 0;
   in_stack_00000004[0x12] = 0;
   in_stack_00000004[0x14] = 0;
-  if (in_stack_00000004[0x17] != -0x40800000) {
+  if (in_stack_00000004[0x17] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0x15] + 4))(piVar1,in_stack_00000004 + 0x17);
-    in_stack_00000004[0x17] = -0x40800000;
+    in_stack_00000004[0x17] = -0x40800000 /* -1.0f */;
   }
-  if (in_stack_00000004[0x1a] != -0x40800000) {
+  if (in_stack_00000004[0x1a] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0x18] + 4))(piVar2,in_stack_00000004 + 0x1a);
-    in_stack_00000004[0x1a] = -0x40800000;
+    in_stack_00000004[0x1a] = -0x40800000 /* -1.0f */;
   }
-  if (in_stack_00000004[0x1d] != -0x40800000) {
+  if (in_stack_00000004[0x1d] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0x1b] + 4))(piVar3,in_stack_00000004 + 0x1d);
-    in_stack_00000004[0x1d] = -0x40800000;
+    in_stack_00000004[0x1d] = -0x40800000 /* -1.0f */;
   }
-  if (in_stack_00000004[0x20] != -0x40800000) {
+  if (in_stack_00000004[0x20] != -0x40800000 /* -1.0f */) {
     (**(code **)(in_stack_00000004[0x1e] + 4))(piVar4,in_stack_00000004 + 0x20);
-    in_stack_00000004[0x20] = -0x40800000;
+    in_stack_00000004[0x20] = -0x40800000 /* -1.0f */;
   }
   *(undefined1 *)(in_stack_00000004 + 0x13) = 0;
   *(undefined1 *)((int)in_stack_00000004 + 0x4d) = 0;
@@ -130,10 +130,10 @@ void __thiscall CINSBotCombat::OnStart(CINSBotCombat *this,CINSNextBot *param_1,
     *(float *)(in_stack_0000000c + 0xb384) = fVar4;
     this_00 = extraout_ECX_00;
   }
-  if (*(int *)(in_stack_0000000c + 0xb380) != 0x41f00000) {
+  if (*(int *)(in_stack_0000000c + 0xb380) != 0x41f00000 /* 30.0f */) {
     (**(code **)(*(int *)(in_stack_0000000c + 0xb37c) + 4))
               (in_stack_0000000c + 0xb37c,in_stack_0000000c + 0xb380);
-    *(undefined4 *)(in_stack_0000000c + 0xb380) = 0x41f00000;
+    *(undefined4 *)(in_stack_0000000c + 0xb380) = 0x41f00000 /* 30.0f */;
     this_00 = extraout_ECX_01;
   }
   fVar4 = *(float *)(**(int **)(unaff_EBX + 0x490695 /* &gpGlobals */) + 0xc);
@@ -142,13 +142,13 @@ void __thiscall CINSBotCombat::OnStart(CINSBotCombat *this,CINSNextBot *param_1,
   UpdateInternalInfo(this_00);
   iVar2 = CINSNextBot::GetDifficulty(this_01);
   if (iVar2 == 2) {
-    *(undefined4 *)(param_2 + 0x50) = 0x40400000;
+    *(undefined4 *)(param_2 + 0x50) = 0x40400000 /* 3.0f */;
   }
   else if (iVar2 == 3) {
-    *(undefined4 *)(param_2 + 0x50) = 0x40000000;
+    *(undefined4 *)(param_2 + 0x50) = 0x40000000 /* 2.0f */;
   }
   else {
-    *(undefined4 *)(param_2 + 0x50) = 0x40a00000;
+    *(undefined4 *)(param_2 + 0x50) = 0x40a00000 /* 5.0f */;
   }
   CINSNextBot::ResetIdleStatus(this_02);
   *(undefined4 *)param_1 = 0;
@@ -302,9 +302,9 @@ LAB_007165c2:
       *(CINSNextBot **)((int)param_2 + 0x5c) = pCVar22;
       pCVar22 = (CINSNextBot *)param_2;
     }
-    if (*(int *)((int)param_2 + 0x58) != 0x3e4ccccd) {
+    if (*(int *)((int)param_2 + 0x58) != 0x3e4ccccd /* 0.2f */) {
       (**(code **)(*(int *)((int)param_2 + 0x54) + 4))();
-      *(undefined4 *)((int)param_2 + 0x58) = 0x3e4ccccd;
+      *(undefined4 *)((int)param_2 + 0x58) = 0x3e4ccccd /* 0.2f */;
       pCVar22 = (CINSNextBot *)param_2;
     }
   }
@@ -320,9 +320,9 @@ LAB_007165c2:
       *(float *)((int)param_2 + 0x5c) = fVar15;
       pCVar22 = (CINSNextBot *)param_2;
     }
-    if (*(int *)((int)param_2 + 0x58) != 0x3d4ccccd) {
+    if (*(int *)((int)param_2 + 0x58) != 0x3d4ccccd /* 0.05f */) {
       (**(code **)(*(int *)((int)param_2 + 0x54) + 4))();
-      *(undefined4 *)((int)param_2 + 0x58) = 0x3d4ccccd;
+      *(undefined4 *)((int)param_2 + 0x58) = 0x3d4ccccd /* 0.05f */;
       pCVar22 = (CINSNextBot *)param_2;
     }
   }
@@ -548,7 +548,7 @@ LAB_0071721a:
         puVar17[2] = 0;
         puVar17[1] = unaff_EBX + 0x411c5d /* vtable for CountdownTimer+0x8 */;
         CountdownTimer::NetworkStateChanged(puVar17 + 1);
-        puVar17[3] = 0xbf800000;
+        puVar17[3] = 0xbf800000 /* -1.0f */;
         (**(code **)(puVar17[1] + 4))();
         puVar17[4] = uVar1;
         puVar17[5] = uVar2;
@@ -559,14 +559,14 @@ LAB_0071721a:
           (**(code **)(puVar17[1] + 4))();
           puVar17[3] = fVar15;
         }
-        if (puVar17[2] != 0x41200000) {
+        if (puVar17[2] != 0x41200000 /* 10.0f */) {
           (**(code **)(puVar17[1] + 4))();
-          puVar17[2] = 0x41200000;
+          puVar17[2] = 0x41200000 /* 10.0f */;
         }
         *(undefined1 *)(puVar17 + 7) = 0;
         *(undefined1 *)((int)puVar17 + 0x1d) = 0;
         *puVar17 = 0xd;
-        puVar17[8] = 0x42c80000;
+        puVar17[8] = 0x42c80000 /* 100.0f */;
         pCVar18 = (CINSGrenadeTarget *)CBaseEntity::GetTeamNumber((CBaseEntity *)in_stack_0000000c);
         iVar8 = TheINSNextBots();
         CINSNextBotManager::AddGrenadeTarget(this_20,iVar8,pCVar18);
@@ -738,9 +738,9 @@ void __cdecl CINSBotCombat::OnEnd(CINSNextBot *param_1,Action *param_2)
   if (param_2 != (Action *)0x0) {
     cVar1 = (**(code **)(*(int *)param_2 + 0x118 /* CBaseEntity::IsAlive */))(param_2);
     if (cVar1 != '\0') {
-      if (*(int *)(param_2 + 0xb384) != -0x40800000) {
+      if (*(int *)(param_2 + 0xb384) != -0x40800000 /* -1.0f */) {
         (**(code **)(*(int *)(param_2 + 0xb37c) + 4))(param_2 + 0xb37c,param_2 + 0xb384);
-        *(undefined4 *)(param_2 + 0xb384) = 0xbf800000;
+        *(undefined4 *)(param_2 + 0xb384) = 0xbf800000 /* -1.0f */;
       }
       *(undefined4 *)(param_2 + 0xb338) = 0xffffffff;
       *(undefined4 *)(param_2 + 0xb33c) = *(undefined4 *)(**(int **)(unaff_EBX + 0x4916d6 /* &gpGlobals */) + 0xc);
@@ -826,14 +826,14 @@ CINSBotCombat::OnResume(CINSBotCombat *this,CINSNextBot *param_1,Action *param_2
           if ((cVar1 != '\0') ||
              (fVar5 = (float10)(**(code **)(*piVar2 + 0x48))(piVar2), this_02 = extraout_ECX_04,
              (float)fVar5 < *(float *)(unaff_EBX + 0x20d733 /* typeinfo name for ISaveRestoreOps+0x6f */))) {
-            if (*(int *)(param_2 + 0x68) != -0x40800000) {
+            if (*(int *)(param_2 + 0x68) != -0x40800000 /* -1.0f */) {
               (**(code **)(*(int *)(param_2 + 0x60) + 4))(param_2 + 0x60,param_2 + 0x68);
-              *(undefined4 *)(param_2 + 0x68) = 0xbf800000;
+              *(undefined4 *)(param_2 + 0x68) = 0xbf800000 /* -1.0f */;
               this_02 = extraout_ECX_02;
             }
-            if (*(int *)(param_2 + 0x74) != -0x40800000) {
+            if (*(int *)(param_2 + 0x74) != -0x40800000 /* -1.0f */) {
               (**(code **)(*(int *)(param_2 + 0x6c) + 4))(param_2 + 0x6c,param_2 + 0x74);
-              *(undefined4 *)(param_2 + 0x74) = 0xbf800000;
+              *(undefined4 *)(param_2 + 0x74) = 0xbf800000 /* -1.0f */;
               this_02 = extraout_ECX_03;
             }
           }
@@ -934,7 +934,7 @@ CINSNextBot * CINSBotCombat::OnStuck(CINSNextBot *param_1)
   *piVar2 = iVar1 + 8;
   piVar2[0xe] = unaff_EBX + 0x41312d /* vtable for CountdownTimer+0x8 */;
   CountdownTimer::NetworkStateChanged(piVar2 + 0xe);
-  piVar2[0x10] = -0x40800000;
+  piVar2[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
   piVar2[0x16] = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x26a9c6 /* "I'm Stuck" */;
@@ -1179,9 +1179,9 @@ void CINSBotCombat::UpdateInternalInfo(void)
     (**(code **)(*(int *)(in_EAX + 0x78) + 4))(in_EAX + 0x78,in_EAX + 0x80);
     *(float *)(in_EAX + 0x80) = fVar16;
   }
-  if (*(int *)(in_EAX + 0x7c) != 0x3f800000) {
+  if (*(int *)(in_EAX + 0x7c) != 0x3f800000 /* 1.0f */) {
     (**(code **)(*(int *)(in_EAX + 0x78) + 4))(in_EAX + 0x78,in_EAX + 0x7c);
-    *(undefined4 *)(in_EAX + 0x7c) = 0x3f800000;
+    *(undefined4 *)(in_EAX + 0x7c) = 0x3f800000 /* 1.0f */;
   }
   pCVar1 = *(CBaseEntity **)(in_EAX + 0x1c);
   if (pCVar1 == (CBaseEntity *)0x0) {
@@ -1331,7 +1331,7 @@ LAB_00715773:
   piVar7 = (int *)(**(code **)(*(int *)pCVar1 + 0x974 /* CINSNextBot::GetVisionInterface */))(pCVar1);
   piVar7 = (int *)(**(code **)(*piVar7 + 0xe4 /* IVision::GetKnown */))(piVar7,this);
   if ((piVar7 == (int *)0x0) || (this == (CBaseEntity *)0x0)) {
-    *(undefined4 *)(in_EAX + 0x48) = 0xbf800000;
+    *(undefined4 *)(in_EAX + 0x48) = 0xbf800000 /* -1.0f */;
     *(undefined1 *)(in_EAX + 0x4d) = 0;
     *(undefined4 *)(in_EAX + 0x38) = 0xffffffff;
   }
@@ -1345,13 +1345,13 @@ LAB_00715773:
     local_b8 = *(undefined4 *)(this + 0x208);
     local_b4 = *(undefined4 *)(this + 0x20c);
     local_b0 = *(undefined4 *)(this + 0x210);
-    cVar4 = (**(code **)(*(int *)(pCVar1 + 0x2060) + 0x124))(pCVar1 + 0x2060,&local_b8,0x459c4000);
+    cVar4 = (**(code **)(*(int *)(pCVar1 + 0x2060) + 0x124))(pCVar1 + 0x2060,&local_b8,0x459c4000 /* 5000.0f */);
     if (cVar4 == '\0') {
       fVar14 = (float10)(**(code **)(*(int *)(pCVar1 + 0x2060) + 0x134))(pCVar1 + 0x2060,&local_b8);
       *(float *)(in_EAX + 0x48) = (float)fVar14;
     }
     else {
-      fVar14 = (float10)CINSNextBot::GetTravelDistance(pCVar1,local_b8,local_b4,local_b0,0x469c4000)
+      fVar14 = (float10)CINSNextBot::GetTravelDistance(pCVar1,local_b8,local_b4,local_b0,0x469c4000 /* 20000.0f */)
       ;
       *(float *)(in_EAX + 0x48) = (float)fVar14;
     }

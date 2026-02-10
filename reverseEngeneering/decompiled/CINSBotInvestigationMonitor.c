@@ -191,9 +191,9 @@ CINSNextBot * CINSBotInvestigationMonitor::Update(CINSNextBot *param_1,float par
           (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x58);
           *(float *)((int)param_2 + 0x58) = fVar8;
         }
-        if (*(int *)((int)param_2 + 0x54) != 0x40a00000) {
+        if (*(int *)((int)param_2 + 0x54) != 0x40a00000 /* 5.0f */) {
           (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x54);
-          *(undefined4 *)((int)param_2 + 0x54) = 0x40a00000;
+          *(undefined4 *)((int)param_2 + 0x54) = 0x40a00000 /* 5.0f */;
         }
       }
     }
@@ -293,13 +293,13 @@ CINSBotInvestigationMonitor::OnOtherKilled
       if (fVar12 <= SQRT((fVar2 - fVar5) * (fVar2 - fVar5) + (fVar1 - fVar4) * (fVar1 - fVar4) +
                          (fVar3 - fVar6) * (fVar3 - fVar6))) goto LAB_0073f330;
     }
-    fVar14 = (float10)RandomFloat(0,0x3f800000);
+    fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
     if (*(float *)(&DAT_001e562d + unaff_EBX) <= (float)fVar14 &&
         (float)fVar14 != *(float *)(&DAT_001e562d + unaff_EBX)) {
       uVar15 = 0;
       CINSNextBot::BotSpeakConceptIfAllowed
                 (this,(int)param_3,(char *)0x49,(char *)0x0,0,(IRecipientFilter *)0x0);
-      fVar14 = (float10)RandomFloat(0,0x3f800000);
+      fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
       if ((float)fVar14 < *(float *)(unaff_EBX + 0x1f8bb5 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0xa0 */) ||
           (float)fVar14 == *(float *)(unaff_EBX + 0x1f8bb5 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0xa0 */)) {
         CINSNextBot::AddInvestigation();
@@ -396,7 +396,7 @@ CINSBotInvestigationMonitor::OnWeaponFired
             (float)fVar14 != *(float *)(param_2 + 0x40)) {
           this_02 = (CINSNextBot *)param_2;
           if (cVar6 != '\0') {
-            fVar14 = (float10)RandomFloat(0,0x3f800000);
+            fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
             this_02 = extraout_ECX;
             if (*(float *)(unaff_EBX + 0x179408 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */) <= (float)fVar14 &&
                 (float)fVar14 != *(float *)(unaff_EBX + 0x179408 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */)) {
@@ -407,9 +407,9 @@ CINSBotInvestigationMonitor::OnWeaponFired
                 (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x40);
                 *(float *)(param_2 + 0x40) = fVar15;
               }
-              if (*(int *)(param_2 + 0x3c) != 0x40a00000) {
+              if (*(int *)(param_2 + 0x3c) != 0x40a00000 /* 5.0f */) {
                 (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x3c);
-                *(undefined4 *)(param_2 + 0x3c) = 0x40a00000;
+                *(undefined4 *)(param_2 + 0x3c) = 0x40a00000 /* 5.0f */;
               }
               goto LAB_0073f725;
             }
@@ -417,7 +417,7 @@ CINSBotInvestigationMonitor::OnWeaponFired
           if (cVar7 != '\0') {
             cVar6 = CINSNextBot::HasInvestigations(this_02);
             if ((cVar6 == '\0') && (iVar8 != 1)) {
-              fVar14 = (float10)RandomFloat(0,0x3f800000);
+              fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
               if (*(float *)(unaff_EBX + 0x1e4378 /* typeinfo name for ISaveRestoreOps+0x67 */) <= (float)fVar14 &&
                   (float)fVar14 != *(float *)(unaff_EBX + 0x1e4378 /* typeinfo name for ISaveRestoreOps+0x67 */)) {
                 uVar16 = 2;
@@ -428,9 +428,9 @@ CINSBotInvestigationMonitor::OnWeaponFired
                   (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x40,uVar16);
                   *(float *)(param_2 + 0x40) = fVar15;
                 }
-                if (*(int *)(param_2 + 0x3c) != 0x40a00000) {
+                if (*(int *)(param_2 + 0x3c) != 0x40a00000 /* 5.0f */) {
                   (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x3c);
-                  *(undefined4 *)(param_2 + 0x3c) = 0x40a00000;
+                  *(undefined4 *)(param_2 + 0x3c) = 0x40a00000 /* 5.0f */;
                 }
                 goto LAB_0073f725;
               }
@@ -438,7 +438,7 @@ CINSBotInvestigationMonitor::OnWeaponFired
           }
           if (SQRT((fVar1 - fVar4) * (fVar1 - fVar4) + (fVar15 - fVar3) * (fVar15 - fVar3) +
                    (fVar2 - fVar5) * (fVar2 - fVar5)) < *(float *)(unaff_EBX + 0x1e58fc /* typeinfo name for ITraceFilter+0x20 */)) {
-            fVar14 = (float10)RandomFloat(0,0x3f800000);
+            fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
             if (*(float *)(unaff_EBX + 0x1edf80 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x34 */) <= (float)fVar14 &&
                 (float)fVar14 != *(float *)(unaff_EBX + 0x1edf80 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x34 */)) {
               CINSNextBot::AddInvestigation(in_stack_00000010,param_3,in_stack_00000010,2);
@@ -448,9 +448,9 @@ CINSBotInvestigationMonitor::OnWeaponFired
                 (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x40);
                 *(float *)(param_2 + 0x40) = fVar15;
               }
-              if (*(int *)(param_2 + 0x3c) != 0x41200000) {
+              if (*(int *)(param_2 + 0x3c) != 0x41200000 /* 10.0f */) {
                 (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x3c);
-                *(undefined4 *)(param_2 + 0x3c) = 0x41200000;
+                *(undefined4 *)(param_2 + 0x3c) = 0x41200000 /* 10.0f */;
               }
             }
           }
@@ -567,7 +567,7 @@ CINSBotInvestigationMonitor::OnHeardFootsteps
     piVar5 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
     pcVar1 = *(code **)(*piVar5 + 0xd4);
     CINSNextBot::GetTargetPosition(local_28);
-    (*pcVar1)(piVar5,local_28,2,0x3f400000,0,unaff_EBX + 0x24351d /* "Looking at source of footsteps" */);
+    (*pcVar1)(piVar5,local_28,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x24351d /* "Looking at source of footsteps" */);
   }
 LAB_0073f403:
   *(undefined4 *)param_1 = 0;
@@ -641,7 +641,7 @@ CINSBotInvestigationMonitor::OnSeeSomethingSuspicious
         else {
           piVar3 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
           (**(code **)(*piVar3 + 0xd4 /* PlayerBody::AimHeadTowards */))
-                    (piVar3,in_stack_00000014,2,0x3f400000,0,unaff_EBX + 0x243d94 /* "Looking at something suspicious" */);
+                    (piVar3,in_stack_00000014,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x243d94 /* "Looking at something suspicious" */);
         }
       }
     }
