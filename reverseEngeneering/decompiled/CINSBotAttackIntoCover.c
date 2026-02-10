@@ -26,7 +26,7 @@ CINSBotAttackIntoCover::CINSBotAttackIntoCover
   *param_2 = unaff_EBX + 0x4884bd /* vtable for CINSBotAttackIntoCover+0x8 */ /* vtable for CINSBotAttackIntoCover+0x8 */;
   piVar1 = param_2 + 0xe;
   param_2[1] = unaff_EBX + 0x488669 /* vtable for CINSBotAttackIntoCover+0x1b4 */ /* vtable for CINSBotAttackIntoCover+0x1b4 */;
-  param_2[0xe] = unaff_EBX + 0x41b24d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  param_2[0xe] = unaff_EBX + 0x41b24d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   param_2[9] = 0;
   param_2[10] = 0;
   param_2[3] = 0;
@@ -41,15 +41,15 @@ CINSBotAttackIntoCover::CINSBotAttackIntoCover
   param_2[0xd] = 0;
   param_2[0xf] = 0;
   CountdownTimer::NetworkStateChanged(piVar1);
-  param_2[0x10] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0xe] + 4))(piVar1,param_2 + 0x10);
+  param_2[0x10] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0xe] + 4))(piVar1,param_2 + 0x10); /* timer_0.NetworkStateChanged() */
   *(undefined1 *)(param_2 + 0x14) = param_6;
   param_2[0x11] = param_3;
   param_2[0x12] = param_4;
   param_2[0x13] = param_5;
   if (param_2[0x10] != -0x40800000 /* -1.0f */) {
-    (**(code **)(param_2[0xe] + 4))(piVar1,param_2 + 0x10);
-    param_2[0x10] = -0x40800000 /* -1.0f */;
+    (**(code **)(param_2[0xe] + 4))(piVar1,param_2 + 0x10); /* timer_0.NetworkStateChanged() */
+    param_2[0x10] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
   }
   *(undefined1 *)((int)param_2 + 0x51) = param_7;
   return;
@@ -151,7 +151,7 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
     return param_1;
   }
   fVar11 = (float10)CountdownTimer::Now();
-  if ((float)fVar11 < *(float *)((int)param_2 + 0x40) ||
+  if ((float)fVar11 < *(float *)((int)param_2 + 0x40) || /* !timer_0.IsElapsed() */
       (float)fVar11 == *(float *)((int)param_2 + 0x40)) goto LAB_0070c532;
   fVar11 = (float10)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x134))
                               (pCVar10,(int)param_2 + 0x44);
@@ -179,8 +179,8 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
       iVar5 = unaff_EBX + 0x41bda7 /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
       piVar4[0xe] = iVar5;
       (*pcVar1)(piVar4 + 0xe,piVar4 + 0xf);
-      piVar4[0x10] = -0x40800000 /* -1.0f */;
-      (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10);
+      piVar4[0x10] = -0x40800000 /* -1.0f */; /* timer_0.Invalidate() */
+      (**(code **)(piVar4[0xe] + 4))(piVar4 + 0xe,piVar4 + 0x10); /* timer_0.NetworkStateChanged() */
       piVar4[0x12] = 0;
       piVar4[0x11] = iVar5;
       (*pcVar1)(piVar4 + 0x11,piVar4 + 0x12);
@@ -311,12 +311,12 @@ LAB_0070c910:
   fVar11 = (float10)CountdownTimer::Now();
   fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x21767b /* 0.25f */ /* 0.25f */);
   if (*(float *)((int)param_2 + 0x40) != fVar12) {
-    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))
+    (**(code **)(*(int *)((int)param_2 + 0x38) + 4)) /* timer_0.NetworkStateChanged() */
               ((int)param_2 + 0x38,(int)param_2 + 0x40,uVar14,uVar15,iVar5);
-    *(float *)((int)param_2 + 0x40) = fVar12;
+    *(float *)((int)param_2 + 0x40) = fVar12; /* timer_0.Start(0.25f) */
   }
   if (*(int *)((int)param_2 + 0x3c) != 0x3e800000 /* 0.25f */) {
-    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c);
+    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c); /* timer_0.NetworkStateChanged() */
     *(undefined4 *)((int)param_2 + 0x3c) = 0x3e800000 /* 0.25f */;
   }
 LAB_0070c532:
@@ -613,8 +613,8 @@ CINSNextBot * CINSBotAttackIntoCover::OnMoveToSuccess(CINSNextBot *param_1,Path 
     pcVar1 = (code *)(unaff_EBX + -0x4dc551 /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
     piVar3[0xe] = iVar2;
     (*pcVar1)(piVar3 + 0xe,piVar3 + 0xf);
-    piVar3[0x10] = -0x40800000 /* -1.0f */;
-    (**(code **)(piVar3[0xe] + 4))(piVar3 + 0xe,piVar3 + 0x10);
+    piVar3[0x10] = -0x40800000 /* -1.0f */; /* timer_0.Invalidate() */
+    (**(code **)(piVar3[0xe] + 4))(piVar3 + 0xe,piVar3 + 0x10); /* timer_0.NetworkStateChanged() */
     piVar3[0x12] = 0;
     piVar3[0x11] = iVar2;
     (*pcVar1)(piVar3 + 0x11,piVar3 + 0x12);

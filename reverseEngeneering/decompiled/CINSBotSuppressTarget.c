@@ -42,21 +42,21 @@ CINSBotSuppressTarget::CINSBotSuppressTarget
   param_2[0xb] = 0;
   param_2[0xd] = 0;
   param_2[0xe] = -1;
-  param_2[0x15] = iVar1;
+  param_2[0x15] = iVar1; /* CountdownTimer timer_0 */
   param_2[0x16] = 0;
   (*pcVar2)(param_2 + 0x15,param_2 + 0x16);
-  param_2[0x17] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x15] + 4))(param_2 + 0x15,param_2 + 0x17);
-  param_2[0x18] = iVar1;
+  param_2[0x17] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x15] + 4))(param_2 + 0x15,param_2 + 0x17); /* timer_0.NetworkStateChanged() */
+  param_2[0x18] = iVar1; /* CountdownTimer timer_1 */
   param_2[0x19] = 0;
   (*pcVar2)(param_2 + 0x18,param_2 + 0x19);
-  param_2[0x1a] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x18] + 4))(param_2 + 0x18,param_2 + 0x1a);
-  param_2[0x1b] = iVar1;
+  param_2[0x1a] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x18] + 4))(param_2 + 0x18,param_2 + 0x1a); /* timer_1.NetworkStateChanged() */
+  param_2[0x1b] = iVar1; /* CountdownTimer timer_2 */
   param_2[0x1c] = 0;
   (*pcVar2)(param_2 + 0x1b,param_2 + 0x1c);
-  param_2[0x1d] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x1b] + 4))(param_2 + 0x1b,param_2 + 0x1d);
+  param_2[0x1d] = -0x40800000 /* -1.0f */; /* timer_2.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x1b] + 4))(param_2 + 0x1b,param_2 + 0x1d); /* timer_2.NetworkStateChanged() */
   if (param_6 == (int *)0x0) {
     param_2[0xe] = -1;
   }
@@ -91,12 +91,12 @@ CINSNextBot * CINSBotSuppressTarget::OnStart(CINSNextBot *param_1,Action *param_
   fVar1 = (float)fVar2;
   fVar2 = (float10)CountdownTimer::Now();
   if (*(float *)(param_2 + 0x5c) != (float)fVar2 + fVar1) {
-    (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x5c);
-    *(float *)(param_2 + 0x5c) = (float)fVar2 + fVar1;
+    (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x5c); /* timer_0.NetworkStateChanged() */
+    *(float *)(param_2 + 0x5c) = (float)fVar2 + fVar1; /* timer_0.Start(...) */
   }
   if (*(float *)(param_2 + 0x58) != fVar1) {
-    (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x58);
-    *(float *)(param_2 + 0x58) = fVar1;
+    (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x58); /* timer_0.NetworkStateChanged() */
+    *(float *)(param_2 + 0x58) = fVar1; /* timer_0.m_duration */
   }
   *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -174,7 +174,7 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
     }
   }
   fVar9 = (float10)CountdownTimer::Now();
-  if ((float)fVar9 < *(float *)((int)param_2 + 0x5c) ||
+  if ((float)fVar9 < *(float *)((int)param_2 + 0x5c) || /* !timer_0.IsElapsed() */
       (float)fVar9 == *(float *)((int)param_2 + 0x5c)) {
     cVar5 = CINSNextBot::IsIdle(this_00);
     if ((cVar5 == '\0') ||

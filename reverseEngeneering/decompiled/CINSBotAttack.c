@@ -24,7 +24,7 @@ void __thiscall CINSBotAttack::CINSBotAttack(CINSBotAttack *this)
   in_stack_00000004[10] = 0;
   *in_stack_00000004 = unaff_EBX + 0x48f35a /* vtable for CINSBotAttack+0x8 */ /* vtable for CINSBotAttack+0x8 */;
   in_stack_00000004[1] = unaff_EBX + 0x48f4fa /* vtable for CINSBotAttack+0x1a8 */ /* vtable for CINSBotAttack+0x1a8 */;
-  in_stack_00000004[0xe] = unaff_EBX + 0x422b0a /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  in_stack_00000004[0xe] = unaff_EBX + 0x422b0a /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
   in_stack_00000004[5] = 0;
@@ -37,8 +37,8 @@ void __thiscall CINSBotAttack::CINSBotAttack(CINSBotAttack *this)
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
   CountdownTimer::NetworkStateChanged(in_stack_00000004 + 0xe);
-  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10);
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10); /* timer_0.NetworkStateChanged() */
   in_stack_00000004[0x12] = -1;
   return;
 }
@@ -231,7 +231,7 @@ CINSBotAttack::Update(CINSBotAttack *this,CINSNextBot *param_1,float param_2)
   
   __i686_get_pc_thunk_bx();
   fVar10 = (float10)CountdownTimer::Now();
-  if (*(float *)((int)param_2 + 0x40) <= (float)fVar10 &&
+  if (*(float *)((int)param_2 + 0x40) <= (float)fVar10 && /* timer_0.IsElapsed() */
       (float)fVar10 != *(float *)((int)param_2 + 0x40)) {
     cVar2 = CINSNextBot::IsIdle(in_stack_0000000c);
     if ((cVar2 != '\0') &&
@@ -607,8 +607,8 @@ CINSNextBot * CINSBotAttack::OnStuck(CINSNextBot *param_1)
   *piVar2 = iVar1 + 8;
   piVar2[0xe] = unaff_EBX + 0x423bbd /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
   CountdownTimer::NetworkStateChanged(piVar2 + 0xe);
-  piVar2[0x10] = -0x40800000 /* -1.0f */;
-  (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
+  piVar2[0x10] = -0x40800000 /* -1.0f */; /* timer_0.Invalidate() */
+  (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10); /* timer_0.NetworkStateChanged() */
   piVar2[0x16] = 0;
   *(undefined **)(param_1 + 8) = &UNK_0027b77d + unaff_EBX;
   piVar2[0x17] = 0;

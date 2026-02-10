@@ -25,7 +25,7 @@ CINSBotThrowGrenade::CINSBotThrowGrenade
   param_2[9] = 0;
   *param_2 = unaff_EBX + 0x463fad /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
   param_2[1] = unaff_EBX + 0x464145 /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */;
-  param_2[0x14] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  param_2[0x14] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   param_2[10] = 0;
   param_2[3] = 0;
   param_2[4] = 0;
@@ -39,13 +39,13 @@ CINSBotThrowGrenade::CINSBotThrowGrenade
   param_2[0xd] = 0;
   param_2[0x15] = 0;
   (*(code *)(unaff_EBX + -0x5045ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x14,param_2 + 0x15);
-  param_2[0x16] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x14] + 4))(param_2 + 0x14,param_2 + 0x16);
+  param_2[0x16] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x14] + 4))(param_2 + 0x14,param_2 + 0x16); /* timer_0.NetworkStateChanged() */
   param_2[0x18] = 0;
-  param_2[0x17] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  param_2[0x17] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
   (*(code *)(unaff_EBX + -0x5045ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x17,param_2 + 0x18);
-  param_2[0x19] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x17] + 4))(param_2 + 0x17,param_2 + 0x19);
+  param_2[0x19] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x17] + 4))(param_2 + 0x17,param_2 + 0x19); /* timer_1.NetworkStateChanged() */
   param_2[0x11] = param_3;
   param_2[0x12] = param_4;
   param_2[0x13] = param_5;
@@ -87,7 +87,7 @@ void __thiscall CINSBotThrowGrenade::CINSBotThrowGrenade(CINSBotThrowGrenade *th
   in_stack_00000004[9] = 0;
   *in_stack_00000004 = unaff_EBX + 0x462d4d /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
   in_stack_00000004[1] = unaff_EBX + 0x462ee5 /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */;
-  in_stack_00000004[0x14] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  in_stack_00000004[0x14] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
@@ -101,13 +101,13 @@ void __thiscall CINSBotThrowGrenade::CINSBotThrowGrenade(CINSBotThrowGrenade *th
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0x15] = 0;
   (*(code *)(unaff_EBX + -0x50580b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x15);
-  in_stack_00000004[0x16] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0x14] + 4))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x16);
+  in_stack_00000004[0x16] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0x14] + 4))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x16); /* timer_0.NetworkStateChanged() */
   in_stack_00000004[0x18] = 0;
-  in_stack_00000004[0x17] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  in_stack_00000004[0x17] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
   (*(code *)(unaff_EBX + -0x50580b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x18);
-  in_stack_00000004[0x19] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0x17] + 4))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x19);
+  in_stack_00000004[0x19] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0x17] + 4))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x19); /* timer_1.NetworkStateChanged() */
   pCVar1 = (CINSNextBot *)in_stack_00000004[7];
   if (pCVar1 != (CINSNextBot *)0x0) {
     piVar3 = (int *)(**(code **)(*(int *)pCVar1 + 0x974 /* CINSNextBot::GetVisionInterface */))(pCVar1);
@@ -223,17 +223,17 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
     *(undefined4 *)(in_stack_0000000c + 0xb344) = 0x41200000 /* 10.0f */;
     *(undefined4 *)(param_2 + 0x68) = *(undefined4 *)(**(int **)(unaff_EBX + 0x472355 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
     if (*(int *)(param_2 + 100) != -0x40800000 /* -1.0f */) {
-      (**(code **)(*(int *)(param_2 + 0x5c) + 4))(param_2 + 0x5c,param_2 + 100);
+      (**(code **)(*(int *)(param_2 + 0x5c) + 4))(param_2 + 0x5c,param_2 + 100); /* timer_1.NetworkStateChanged() */
       *(undefined4 *)(param_2 + 100) = 0xbf800000 /* -1.0f */;
     }
     fVar3 = (float10)CountdownTimer::Now();
     fVar1 = (float)fVar3 + *(float *)(unaff_EBX + 0x1f0221 /* 5.0f */ /* 5.0f */);
     if (*(float *)(param_2 + 0x58) != fVar1) {
-      (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58);
-      *(float *)(param_2 + 0x58) = fVar1;
+      (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58); /* timer_0.NetworkStateChanged() */
+      *(float *)(param_2 + 0x58) = fVar1; /* timer_0.Start(5.0f) */
     }
     if (*(int *)(param_2 + 0x54) != 0x40a00000 /* 5.0f */) {
-      (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54);
+      (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54); /* timer_0.NetworkStateChanged() */
       *(undefined4 *)(param_2 + 0x54) = 0x40a00000 /* 5.0f */;
     }
     *(undefined4 *)param_1 = 0 /* Continue */;
@@ -298,7 +298,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
   }
   else {
     fVar5 = (float10)CountdownTimer::Now();
-    if ((float)fVar5 < *(float *)((int)param_2 + 0x58) ||
+    if ((float)fVar5 < *(float *)((int)param_2 + 0x58) || /* !timer_0.IsElapsed() */
         (float)fVar5 == *(float *)((int)param_2 + 0x58)) {
       cVar1 = CINSNextBot::IsIdle(this_02);
       this_04 = this_03;

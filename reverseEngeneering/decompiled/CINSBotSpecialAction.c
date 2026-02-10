@@ -23,7 +23,7 @@ CINSBotSpecialAction::CINSBotSpecialAction
   param_2[8] = 0;
   *param_2 = unaff_EBX + 0x4671ad /* vtable for CINSBotSpecialAction+0x8 */ /* vtable for CINSBotSpecialAction+0x8 */;
   param_2[1] = unaff_EBX + 0x46733d /* vtable for CINSBotSpecialAction+0x198 */ /* vtable for CINSBotSpecialAction+0x198 */;
-  param_2[0xf] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  param_2[0xf] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   param_2[9] = 0;
   param_2[10] = 0;
   param_2[3] = 0;
@@ -38,13 +38,13 @@ CINSBotSpecialAction::CINSBotSpecialAction
   param_2[0xd] = 0;
   param_2[0x10] = 0;
   (*(code *)(unaff_EBX + -0x500c0b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0xf,param_2 + 0x10);
-  param_2[0x11] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0xf] + 4))(param_2 + 0xf,param_2 + 0x11);
+  param_2[0x11] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0xf] + 4))(param_2 + 0xf,param_2 + 0x11); /* timer_0.NetworkStateChanged() */
   param_2[0x13] = 0;
-  param_2[0x12] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  param_2[0x12] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
   (*(code *)(unaff_EBX + -0x500c0b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x12,param_2 + 0x13);
-  param_2[0x14] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x12] + 4))(param_2 + 0x12,param_2 + 0x14);
+  param_2[0x14] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x12] + 4))(param_2 + 0x12,param_2 + 0x14); /* timer_1.NetworkStateChanged() */
   param_2[0xe] = param_3;
   *(undefined1 *)(param_2 + 0x15) = param_4;
   return;
@@ -71,21 +71,21 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
     fVar1 = (float10)CountdownTimer::Now();
     fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x1f3691 /* 5.0f */ /* 5.0f */);
     if (*(float *)(param_2 + 0x44) != fVar2) {
-      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x44);
-      *(float *)(param_2 + 0x44) = fVar2;
+      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x44); /* timer_0.NetworkStateChanged() */
+      *(float *)(param_2 + 0x44) = fVar2; /* timer_0.Start(5.0f) */
     }
     if (*(int *)(param_2 + 0x40) != 0x40a00000 /* 5.0f */) {
-      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x40);
+      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x40); /* timer_0.NetworkStateChanged() */
       *(undefined4 *)(param_2 + 0x40) = 0x40a00000 /* 5.0f */;
     }
     fVar1 = (float10)CountdownTimer::Now();
     fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187ea1 /* 3.0f */ /* 3.0f */);
     if (*(float *)(param_2 + 0x50) != fVar2) {
-      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50);
-      *(float *)(param_2 + 0x50) = fVar2;
+      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50); /* timer_1.NetworkStateChanged() */
+      *(float *)(param_2 + 0x50) = fVar2; /* timer_1.Start(3.0f) */
     }
     if (*(int *)(param_2 + 0x4c) != 0x40400000 /* 3.0f */) {
-      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x4c);
+      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x4c); /* timer_1.NetworkStateChanged() */
       *(undefined4 *)(param_2 + 0x4c) = 0x40400000 /* 3.0f */;
     }
     param_2[0x54] = (Action)0x0;
@@ -95,21 +95,21 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
     fVar2 = (float)fVar1;
     fVar1 = (float10)CountdownTimer::Now();
     if (*(float *)(param_2 + 0x44) != (float)fVar1 + fVar2) {
-      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x44);
-      *(float *)(param_2 + 0x44) = (float)fVar1 + fVar2;
+      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x44); /* timer_0.NetworkStateChanged() */
+      *(float *)(param_2 + 0x44) = (float)fVar1 + fVar2; /* timer_0.Start(...) */
     }
     if (*(float *)(param_2 + 0x40) != fVar2) {
-      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x40);
-      *(float *)(param_2 + 0x40) = fVar2;
+      (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x40); /* timer_0.NetworkStateChanged() */
+      *(float *)(param_2 + 0x40) = fVar2; /* timer_0.m_duration */
     }
     fVar1 = (float10)CountdownTimer::Now();
     fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187a39 /* 1.0f */ /* 1.0f */);
     if (*(float *)(param_2 + 0x50) != fVar2) {
-      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50);
-      *(float *)(param_2 + 0x50) = fVar2;
+      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50); /* timer_1.NetworkStateChanged() */
+      *(float *)(param_2 + 0x50) = fVar2; /* timer_1.Start(1.0f) */
     }
     if (*(int *)(param_2 + 0x4c) != 0x3f800000 /* 1.0f */) {
-      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x4c);
+      (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x4c); /* timer_1.NetworkStateChanged() */
       *(undefined4 *)(param_2 + 0x4c) = 0x3f800000 /* 1.0f */;
     }
   }
@@ -136,10 +136,10 @@ CINSNextBot * CINSBotSpecialAction::Update(CINSNextBot *param_1,float param_2)
   
   __i686_get_pc_thunk_bx();
   fVar1 = (float10)CountdownTimer::Now();
-  if ((float)fVar1 < *(float *)((int)param_2 + 0x44) ||
+  if ((float)fVar1 < *(float *)((int)param_2 + 0x44) || /* !timer_0.IsElapsed() */
       (float)fVar1 == *(float *)((int)param_2 + 0x44)) {
     fVar1 = (float10)CountdownTimer::Now();
-    if ((*(float *)((int)param_2 + 0x50) <= (float)fVar1 &&
+    if ((*(float *)((int)param_2 + 0x50) <= (float)fVar1 && /* timer_1.IsElapsed() */
          (float)fVar1 != *(float *)((int)param_2 + 0x50)) &&
        (*(char *)((int)param_2 + 0x54) == '\0')) {
       *(undefined1 *)((int)param_2 + 0x54) = 1;

@@ -46,27 +46,27 @@ CINSBotInvestigateGunshot::CINSBotInvestigateGunshot
   pcVar1 = (code *)(unaff_EBX + -0x4f45db /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
   param_2[0x122e] = 0;
   iVar2 = unaff_EBX + 0x40346d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
-  param_2[0x122d] = iVar2;
+  param_2[0x122d] = iVar2; /* CountdownTimer timer_0 */
   (*pcVar1)(param_2 + 0x122d,param_2 + 0x122e);
-  param_2[0x122f] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x122d] + 4))(param_2 + 0x122d,param_2 + 0x122f);
+  param_2[0x122f] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x122d] + 4))(param_2 + 0x122d,param_2 + 0x122f); /* timer_0.NetworkStateChanged() */
   param_2[0x1231] = 0;
-  param_2[0x1230] = iVar2;
+  param_2[0x1230] = iVar2; /* CountdownTimer timer_1 */
   (*pcVar1)(param_2 + 0x1230,param_2 + 0x1231);
-  param_2[0x1232] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x1230] + 4))(param_2 + 0x1230,param_2 + 0x1232);
+  param_2[0x1232] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x1230] + 4))(param_2 + 0x1230,param_2 + 0x1232); /* timer_1.NetworkStateChanged() */
   piVar3 = param_2 + 0x1233;
   param_2[0x1234] = 0;
-  param_2[0x1233] = iVar2;
+  param_2[0x1233] = iVar2; /* CountdownTimer timer_2 */
   (*pcVar1)(piVar3,param_2 + 0x1234);
-  param_2[0x1235] = -0x40800000 /* -1.0f */;
-  (**(code **)(param_2[0x1233] + 4))(piVar3,param_2 + 0x1235);
+  param_2[0x1235] = -0x40800000 /* -1.0f */; /* timer_2.m_timestamp = -1 (not running) */
+  (**(code **)(param_2[0x1233] + 4))(piVar3,param_2 + 0x1235); /* timer_2.NetworkStateChanged() */
   CINSPathFollower::Invalidate(this_00);
   fVar5 = (float10)CountdownTimer::Now();
   fVar4 = (float)param_2[0x1234];
   if ((float)param_2[0x1235] != (float)fVar5 + fVar4) {
-    (**(code **)(param_2[0x1233] + 4))(piVar3,param_2 + 0x1235);
-    param_2[0x1235] = (int)((float)fVar5 + fVar4);
+    (**(code **)(param_2[0x1233] + 4))(piVar3,param_2 + 0x1235); /* timer_2.NetworkStateChanged() */
+    param_2[0x1235] = (int)((float)fVar5 + fVar4); /* timer_2.Start(...) */
   }
   *(undefined1 *)(param_2 + 0x123a) = 0;
   param_2[0x1239] = -0x40800000 /* -1.0f */;

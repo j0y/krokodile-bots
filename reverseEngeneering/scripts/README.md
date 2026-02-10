@@ -22,6 +22,9 @@ python3 reverseEngeneering/scripts/annotate_floats.py
 
 # 6. Annotate ActionResult type codes (Continue/ChangeTo/SuspendFor/Done)
 python3 reverseEngeneering/scripts/annotate_actionresult.py
+
+# 7. Annotate CountdownTimer patterns (IsElapsed, Start, Invalidate)
+python3 reverseEngeneering/scripts/annotate_timers.py
 ```
 
 Order matters: `resolve_pic_refs` must run first. `annotate_rodata_floats` must run before `annotate_vtable` since both replace PIC annotations — rodata_floats handles float constants, then vtable replaces remaining PIC annotations on vtable dispatches.

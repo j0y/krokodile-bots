@@ -315,10 +315,10 @@ void __thiscall CINSNavArea::CINSNavArea(CINSNavArea *this)
   in_stack_00000004[0x65] = -0x40800000 /* -1.0f */;
   (*pcVar1)(in_stack_00000004 + 100,in_stack_00000004 + 0x65);
   in_stack_00000004[0x7c] = 0;
-  in_stack_00000004[0x7b] = unaff_EBX + 0x44246d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  in_stack_00000004[0x7b] = unaff_EBX + 0x44246d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   (*(code *)(unaff_EBX + -0x4b55db /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x7b,in_stack_00000004 + 0x7c);
-  in_stack_00000004[0x7d] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0x7b] + 4))(in_stack_00000004 + 0x7b,in_stack_00000004 + 0x7d);
+  in_stack_00000004[0x7d] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0x7b] + 4))(in_stack_00000004 + 0x7b,in_stack_00000004 + 0x7d); /* timer_0.NetworkStateChanged() */
   piVar3 = in_stack_00000004 + 0x7f;
   do {
     *piVar3 = unaff_EBX + 0x44246d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
@@ -2644,12 +2644,12 @@ void __thiscall CINSNavArea::UpdateCover(CINSNavArea *this,float *param_1)
   this_00 = extraout_ECX;
   if (param_1[0x7d] != (float)fVar8 + fVar9) {
     (**(code **)((int)param_1[0x7b] + 4))(param_1 + 0x7b,param_1 + 0x7d);
-    param_1[0x7d] = (float)fVar8 + fVar9;
+    param_1[0x7d] = (float)fVar8 + fVar9; /* timer_0.Start(5.0f) */
     this_00 = extraout_ECX_00;
   }
   if (param_1[0x7c] != fVar9) {
     (**(code **)((int)param_1[0x7b] + 4))(param_1 + 0x7b,param_1 + 0x7c);
-    param_1[0x7c] = fVar9;
+    param_1[0x7c] = fVar9; /* timer_0.m_duration */
     this_00 = extraout_ECX_01;
   }
   iVar5 = **(int **)(CNavArea::GetClosestPointOnArea + unaff_EBX + 5);

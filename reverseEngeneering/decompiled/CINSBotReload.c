@@ -40,21 +40,21 @@ void __thiscall CINSBotReload::CINSBotReload(CINSBotReload *this)
   in_stack_00000004[2] = 0;
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
-  in_stack_00000004[0xe] = iVar1;
+  in_stack_00000004[0xe] = iVar1; /* CountdownTimer timer_0 */
   in_stack_00000004[0xf] = 0;
   (*pcVar2)(in_stack_00000004 + 0xe,in_stack_00000004 + 0xf);
-  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10);
-  in_stack_00000004[0x11] = iVar1;
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10); /* timer_0.NetworkStateChanged() */
+  in_stack_00000004[0x11] = iVar1; /* CountdownTimer timer_1 */
   in_stack_00000004[0x12] = 0;
   (*pcVar2)(in_stack_00000004 + 0x11,in_stack_00000004 + 0x12);
-  in_stack_00000004[0x13] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0x11] + 4))(in_stack_00000004 + 0x11,in_stack_00000004 + 0x13);
-  in_stack_00000004[0x14] = iVar1;
+  in_stack_00000004[0x13] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0x11] + 4))(in_stack_00000004 + 0x11,in_stack_00000004 + 0x13); /* timer_1.NetworkStateChanged() */
+  in_stack_00000004[0x14] = iVar1; /* CountdownTimer timer_2 */
   in_stack_00000004[0x15] = 0;
   (*pcVar2)(in_stack_00000004 + 0x14,in_stack_00000004 + 0x15);
-  in_stack_00000004[0x16] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0x14] + 4))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x16);
+  in_stack_00000004[0x16] = -0x40800000 /* -1.0f */; /* timer_2.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0x14] + 4))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x16); /* timer_2.NetworkStateChanged() */
   return;
 }
 
@@ -147,11 +147,11 @@ LAB_0072ab00:
   fVar6 = (float10)CountdownTimer::Now();
   fVar4 = (float)fVar6 + *(float *)(unaff_EBX + 0x1f9d5d /* 0.5f */ /* 0.5f */);
   if (*(float *)(param_2 + 0x58) != fVar4) {
-    (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58);
-    *(float *)(param_2 + 0x58) = fVar4;
+    (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58); /* timer_2.NetworkStateChanged() */
+    *(float *)(param_2 + 0x58) = fVar4; /* timer_2.Start(0.5f) */
   }
   if (*(int *)(param_2 + 0x54) != 0x3f000000 /* 0.5f */) {
-    (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54);
+    (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54); /* timer_2.NetworkStateChanged() */
     *(undefined4 *)(param_2 + 0x54) = 0x3f000000 /* 0.5f */;
   }
   *(undefined4 *)param_1 = 0 /* Continue */;
@@ -200,7 +200,7 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
     }
   }
   fVar4 = (float10)CountdownTimer::Now();
-  if (*(float *)((int)param_2 + 0x58) <= (float)fVar4 &&
+  if (*(float *)((int)param_2 + 0x58) <= (float)fVar4 && /* timer_2.IsElapsed() */
       (float)fVar4 != *(float *)((int)param_2 + 0x58)) {
     piVar2 = (int *)CINSPlayer::GetActiveINSWeapon();
     if (piVar2 == (int *)0x0) {
@@ -232,11 +232,11 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
     fVar4 = (float10)CountdownTimer::Now();
     fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f8dab /* 0.25f */ /* 0.25f */);
     if (*(float *)((int)param_2 + 0x58) != fVar5) {
-      (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x58);
-      *(float *)((int)param_2 + 0x58) = fVar5;
+      (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x58); /* timer_2.NetworkStateChanged() */
+      *(float *)((int)param_2 + 0x58) = fVar5; /* timer_2.Start(0.25f) */
     }
     if (*(int *)((int)param_2 + 0x54) != 0x3e800000 /* 0.25f */) {
-      (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x54);
+      (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x54); /* timer_2.NetworkStateChanged() */
       *(undefined4 *)((int)param_2 + 0x54) = 0x3e800000 /* 0.25f */;
     }
   }

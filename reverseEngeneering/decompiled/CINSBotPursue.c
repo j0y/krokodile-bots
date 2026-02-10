@@ -24,7 +24,7 @@ void __thiscall CINSBotPursue::CINSBotPursue(CINSBotPursue *this)
   in_stack_00000004[10] = 0;
   *in_stack_00000004 = unaff_EBX + 0x46d3ba /* vtable for CINSBotPursue+0x8 */ /* vtable for CINSBotPursue+0x8 */;
   in_stack_00000004[1] = unaff_EBX + 0x46d552 /* vtable for CINSBotPursue+0x1a0 */ /* vtable for CINSBotPursue+0x1a0 */;
-  in_stack_00000004[0xe] = unaff_EBX + 0x3fda2a /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  in_stack_00000004[0xe] = unaff_EBX + 0x3fda2a /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
   in_stack_00000004[5] = 0;
@@ -37,8 +37,8 @@ void __thiscall CINSBotPursue::CINSBotPursue(CINSBotPursue *this)
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
   CountdownTimer::NetworkStateChanged(in_stack_00000004 + 0xe);
-  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */;
-  (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10);
+  in_stack_00000004[0x10] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
+  (**(code **)(in_stack_00000004[0xe] + 4))(in_stack_00000004 + 0xe,in_stack_00000004 + 0x10); /* timer_0.NetworkStateChanged() */
   *(undefined1 *)(in_stack_00000004 + 0x16) = 0;
   in_stack_00000004[0x15] = -0x40800000 /* -1.0f */;
   in_stack_00000004[0x14] = -1;
@@ -130,7 +130,7 @@ CINSBotPursue::Update(CINSBotPursue *this,CINSNextBot *param_1,float param_2)
   
   __i686_get_pc_thunk_bx();
   fVar10 = (float10)CountdownTimer::Now();
-  if ((float)fVar10 < *(float *)((int)param_2 + 0x40) ||
+  if ((float)fVar10 < *(float *)((int)param_2 + 0x40) || /* !timer_0.IsElapsed() */
       (float)fVar10 == *(float *)((int)param_2 + 0x40)) goto LAB_0072a550;
   if ((in_stack_0000000c[0x2cce] == -1) ||
      (iVar3 = UTIL_EntityByIndex(in_stack_0000000c[0x2cce]), iVar3 == 0)) {
@@ -210,11 +210,11 @@ LAB_0072a67c:
   fVar10 = (float10)CountdownTimer::Now();
   fVar11 = (float)fVar10 + *(float *)(unaff_EBX + 0x18e7b6 /* 1.0f */ /* 1.0f */);
   if (*(float *)((int)param_2 + 0x40) != fVar11) {
-    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40);
-    *(float *)((int)param_2 + 0x40) = fVar11;
+    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40); /* timer_0.NetworkStateChanged() */
+    *(float *)((int)param_2 + 0x40) = fVar11; /* timer_0.Start(1.0f) */
   }
   if (*(int *)((int)param_2 + 0x3c) != 0x3f800000 /* 1.0f */) {
-    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c);
+    (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x3c); /* timer_0.NetworkStateChanged() */
     *(undefined4 *)((int)param_2 + 0x3c) = 0x3f800000 /* 1.0f */;
   }
 LAB_0072a550:
