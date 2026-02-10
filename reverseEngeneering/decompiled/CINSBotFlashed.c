@@ -30,7 +30,7 @@ CINSBotFlashed::OnStart(CINSBotFlashed *this,CINSNextBot *param_1,Action *param_
   } while (iVar1 != 4);
   CINSNextBot::BotSpeakConceptIfAllowed
             (this_00,in_stack_0000000c,(char *)0x4b,(char *)0x0,0,(IRecipientFilter *)0x0);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

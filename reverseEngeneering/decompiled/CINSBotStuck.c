@@ -39,7 +39,7 @@ CINSBotStuck::OnStart(CINSBotStuck *this,CINSNextBot *param_1,Action *param_2)
   iVar2 = (**(code **)(*in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c,uVar3);
   if (iVar2 == 0) {
     Warning(unaff_EBX + 0x24fd09 /* "Bot stuck on non-existant nav mesh" */);
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24fcd5 /* "Not on the nav mesh" */;
   }
@@ -63,7 +63,7 @@ CINSBotStuck::OnStart(CINSBotStuck *this,CINSNextBot *param_1,Action *param_2)
     CUtlVector<Vector,CUtlMemory<Vector,int>>::InsertBefore((int)pAVar1,*(Vector **)(param_2 + 100))
     ;
     CINSNextBot::ResetIdleStatus(this_01);
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     CUtlMemory<Vector,int>::~CUtlMemory(this_02);
@@ -168,7 +168,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         (float)fVar4 != *(float *)(unaff_EBX + 0x2067ad /* typeinfo name for CUseTraceFilter+0x19 */)) {
       piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
       (**(code **)(*piVar3 + 0x194 /* ILocomotion::ClearStuckStatus */))(piVar3,&UNK_00228410 + unaff_EBX);
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x250789 /* " moved from our stuck position" */;
       return param_1;
@@ -280,7 +280,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
             local_70 = 0;
             *(undefined4 *)((int)param_2 + 0x48) =
                  *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */) + 0xc);
-            *(undefined4 *)param_1 = 0;
+            *(undefined4 *)param_1 = 0 /* Continue */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(undefined4 *)(param_1 + 8) = 0;
             local_8c = unaff_EBX + 0x462f0d /* vtable for INSVisionTraceFilter+0x8 */;
@@ -339,7 +339,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
     }
   }
 LAB_00731699:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -378,7 +378,7 @@ void CINSBotStuck::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined **)(param_1 + 8) = &UNK_0025082d + extraout_ECX;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -416,7 +416,7 @@ void CINSBotStuck::OnMoveToFailure(undefined4 *param_1)
 void CINSBotStuck::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -438,7 +438,7 @@ void CINSBotStuck::OnUnStuck(CINSNextBot *param_1)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = extraout_ECX + 0x2507a7 /* "Successful unstuck " */;
   *(undefined4 *)(param_1 + 0xc) = 1;

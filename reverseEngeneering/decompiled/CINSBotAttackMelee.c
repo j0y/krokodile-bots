@@ -72,7 +72,7 @@ CINSBotAttackMelee::OnStart(CINSBotAttackMelee *this,CINSNextBot *param_1,Action
   
   __i686_get_pc_thunk_bx();
   if (**(int **)(unaff_EBX + 0x497eda /* &g_pGameRules */) == 0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x27145e /* "INSRules failed to initialize." */;
   }
@@ -90,7 +90,7 @@ CINSBotAttackMelee::OnStart(CINSBotAttackMelee *this,CINSNextBot *param_1,Action
       *(undefined4 *)(in_stack_0000000c + 0xb380) = 0x40a00000 /* 5.0f */;
     }
     puVar1 = *(undefined4 **)(unaff_EBX + 0x497bae /* &vec3_origin */);
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_2 + 0x44) = *puVar1;
@@ -289,17 +289,17 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
           CINSNextBot::ChooseBestWeapon(this_00,in_stack_0000000c,(float)this_00);
         }
       }
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
     }
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x271810 /* "Non INS Player Enemy?" */;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x27198c /* "Lost our threat." */;
   return param_1;
@@ -454,7 +454,7 @@ undefined4 __cdecl CINSBotAttackMelee::ShouldAttack(INextBot *param_1,CKnownEnti
 void CINSBotAttackMelee::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -473,7 +473,7 @@ void CINSBotAttackMelee::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGa
 void CINSBotAttackMelee::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -511,7 +511,7 @@ void CINSBotAttackMelee::OnMoveToFailure(undefined4 *param_1)
 void CINSBotAttackMelee::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -530,7 +530,7 @@ void CINSBotAttackMelee::OnStuck(CINSNextBot *param_1)
 void CINSBotAttackMelee::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -549,7 +549,7 @@ void CINSBotAttackMelee::OnUnStuck(CINSNextBot *param_1)
 void CINSBotAttackMelee::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -568,7 +568,7 @@ void CINSBotAttackMelee::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2
 void CINSBotAttackMelee::OnKilled(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -588,7 +588,7 @@ void CINSBotAttackMelee::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -607,7 +607,7 @@ void CINSBotAttackMelee::OnOtherKilled
 void CINSBotAttackMelee::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -626,7 +626,7 @@ void CINSBotAttackMelee::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackMelee::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -646,7 +646,7 @@ void CINSBotAttackMelee::OnWeaponFired
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CBaseCombatWeapon *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -665,7 +665,7 @@ void CINSBotAttackMelee::OnWeaponFired
 void CINSBotAttackMelee::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -684,7 +684,7 @@ void CINSBotAttackMelee::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,
 void CINSBotAttackMelee::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -703,7 +703,7 @@ void CINSBotAttackMelee::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *par
 void CINSBotAttackMelee::OnCommandString(CINSNextBot *param_1,char *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -722,7 +722,7 @@ void CINSBotAttackMelee::OnCommandString(CINSNextBot *param_1,char *param_2)
 void CINSBotAttackMelee::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -741,7 +741,7 @@ void CINSBotAttackMelee::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackMelee::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -760,7 +760,7 @@ void CINSBotAttackMelee::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param
 void CINSBotAttackMelee::OnCommandRetreat(CINSNextBot *param_1,CBaseEntity *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -780,7 +780,7 @@ void CINSBotAttackMelee::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -799,7 +799,7 @@ void CINSBotAttackMelee::OnHeardFootsteps
 void CINSBotAttackMelee::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -818,7 +818,7 @@ void CINSBotAttackMelee::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2
 void CINSBotAttackMelee::OnPostureChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -839,7 +839,7 @@ void CINSBotAttackMelee::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -113,7 +113,7 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
       *(undefined4 *)(param_2 + 0x4c) = 0x3f800000 /* 1.0f */;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -144,12 +144,12 @@ CINSNextBot * CINSBotSpecialAction::Update(CINSNextBot *param_1,float param_2)
        (*(char *)((int)param_2 + 0x54) == '\0')) {
       *(undefined1 *)((int)param_2 + 0x54) = 1;
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
   }
   else {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_00250de0 + unaff_EBX;
   }
@@ -197,7 +197,7 @@ void __cdecl CINSBotSpecialAction::OnEnd(CINSNextBot *param_1,Action *param_2)
 void CINSBotSpecialAction::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -215,7 +215,7 @@ void CINSBotSpecialAction::OnSuspend(CINSNextBot *param_1,Action *param_2)
 void CINSBotSpecialAction::OnResume(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -252,13 +252,13 @@ void CINSBotSpecialAction::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param
 
 {
   if (param_2[0x54] == (CTakeDamageInfo)0x0) {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;
     return;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

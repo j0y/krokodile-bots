@@ -23,7 +23,7 @@ CINSNextBot * CINSBotDead::OnStart(CINSNextBot *param_1,Action *param_2)
     (**(code **)(*(int *)(param_2 + 0x38) + 8))(param_2 + 0x38,param_2 + 0x3c);
     *(float *)(param_2 + 0x3c) = (float)fVar1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -66,14 +66,14 @@ CINSNextBot * __thiscall CINSBotDead::Update(CINSBotDead *this,CINSNextBot *para
 " */),uVar5);
       (*pcVar2)(*puVar1,uVar5);
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
   }
   else {
     piVar6 = (int *)::operator_new(0x40);
     iVar3 = *(int *)(unaff_EBX + 0x48f26c /* &vtable for CINSBotMainAction */);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     piVar6[8] = 0;
     piVar6[9] = 0;
     piVar6[10] = 0;

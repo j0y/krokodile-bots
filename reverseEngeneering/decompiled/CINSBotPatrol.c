@@ -210,12 +210,12 @@ CINSBotPatrol::OnStart(CINSBotPatrol *this,CINSNextBot *param_1,Action *param_2)
       (**(code **)(*(int *)(param_2 + 0x48f4) + 4))(param_2 + 0x48f4,param_2 + 0x48f8);
       *(float *)(param_2 + 0x48f8) = fVar5;
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined **)(param_1 + 8) = &UNK_00259205 + unaff_EBX;
   *(undefined4 *)(param_1 + 4) = 0;
   return param_1;
@@ -281,7 +281,7 @@ CINSBotPatrol::Update(CINSBotPatrol *this,CINSNextBot *param_1,float param_2)
     piVar12 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))();
     iVar13 = (**(code **)(*piVar12 + 0xd4 /* IIntention::ShouldAttack */))(piVar12,in_stack_0000000c + 0x818,iVar13);
     if (iVar13 == 1) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined **)(param_1 + 8) = &UNK_002580a4 + unaff_EBX;
       return param_1;
@@ -295,7 +295,7 @@ CINSBotPatrol::Update(CINSBotPatrol *this,CINSNextBot *param_1,float param_2)
        ((((fVar1 = *(float *)(::__tcf_0 + unaff_EBX + 5), fVar1 < fVar19 &&
           (fVar2 = *(float *)(unaff_EBX + 0x1fd679 /* typeinfo name for ITraceFilter+0x40 */), fVar19 < fVar2)) &&
          ((fVar1 < fVar5 && ((fVar5 < fVar2 && (fVar1 < fVar6)))))) && (fVar6 < fVar2)))) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x259afd /* "Goal position no longer valid?" */;
     }
@@ -377,7 +377,7 @@ LAB_00728208:
               }
             }
             GetNextPatrolArea((CINSBotPatrol *)param_2);
-            *(undefined4 *)param_1 = 0;
+            *(undefined4 *)param_1 = 0 /* Continue */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(undefined4 *)(param_1 + 8) = 0;
             return param_1;
@@ -408,7 +408,7 @@ LAB_00728208:
           piVar12 = *(int **)(CServerGameDLL::ShouldAllowDirectConnect + unaff_EBX + 1);
           cVar10 = CINSRules::IsHunt((CINSRules *)param_2);
           if ((cVar10 != '\0') && (*(char *)(*piVar12 + 0x3ac) != '\0')) {
-            *(undefined4 *)param_1 = 3;
+            *(undefined4 *)param_1 = 3 /* Done */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(int *)(param_1 + 8) = unaff_EBX + 0x259c69 /* "We are in counterattack, time to go to the CP" */;
             return param_1;
@@ -494,18 +494,18 @@ LAB_00728208:
                      *(undefined4 *)((int)param_2 + 0x40),*(undefined4 *)((int)param_2 + 0x44),4,3,
                      0x40a00000 /* 5.0f */);
         }
-        *(undefined4 *)param_1 = 0;
+        *(undefined4 *)param_1 = 0 /* Continue */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined4 *)(param_1 + 8) = 0;
         return param_1;
       }
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x259c39 /* "Patrol expiry time reached." */;
     }
   }
   else {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x259c1b /* "I have things to investigate!" */;
   }
@@ -540,7 +540,7 @@ void __cdecl CINSBotPatrol::OnEnd(CINSNextBot *param_1,Action *param_2)
 void CINSBotPatrol::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -594,12 +594,12 @@ CINSBotPatrol::OnResume(CINSBotPatrol *this,CINSNextBot *param_1,Action *param_2
   }
   cVar1 = GetNextPatrolArea(this_01);
   if (cVar1 != '\0') {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x259341 /* "Nothing to patrol" */;
   *(undefined4 *)(param_1 + 4) = 0;
   return param_1;
@@ -739,7 +739,7 @@ CINSBotPatrol::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *p
     piVar1 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
     (**(code **)(*piVar1 + 0x130 /* CINSBotBody::SetArousal */))(piVar1,3);
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -780,7 +780,7 @@ CINSBotPatrol::OnMoveToSuccess(CINSBotPatrol *this,CINSNextBot *param_1,Path *pa
   __i686_get_pc_thunk_bx();
   cVar3 = CINSRules::IsHunt(this_00);
   if (cVar3 == '\0') {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25b1dd /* "Completed our task." */;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -835,7 +835,7 @@ CINSBotPatrol::OnMoveToSuccess(CINSBotPatrol *this,CINSNextBot *param_1,Path *pa
         *(float *)(param_2 + 0x48d4) = fVar1;
       }
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -910,7 +910,7 @@ CINSNextBot * CINSBotPatrol::OnStuck(CINSNextBot *param_1)
   piVar2[0x18] = 0;
   piVar2[0x19] = 0;
   piVar2[0x1a] = 0;
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(int **)(param_1 + 4) = piVar2;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return param_1;
@@ -939,7 +939,7 @@ CINSBotPatrol::OnInjured(CINSBotPatrol *this,CINSNextBot *param_1,CTakeDamageInf
     piVar1 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
     (**(code **)(*piVar1 + 0x130 /* CINSBotBody::SetArousal */))(piVar1,5);
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -991,7 +991,7 @@ CINSBotPatrol::OnOtherKilled
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1068,7 +1068,7 @@ CINSNextBot * CINSBotPatrol::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
     }
   }
 LAB_00726ae3:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1087,7 +1087,7 @@ LAB_00726ae3:
 void CINSBotPatrol::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1148,7 +1148,7 @@ CINSNextBot * CINSBotPatrol::OnCommandApproach(CINSNextBot *param_1,Vector *para
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1412,7 +1412,7 @@ CINSNextBot * CINSBotPatrol::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *p
   piVar1 = (int *)__i686_get_pc_thunk_bx();
   piVar1 = (int *)(**(code **)(*piVar1 + 0x974 /* CINSNextBot::GetVisionInterface */))(piVar1);
   (**(code **)(*piVar1 + 0xe8 /* IVision::AddKnownEntity */))(piVar1,in_stack_00000010);
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x259f33 /* "Received the order to attack" */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 0xc) = 2;
@@ -1483,7 +1483,7 @@ CINSBotPatrol::OnHeardFootsteps
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1548,7 +1548,7 @@ CINSBotPatrol::OnNavAreaChanged
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1662,7 +1662,7 @@ CINSBotPatrol::OnSeeSomethingSuspicious
   iVar9 = TheINSNextBots();
   CINSNextBotManager::AddGrenadeTarget(this_01,iVar9,pCVar8);
 LAB_007262ea:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

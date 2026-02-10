@@ -71,7 +71,7 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
   piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
   piVar2 = (int *)(**(code **)(*piVar2 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar2,0);
   if (piVar2 == (int *)0x0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2575af /* "No Known Threats" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
@@ -83,12 +83,12 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
   *(int *)(param_2 + 0x50) = in_stack_0000000c[0x2cce];
   cVar1 = CINSNextBot::IsEscorting(this_01);
   if (cVar1 == '\0') {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x257605 /* "I should not be pursuing while escorting" */;
   *(undefined4 *)(param_1 + 4) = 0;
   return param_1;
@@ -144,7 +144,7 @@ CINSBotPursue::Update(CINSBotPursue *this,CINSNextBot *param_1,float param_2)
     iVar4 = *(int *)(iVar3 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x47c542 /* &gpGlobals */) + 0x5c) >> 4;
   }
   if (*(int *)((int)param_2 + 0x50) != iVar4) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_0025736d + unaff_EBX;
     return param_1;
@@ -153,7 +153,7 @@ CINSBotPursue::Update(CINSBotPursue *this,CINSNextBot *param_1,float param_2)
   piVar5 = (int *)(**(code **)(*piVar5 + 0xe4 /* IVision::GetKnown */))(piVar5,iVar3);
   if (piVar5 == (int *)0x0) {
 LAB_0072a5b0:
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_0025735c + unaff_EBX;
     return param_1;
@@ -165,7 +165,7 @@ LAB_0072a5b0:
     iVar3 = (**(code **)(*piVar7 + 0xd4 /* IIntention::ShouldAttack */))(piVar7,in_stack_0000000c + 0x818,piVar5);
     this_00 = extraout_ECX_00;
     if (iVar3 != 0) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined **)(param_1 + 8) = &UNK_0025738b + unaff_EBX;
       return param_1;
@@ -176,7 +176,7 @@ LAB_0072a5b0:
      (fVar10 = (float10)CINSNextBot::GetIdleDuration(this_01),
      *(float *)(unaff_EBX + 0x1fa40e /* typeinfo name for CBaseGameSystem+0x32 */) <= (float)fVar10 &&
      (float)fVar10 != *(float *)(unaff_EBX + 0x1fa40e /* typeinfo name for CBaseGameSystem+0x32 */))) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_002573a3 + unaff_EBX;
     return param_1;
@@ -218,7 +218,7 @@ LAB_0072a67c:
     *(undefined4 *)((int)param_2 + 0x3c) = 0x3f800000 /* 1.0f */;
   }
 LAB_0072a550:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -251,7 +251,7 @@ void __cdecl CINSBotPursue::OnEnd(CINSNextBot *param_1,Action *param_2)
 void CINSBotPursue::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -334,7 +334,7 @@ byte __cdecl CINSBotPursue::ShouldHurry(INextBot *param_1)
 void CINSBotPursue::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -356,7 +356,7 @@ void CINSBotPursue::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = extraout_ECX + 0x25746b /* "Arrived at investigation target." */;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -397,7 +397,7 @@ void CINSBotPursue::OnMoveToFailure(undefined4 *param_1)
 void CINSBotPursue::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -416,7 +416,7 @@ void CINSBotPursue::OnStuck(CINSNextBot *param_1)
 void CINSBotPursue::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -435,7 +435,7 @@ void CINSBotPursue::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotPursue::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

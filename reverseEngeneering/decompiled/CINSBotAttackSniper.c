@@ -93,7 +93,7 @@ CINSBotAttackSniper::OnStart(CINSBotAttackSniper *this,CINSNextBot *param_1,Acti
   __i686_get_pc_thunk_bx();
   if (in_stack_0000000c == (CINSWeapon *)0x0) {
 LAB_0071212a:
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -157,7 +157,7 @@ LAB_00712159:
     CINSBotBody::SetPosture();
   }
 LAB_00712047:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -260,7 +260,7 @@ CINSBotAttackSniper::Update(CINSBotAttackSniper *this,CINSNextBot *param_1,float
     piVar5 = (int *)(**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
     if ((piVar5 == (int *)0x0) ||
        (iVar3 = (**(code **)(*piVar5 + 0x10))(piVar5), pCVar4 = extraout_ECX_00, iVar3 == 0)) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
@@ -374,7 +374,7 @@ LAB_007123d8:
     *(undefined4 *)((int)param_2 + 0x48) = 0x3f000000 /* 0.5f */;
   }
 LAB_007122ac:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -520,7 +520,7 @@ undefined4 __cdecl CINSBotAttackSniper::ShouldAttack(INextBot *param_1,CKnownEnt
 void CINSBotAttackSniper::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -539,7 +539,7 @@ void CINSBotAttackSniper::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CG
 void CINSBotAttackSniper::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -577,7 +577,7 @@ void CINSBotAttackSniper::OnMoveToFailure(undefined4 *param_1)
 void CINSBotAttackSniper::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -596,7 +596,7 @@ void CINSBotAttackSniper::OnStuck(CINSNextBot *param_1)
 void CINSBotAttackSniper::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -615,7 +615,7 @@ void CINSBotAttackSniper::OnUnStuck(CINSNextBot *param_1)
 void CINSBotAttackSniper::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -634,7 +634,7 @@ void CINSBotAttackSniper::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_
 void CINSBotAttackSniper::OnKilled(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -655,7 +655,7 @@ void CINSBotAttackSniper::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -674,7 +674,7 @@ void CINSBotAttackSniper::OnOtherKilled
 void CINSBotAttackSniper::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -693,7 +693,7 @@ void CINSBotAttackSniper::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackSniper::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -713,7 +713,7 @@ void CINSBotAttackSniper::OnWeaponFired
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CBaseCombatWeapon *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -732,7 +732,7 @@ void CINSBotAttackSniper::OnWeaponFired
 void CINSBotAttackSniper::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -751,7 +751,7 @@ void CINSBotAttackSniper::OnCommandApproach(CINSNextBot *param_1,Vector *param_2
 void CINSBotAttackSniper::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -770,7 +770,7 @@ void CINSBotAttackSniper::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *pa
 void CINSBotAttackSniper::OnCommandString(CINSNextBot *param_1,char *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -789,7 +789,7 @@ void CINSBotAttackSniper::OnCommandString(CINSNextBot *param_1,char *param_2)
 void CINSBotAttackSniper::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -808,7 +808,7 @@ void CINSBotAttackSniper::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackSniper::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -827,7 +827,7 @@ void CINSBotAttackSniper::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *para
 void CINSBotAttackSniper::OnCommandRetreat(CINSNextBot *param_1,CBaseEntity *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -847,7 +847,7 @@ void CINSBotAttackSniper::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -866,7 +866,7 @@ void CINSBotAttackSniper::OnHeardFootsteps
 void CINSBotAttackSniper::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -885,7 +885,7 @@ void CINSBotAttackSniper::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_
 void CINSBotAttackSniper::OnPostureChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -906,7 +906,7 @@ void CINSBotAttackSniper::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

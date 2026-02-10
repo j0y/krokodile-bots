@@ -163,7 +163,7 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
   uStack_14 = 0x73454b;
   __i686_get_pc_thunk_bx();
   if (*(int *)(in_stack_0000000c + 0x2280) == 3) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24da71 /* "Nothing to throw at" */;
     return param_1;
@@ -236,12 +236,12 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
       (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54);
       *(undefined4 *)(param_2 + 0x54) = 0x40a00000 /* 5.0f */;
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x24caad /* "No grenade...
 " */;
@@ -289,7 +289,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
   piVar2 = (int *)CINSPlayer::GetWeaponInSlot(this_01,(int)in_stack_0000000c,true);
   piVar3 = (int *)CINSPlayer::GetActiveINSWeapon();
   if ((piVar2 == (int *)0x0) || (piVar3 == (int *)0x0)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24c6fa /* "No grenade...
 " */;
@@ -305,7 +305,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
          (float)fVar5 < *(float *)(&DAT_001efe6e + unaff_EBX) ||
          (float)fVar5 == *(float *)(&DAT_001efe6e + unaff_EBX))) {
         if (*(int *)(in_stack_0000000c + 0x2280) == 3) {
-          *(undefined4 *)param_1 = 3;
+          *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(int *)(param_1 + 8) = unaff_EBX + 0x24d6e8 /* "Error aiming grenade." */;
         }
@@ -335,7 +335,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
               (**(code **)(*(int *)in_stack_0000000c + 0x8c0 /* NextBotPlayer::PressFireButton */))(in_stack_0000000c,0x3f59999a /* 0.85f */);
               CountdownTimer::Start(this_05,(float)((int)param_2 + 0x5c));
               CountdownTimer::Start(this_06,(float)(in_stack_0000000c + 0xb388));
-              *(undefined4 *)param_1 = 0;
+              *(undefined4 *)param_1 = 0 /* Continue */;
               *(undefined4 *)(in_stack_0000000c + 0xb344) = 0x41200000 /* 10.0f */;
               *(undefined4 *)(param_1 + 4) = 0;
               *(undefined4 *)(param_1 + 8) = 0;
@@ -345,7 +345,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
           else {
             piVar9 = (int *)(**(code **)(*piVar3 + 0x5dc /* CBasePlayer::NoClipStateChanged */))(piVar3);
             if (piVar9 == (int *)0x0) {
-              *(undefined4 *)param_1 = 3;
+              *(undefined4 *)param_1 = 3 /* Done */;
               *(undefined4 *)(param_1 + 4) = 0;
               *(undefined **)(param_1 + 8) = &UNK_0024d6fe + unaff_EBX;
               return param_1;
@@ -357,25 +357,25 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
                 (cVar1 = (**(code **)(*piVar9 + 0x770 /* CBasePlayer::Hints */))(piVar9), cVar1 == '\0')))) {
               piVar9 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
               (**(code **)(*piVar9 + 0x160 /* PlayerBody::ForceLookAtExpire */))(piVar9);
-              *(undefined4 *)param_1 = 3;
+              *(undefined4 *)param_1 = 3 /* Done */;
               *(undefined4 *)(param_1 + 4) = 0;
               *(int *)(param_1 + 8) = unaff_EBX + 0x24c770 /* "Finished throw." */;
               return param_1;
             }
           }
-          *(undefined4 *)param_1 = 0;
+          *(undefined4 *)param_1 = 0 /* Continue */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(undefined4 *)(param_1 + 8) = 0;
         }
       }
       else {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24d6d2 /* "Idle in throw grenade" */;
       }
     }
     else {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24b993 /* "Timeout" */;
     }

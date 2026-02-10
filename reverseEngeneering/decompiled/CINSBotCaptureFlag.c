@@ -116,7 +116,7 @@ CINSBotCaptureFlag::OnStart(CINSBotCaptureFlag *this,CINSNextBot *param_1,Action
   CINSPathFollower::ComputePath
             ((CINSPathFollower *)(in_stack_0000000c + 0x2060),param_2 + 0x3c,pCVar1,param_2 + 0x48b8
              ,1,(float)fVar2,0,0x41f00000 /* 30.0f */);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -172,7 +172,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   __i686_get_pc_thunk_bx();
   iVar5 = CBaseEntity::GetTeamNumber(this_00);
   if (1 < iVar5 - 2U) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26bc62 /* "Bot is not on a playteam" */;
     return param_1;
@@ -182,7 +182,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
                      ((int *)**(undefined4 **)(&DAT_00491f84 + unaff_EBX),iVar5);
   bVar8 = pCVar6 != (CINSBotCaptureFlag *)0x0;
   if ((in_stack_0000000c != pCVar6) && (bVar8)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26be04 /* "Flag carrier that wasn't us? Bailing." */;
     return param_1;
@@ -204,7 +204,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   *(float *)((int)param_2 + 0x48c0) = local_50;
   if (((((fVar10 < local_58) && (fVar1 = *(float *)(unaff_EBX + 0x2106bc /* typeinfo name for ITraceFilter+0x40 */), local_58 < fVar1)) &&
        (fVar10 < local_54)) && ((local_54 < fVar1 && (fVar10 < local_50)))) && (local_50 < fVar1)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_0026bddb + unaff_EBX;
     return param_1;
@@ -289,7 +289,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   *(undefined1 *)((int)param_2 + 0x48c5) = uVar3;
   CINSPathFollower::Update(this_01,(INextBot *)((int)param_2 + 0x3c));
 LAB_00714b53:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -384,7 +384,7 @@ CINSNextBot * CINSBotCaptureFlag::OnMoveToSuccess(CINSNextBot *param_1,Path *par
     (**(code **)(*(int *)(param_2 + 0x48c8) + 8))(param_2 + 0x48c8,param_2 + 0x48cc);
     *(float *)(param_2 + 0x48cc) = (float)fVar1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

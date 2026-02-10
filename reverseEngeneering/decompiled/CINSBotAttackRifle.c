@@ -93,7 +93,7 @@ CINSBotAttackRifle::OnStart(CINSBotAttackRifle *this,CINSNextBot *param_1,Action
   __i686_get_pc_thunk_bx();
   if (in_stack_0000000c == (CINSWeapon *)0x0) {
 LAB_00710fea:
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -157,7 +157,7 @@ LAB_00711019:
     CINSBotBody::SetPosture();
   }
 LAB_00710f07:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -271,7 +271,7 @@ CINSBotAttackRifle::Update(CINSBotAttackRifle *this,CINSNextBot *param_1,float p
     piVar5 = (int *)(**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
     if ((piVar5 == (int *)0x0) ||
        (iVar3 = (**(code **)(*piVar5 + 0x10))(piVar5), pCVar4 = extraout_ECX_00, iVar3 == 0)) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
@@ -385,7 +385,7 @@ LAB_00711298:
     *(undefined4 *)((int)param_2 + 0x48) = 0x3f000000 /* 0.5f */;
   }
 LAB_0071116c:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -531,7 +531,7 @@ undefined4 __cdecl CINSBotAttackRifle::ShouldAttack(INextBot *param_1,CKnownEnti
 void CINSBotAttackRifle::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -550,7 +550,7 @@ void CINSBotAttackRifle::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGa
 void CINSBotAttackRifle::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -588,7 +588,7 @@ void CINSBotAttackRifle::OnMoveToFailure(undefined4 *param_1)
 void CINSBotAttackRifle::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -607,7 +607,7 @@ void CINSBotAttackRifle::OnStuck(CINSNextBot *param_1)
 void CINSBotAttackRifle::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -626,7 +626,7 @@ void CINSBotAttackRifle::OnUnStuck(CINSNextBot *param_1)
 void CINSBotAttackRifle::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -645,7 +645,7 @@ void CINSBotAttackRifle::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2
 void CINSBotAttackRifle::OnKilled(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -665,7 +665,7 @@ void CINSBotAttackRifle::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -684,7 +684,7 @@ void CINSBotAttackRifle::OnOtherKilled
 void CINSBotAttackRifle::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -703,7 +703,7 @@ void CINSBotAttackRifle::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackRifle::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -723,7 +723,7 @@ void CINSBotAttackRifle::OnWeaponFired
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CBaseCombatWeapon *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -742,7 +742,7 @@ void CINSBotAttackRifle::OnWeaponFired
 void CINSBotAttackRifle::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -761,7 +761,7 @@ void CINSBotAttackRifle::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,
 void CINSBotAttackRifle::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -780,7 +780,7 @@ void CINSBotAttackRifle::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *par
 void CINSBotAttackRifle::OnCommandString(CINSNextBot *param_1,char *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -799,7 +799,7 @@ void CINSBotAttackRifle::OnCommandString(CINSNextBot *param_1,char *param_2)
 void CINSBotAttackRifle::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -818,7 +818,7 @@ void CINSBotAttackRifle::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackRifle::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -837,7 +837,7 @@ void CINSBotAttackRifle::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param
 void CINSBotAttackRifle::OnCommandRetreat(CINSNextBot *param_1,CBaseEntity *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -857,7 +857,7 @@ void CINSBotAttackRifle::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -876,7 +876,7 @@ void CINSBotAttackRifle::OnHeardFootsteps
 void CINSBotAttackRifle::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -895,7 +895,7 @@ void CINSBotAttackRifle::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2
 void CINSBotAttackRifle::OnPostureChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -916,7 +916,7 @@ void CINSBotAttackRifle::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

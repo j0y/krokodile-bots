@@ -15,7 +15,7 @@
 void Action<CINSNextBot>::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -48,7 +48,7 @@ undefined4 __cdecl Action<CINSNextBot>::InitialContainedAction(CINSNextBot *para
 void Action<CINSNextBot>::Update(CINSNextBot *param_1,float param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -81,7 +81,7 @@ void __cdecl Action<CINSNextBot>::OnEnd(CINSNextBot *param_1,Action *param_2)
 void Action<CINSNextBot>::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -99,7 +99,7 @@ void Action<CINSNextBot>::OnSuspend(CINSNextBot *param_1,Action *param_2)
 void Action<CINSNextBot>::OnResume(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -117,7 +117,7 @@ void Action<CINSNextBot>::OnResume(CINSNextBot *param_1,Action *param_2)
 void Action<CINSNextBot>::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -346,7 +346,7 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
 void Action<CINSNextBot>::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -793,7 +793,7 @@ Action<CINSNextBot>::OnMoveToFailure
 void Action<CINSNextBot>::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1007,7 +1007,7 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
 void Action<CINSNextBot>::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1220,7 +1220,7 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
 void Action<CINSNextBot>::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1439,7 +1439,7 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
 void Action<CINSNextBot>::OnKilled(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1661,7 +1661,7 @@ void Action<CINSNextBot>::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1892,7 +1892,7 @@ Action<CINSNextBot>::OnOtherKilled
 void Action<CINSNextBot>::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -2112,7 +2112,7 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
 void Action<CINSNextBot>::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -2334,7 +2334,7 @@ void Action<CINSNextBot>::OnSound
                (CINSNextBot *param_1,CBaseEntity *param_2,Vector *param_3,KeyValues *param_4)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -2564,7 +2564,7 @@ void Action<CINSNextBot>::OnWeaponFired
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CBaseCombatWeapon *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -2797,7 +2797,7 @@ void Action<CINSNextBot>::OnPickUp
                (CINSNextBot *param_1,CBaseEntity *param_2,CBaseCombatCharacter *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -3027,7 +3027,7 @@ Action<CINSNextBot>::OnPickUp
 void Action<CINSNextBot>::OnDrop(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -3247,7 +3247,7 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
 void Action<CINSNextBot>::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -3266,7 +3266,7 @@ void Action<CINSNextBot>::OnCommandApproach(CINSNextBot *param_1,Vector *param_2
 void Action<CINSNextBot>::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -3700,7 +3700,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
 void Action<CINSNextBot>::OnCommandString(CINSNextBot *param_1,char *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -4611,7 +4611,7 @@ Action<CINSNextBot>::InvokeOnResume(CINSNextBot *param_1,Behavior *param_2,Actio
     *(undefined4 *)(param_1 + 8) = local_30;
     return param_1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -4866,7 +4866,7 @@ Action<CINSNextBot>::InvokeUpdate(CINSNextBot *param_1,Behavior *param_2,float p
   if (iVar3 == 0) {
 LAB_00752ddc:
     if (param_2[0x30] == (Behavior)0x0) {
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(Behavior **)(param_1 + 4) = param_2;
       *(int *)(param_1 + 8) = unaff_EBX + 0x23013b /* "Starting Action" */;
     }
@@ -4950,7 +4950,7 @@ LAB_00752ddc:
       if (iVar5 == 0) goto LAB_00752ddc;
     } while ((*(int *)(iVar5 + 0x20) != 3) && (*(int *)(iVar5 + 0x20) != 1));
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x23012e /* "Out of scope" */;
   *(undefined4 *)(param_1 + 4) = 0;
   return param_1;
@@ -5027,7 +5027,7 @@ void Action<CINSNextBot>::OnActorEmoted
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,int param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -5257,7 +5257,7 @@ Action<CINSNextBot>::OnActorEmoted
 void Action<CINSNextBot>::OnAnimationActivityComplete(CINSNextBot *param_1,int param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -5477,7 +5477,7 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
 void Action<CINSNextBot>::OnAnimationActivityInterrupted(CINSNextBot *param_1,int param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -5697,7 +5697,7 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
 void Action<CINSNextBot>::OnAnimationEvent(CINSNextBot *param_1,animevent_t *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -5918,7 +5918,7 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
 void Action<CINSNextBot>::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -6138,7 +6138,7 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
 void Action<CINSNextBot>::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -6363,7 +6363,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
 void Action<CINSNextBot>::OnCommandPause(CINSNextBot *param_1,float param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -6582,7 +6582,7 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
 void Action<CINSNextBot>::OnCommandResume(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -6796,7 +6796,7 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
 void Action<CINSNextBot>::OnCommandRetreat(CINSNextBot *param_1,CBaseEntity *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -7028,7 +7028,7 @@ void Action<CINSNextBot>::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -7281,7 +7281,7 @@ LAB_006f9457:
 void Action<CINSNextBot>::OnIgnite(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -7494,7 +7494,7 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
 void Action<CINSNextBot>::OnLandOnGround(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -7715,7 +7715,7 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
 void Action<CINSNextBot>::OnLeaveGround(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -7936,7 +7936,7 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
 void Action<CINSNextBot>::OnLose(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -8150,7 +8150,7 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
 void Action<CINSNextBot>::OnModelChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -8364,7 +8364,7 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
 void Action<CINSNextBot>::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -8593,7 +8593,7 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
 void Action<CINSNextBot>::OnOrderReceived(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -8830,7 +8830,7 @@ LAB_006f8847:
 void Action<CINSNextBot>::OnPostureChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -9045,7 +9045,7 @@ void Action<CINSNextBot>::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -9298,7 +9298,7 @@ LAB_006f8f47:
 void Action<CINSNextBot>::OnShoved(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -9757,7 +9757,7 @@ Action<CINSNextBot>::OnSpokeConcept
 void Action<CINSNextBot>::OnTerritoryCaptured(CINSNextBot *param_1,int param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -9976,7 +9976,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
 void Action<CINSNextBot>::OnTerritoryContested(CINSNextBot *param_1,int param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -10199,7 +10199,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
 void Action<CINSNextBot>::OnTerritoryLost(CINSNextBot *param_1,int param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -10422,7 +10422,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
 void Action<CINSNextBot>::OnWin(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -103,12 +103,12 @@ CINSBotCaptureCP::OnStart(CINSBotCaptureCP *this,CINSNextBot *param_1,Action *pa
     CINSBotLocomotion::AddMovementRequest
               (uVar4,*(undefined4 *)(param_2 + 0x58),*(undefined4 *)(param_2 + 0x5c),
                *(undefined4 *)(param_2 + 0x60),6,3,0x40a00000 /* 5.0f */);
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
   }
   else {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26d7c6 /* "Unable to find hiding spots at this control point" */;
   }
@@ -225,7 +225,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
       if (((((fVar21 < local_74) && (fVar1 = *(float *)(unaff_EBX + 0x211e85 /* typeinfo name for ITraceFilter+0x40 */), local_74 < fVar1)) &&
            (fVar21 < local_70)) && ((local_70 < fVar1 && (fVar21 < local_6c)))) &&
          (local_6c < fVar1)) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x26d4a9 /* "Unable to find hiding spots at this control point" */;
         return param_1;
@@ -243,7 +243,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
       iVar8 = (**(code **)(*piVar11 + 0xd4 /* IIntention::ShouldAttack */))(piVar11,pCVar17,iVar8);
       this = extraout_ECX_00;
       if (iVar8 == 1) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x26d412 /* "Attacking nearby threats" */;
         return param_1;
@@ -251,7 +251,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
     }
     iVar8 = CBaseEntity::GetTeamNumber(this);
     if (1 < iVar8 - 2U) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26d42b /* "Bot is not on a playteam" */;
       return param_1;
@@ -259,7 +259,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
     iVar18 = *(int *)(**(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */) + 0x490 + *(int *)((int)param_2 + 0x54) * 4);
     iVar19 = CBaseEntity::GetTeamNumber((CBaseEntity *)param_2);
     if (iVar19 == iVar18) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26d444 /* "Successfully captured." */;
       return param_1;
@@ -285,7 +285,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
       CINSNextBot::AddInvestigation(in_stack_0000000c,in_stack_0000000c,uVar23,0);
       pCVar13 = (CNavArea *)::operator_new(0x4900);
       CINSBotInvestigate::CINSBotInvestigate(this_03,pCVar13);
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(CNavArea **)(param_1 + 4) = pCVar13;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26d4dd /* "CP Contested, trying to find threat" */;
       return param_1;
@@ -305,7 +305,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
                          *(int *)((int)param_2 + 0x54) * 4), iVar8 == 0 || (iVar8 == 8)))) {
       pvVar14 = ::operator_new(0x4900);
       CINSBotDestroyCache::CINSBotDestroyCache((CINSBotDestroyCache *)param_2,(int)pvVar14);
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(void **)(param_1 + 4) = pvVar14;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26d501 /* "Point type is a Cache, blow it up!" */;
       return param_1;
@@ -572,7 +572,7 @@ LAB_007136f6:
   *(float *)((int)param_2 + 0x60) = local_60;
   if (((((fVar21 < local_68) && (fVar1 = *(float *)(unaff_EBX + 0x211e85 /* typeinfo name for ITraceFilter+0x40 */), local_68 < fVar1)) &&
        (fVar21 < local_64)) && ((local_64 < fVar1 && (fVar21 < local_60)))) && (local_60 < fVar1)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26d525 /* "Unable to find hiding spots at this control point, falling back to investigate" */;
     return param_1;
@@ -583,7 +583,7 @@ LAB_007136f6:
     *(undefined4 *)((int)param_2 + 0x74) = 0xbf800000 /* -1.0f */;
   }
 LAB_007132f0:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -632,7 +632,7 @@ CINSNextBot * CINSBotCaptureCP::OnResume(CINSNextBot *param_1,Action *param_2)
   CINSBotLocomotion::AddMovementRequest
             (uVar2,*(undefined4 *)(param_2 + 0x58),*(undefined4 *)(param_2 + 0x5c),
              *(undefined4 *)(param_2 + 0x60),6,3,0x40a00000 /* 5.0f */);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -745,7 +745,7 @@ CINSBotCaptureCP::OnMoveToSuccess(CINSBotCaptureCP *this,CINSNextBot *param_1,Pa
     }
     *(undefined1 *)(in_stack_0000000c + 0x2290) = 1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -797,7 +797,7 @@ CINSNextBot * CINSBotCaptureCP::OnStuck(CINSNextBot *param_1)
   piVar2[0x18] = 0;
   piVar2[0x19] = 0;
   piVar2[0x1a] = 0;
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(int **)(param_1 + 4) = piVar2;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return param_1;

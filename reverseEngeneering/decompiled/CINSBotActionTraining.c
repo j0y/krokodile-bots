@@ -61,7 +61,7 @@ CINSBotActionTraining::OnStart(CINSBotActionTraining *this,CINSNextBot *param_1,
     }
   }
   *(undefined1 *)(in_stack_0000000c + 0x8a4) = 1;
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -155,7 +155,7 @@ CINSBotActionTraining::Update(CINSBotActionTraining *this,CINSNextBot *param_1,f
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar12;
       *(int *)(param_1 + 8) = unaff_EBX + 0x2432d2 /* "Attacking nearby threats" */;
       return param_1;
@@ -469,7 +469,7 @@ LAB_0073dd60:
   uVar13 = UTIL_GetListenServerHost();
   (*pcVar3)(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
 LAB_0073d622:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -560,7 +560,7 @@ void CINSBotActionTraining::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
   int unaff_EBX;
   
   __i686_get_pc_thunk_bx();
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   puVar1 = *(undefined4 **)(unaff_EBX + 0x4696eb /* &vec3_origin */);
   *(undefined4 *)(param_1 + 8) = 0;
@@ -628,7 +628,7 @@ CINSNextBot * CINSBotActionTraining::OnStuck(CINSNextBot *param_1)
     (**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0xe0))
               (in_stack_0000000c + 0x2060,in_stack_00000008 + 0x48b8);
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

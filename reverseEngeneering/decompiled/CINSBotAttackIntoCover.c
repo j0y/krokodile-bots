@@ -75,7 +75,7 @@ CINSNextBot * CINSBotAttackIntoCover::OnStart(CINSNextBot *param_1,Action *param
   CINSBotLocomotion::AddMovementRequest
             (uVar2,*(undefined4 *)(param_2 + 0x44),*(undefined4 *)(param_2 + 0x48),
              *(undefined4 *)(param_2 + 0x4c),2,7,0x40a00000 /* 5.0f */);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -129,7 +129,7 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
   piVar4 = (int *)(**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
   if (((piVar4 == (int *)0x0) || (iVar5 = (**(code **)(*piVar4 + 0x10))(piVar4), iVar5 == 0)) ||
      (cVar2 = (**(code **)(*piVar4 + 0x54))(piVar4), cVar2 != '\0')) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -138,14 +138,14 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
   pCVar10 = in_stack_0000000c + 0x2060;
   iVar5 = (**(code **)(*piVar6 + 0xd4 /* IIntention::ShouldAttack */))(piVar6,pCVar10,piVar4);
   if (iVar5 == 0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x273b6e /* "Should Not Attack This Threat" */;
     return param_1;
   }
   piVar6 = (int *)(**(code **)(*piVar4 + 0x10))(piVar4);
   if ((piVar6 == (int *)0x0) || (cVar2 = (**(code **)(*piVar6 + 0x158))(piVar6), cVar2 == '\0')) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x273f40 /* "Non INS Player Enemy?" */;
     return param_1;
@@ -191,14 +191,14 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
       (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
       piVar4[0x16] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(int **)(param_1 + 4) = piVar4;
       *(int *)(param_1 + 8) = unaff_EBX + 0x273f56 /* "Made it, now reloading!" */;
       return param_1;
     }
     pvVar7 = ::operator_new(0x68);
     CINSBotAttackFromCover::CINSBotAttackFromCover(this_00);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(void **)(param_1 + 4) = pvVar7;
     *(int *)(param_1 + 8) = unaff_EBX + 0x273f6e /* "Made It!" */;
     return param_1;
@@ -293,7 +293,7 @@ LAB_0070c910:
       fVar11 = (float10)CINSBotLocomotion::GetStillDuration(this_04);
       if (*(float *)(unaff_EBX + 0x21a99f /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) <= (float)fVar11 &&
           (float)fVar11 != *(float *)(unaff_EBX + 0x21a99f /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */)) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x273ff7 /* "Rethink, i've been still here for more than 2 seconds" */;
         return param_1;
@@ -320,7 +320,7 @@ LAB_0070c910:
     *(undefined4 *)((int)param_2 + 0x3c) = 0x3e800000 /* 0.25f */;
   }
 LAB_0070c532:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -550,7 +550,7 @@ void CINSBotAttackIntoCover::OnContact
                (CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -579,13 +579,13 @@ CINSNextBot * CINSBotAttackIntoCover::OnMoveToSuccess(CINSNextBot *param_1,Path 
   fVar4 = (float10)(**(code **)(*(int *)(iVar2 + 0x2060) + 0x134))(iVar2 + 0x2060,param_2 + 0x44);
   if (*(float *)(CUtlRBTree<CUtlMap<char_const*,BasicGameStatsRecord_t,unsigned_short,bool(*)(char_const*const&,char_const*const&)>::Node_t,unsigned_short,CUtlMap<char_const*,BasicGameStatsRecord_t,unsigned_short,bool(*)(char_const*const&,char_const*const&)>::CKeyLess,CUtlMemory<UtlRBTreeNode_t<CUtlMap<char_const*,BasicGameStatsRecord_t,unsigned_short,bool(*)(char_const*const&,char_const*const&)>::Node_t,unsigned_short>,unsigned_short>>
                  ::RemoveAll + unaff_EBX + 7) <= (float)fVar4) {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;
   }
   else if (param_2[0x50] == (Path)0x0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2736be /* "Made It!" */;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -625,7 +625,7 @@ CINSNextBot * CINSBotAttackIntoCover::OnMoveToSuccess(CINSNextBot *param_1,Path 
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
     piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(int **)(param_1 + 4) = piVar3;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2736a6 /* "Made it, now reloading!" */;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -664,7 +664,7 @@ void CINSBotAttackIntoCover::OnMoveToFailure(undefined4 *param_1)
 void CINSBotAttackIntoCover::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -683,7 +683,7 @@ void CINSBotAttackIntoCover::OnStuck(CINSNextBot *param_1)
 void CINSBotAttackIntoCover::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -702,7 +702,7 @@ void CINSBotAttackIntoCover::OnUnStuck(CINSNextBot *param_1)
 void CINSBotAttackIntoCover::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -721,7 +721,7 @@ void CINSBotAttackIntoCover::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *par
 void CINSBotAttackIntoCover::OnKilled(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -742,7 +742,7 @@ void CINSBotAttackIntoCover::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -761,7 +761,7 @@ void CINSBotAttackIntoCover::OnOtherKilled
 void CINSBotAttackIntoCover::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -780,7 +780,7 @@ void CINSBotAttackIntoCover::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackIntoCover::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -800,7 +800,7 @@ void CINSBotAttackIntoCover::OnWeaponFired
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CBaseCombatWeapon *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -819,7 +819,7 @@ void CINSBotAttackIntoCover::OnWeaponFired
 void CINSBotAttackIntoCover::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -838,7 +838,7 @@ void CINSBotAttackIntoCover::OnCommandApproach(CINSNextBot *param_1,Vector *para
 void CINSBotAttackIntoCover::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -857,7 +857,7 @@ void CINSBotAttackIntoCover::OnCommandApproach(CINSNextBot *param_1,CBaseEntity 
 void CINSBotAttackIntoCover::OnCommandString(CINSNextBot *param_1,char *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -909,7 +909,7 @@ undefined4 __cdecl CINSBotAttackIntoCover::IsHindrance(INextBot *param_1,CBaseEn
 void CINSBotAttackIntoCover::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -928,7 +928,7 @@ void CINSBotAttackIntoCover::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2
 void CINSBotAttackIntoCover::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -948,7 +948,7 @@ void CINSBotAttackIntoCover::OnCommandRetreat
                (CINSNextBot *param_1,CBaseEntity *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -968,7 +968,7 @@ void CINSBotAttackIntoCover::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -988,7 +988,7 @@ void CINSBotAttackIntoCover::OnNavAreaChanged
                (CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1007,7 +1007,7 @@ void CINSBotAttackIntoCover::OnNavAreaChanged
 void CINSBotAttackIntoCover::OnPostureChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1028,7 +1028,7 @@ void CINSBotAttackIntoCover::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

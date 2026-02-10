@@ -106,7 +106,7 @@ CINSBotInvestigateGunshot::OnStart
   CINSPathFollower::ComputePath
             ((CINSPathFollower *)(in_stack_0000000c + 0x2060),param_2 + 0x44,pCVar1,param_2 + 0x38,2
              ,(float)fVar2,0,0x41f00000 /* 30.0f */);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -158,14 +158,14 @@ CINSBotInvestigateGunshot::Update
     if (((*(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0xc)) ||
         (*(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0x10))) ||
        (*(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0x14))) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25c4d1 /* "Leaving investigation, we changed targets." */;
       return param_1;
     }
     fVar9 = (float10)CountdownTimer::Now();
     if (*(float *)(iVar6 + 8) <= (float)fVar9 && (float)fVar9 != *(float *)(iVar6 + 8)) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25c4fd /* "Leaving investigation, time elapsed." */;
       return param_1;
@@ -197,7 +197,7 @@ CINSBotInvestigateGunshot::Update
             CUtlVector<InvestigationData_t,CUtlMemory<InvestigationData_t,int>>::Remove
                       ((int)(in_stack_0000000c + 0x2d17));
           }
-          *(undefined4 *)param_1 = 3;
+          *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(int *)(param_1 + 8) = unaff_EBX + 0x25c47d /* "Gave up investigating, took too long." */;
           return param_1;
@@ -287,19 +287,19 @@ CINSBotInvestigateGunshot::Update
       }
       *(float *)(extraout_EDX + 0x48e4 /* CollectIdealPatrolAreas::operator */) = fVar10;
       uVar3 = (**(code **)(*in_stack_0000000c + 0x444 /* CINSPlayer::IsLineOfSightClear */))(in_stack_0000000c,local_2c,1,0);
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       *(undefined1 *)(extraout_EDX + 0x48e8 /* CollectIdealPatrolAreas::operator */) = uVar3;
     }
     else {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25c45d /* "Goal position no longer valid?" */;
     }
   }
   else {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25c525 /* "Not investigating, we have a threat.
 " */;
@@ -334,7 +334,7 @@ void __cdecl CINSBotInvestigateGunshot::OnEnd(CINSNextBot *param_1,Action *param
 void CINSBotInvestigateGunshot::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -352,7 +352,7 @@ void CINSBotInvestigateGunshot::OnSuspend(CINSNextBot *param_1,Action *param_2)
 void CINSBotInvestigateGunshot::OnResume(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -427,7 +427,7 @@ void CINSBotInvestigateGunshot::OnContact
                (CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -453,7 +453,7 @@ CINSNextBot * CINSBotInvestigateGunshot::OnMoveToSuccess(CINSNextBot *param_1,Pa
   if (0 < *(int *)(iVar1 + 0xb468)) {
     CUtlVector<InvestigationData_t,CUtlMemory<InvestigationData_t,int>>::Remove(iVar1 + 0xb45c);
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x25c45f /* "Arrived at investigation target." */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 0xc) = 3;
@@ -498,7 +498,7 @@ undefined4 * CINSBotInvestigateGunshot::OnMoveToFailure(undefined4 *param_1)
 void CINSBotInvestigateGunshot::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -517,7 +517,7 @@ void CINSBotInvestigateGunshot::OnStuck(CINSNextBot *param_1)
 void CINSBotInvestigateGunshot::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -537,7 +537,7 @@ void CINSBotInvestigateGunshot::OnNavAreaChanged
                (CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

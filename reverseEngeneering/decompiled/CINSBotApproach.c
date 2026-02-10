@@ -91,7 +91,7 @@ void __thiscall CINSBotApproach::OnStart(CINSBotApproach *this,CINSNextBot *para
             (uVar3,*(undefined4 *)(param_2 + 0x44),*(undefined4 *)(param_2 + 0x48),
              *(undefined4 *)(param_2 + 0x4c),6,8,0x40a00000 /* 5.0f */);
   CINSNextBot::ResetIdleStatus(this_02);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -151,7 +151,7 @@ CINSBotApproach::Update(CINSBotApproach *this,CINSNextBot *param_1,float param_2
       iVar3 = (**(code **)(*piVar2 + 0xd4 /* IIntention::ShouldAttack */))(piVar2,in_stack_0000000c + 0x818,iVar3);
       this_00 = extraout_ECX_00;
       if (iVar3 == 1) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x2889f0 /* "Found a threat!" */;
         return param_1;
@@ -183,7 +183,7 @@ CINSBotApproach::Update(CINSBotApproach *this,CINSNextBot *param_1,float param_2
       CINSWeapon::ToggleFlashlight(this_05);
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -216,7 +216,7 @@ void __cdecl CINSBotApproach::OnEnd(CINSNextBot *param_1,Action *param_2)
 void CINSBotApproach::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -242,7 +242,7 @@ CINSNextBot * CINSBotApproach::OnResume(CINSNextBot *param_1,Action *param_2)
   CINSBotLocomotion::AddMovementRequest
             (uVar2,*(undefined4 *)(param_2 + 0x44),*(undefined4 *)(param_2 + 0x48),
              *(undefined4 *)(param_2 + 0x4c),6,8,0x40a00000 /* 5.0f */);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -328,7 +328,7 @@ char __thiscall CINSBotApproach::ShouldHurry(CINSBotApproach *this,INextBot *par
 void CINSBotApproach::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -347,7 +347,7 @@ void CINSBotApproach::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameT
 void CINSBotApproach::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -421,7 +421,7 @@ CINSNextBot * CINSBotApproach::OnStuck(CINSNextBot *param_1)
   piVar2[0x18] = 0;
   piVar2[0x19] = 0;
   piVar2[0x1a] = 0;
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(int **)(param_1 + 4) = piVar2;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return param_1;
@@ -439,7 +439,7 @@ CINSNextBot * CINSBotApproach::OnStuck(CINSNextBot *param_1)
 void CINSBotApproach::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -459,7 +459,7 @@ void CINSBotApproach::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -478,7 +478,7 @@ void CINSBotApproach::OnOtherKilled
 void CINSBotApproach::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -497,7 +497,7 @@ void CINSBotApproach::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotApproach::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -519,7 +519,7 @@ void CINSBotApproach::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = extraout_ECX + 0x288f2f /* "Received the order to attack" */;
   *(undefined4 *)(param_1 + 0xc) = 2;
@@ -539,7 +539,7 @@ void CINSBotApproach::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -604,7 +604,7 @@ CINSBotApproach::OnNavAreaChanged
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -624,7 +624,7 @@ void CINSBotApproach::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

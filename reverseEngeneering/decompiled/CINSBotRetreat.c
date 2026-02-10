@@ -297,7 +297,7 @@ CINSBotRetreat::OnStart(CINSBotRetreat *this,CINSNextBot *param_1,Action *param_
         *(undefined4 *)(param_2 + 0x48e8) = 0x3f000000 /* 0.5f */;
       }
       param_2[0x48f0] = (Action)0x1;
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
@@ -382,7 +382,7 @@ CINSBotRetreat::OnStart(CINSBotRetreat *this,CINSNextBot *param_1,Action *param_
       (**(code **)(*in_stack_0000000c + 0x800 /* CINSPlayer::SpeakConceptIfAllowed */))(in_stack_0000000c,0x68,0,0,0,0);
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -424,7 +424,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
      (fVar5 = (float10)CountdownTimer::Now(), this_00 = extraout_ECX_00,
      *(float *)((int)param_2 + 0x48ec) <= (float)fVar5 &&
      (float)fVar5 != *(float *)((int)param_2 + 0x48ec))) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_002560fc + unaff_EBX;
     return param_1;
@@ -434,7 +434,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
      (fVar5 = (float10)CINSNextBot::GetIdleDuration(this_01),
      *(float *)(unaff_EBX + 0x1f8fd8 /* typeinfo name for CBaseGameSystem+0x32 */) <= (float)fVar5 &&
      (float)fVar5 != *(float *)(unaff_EBX + 0x1f8fd8 /* typeinfo name for CBaseGameSystem+0x32 */))) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25611a /* "Idle in retreat" */;
     return param_1;
@@ -444,7 +444,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
      *(float *)((int)param_2 + 0x48e0) <= (float)fVar5 &&
      (float)fVar5 != *(float *)((int)param_2 + 0x48e0))) {
     if (*(char *)((int)param_2 + 0x48d0) == '\0') {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25612a /* "Retreat timer elapsed." */;
       return param_1;
@@ -483,7 +483,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
     piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(int **)(param_1 + 4) = piVar3;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2562b4 /* "Retreat timer elapsed, changing to reload" */;
     return param_1;
@@ -501,7 +501,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
         *(undefined1 *)((int)param_2 + 0x48f0) = 1;
         RandomFloat(0x3ecccccd /* 0.4f */,0x3f19999a /* 0.6f */);
         CountdownTimer::Start(this_03,(float)((int)param_2 + 0x48e4));
-        *(undefined4 *)param_1 = 0;
+        *(undefined4 *)param_1 = 0 /* Continue */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined4 *)(param_1 + 8) = 0;
         return param_1;
@@ -532,7 +532,7 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
       *(float *)((int)param_2 + 0x48c8) = local_20;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -653,7 +653,7 @@ CINSNextBot * CINSBotRetreat::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2
   
   iVar2 = __i686_get_pc_thunk_bx();
   if (*(char *)(iVar2 + 0x48d0) == '\0') {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -693,7 +693,7 @@ CINSNextBot * CINSBotRetreat::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
     piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(int **)(param_1 + 4) = piVar3;
     *(int *)(param_1 + 8) = unaff_EBX + 0x256757 /* "Doing reload after OnMoveToFailure" */;
     *(undefined4 *)(param_1 + 0xc) = 2;
@@ -788,7 +788,7 @@ CINSNextBot * CINSBotRetreat::OnStuck(CINSNextBot *param_1)
   
   iVar3 = __i686_get_pc_thunk_bx();
   if (*(char *)(iVar3 + 0x48d0) == '\0') {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -828,7 +828,7 @@ CINSNextBot * CINSBotRetreat::OnStuck(CINSNextBot *param_1)
     (*pcVar2)(piVar4 + 0x14,piVar4 + 0x15);
     piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(int **)(param_1 + 4) = piVar4;
     *(int *)(param_1 + 8) = unaff_EBX + 0x256587 /* "Doing reload after OnMoveToFailure" */;
     *(undefined4 *)(param_1 + 0xc) = 2;

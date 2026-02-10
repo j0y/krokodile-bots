@@ -151,7 +151,7 @@ void __thiscall CINSBotCombat::OnStart(CINSBotCombat *this,CINSNextBot *param_1,
     *(undefined4 *)(param_2 + 0x50) = 0x40a00000 /* 5.0f */;
   }
   CINSNextBot::ResetIdleStatus(this_02);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -329,7 +329,7 @@ LAB_007165c2:
   cVar6 = CINSNextBot::IsEscorting(pCVar22);
   if ((*(int *)((int)param_2 + 0x38) == -1) &&
      (UpdateInternalInfo((CINSBotCombat *)param_2), *(int *)((int)param_2 + 0x38) == -1)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26a475 /* "Combat no longer has a target 
 " */;
@@ -337,14 +337,14 @@ LAB_007165c2:
   }
   fVar15 = *(float *)(**(int **)(unaff_EBX + 0x490345 /* &gpGlobals */) + 0xc);
   if (*(float *)((int)param_2 + 0x40) <= fVar15 && fVar15 != *(float *)((int)param_2 + 0x40)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26a317 /* "Combat has timed out" */;
     return param_1;
   }
   piVar9 = (int *)UTIL_EntityByIndex(*(int *)((int)param_2 + 0x38));
   if ((piVar9 == (int *)0x0) || (cVar7 = (**(code **)(*piVar9 + 0x118))(), cVar7 == '\0')) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26a495 /* "Ending Combat in Update, Unable to retrieve primary target" */;
     return param_1;
@@ -353,7 +353,7 @@ LAB_007165c2:
   if (cVar7 == '\0') {
     pvVar14 = ::operator_new(0x48f8);
     CINSBotRetreat::CINSBotRetreat((CINSBotRetreat *)param_2,(int)pvVar14);
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(void **)(param_1 + 4) = pvVar14;
     *(undefined4 *)((int)param_2 + 0x20) = 0;
     *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -365,7 +365,7 @@ LAB_007165c2:
   piVar10 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))();
   piVar10 = (int *)(**(code **)(*piVar10 + 0xe4 /* IVision::GetKnown */))();
   if (piVar10 == (int *)0x0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x26a4f5 /* "Ending Combat in Update , Target ent is not a Known Entity" */;
     return param_1;
@@ -375,7 +375,7 @@ LAB_007165c2:
   piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))();
   iVar12 = (**(code **)(*piVar11 + 0xd4 /* IIntention::ShouldAttack */))();
   if (iVar12 == 0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x269a24 /* "Should Not Attack This Threat" */;
     return param_1;
@@ -384,7 +384,7 @@ LAB_007165c2:
   if (piVar11 == (int *)0x0) {
     CINSNextBot::ChooseBestWeapon(this_05,(CKnownEntity *)in_stack_0000000c);
 LAB_007166b8:
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -402,7 +402,7 @@ LAB_007166b8:
     if (bVar5) {
       pvVar14 = ::operator_new(100);
       CINSBotRetreatToCover::CINSBotRetreatToCover(this_06,SUB41(pvVar14,0),0.0);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar14;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -413,7 +413,7 @@ LAB_007166b8:
     }
     pvVar14 = ::operator_new(0x48f8);
     CINSBotRetreat::CINSBotRetreat(this_08,SUB41(pvVar14,0),0.0);
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(void **)(param_1 + 4) = pvVar14;
     *(undefined4 *)((int)param_2 + 0x20) = 0;
     *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -435,7 +435,7 @@ LAB_00716d63:
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar14;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26a5f1 /* "Attacking a visible/HasLOS threat" */;
       return param_1;
@@ -451,7 +451,7 @@ LAB_00716d63:
       if (iVar8 != 1) {
         pvVar14 = ::operator_new(0x5c);
         CINSBotPursue::CINSBotPursue(this_16);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(void **)(param_1 + 4) = pvVar14;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
         *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -463,7 +463,7 @@ LAB_00716d63:
       pvVar14 = ::operator_new(0x48f8);
       CINSBotRetreat::CINSBotRetreat(this_24,SUB41(pvVar14,0),0.0);
 LAB_0071721a:
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar14;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -488,7 +488,7 @@ LAB_0071721a:
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar14;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26a65d /* "Suppressing a recently lost threat" */;
       return param_1;
@@ -510,7 +510,7 @@ LAB_0071721a:
       if ((cVar6 == '\0') && (iVar8 == 1)) {
         pvVar14 = ::operator_new(0x5c);
         CINSBotPursue::CINSBotPursue(this_26);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(void **)(param_1 + 4) = pvVar14;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
         *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -578,7 +578,7 @@ LAB_00716e5d:
         if (cVar7 != '\0') {
           pvVar14 = ::operator_new(0x5c);
           CINSBotReload::CINSBotReload(this_27);
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(void **)(param_1 + 4) = pvVar14;
           *(undefined4 *)((int)param_2 + 0x20) = 0;
           *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -590,7 +590,7 @@ LAB_00716e5d:
         if (cVar6 != '\0') {
           pvVar14 = ::operator_new(0x5c);
           CINSBotReload::CINSBotReload(this_21);
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(void **)(param_1 + 4) = pvVar14;
           *(undefined4 *)((int)param_2 + 0x20) = 0;
           *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -645,13 +645,13 @@ LAB_00716e5d:
     }
     UpdateInternalInfo((CINSBotCombat *)param_2);
     if (*(int *)((int)param_2 + 0x38) == -1) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26a3a6 /* "Bailing on Combat, no target" */;
     }
     else {
       CINSNextBot::GetIdleDuration(in_stack_0000000c);
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
     }
@@ -672,7 +672,7 @@ LAB_00716e5d:
         *(undefined4 *)((int)param_2 + 0x24) = 0;
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(void **)(param_1 + 4) = pvVar14;
         *(int *)(param_1 + 8) = unaff_EBX + 0x26a555 /* "Pistol Swap with primary empty for close target who is firing." */;
         return param_1;
@@ -682,7 +682,7 @@ LAB_00716e5d:
     if (cVar6 != '\0') {
       pvVar14 = ::operator_new(0x5c);
       CINSBotReload::CINSBotReload(this_13);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar14;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -694,7 +694,7 @@ LAB_00716e5d:
     if (bVar5) {
       pvVar14 = ::operator_new(100);
       CINSBotRetreatToCover::CINSBotRetreatToCover(this_07,SUB41(pvVar14,0),1.4013e-45);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar14;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -706,7 +706,7 @@ LAB_00716e5d:
     pvVar14 = ::operator_new(0x48f8);
     CINSBotRetreat::CINSBotRetreat(this_12,SUB41(pvVar14,0),1.4013e-45);
 LAB_00716eb8:
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(void **)(param_1 + 4) = pvVar14;
     *(undefined4 *)((int)param_2 + 0x20) = 0;
     *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -789,7 +789,7 @@ CINSBotCombat::OnResume(CINSBotCombat *this,CINSNextBot *param_1,Action *param_2
   __i686_get_pc_thunk_bx();
   if (*(int *)(extraout_EDX + 0x38 /* CINSBotCombat::OnResume */) == -1) {
     UpdateInternalInfo(this_00);
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
   }
@@ -800,7 +800,7 @@ CINSBotCombat::OnResume(CINSBotCombat *this,CINSNextBot *param_1,Action *param_2
        (cVar1 = (**(code **)(*piVar2 + 0x118))(piVar2), this_01 = extraout_ECX_00, cVar1 == '\0')) {
       *(undefined4 *)(param_2 + 0x38) = 0xffffffff;
       UpdateInternalInfo(this_01);
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26a4ad /* "Our threat is gone" */;
     }
@@ -808,7 +808,7 @@ CINSBotCombat::OnResume(CINSBotCombat *this,CINSNextBot *param_1,Action *param_2
       piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
       piVar2 = (int *)(**(code **)(*piVar3 + 0xe4 /* IVision::GetKnown */))(piVar3,piVar2);
       if (piVar2 == (int *)0x0) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x26a64b /* "Primary target is no longer known" */;
       }
@@ -816,7 +816,7 @@ CINSBotCombat::OnResume(CINSBotCombat *this,CINSNextBot *param_1,Action *param_2
         piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
         iVar4 = (**(code **)(*piVar3 + 0xd4 /* IIntention::ShouldAttack */))(piVar3,in_stack_0000000c + 0x818,piVar2);
         if (iVar4 == 0) {
-          *(undefined4 *)param_1 = 3;
+          *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(int *)(param_1 + 8) = unaff_EBX + 0x269c1e /* "Should Not Attack This Threat" */;
         }
@@ -838,7 +838,7 @@ CINSBotCombat::OnResume(CINSBotCombat *this,CINSNextBot *param_1,Action *param_2
             }
           }
           CINSNextBot::ResetIdleStatus(this_02);
-          *(undefined4 *)param_1 = 0;
+          *(undefined4 *)param_1 = 0 /* Continue */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(undefined4 *)(param_1 + 8) = 0;
         }
@@ -942,7 +942,7 @@ CINSNextBot * CINSBotCombat::OnStuck(CINSNextBot *param_1)
   piVar2[0x18] = 0;
   piVar2[0x19] = 0;
   piVar2[0x1a] = 0;
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(int **)(param_1 + 4) = piVar2;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return param_1;
@@ -976,7 +976,7 @@ CINSNextBot * CINSBotCombat::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
     param_2[0x4c] = (CBaseEntity)0x1;
   }
   UpdateInternalInfo(this);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1021,7 +1021,7 @@ CINSNextBot * CINSBotCombat::OnLostSight(CINSNextBot *param_1,CBaseEntity *param
       iVar2 = (int)this_01 >> 4;
     }
     if (iVar3 == iVar2) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x26a87e /* "Lost sight of my Escort Target" */;
       *(undefined4 *)(param_1 + 0xc) = 2;
@@ -1037,7 +1037,7 @@ CINSNextBot * CINSBotCombat::OnLostSight(CINSNextBot *param_1,CBaseEntity *param
     param_2[0x4c] = (CBaseEntity)0x0;
   }
   UpdateInternalInfo(this_01);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -49,7 +49,7 @@ void __thiscall CINSBotActionFlashpoint::CINSBotActionFlashpoint(CINSBotActionFl
 void CINSBotActionFlashpoint::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -104,7 +104,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
     if (iVar3 == 1) {
       pvVar5 = ::operator_new(0x88);
       CINSBotCombat::CINSBotCombat(this_05);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar5;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -121,7 +121,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       CINSNextBot::GetCurrentInvestigationArea(this_03);
       pCVar4 = (CNavArea *)::operator_new(0x4900);
       CINSBotInvestigate::CINSBotInvestigate(this_04,pCVar4);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(CNavArea **)(param_1 + 4) = pCVar4;
       *(int *)(param_1 + 8) = unaff_EBX + 0x249a43 /* "I have an investigation!" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -149,7 +149,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
           CFmtStrN<256,false>::CFmtStrN(this_00,local_234,unaff_EBX + 0x249c41 /* "Destroying %i" */,this_00);
           pvVar5 = ::operator_new(0x4900);
           CINSBotDestroyCache::CINSBotDestroyCache((CINSBotDestroyCache *)this_00,(int)pvVar5);
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(void **)(param_1 + 4) = pvVar5;
           *(undefined1 **)(param_1 + 8) = local_22f;
           *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -164,7 +164,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       CFmtStrN<256,false>::CFmtStrN(this_00,local_128,unaff_EBX + 0x249c4f /* "Capturing %i" */,this_00);
       pvVar5 = ::operator_new(0x88);
       CINSBotCaptureCP::CINSBotCaptureCP((CINSBotCaptureCP *)this_00,(int)pvVar5,SUB41(this_00,0));
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar5;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -174,7 +174,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       return param_1;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

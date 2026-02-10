@@ -15,7 +15,7 @@
 void CINSBotMainAction::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -154,7 +154,7 @@ CINSBotMainAction::Update(CINSBotMainAction *this,CINSNextBot *param_1,float par
       *piVar4 = iVar5 + 8;
       piVar4[0xe] = iVar2 + 8;
       (**(code **)(iVar2 + 0x10))(piVar4 + 0xe,piVar4 + 0xf);
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(int **)(param_1 + 4) = piVar4;
       *(int *)(param_1 + 8) = unaff_EBX + 0x1d578b /* "Dead" */;
       return param_1;
@@ -182,7 +182,7 @@ CINSBotMainAction::Update(CINSBotMainAction *this,CINSNextBot *param_1,float par
       *piVar4 = iVar5 + 8;
       piVar4[0xd] = 0;
       *(int **)(param_1 + 4) = piVar4;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -208,7 +208,7 @@ CINSBotMainAction::Update(CINSBotMainAction *this,CINSNextBot *param_1,float par
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -259,7 +259,7 @@ CINSBotMainAction::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrac
     (**(code **)(*(int *)param_3 + 0x8d8 /* NextBotPlayer::PressUseButton */))(param_3,0x3dcccccd /* 0.1f */);
   }
 LAB_00754092:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -353,7 +353,7 @@ LAB_00753e73:
   UTIL_LogPrintf((char *)(unaff_EBX + 0x22f77d /* "   path_goal ( \"NULL\" )
 " */),uVar12,uVar13,dVar11,local_3c,local_34,dVar10);
 LAB_00753fb6:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -372,7 +372,7 @@ LAB_00753fb6:
 void CINSBotMainAction::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -406,7 +406,7 @@ CINSNextBot * CINSBotMainAction::OnInjured(CINSNextBot *param_1,CTakeDamageInfo 
     piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSNextBot::GetVisionInterface */))(extraout_EDX);
     (**(code **)(*piVar3 + 0xe8 /* IVision::AddKnownEntity */))(piVar3,iVar1);
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -20,7 +20,7 @@ CINSBotActionCheckpoint::OnStart(CINSBotActionCheckpoint *this,CINSNextBot *para
   int in_stack_0000000c;
   
   AVar1 = *(Action *)(in_stack_0000000c + 0x228f);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   param_2[0x38] = AVar1;
@@ -95,7 +95,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
     if (iVar4 == 1) {
       pvVar6 = ::operator_new(0x88);
       CINSBotCombat::CINSBotCombat(this_04);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -110,7 +110,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
   if (iVar4 != iVar5) {
     pvVar6 = ::operator_new(0x9c);
     CINSBotEscort::CINSBotEscort(this_03);
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(void **)(param_1 + 4) = pvVar6;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24b74b /* "Escorting nearest Human" */;
     *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -126,7 +126,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       CINSNextBot::GetCurrentInvestigationArea(this_06);
       pCVar8 = (CNavArea *)::operator_new(0x4900);
       CINSBotInvestigate::CINSBotInvestigate(this_10,pCVar8);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(CNavArea **)(param_1 + 4) = pCVar8;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24b6f3 /* "I have an investigation!" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -152,7 +152,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3,uVar7,uVar14);
         pCVar8 = (CNavArea *)::operator_new(0x4900);
         CINSBotInvestigate::CINSBotInvestigate(this_09,pCVar8);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(CNavArea **)(param_1 + 4) = pCVar8;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24b722 /* "Knifing a player" */;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -212,7 +212,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
           (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3,uVar7,uVar14);
           pCVar8 = (CNavArea *)::operator_new(0x4900);
           CINSBotInvestigate::CINSBotInvestigate(this_14,pCVar8);
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(CNavArea **)(param_1 + 4) = pCVar8;
           *(int *)(param_1 + 8) = unaff_EBX + 0x24b765 /* "Counter-attacking enemy directly" */;
           *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -224,7 +224,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       }
       pvVar6 = ::operator_new(0x88);
       CINSBotCaptureCP::CINSBotCaptureCP(this_16,(int)pvVar6,SUB41(fVar10,0));
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24b789 /* "It's a counter-attack and we're not hunting, re-cap" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -244,7 +244,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         CINSNextBot::AddInvestigation(pCVar9,in_stack_0000000c,iVar4,0);
         pCVar8 = (CNavArea *)::operator_new(0x4900);
         CINSBotInvestigate::CINSBotInvestigate(this_11,pCVar8);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(CNavArea **)(param_1 + 4) = pCVar8;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
         *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -257,7 +257,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
     if ((*(byte *)(in_stack_0000000c + 0x8a5) & 4) != 0) {
       pvVar6 = ::operator_new(0x48f4);
       CINSBotGuardDefensive::CINSBotGuardDefensive(this_12,(int)pvVar6);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24b733 /* "Defending." */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -273,7 +273,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       RandomFloat(0x40a00000 /* 5.0f */,0x41700000 /* 15.0f */,uVar7);
       pvVar6 = ::operator_new(0x48fc);
       CINSBotGuardCP::CINSBotGuardCP(this_15,(int)pvVar6,fVar10);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24b73e /* "Guarding CP." */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -283,7 +283,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       return param_1;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

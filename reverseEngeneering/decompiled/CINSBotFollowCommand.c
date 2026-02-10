@@ -60,12 +60,12 @@ void CINSBotFollowCommand::OnStart(CINSNextBot *param_1,Action *param_2)
   __i686_get_pc_thunk_cx();
   if (*(int *)(param_2 + 0x38) != -1) {
     param_2[0x3c] = (Action)0x0;
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = extraout_ECX + 0x261067 /* "No radial command!" */;
   return;
@@ -85,7 +85,7 @@ CINSNextBot * CINSBotFollowCommand::Update(CINSNextBot *param_1,float param_2)
 {
   __i686_get_pc_thunk_bx();
   CountdownTimer::Now();
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -118,7 +118,7 @@ void __cdecl CINSBotFollowCommand::OnEnd(CINSNextBot *param_1,Action *param_2)
 void CINSBotFollowCommand::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -136,7 +136,7 @@ void CINSBotFollowCommand::OnSuspend(CINSNextBot *param_1,Action *param_2)
 void CINSBotFollowCommand::OnResume(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   param_2[0x3c] = (Action)0x0;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;

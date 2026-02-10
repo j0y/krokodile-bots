@@ -308,7 +308,7 @@ CINSBotInvestigate::OnStart(CINSBotInvestigate *this,CINSNextBot *param_1,Action
   __i686_get_pc_thunk_bx();
   iVar3 = CINSNextBot::GetCurrentInvestigation(this_00);
   if (iVar3 == 0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25de7c /* "Invalid investigation?" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
@@ -317,7 +317,7 @@ CINSBotInvestigate::OnStart(CINSBotInvestigate *this,CINSNextBot *param_1,Action
     iVar5 = CNavMesh::GetNearestNavArea();
     *(int *)(param_2 + 0x38) = iVar5;
     if (iVar5 == 0) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25de93 /* "No Place to investigate " */;
       *(undefined4 *)(param_1 + 4) = 0;
       return param_1;
@@ -363,7 +363,7 @@ LAB_007235e5:
     (**(code **)(*(int *)(param_2 + 0x48b8) + 4))(param_2 + 0x48b8,param_2 + 0x48bc);
     *(undefined4 *)(param_2 + 0x48bc) = 0x40a00000 /* 5.0f */;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -408,14 +408,14 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
   
   __i686_get_pc_thunk_bx();
   if (*(CINSNextBot **)((int)param_2 + 0x38) == (CINSNextBot *)0x0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25da83 /* "Invalid investigation area?" */;
   }
   else {
     cVar2 = CINSNextBot::HasInvestigations(*(CINSNextBot **)((int)param_2 + 0x38));
     if (cVar2 == '\0') {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25db18 /* "No move investigations to worry about" */;
     }
@@ -449,7 +449,7 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
           piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
           iVar7 = (**(code **)(*piVar6 + 0xd4 /* IIntention::ShouldAttack */))(piVar6,in_stack_0000000c + 0x2060,iVar7);
           if (iVar7 == 1) {
-            *(undefined4 *)param_1 = 3;
+            *(undefined4 *)param_1 = 3 /* Done */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(undefined **)(param_1 + 8) = &UNK_0025c0e7 + unaff_EBX;
             return param_1;
@@ -474,7 +474,7 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
             fVar12 = *(float *)((int)param_2 + 0x48e4) - fVar1;
             if (SQRT(fVar10 * fVar10 + fVar13 * fVar13 + fVar12 * fVar12) <
                 *(float *)(unaff_EBX + 0x200114 /* typeinfo name for ISaveRestoreOps+0x63 */)) {
-              *(undefined4 *)param_1 = 3;
+              *(undefined4 *)param_1 = 3 /* Done */;
               *(undefined4 *)(param_1 + 4) = 0;
               *(int *)(param_1 + 8) = unaff_EBX + 0x25db60 /* "Gave up investigating, took too long." */;
               return param_1;
@@ -539,24 +539,24 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
              (fVar9 = (float10)CountdownTimer::Now(),
              (float)fVar9 < *(float *)((int)param_2 + 0x48f0) ||
              (float)fVar9 == *(float *)((int)param_2 + 0x48f0))) {
-            *(undefined4 *)param_1 = 0;
+            *(undefined4 *)param_1 = 0 /* Continue */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(undefined4 *)(param_1 + 8) = 0;
           }
           else {
-            *(undefined4 *)param_1 = 3;
+            *(undefined4 *)param_1 = 3 /* Done */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(int *)(param_1 + 8) = unaff_EBX + 0x25dab3 /* "Bot can't do anything" */;
           }
         }
         else {
-          *(undefined4 *)param_1 = 3;
+          *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(int *)(param_1 + 8) = unaff_EBX + 0x25db40 /* "Goal position no longer valid?" */;
         }
       }
       else {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x25da9f /* "Idle in Investigate" */;
       }
@@ -615,7 +615,7 @@ CINSNextBot * CINSBotInvestigate::OnSuspend(CINSNextBot *param_1,Action *param_2
   
   bVar1 = (bool)__i686_get_pc_thunk_bx();
   CINSNextBot::SetInvestigating(this,bVar1);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -675,12 +675,12 @@ CINSBotInvestigate::OnResume(CINSBotInvestigate *this,CINSNextBot *param_1,Actio
       this_03 = extraout_ECX_01;
     }
     CINSNextBot::ResetIdleStatus(this_03);
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x25dbe3 /* "Invalid investigation area?" */;
   return param_1;
@@ -768,7 +768,7 @@ uint __cdecl CINSBotInvestigate::ShouldHurry(INextBot *param_1)
 void CINSBotInvestigate::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -790,7 +790,7 @@ void CINSBotInvestigate::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = extraout_ECX + 0x25e3ab /* "Arrived at investigation target." */;
   *(undefined4 *)(param_1 + 0xc) = 3;
@@ -864,7 +864,7 @@ CINSNextBot * CINSBotInvestigate::OnStuck(CINSNextBot *param_1)
   piVar2[0x18] = 0;
   piVar2[0x19] = 0;
   piVar2[0x1a] = 0;
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(int **)(param_1 + 4) = piVar2;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return param_1;
@@ -882,7 +882,7 @@ CINSNextBot * CINSBotInvestigate::OnStuck(CINSNextBot *param_1)
 void CINSBotInvestigate::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -902,7 +902,7 @@ void CINSBotInvestigate::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -921,7 +921,7 @@ void CINSBotInvestigate::OnHeardFootsteps
 void CINSBotInvestigate::OnNavAreaChanged(CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -942,7 +942,7 @@ void CINSBotInvestigate::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

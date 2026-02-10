@@ -82,7 +82,7 @@ CINSBotAttackInPlace::OnStart(CINSBotAttackInPlace *this,CINSNextBot *param_1,Ac
   
   __i686_get_pc_thunk_bx();
   if (**(int **)(unaff_EBX + 0x49bc9a /* &g_pGameRules */) == 0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_0027521e + unaff_EBX;
   }
@@ -94,7 +94,7 @@ CINSBotAttackInPlace::OnStart(CINSBotAttackInPlace *this,CINSNextBot *param_1,Ac
       piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
       iVar5 = (**(code **)(*piVar6 + 0xd4 /* IIntention::ShouldAttack */))(piVar6,in_stack_0000000c + 0x2060,piVar4);
       if (iVar5 == 0) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x275321 /* "Should Not Attack This Threat" */;
         return param_1;
@@ -134,18 +134,18 @@ CINSBotAttackInPlace::OnStart(CINSBotAttackInPlace *this,CINSNextBot *param_1,Ac
         }
         (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
         CINSBotLocomotion::ClearMovementRequests();
-        *(undefined4 *)param_1 = 0;
+        *(undefined4 *)param_1 = 0 /* Continue */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined4 *)(param_1 + 8) = 0;
         return param_1;
       }
       CINSNextBot::ChooseBestWeapon(this_00,in_stack_0000000c);
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x275262 /* "Unable to determine active weapon." */;
       return param_1;
     }
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
   }
@@ -242,7 +242,7 @@ CINSBotAttackInPlace::Update(CINSBotAttackInPlace *this,CINSNextBot *param_1,flo
   fVar13 = (float10)CountdownTimer::Now();
   if (*(float *)((int)param_2 + 0x4c) <= (float)fVar13 &&
       (float)fVar13 != *(float *)((int)param_2 + 0x4c)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x27513c /* " Timeout" */;
     return param_1;
@@ -254,7 +254,7 @@ CINSBotAttackInPlace::Update(CINSBotAttackInPlace *this,CINSNextBot *param_1,flo
     piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
     piVar4 = (int *)(**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
     if (piVar4 == (int *)0x0) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x275145 /* "No Known Threat" */;
       return param_1;
@@ -264,7 +264,7 @@ CINSBotAttackInPlace::Update(CINSBotAttackInPlace *this,CINSNextBot *param_1,flo
        (cVar3 = (**(code **)(*piVar4 + 0x3c))(piVar4), cVar3 != '\0')) {
       pvVar11 = ::operator_new(0x5c);
       CINSBotAttackAdvance::CINSBotAttackAdvance(this_01);
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(void **)(param_1 + 4) = pvVar11;
       *(int *)(param_1 + 8) = unaff_EBX + 0x275184 /* "Advancing towards a lost target" */;
       return param_1;
@@ -281,7 +281,7 @@ CINSBotAttackInPlace::Update(CINSBotAttackInPlace *this,CINSNextBot *param_1,flo
       if ((cVar3 != '\0') || (cVar3 = CINSPlayer::IsCrouched(this_02), cVar3 != '\0')) {
         (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
         CINSBotBody::SetPosture();
-        *(undefined4 *)param_1 = 0;
+        *(undefined4 *)param_1 = 0 /* Continue */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined4 *)(param_1 + 8) = 0;
         return param_1;
@@ -364,7 +364,7 @@ CINSBotAttackInPlace::Update(CINSBotAttackInPlace *this,CINSNextBot *param_1,flo
         if ((local_110 < *(float *)(unaff_EBX + 0x1ad9c0 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */)) && (local_105 == '\0')) {
           pvVar11 = ::operator_new(0x5c);
           CINSBotAttackAdvance::CINSBotAttackAdvance(this_06);
-          *(undefined4 *)param_1 = 1;
+          *(undefined4 *)param_1 = 1 /* ChangeTo */;
           *(int *)(param_1 + 8) = unaff_EBX + 0x275166 /* "Advancing because of no LOS" */;
           *(void **)(param_1 + 4) = pvVar11;
           INSVisionTraceFilterIgnoreTeam::~INSVisionTraceFilterIgnoreTeam(this_07);
@@ -410,7 +410,7 @@ CINSBotAttackInPlace::Update(CINSBotAttackInPlace *this,CINSNextBot *param_1,flo
   }
   CINSNextBot::FireWeaponAtEnemy(pCVar12);
 LAB_0070b37b:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -594,7 +594,7 @@ undefined4 __cdecl CINSBotAttackInPlace::ShouldAttack(INextBot *param_1,CKnownEn
 void CINSBotAttackInPlace::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -613,7 +613,7 @@ void CINSBotAttackInPlace::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,C
 void CINSBotAttackInPlace::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -651,7 +651,7 @@ void CINSBotAttackInPlace::OnMoveToFailure(undefined4 *param_1)
 void CINSBotAttackInPlace::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -670,7 +670,7 @@ void CINSBotAttackInPlace::OnStuck(CINSNextBot *param_1)
 void CINSBotAttackInPlace::OnUnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -689,7 +689,7 @@ void CINSBotAttackInPlace::OnUnStuck(CINSNextBot *param_1)
 void CINSBotAttackInPlace::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -708,7 +708,7 @@ void CINSBotAttackInPlace::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param
 void CINSBotAttackInPlace::OnKilled(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -729,7 +729,7 @@ void CINSBotAttackInPlace::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -748,7 +748,7 @@ void CINSBotAttackInPlace::OnOtherKilled
 void CINSBotAttackInPlace::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -767,7 +767,7 @@ void CINSBotAttackInPlace::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackInPlace::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -787,7 +787,7 @@ void CINSBotAttackInPlace::OnWeaponFired
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CBaseCombatWeapon *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -806,7 +806,7 @@ void CINSBotAttackInPlace::OnWeaponFired
 void CINSBotAttackInPlace::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -825,7 +825,7 @@ void CINSBotAttackInPlace::OnCommandApproach(CINSNextBot *param_1,Vector *param_
 void CINSBotAttackInPlace::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -844,7 +844,7 @@ void CINSBotAttackInPlace::OnCommandApproach(CINSNextBot *param_1,CBaseEntity *p
 void CINSBotAttackInPlace::OnCommandString(CINSNextBot *param_1,char *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -863,7 +863,7 @@ void CINSBotAttackInPlace::OnCommandString(CINSNextBot *param_1,char *param_2)
 void CINSBotAttackInPlace::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -882,7 +882,7 @@ void CINSBotAttackInPlace::OnBlinded(CINSNextBot *param_1,CBaseEntity *param_2)
 void CINSBotAttackInPlace::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -901,7 +901,7 @@ void CINSBotAttackInPlace::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *par
 void CINSBotAttackInPlace::OnCommandRetreat(CINSNextBot *param_1,CBaseEntity *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -921,7 +921,7 @@ void CINSBotAttackInPlace::OnHeardFootsteps
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -941,7 +941,7 @@ void CINSBotAttackInPlace::OnNavAreaChanged
                (CINSNextBot *param_1,CNavArea *param_2,CNavArea *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -960,7 +960,7 @@ void CINSBotAttackInPlace::OnNavAreaChanged
 void CINSBotAttackInPlace::OnPostureChanged(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -981,7 +981,7 @@ void CINSBotAttackInPlace::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -15,7 +15,7 @@
 void CINSBotGamemodeMonitor::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -350,7 +350,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
 void CINSBotGamemodeMonitor::Update(CINSNextBot *param_1,float param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;

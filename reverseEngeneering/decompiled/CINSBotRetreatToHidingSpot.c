@@ -117,12 +117,12 @@ CINSBotRetreatToHidingSpot::OnStart
     *(undefined1 *)((int)in_stack_0000000c + 0x2291) = 1;
     CINSNextBot::MaxPathLength();
     CINSPathFollower::ComputePath();
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x25205d /* "Failed finding cover nearby...
 " */;
@@ -168,7 +168,7 @@ CINSBotRetreatToHidingSpot::Update
   pCVar8 = in_stack_0000000c + 0x2060;
   iVar6 = (**(code **)(*(int *)((int)param_2 + 4) + 0x10))((int)param_2 + 4,pCVar8);
   if (iVar6 == 0) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x251890 /* "No longer need to retreat" */;
     return param_1;
@@ -178,7 +178,7 @@ CINSBotRetreatToHidingSpot::Update
     fVar9 = (float10)IntervalTimer::Now();
     if (fVar2 < (float)fVar9 - *(float *)((int)param_2 + 0x48d8)) {
       if (*(char *)((int)param_2 + 0x48cc) == '\0') {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(int *)(param_1 + 8) = unaff_EBX + 0x2514f3 /* "Retreat timer elapsed." */;
         *(undefined4 *)(param_1 + 4) = 0;
         return param_1;
@@ -217,7 +217,7 @@ CINSBotRetreatToHidingSpot::Update
       (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
       piVar4[0x16] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
-      *(undefined4 *)param_1 = 1;
+      *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x251909 /* "Timer elapsed, changing to reload action" */;
       *(int **)(param_1 + 4) = piVar4;
       return param_1;
@@ -232,7 +232,7 @@ CINSBotRetreatToHidingSpot::Update
                  CINSNextBot::FindNearbyCoverPosition(in_stack_0000000c,(float)in_stack_0000000c);
         if (puVar7 == (undefined4 *)0x0) {
           if (*(char *)((int)param_2 + 0x48cc) == '\0') {
-            *(undefined4 *)param_1 = 3;
+            *(undefined4 *)param_1 = 3 /* Done */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(int *)(param_1 + 8) = unaff_EBX + 0x251961 /* "Got to cover, couldn't find another.
 " */;
@@ -272,7 +272,7 @@ CINSBotRetreatToHidingSpot::Update
           (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
           piVar4[0x16] = -0x40800000 /* -1.0f */;
           (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
-          *(undefined4 *)param_1 = 1;
+          *(undefined4 *)param_1 = 1 /* ChangeTo */;
           *(int **)(param_1 + 4) = piVar4;
           *(int *)(param_1 + 8) = unaff_EBX + 0x251935 /* "Failed finding another cover, doing reload." */;
           return param_1;
@@ -341,7 +341,7 @@ CINSBotRetreatToHidingSpot::Update
     }
   }
 LAB_00730507:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -473,7 +473,7 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnMoveToSuccess(CINSNextBot *param_1,P
     *(float *)(param_2 + 0x48d8) = (float)fVar5;
   }
   if (param_2[0x48cc] == (Path)0x0) {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -513,7 +513,7 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnMoveToSuccess(CINSNextBot *param_1,P
     (*pcVar2)(piVar4 + 0x14,piVar4 + 0x15);
     piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(int **)(param_1 + 4) = piVar4;
     *(int *)(param_1 + 8) = unaff_EBX + 0x251b8a /* "Doing reload after OnMoveToFailure" */;
     *(undefined4 *)(param_1 + 0xc) = 3;
@@ -622,7 +622,7 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnStuck(CINSNextBot *param_1)
                      ,(CINSPathFollower *)(in_stack_00000008 + 0x48a8),3,(float)fVar5,0,0x41f00000 /* 30.0f */);
   if (cVar2 != '\0') {
     if (*(char *)(in_stack_00000008 + 0x48cc) == '\0') {
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       *(undefined4 *)(param_1 + 0xc) = 1;
@@ -662,13 +662,13 @@ CINSNextBot * CINSBotRetreatToHidingSpot::OnStuck(CINSNextBot *param_1)
     (*pcVar1)(piVar4 + 0x14,piVar4 + 0x15);
     piVar4[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(undefined **)(param_1 + 8) = &UNK_0025178d + unaff_EBX;
     *(int **)(param_1 + 4) = piVar4;
     *(undefined4 *)(param_1 + 0xc) = 3;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x251b3d /* "We couldn't get a path to our target after getting stuck" */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 0xc) = 3;
@@ -692,7 +692,7 @@ void CINSBotRetreatToHidingSpot::OnInjured(CINSNextBot *param_1,CTakeDamageInfo 
   
   __i686_get_pc_thunk_cx();
   if ((*(byte *)(in_stack_00000010 + 0x3c) & 8) == 0) {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     *(undefined4 *)(param_1 + 0xc) = 1;

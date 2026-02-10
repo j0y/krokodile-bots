@@ -81,14 +81,14 @@ CINSNextBot * CINSBotInvestigationMonitor::OnStart(CINSNextBot *param_1,Action *
 " */);
       }
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
   Warning(unaff_EBX + 0x243b3d /* "Could not initialize investigation data
 " */);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -198,7 +198,7 @@ CINSNextBot * CINSBotInvestigationMonitor::Update(CINSNextBot *param_1,float par
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -323,7 +323,7 @@ CINSBotInvestigationMonitor::OnOtherKilled
     }
   }
 LAB_0073f330:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -459,7 +459,7 @@ CINSBotInvestigationMonitor::OnWeaponFired
     }
   }
 LAB_0073f725:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -570,7 +570,7 @@ CINSBotInvestigationMonitor::OnHeardFootsteps
     (*pcVar1)(piVar5,local_28,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x24351d /* "Looking at source of footsteps" */);
   }
 LAB_0073f403:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -646,7 +646,7 @@ CINSBotInvestigationMonitor::OnSeeSomethingSuspicious
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -50,7 +50,7 @@ void __thiscall CINSBotActionSkirmish::CINSBotActionSkirmish(CINSBotActionSkirmi
 void CINSBotActionSkirmish::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -124,7 +124,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar2;
         *(int *)(param_1 + 8) = unaff_EBX + 0x244ca2 /* "Attacking nearby threats" */;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         return param_1;
       }
     }
@@ -139,7 +139,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(CNavArea **)(param_1 + 4) = pCVar5;
       *(undefined **)(param_1 + 8) = &UNK_00246833 + unaff_EBX;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       return param_1;
     }
     fVar7 = (float10)CINSNextBot::TransientlyConsistentRandomValue
@@ -148,7 +148,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
     this_00 = (CFmtStrN<256,false> *)GetDesiredObjective(in_stack_0000000c,(CINSNextBot *)param_2);
     iVar4 = CBaseEntity::GetTeamNumber(this_05);
     if (this_00 == (CFmtStrN<256,false> *)0xffffffff) {
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
     }
@@ -176,7 +176,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
           *(undefined4 *)((int)param_2 + 0x28) = 0;
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
           *(void **)(param_1 + 4) = pvVar2;
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(undefined1 **)(param_1 + 8) = local_247;
           return param_1;
         }
@@ -196,7 +196,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar2;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(undefined1 **)(param_1 + 8) = local_13b;
     }
   }
@@ -208,7 +208,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar2;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24693d /* "Escorting " */;
   }
   return param_1;

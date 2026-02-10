@@ -26,7 +26,7 @@ CINSNextBot * CINSBotTacticalMonitor::OnStart(CINSNextBot *param_1,Action *param
     (**(code **)(*(int *)(param_2 + 0x74) + 4))(param_2 + 0x74,param_2 + 0x7c);
     *(float *)(param_2 + 0x7c) = (float)fVar2 + fVar1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -199,7 +199,7 @@ LAB_0074218d:
             *(undefined4 *)((int)param_2 + 0x24) = 0;
             *(undefined4 *)((int)param_2 + 0x28) = 0;
             *(undefined4 *)((int)param_2 + 0x2c) = 0;
-            *(undefined4 *)param_1 = 2;
+            *(undefined4 *)param_1 = 2 /* SuspendFor */;
             *(void **)(param_1 + 4) = pvVar11;
             *(int *)(param_1 + 8) = unaff_EBX + 0x240dda /* "Firing an RPG!" */;
             return param_1;
@@ -224,7 +224,7 @@ LAB_00741c53:
         *(undefined4 *)((int)param_2 + 0x24) = 0;
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(void **)(param_1 + 4) = pvVar11;
         *(int *)(param_1 + 8) = unaff_EBX + 0x240dc6 /* "Throwing a grenade!" */;
         return param_1;
@@ -351,7 +351,7 @@ LAB_00741d1f:
     *(undefined4 *)((int)param_2 + 0x24) = 0;
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(int **)(param_1 + 4) = piVar4;
     *(int *)(param_1 + 8) = unaff_EBX + 0x240de9 /* "Opportunistic reload in-place" */;
     return param_1;
@@ -373,7 +373,7 @@ LAB_00741d1f:
     }
   }
 LAB_00741de8:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -550,7 +550,7 @@ LAB_00740c78:
         }
         pvVar8 = ::operator_new(100);
         CINSBotRetreatToCover::CINSBotRetreatToCover(this_01,SUB41(pvVar8,0),0.0);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(int *)(param_1 + 8) = unaff_EBX + 0x241e31 /* "We're in fire, get out of here!" */;
         *(void **)(param_1 + 4) = pvVar8;
         *(undefined4 *)(param_1 + 0xc) = 2;
@@ -623,7 +623,7 @@ LAB_00740c78:
     }
   }
 LAB_00740fb0:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -678,14 +678,14 @@ CINSNextBot * CINSBotTacticalMonitor::OnSight(CINSNextBot *param_1,CBaseEntity *
     if (SQRT(fVar5 * fVar5 + fVar7 * fVar7 + fVar6 * fVar6) < (float)fVar4) {
       pvVar3 = ::operator_new(100);
       CINSBotRetreatToCover::CINSBotRetreatToCover(this_01,SUB41(pvVar3,0),0.0);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar3;
       *(int *)(param_1 + 8) = unaff_EBX + 0x241f1d /* "Fleeing from nade" */;
       *(undefined4 *)(param_1 + 0xc) = 1;
       return param_1;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -718,7 +718,7 @@ CINSNextBot * CINSBotTacticalMonitor::OnLostSight(CINSNextBot *param_1,CBaseEnti
       CINSNextBot::AddInvestigation();
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -777,7 +777,7 @@ CINSBotTacticalMonitor::OnWeaponFired
     iVar4 = CBaseEntity::GetTeamNumber(this_01);
     iVar5 = CBaseEntity::GetTeamNumber(in_stack_00000010);
     if (iVar4 == iVar5) {
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       *(undefined4 *)(param_1 + 0xc) = 1;
@@ -788,7 +788,7 @@ CINSBotTacticalMonitor::OnWeaponFired
       if (cVar2 != '\0') {
         piVar3 = (int *)(**(code **)(*(int *)param_3 + 0x974 /* CINSNextBot::GetVisionInterface */))(param_3);
         (**(code **)(*piVar3 + 0xe8 /* IVision::AddKnownEntity */))(piVar3,in_stack_00000010);
-        *(undefined4 *)param_1 = 0;
+        *(undefined4 *)param_1 = 0 /* Continue */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined4 *)(param_1 + 8) = 0;
         *(undefined4 *)(param_1 + 0xc) = 1;
@@ -824,7 +824,7 @@ CINSBotTacticalMonitor::OnWeaponFired
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -843,7 +843,7 @@ CINSBotTacticalMonitor::OnWeaponFired
 void CINSBotTacticalMonitor::OnCommandApproach(CINSNextBot *param_1,Vector *param_2,float param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1108,7 +1108,7 @@ CINSBotTacticalMonitor::OnHeardFootsteps
     }
   }
 LAB_007402c7:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1184,7 +1184,7 @@ CINSBotTacticalMonitor::OnSeeSomethingSuspicious
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

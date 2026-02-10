@@ -77,7 +77,7 @@ CINSBotActionSurvival::OnStart(CINSBotActionSurvival *this,CINSNextBot *param_1,
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -158,14 +158,14 @@ CINSBotActionSurvival::Update(CINSBotActionSurvival *this,CINSNextBot *param_1,f
           *(undefined4 *)((int)param_2 + 0x24) = 0;
           *(undefined4 *)((int)param_2 + 0x28) = 0;
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(CNavArea **)(param_1 + 4) = pCVar8;
           *(int *)(param_1 + 8) = unaff_EBX + 0x245b23 /* "I have an investigation!" */;
           return param_1;
         }
         pvVar6 = ::operator_new(0x4934);
         CINSBotPatrol::CINSBotPatrol(this_08);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(void **)(param_1 + 4) = pvVar6;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
         *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -180,7 +180,7 @@ CINSBotActionSurvival::Update(CINSBotActionSurvival *this,CINSNextBot *param_1,f
       if (cVar1 != '\0') {
         pvVar6 = ::operator_new(0x9c);
         CINSBotEscort::CINSBotEscort(this_09);
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(void **)(param_1 + 4) = pvVar6;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24612c /* "Escorting the nearest human" */;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -200,7 +200,7 @@ CINSBotActionSurvival::Update(CINSBotActionSurvival *this,CINSNextBot *param_1,f
           *(undefined4 *)((int)param_2 + 0x28) = 0;
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
 LAB_0073c706:
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(void **)(param_1 + 4) = pvVar6;
           *(undefined **)(param_1 + 8) = &UNK_00243f92 + unaff_EBX;
           return param_1;
@@ -233,7 +233,7 @@ LAB_0073c81f:
               *(undefined4 *)((int)param_2 + 0x24) = 0;
               *(undefined4 *)((int)param_2 + 0x28) = 0;
               *(undefined4 *)((int)param_2 + 0x2c) = 0;
-              *(undefined4 *)param_1 = 2;
+              *(undefined4 *)param_1 = 2 /* SuspendFor */;
               *(void **)(param_1 + 4) = pvVar6;
               *(int *)(param_1 + 8) = unaff_EBX + 0x246148 /* "Capturing a CP" */;
               return param_1;
@@ -244,7 +244,7 @@ LAB_0073c81f:
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

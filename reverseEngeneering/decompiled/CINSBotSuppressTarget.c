@@ -98,7 +98,7 @@ CINSNextBot * CINSBotSuppressTarget::OnStart(CINSNextBot *param_1,Action *param_
     (**(code **)(*(int *)(param_2 + 0x54) + 4))(param_2 + 0x54,param_2 + 0x58);
     *(float *)(param_2 + 0x58) = fVar1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -167,7 +167,7 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
     piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))();
     iVar8 = (**(code **)(*piVar6 + 0xd4 /* IIntention::ShouldAttack */))();
     if (iVar8 != 0) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24f3fd /* "Spotted a threat while suppressing." */;
       return param_1;
@@ -183,7 +183,7 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
        (float)fVar9 == *(float *)(unaff_EBX + 0x1f1c95 /* typeinfo name for CBaseGameSystem+0x32 */))) {
       piVar6 = (int *)CINSPlayer::GetActiveINSWeapon();
       if (piVar6 == (int *)0x0) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24f3aa /* "Failed to init weapon entity" */;
       }
@@ -243,25 +243,25 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
             RandomFloat(0x3dcccccd /* 0.1f */,0x3eb33333 /* 0.35f */);
             (*pcVar2)();
           }
-          *(undefined4 *)param_1 = 0;
+          *(undefined4 *)param_1 = 0 /* Continue */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(undefined4 *)(param_1 + 8) = 0;
         }
         else {
-          *(undefined4 *)param_1 = 3;
+          *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(int *)(param_1 + 8) = unaff_EBX + 0x24f3c7 /* "Our weapon is out of ammo." */;
         }
       }
     }
     else {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24f399 /* "Idle in suppress" */;
     }
   }
   else {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24f381 /* "We're done suppressing." */;
   }

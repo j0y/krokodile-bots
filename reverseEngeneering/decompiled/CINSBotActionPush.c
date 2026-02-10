@@ -20,7 +20,7 @@ CINSBotActionPush::OnStart(CINSBotActionPush *this,CINSNextBot *param_1,Action *
   int in_stack_0000000c;
   
   AVar1 = *(Action *)(in_stack_0000000c + 0x228f);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   param_2[0x38] = AVar1;
@@ -73,7 +73,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar3;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x247357 /* "Escorting " */;
     return param_1;
   }
@@ -92,7 +92,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar3;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x2456bc /* "Attacking nearby threats" */;
       return param_1;
     }
@@ -109,13 +109,13 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(CNavArea **)(param_1 + 4) = pCVar6;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24724d /* "I have an investigation!" */;
       return param_1;
     }
     iVar5 = CBaseEntity::GetTeamNumber(this_04);
     if (1 < iVar5 - 2U) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x2456d5 /* "Bot is not on a playteam" */;
       return param_1;
@@ -134,7 +134,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar3;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x2473eb /* "Attacking enemy controlled point" */;
       return param_1;
     }
@@ -146,7 +146,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar3;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x24740f /* "Capturing neutral controlled point" */;
       return param_1;
     }
@@ -159,7 +159,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       CINSNextBot::AddInvestigation(in_stack_0000000c,local_28,local_24,local_20,0);
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

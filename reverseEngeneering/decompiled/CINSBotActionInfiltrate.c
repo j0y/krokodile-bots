@@ -15,7 +15,7 @@
 void CINSBotActionInfiltrate::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -84,7 +84,7 @@ CINSBotActionInfiltrate::Update(CINSBotActionInfiltrate *this,CINSNextBot *param
     if (iVar5 == 1) {
       pvVar7 = ::operator_new(0x88);
       CINSBotCombat::CINSBotCombat(this_03);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar7;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -101,7 +101,7 @@ CINSBotActionInfiltrate::Update(CINSBotActionInfiltrate *this,CINSNextBot *param
       CINSNextBot::GetCurrentInvestigationArea((CINSNextBot *)this_01);
       pCVar6 = (CNavArea *)::operator_new(0x4900);
       CINSBotInvestigate::CINSBotInvestigate(this_02,pCVar6);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(CNavArea **)(param_1 + 4) = pCVar6;
       *(int *)(param_1 + 8) = unaff_EBX + 0x248ae3 /* "I have an investigation!" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -112,7 +112,7 @@ CINSBotActionInfiltrate::Update(CINSBotActionInfiltrate *this,CINSNextBot *param
     }
     iVar5 = CBaseEntity::GetTeamNumber(this_01);
     if (1 < iVar5 - 2U) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x246f6b /* "Bot is not on a playteam" */;
       return param_1;
@@ -132,7 +132,7 @@ CINSBotActionInfiltrate::Update(CINSBotActionInfiltrate *this,CINSNextBot *param
            (*(int *)(*(int *)(unaff_EBX + 0x46d231 /* &CINSBotCaptureFlag::m_pCapturer */) + iVar8 * 4) == -1)) {
           pCVar9 = (CINSPlayer *)::operator_new(0x4900);
           CINSBotCaptureFlag::CINSBotCaptureFlag(this_06,pCVar9,(int)in_stack_0000000c);
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(CINSPlayer **)(param_1 + 4) = pCVar9;
           *(undefined4 *)((int)param_2 + 0x20) = 0;
           *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -193,7 +193,7 @@ CINSBotActionInfiltrate::Update(CINSBotActionInfiltrate *this,CINSNextBot *param
     Warning(unaff_EBX + 0x248d61 /* "NAVMESH ERROR: Unable to find any navmesh areas for CP %i, navmesh probably o..." */,iVar8);
   }
 LAB_007396dd:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

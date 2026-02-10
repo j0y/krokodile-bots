@@ -109,7 +109,7 @@ CINSBotGuardDefensive::OnStart(CINSBotGuardDefensive *this,CINSNextBot *param_1,
   fVar1 = (float10)CINSNextBot::GetDesiredPathLookAheadRange(this_00);
   *(float *)(param_2 + 0x4830) = (float)fVar1;
   GetRandomHidingSpotForPoint(this_01,(CINSNextBot *)&local_34,in_stack_0000000c);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_2 + 0x3c) = local_34;
@@ -194,7 +194,7 @@ CINSNextBot * CINSBotGuardDefensive::Update(CINSNextBot *param_1,float param_2)
     piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
     iVar6 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x818,iVar6);
     if (iVar6 == 1) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x25edd7 /* "LoS to an enemy." */;
       return param_1;
@@ -204,7 +204,7 @@ CINSNextBot * CINSBotGuardDefensive::Update(CINSNextBot *param_1,float param_2)
   piVar5 = in_stack_0000000c;
   iVar6 = CINSNextBotManager::GetDesiredPushTypeObjective(pCVar7);
   if (iVar6 != *(int *)((int)param_2 + 0x38)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25eeb9 /* "Point we were guarding is inactive, relocating to new point." */;
     return param_1;
@@ -225,7 +225,7 @@ LAB_007228df:
            (fVar10 = (float10)CountdownTimer::Now(),
            *(float *)((int)param_2 + 0x48d8) <= (float)fVar10 &&
            (float)fVar10 != *(float *)((int)param_2 + 0x48d8))) {
-          *(undefined4 *)param_1 = 3;
+          *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
           *(int *)(param_1 + 8) = unaff_EBX + 0x25ee3d /* "Exiting guard state, enemy entering CP" */;
           return param_1;
@@ -404,7 +404,7 @@ LAB_00722b47:
     CINSPathFollower::Update(this,(INextBot *)((int)param_2 + 0x54));
   }
 LAB_00722894:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -476,7 +476,7 @@ CINSNextBot * CINSBotGuardDefensive::OnMoveToSuccess(CINSNextBot *param_1,Path *
     (**(code **)(*(int *)(param_2 + 0x48e8) + 4))(param_2 + 0x48e8,param_2 + 0x48ec);
     *(undefined4 *)(param_2 + 0x48ec) = 0x3f000000 /* 0.5f */;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -550,7 +550,7 @@ CINSBotGuardDefensive::OnWeaponFired
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

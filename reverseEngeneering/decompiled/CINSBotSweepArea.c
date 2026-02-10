@@ -33,7 +33,7 @@ CINSNextBot * CINSBotSweepArea::OnStart(CINSNextBot *param_1,Action *param_2)
   *(undefined4 *)(param_2 + 0x48b4) = 0;
   *(float *)(param_2 + 0x4814) = (float)fVar2;
   uVar1 = CBaseEntity::GetTeamNumber(this_00);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_2 + 0x48b8) = uVar1;
   *(undefined4 *)(param_2 + 0x48bc) = 0;
   *(undefined4 *)(param_2 + 0x48e4) = 0;
@@ -105,7 +105,7 @@ CINSBotSweepArea::Update(CINSBotSweepArea *this,CINSNextBot *param_1,float param
         (float)fVar11 != *(float *)((int)param_2 + 0x48e0)) {
       iVar6 = (**(code **)(*(int *)in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c);
       if (iVar6 == 0) {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24e579 /* "No last known area when sweeping?" */;
         return param_1;
@@ -197,7 +197,7 @@ LAB_00733de0:
         (*pcVar3)(piVar7,local_40,3,fVar12,0,unaff_EBX + 0x24e59d /* "Looking at random visible areas" */);
       }
       local_60 = (Vector *)0x0;
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       if (local_6c[2] < 0) {
@@ -279,7 +279,7 @@ LAB_00733de0:
     if (*(int *)((int)param_2 + 0x443c) < 1) {
       cVar5 = GetAreaToSweep((CINSBotSweepArea *)pCVar9);
       if (cVar5 == '\0') {
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24e563 /* "No areas to sweep." */;
         return param_1;
@@ -297,7 +297,7 @@ LAB_00733de0:
     CINSPathFollower::Update(in_stack_0000000c,(INextBot *)((int)param_2 + 0x38));
   }
 LAB_00733a40:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -364,7 +364,7 @@ CINSNextBot * CINSBotSweepArea::OnMoveToSuccess(CINSNextBot *param_1,Path *param
     (**(code **)(*(int *)(param_2 + 0x48cc) + 4))(param_2 + 0x48cc,param_2 + 0x48d0);
     *(undefined4 *)(param_2 + 0x48d0) = 0x40e00000 /* 7.0f */;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

@@ -77,7 +77,7 @@ CINSBotActionHunt::OnStart(CINSBotActionHunt *this,CINSNextBot *param_1,Action *
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -117,7 +117,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
   
   __i686_get_pc_thunk_bx();
   if (**(int **)(&DAT_0046d98d + unaff_EBX) == 0) {
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -138,7 +138,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar8;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(int *)(param_1 + 8) = unaff_EBX + 0x247652 /* "Attacking nearby threats" */;
         return param_1;
       }
@@ -167,7 +167,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
           *(undefined4 *)((int)param_2 + 0x28) = 0;
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
           *(void **)(param_1 + 4) = pvVar8;
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(int *)(param_1 + 8) = unaff_EBX + 0x249416 /* "Moving to recently lost cache" */;
           return param_1;
         }
@@ -180,7 +180,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar8;
       *(int *)(param_1 + 8) = unaff_EBX + 0x249322 /* "My Job is to Patrol" */;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       return param_1;
     }
     CINSNextBot::GetCurrentInvestigationArea(this_00);
@@ -191,7 +191,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(CNavArea **)(param_1 + 4) = pCVar9;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(undefined **)(param_1 + 8) = &UNK_00249339 + unaff_EBX;
   }
   else {
@@ -202,7 +202,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar8;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(undefined **)(param_1 + 8) = &UNK_002492ed + unaff_EBX;
   }
   return param_1;

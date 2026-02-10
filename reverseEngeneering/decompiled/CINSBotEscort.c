@@ -90,7 +90,7 @@ CINSBotEscort::OnStart(CINSBotEscort *this,CINSNextBot *param_1,Action *param_2)
   int in_stack_0000000c;
   
   SetEscortTarget(this);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined1 *)(in_stack_0000000c + 0x2290) = 1;
@@ -153,7 +153,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
           *(undefined4 *)((int)param_2 + 0x24) = 0;
           *(undefined4 *)((int)param_2 + 0x28) = 0;
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
-          *(undefined4 *)param_1 = 2;
+          *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(void **)(param_1 + 4) = pvVar6;
           *(int *)(param_1 + 8) = unaff_EBX + 0x264a98 /* "Combat time!" */;
           return param_1;
@@ -168,7 +168,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
         (this_02 = this_01,
         *(int *)(**(int **)(unaff_EBX + 0x48a545 /* &gpGlobals */) + 0x14) < *(int *)((int)param_2 + 0x38))) &&
        (SetEscortTarget(this_01), this_02 = extraout_ECX, *(int *)((int)param_2 + 0x38) == -1)) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x264aa5 /* "Unable to get escort Target" */;
       return param_1;
@@ -176,7 +176,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
     piVar3 = (int *)GetEscortTarget(this_02);
     if ((piVar3 == (int *)0x0) || (cVar2 = (**(code **)(*piVar3 + 0x118 /* CBaseEntity::IsAlive */))(piVar3), cVar2 == '\0')) {
       *(undefined4 *)((int)param_2 + 0x38) = 0xffffffff;
-      *(undefined4 *)param_1 = 0;
+      *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
@@ -233,12 +233,12 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
   pCVar7 = (CINSNextBot *)GetEscortFormation(in_stack_0000000c);
   UpdateFormationMovement(this_07,(INSBotEscortFormation *)param_2,pCVar7);
   if (9 < *(int *)(in_stack_0000000c + 0xb324)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x264c15 /* "Path compute failed. Let's go back to Game Mode" */;
     return param_1;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -281,7 +281,7 @@ void __cdecl CINSBotEscort::OnEnd(CINSNextBot *param_1,Action *param_2)
 void CINSBotEscort::OnSuspend(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -303,7 +303,7 @@ CINSBotEscort::OnResume(CINSBotEscort *this,CINSNextBot *param_1,Action *param_2
   int in_stack_0000000c;
   
   SetEscortTarget(this);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined1 *)(in_stack_0000000c + 0x2290) = 1;
@@ -554,7 +554,7 @@ CINSBotEscort::ShouldAttack(CINSBotEscort *this,INextBot *param_1,CKnownEntity *
 void CINSBotEscort::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrace *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -573,7 +573,7 @@ void CINSBotEscort::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTra
 void CINSBotEscort::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -611,7 +611,7 @@ void CINSBotEscort::OnMoveToFailure(undefined4 *param_1)
 void CINSBotEscort::OnStuck(CINSNextBot *param_1)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -630,7 +630,7 @@ void CINSBotEscort::OnStuck(CINSNextBot *param_1)
 void CINSBotEscort::OnInjured(CINSNextBot *param_1,CTakeDamageInfo *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -650,7 +650,7 @@ void CINSBotEscort::OnOtherKilled
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,CTakeDamageInfo *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -721,7 +721,7 @@ CINSNextBot * CINSBotEscort::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
     (**(code **)(*piVar4 + 0x38))(piVar4,in_stack_0000000c);
   }
 LAB_00719c30:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -752,7 +752,7 @@ void CINSBotEscort::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
   if (*(int *)(param_2 + 0x38) == iVar1) {
     param_2[0x48] = (CBaseEntity)0x0;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -959,7 +959,7 @@ CINSBotEscort::OnWeaponFired
       return param_1;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1213,7 +1213,7 @@ CINSNextBot * CINSBotEscort::OnCommandAttack(CINSNextBot *param_1,CBaseEntity *p
   
   piVar1 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))();
   (**(code **)(*piVar1 + 0xe8 /* IVision::AddKnownEntity */))(piVar1,in_stack_00000010);
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1284,7 +1284,7 @@ CINSBotEscort::OnHeardFootsteps
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1349,7 +1349,7 @@ CINSBotEscort::OnNavAreaChanged
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
@@ -1369,7 +1369,7 @@ void CINSBotEscort::OnSeeSomethingSuspicious
                (CINSNextBot *param_1,CBaseCombatCharacter *param_2,Vector *param_3)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;

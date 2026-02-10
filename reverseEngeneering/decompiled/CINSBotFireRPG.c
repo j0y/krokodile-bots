@@ -207,7 +207,7 @@ CINSBotFireRPG::OnStart(CINSBotFireRPG *this,CINSNextBot *param_1,Action *param_
   
   __i686_get_pc_thunk_bx();
   if (*(int *)(in_stack_0000000c + 0x2284) == 3) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2635a8 /* "No Target to fire at" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
@@ -266,12 +266,12 @@ CINSBotFireRPG::OnStart(CINSBotFireRPG *this,CINSNextBot *param_1,Action *param_
       (**(code **)(*(int *)(param_2 + 0x5c) + 4))(param_2 + 0x5c,param_2 + 100);
       *(undefined4 *)(param_2 + 100) = 0xbf800000 /* -1.0f */;
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(int *)(param_1 + 8) = unaff_EBX + 0x2635bd /* "No grenade...
 " */;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -325,7 +325,7 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
   piVar2 = (int *)CINSPlayer::GetWeaponInSlot(this_00,(int)in_stack_0000000c,true);
   piVar3 = (int *)CINSPlayer::GetActiveINSWeapon();
   if ((piVar2 == (int *)0x0) || (piVar3 == (int *)0x0)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x261867 /* "No grenade...
 " */;
@@ -336,20 +336,20 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
      (fVar8 = (float10)CINSNextBot::GetIdleDuration(this_02),
      *(float *)(unaff_EBX + 0x204fdb /* typeinfo name for CBaseGameSystem+0x32 */) <= (float)fVar8 &&
      (float)fVar8 != *(float *)(unaff_EBX + 0x204fdb /* typeinfo name for CBaseGameSystem+0x32 */))) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2618a8 /* "Idle in fire rpg" */;
     return param_1;
   }
   if (*(int *)(in_stack_0000000c + 0x2284) == 3) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2618b9 /* "Error acquiring RPG target" */;
     return param_1;
   }
   fVar9 = *(float *)(**(int **)(&DAT_0048710f + unaff_EBX) + 0xc) - *(float *)((int)param_2 + 0x68);
   if (*(float *)(unaff_EBX + 0x204fcf /* typeinfo name for CBaseGameSystem+0x26 */) <= fVar9 && fVar9 != *(float *)(unaff_EBX + 0x204fcf /* typeinfo name for CBaseGameSystem+0x26 */)) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2618d4 /* "Expired." */;
     return param_1;
@@ -370,7 +370,7 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
       if (cVar1 == '\0') {
         DevMsg((char *)(unaff_EBX + 0x26196b /* "CINSBotFireRPG - Bailing, LoS not clear to our target (%.2f)
 " */));
-        *(undefined4 *)param_1 = 3;
+        *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined **)(param_1 + 8) = &UNK_002618ed + unaff_EBX;
         return param_1;
@@ -457,14 +457,14 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
       piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
       (**(code **)(*piVar2 + 0x160 /* PlayerBody::ForceLookAtExpire */))(piVar2);
       DevMsg((char *)(CINSRules_Ambush::IsEliminationRules + unaff_EBX + 7));
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined **)(param_1 + 8) = &UNK_002618dd + unaff_EBX;
       return param_1;
     }
   }
 LAB_0071f8b7:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

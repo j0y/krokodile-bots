@@ -49,7 +49,7 @@ void __thiscall CINSBotActionStrike::CINSBotActionStrike(CINSBotActionStrike *th
 void CINSBotActionStrike::OnStart(CINSNextBot *param_1,Action *param_2)
 
 {
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return;
@@ -101,7 +101,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
     if (iVar3 == 1) {
       pvVar7 = ::operator_new(0x88);
       CINSBotCombat::CINSBotCombat(this_08);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar7;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -120,7 +120,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
       fVar6 = (float)GetDesiredObjective((CINSNextBot *)param_2,(int)in_stack_0000000c);
       pvVar7 = ::operator_new(0x48fc);
       CINSBotGuardCP::CINSBotGuardCP(this_07,(int)pvVar7,fVar6);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar7;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -132,7 +132,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
       iVar3 = CBaseEntity::GetTeamNumber(this_04);
       iVar5 = CINSRules::GetAttackingTeam(this_05);
       if (iVar3 != iVar5) {
-        *(undefined4 *)param_1 = 0;
+        *(undefined4 *)param_1 = 0 /* Continue */;
         *(undefined4 *)(param_1 + 4) = 0;
         *(undefined4 *)(param_1 + 8) = 0;
         return param_1;
@@ -141,7 +141,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
       GetDesiredObjective((CINSNextBot *)param_2,(int)in_stack_0000000c);
       pvVar7 = ::operator_new(0x4900);
       CINSBotDestroyCache::CINSBotDestroyCache(this_09,(int)pvVar7);
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar7;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
@@ -154,7 +154,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
     CINSNextBot::GetCurrentInvestigationArea((CINSNextBot *)this_01);
     pCVar4 = (CNavArea *)::operator_new(0x4900);
     CINSBotInvestigate::CINSBotInvestigate(this_02,pCVar4);
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(CNavArea **)(param_1 + 4) = pCVar4;
     *(undefined4 *)((int)param_2 + 0x20) = 0;
     *(undefined4 *)((int)param_2 + 0x24) = 0;

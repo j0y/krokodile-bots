@@ -186,7 +186,7 @@ LAB_0072ebf0:
       if (iVar4 == 0) {
         pvVar5 = ::operator_new(0x48f8);
         CINSBotRetreat::CINSBotRetreat(this_05,SUB41(pvVar5,0),0.0);
-        *(undefined4 *)param_1 = 1;
+        *(undefined4 *)param_1 = 1 /* ChangeTo */;
         *(void **)(param_1 + 4) = pvVar5;
         *(int *)(param_1 + 8) = unaff_EBX + 0x253291 /* "Bailing on retreat to cover, unknown threat entity" */;
         return param_1;
@@ -232,7 +232,7 @@ LAB_0072ebf0:
     CINSBotLocomotion::AddMovementRequest
               (uVar10,*(undefined4 *)(param_2 + 0x38),*(undefined4 *)(param_2 + 0x3c),
                *(undefined4 *)(param_2 + 0x40),6,7,0x40a00000 /* 5.0f */);
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -240,7 +240,7 @@ LAB_0072ebf0:
 LAB_0072eb2e:
   pvVar5 = ::operator_new(0x48f8);
   CINSBotRetreat::CINSBotRetreat(this_04,SUB41(pvVar5,0),0.0);
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(void **)(param_1 + 4) = pvVar5;
   *(int *)(param_1 + 8) = unaff_EBX + 0x253255 /* "Bailing on retreat to cover, no pos or threat is invalid" */;
   return param_1;
@@ -283,7 +283,7 @@ CINSBotRetreatToCover::Update(CINSBotRetreatToCover *this,CINSNextBot *param_1,f
      (fVar8 = (float10)CINSNextBot::GetIdleDuration(in_stack_0000000c),
      *(float *)(unaff_EBX + 0x1f5711 /* typeinfo name for CBaseGameSystem+0x32 */) <= (float)fVar8 &&
      (float)fVar8 != *(float *)(unaff_EBX + 0x1f5711 /* typeinfo name for CBaseGameSystem+0x32 */))) {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x252a5a /* "Idle in retreat to cover" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
@@ -293,7 +293,7 @@ CINSBotRetreatToCover::Update(CINSBotRetreatToCover *this,CINSNextBot *param_1,f
      *(float *)((int)param_2 + 0x60) <= (float)fVar8 &&
      (float)fVar8 != *(float *)((int)param_2 + 0x60))) {
     if (*(char *)((int)param_2 + 0x50) == '\0') {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x252863 /* "Retreat timer elapsed." */;
       return param_1;
@@ -332,7 +332,7 @@ CINSBotRetreatToCover::Update(CINSBotRetreatToCover *this,CINSNextBot *param_1,f
     (*pcVar1)(piVar5 + 0x14,piVar5 + 0x15);
     piVar5[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar5[0x14] + 4))(piVar5 + 0x14,piVar5 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(undefined **)(param_1 + 8) = &UNK_002529ed + unaff_EBX;
     *(int **)(param_1 + 4) = piVar5;
     return param_1;
@@ -379,13 +379,13 @@ CINSBotRetreatToCover::Update(CINSBotRetreatToCover *this,CINSNextBot *param_1,f
         *(undefined4 *)((int)param_2 + 0x48) = 0x3e800000 /* 0.25f */;
       }
     }
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
   }
   if (*(char *)((int)param_2 + 0x50) == '\0') {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x251887 /* "In Cover" */;
     return param_1;
@@ -424,7 +424,7 @@ CINSBotRetreatToCover::Update(CINSBotRetreatToCover *this,CINSNextBot *param_1,f
   (*pcVar1)(piVar5 + 0x14,piVar5 + 0x15);
   piVar5[0x16] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar5[0x14] + 4))(piVar5 + 0x14,piVar5 + 0x16);
-  *(undefined4 *)param_1 = 1;
+  *(undefined4 *)param_1 = 1 /* ChangeTo */;
   *(int **)(param_1 + 4) = piVar5;
   *(int *)(param_1 + 8) = unaff_EBX + 0x252b09 /* "Doing given action now that I'm in cover" */;
   return param_1;
@@ -547,7 +547,7 @@ CINSNextBot * CINSBotRetreatToCover::OnMoveToSuccess(CINSNextBot *param_1,Path *
   
   iVar2 = __i686_get_pc_thunk_bx();
   if (*(char *)(iVar2 + 0x50) == '\0') {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x252c07 /* "We got to target's position!" */;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -587,7 +587,7 @@ CINSNextBot * CINSBotRetreatToCover::OnMoveToSuccess(CINSNextBot *param_1,Path *
     (*pcVar1)(piVar3 + 0x14,piVar3 + 0x15);
     piVar3[0x16] = -0x40800000 /* -1.0f */;
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
-    *(undefined4 *)param_1 = 1;
+    *(undefined4 *)param_1 = 1 /* ChangeTo */;
     *(int **)(param_1 + 4) = piVar3;
     *(int *)(param_1 + 8) = unaff_EBX + 0x252caf /* "Doing reload after OnMoveToSuccess" */;
     *(undefined4 *)(param_1 + 0xc) = 1;
@@ -677,7 +677,7 @@ void CINSBotRetreatToCover::OnStuck(CINSNextBot *param_1)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)param_1 = 3;
+  *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = extraout_ECX + 0x2532f3 /* "Im Stuck, help!" */;
   *(undefined4 *)(param_1 + 0xc) = 1;

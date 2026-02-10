@@ -94,7 +94,7 @@ CINSBotReload::OnStart(CINSBotReload *this,CINSNextBot *param_1,Action *param_2)
   __i686_get_pc_thunk_bx();
   cVar1 = CINSNextBot::CheckAnyAmmo(this_00);
   if (cVar1 == '\0') {
-    *(undefined4 *)param_1 = 3;
+    *(undefined4 *)param_1 = 3 /* Done */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x256d5f /* "No more ammo for this weapon" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
@@ -154,7 +154,7 @@ LAB_0072ab00:
     (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x54);
     *(undefined4 *)(param_2 + 0x54) = 0x3f000000 /* 0.5f */;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -193,7 +193,7 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
        (*(float *)(unaff_EBX + 0x1fc0cf /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) <
         *(float *)(**(int **)(&LAB_0047bbbf + unaff_EBX) + 0xc) - *(float *)((int)param_2 + 0x34)))
     {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined **)(param_1 + 8) = &UNK_00256abc + unaff_EBX;
       return param_1;
@@ -204,14 +204,14 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
       (float)fVar4 != *(float *)((int)param_2 + 0x58)) {
     piVar2 = (int *)CINSPlayer::GetActiveINSWeapon();
     if (piVar2 == (int *)0x0) {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined **)(param_1 + 8) = &UNK_00256acb + unaff_EBX;
       return param_1;
     }
     cVar1 = (**(code **)(*piVar2 + 0x648 /* CBasePlayer::SetFogController */))(piVar2);
     if (cVar1 == '\0') {
-      *(undefined4 *)param_1 = 3;
+      *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x256ad6 /* "Finished reloading!" */;
       return param_1;
@@ -240,7 +240,7 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
       *(undefined4 *)((int)param_2 + 0x54) = 0x3e800000 /* 0.25f */;
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

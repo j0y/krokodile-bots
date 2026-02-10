@@ -69,7 +69,7 @@ CINSBotActionAmbush::OnStart(CINSBotActionAmbush *this,CINSNextBot *param_1,Acti
     puVar3 = (undefined4 *)(**(code **)(*piVar2 + 0xc))(piVar2);
     *(undefined4 *)(param_2 + 0x3c) = *puVar3;
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -141,7 +141,7 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar4;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24a292 /* "Attacking nearby threats" */;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         return param_1;
       }
     }
@@ -157,7 +157,7 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(CNavArea **)(param_1 + 4) = pCVar6;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(int *)(param_1 + 8) = unaff_EBX + 0x24be23 /* "I have an investigation!" */;
         return param_1;
       }
@@ -179,7 +179,7 @@ LAB_00736395:
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar4;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24be11 /* "Moving to capture" */;
     return param_1;
   }
@@ -217,7 +217,7 @@ LAB_00736443:
     CINSNextBot::UpdateChasePath(pCVar7,in_stack_0000000c);
   }
 LAB_007364f5:
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;

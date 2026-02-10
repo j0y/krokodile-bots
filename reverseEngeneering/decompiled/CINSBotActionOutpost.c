@@ -83,7 +83,7 @@ CINSBotActionOutpost::OnStart(CINSBotActionOutpost *this,CINSNextBot *param_1,Ac
       }
     }
   }
-  *(undefined4 *)param_1 = 0;
+  *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 8) = 0;
   return param_1;
@@ -137,7 +137,7 @@ CINSBotActionOutpost::Update(CINSBotActionOutpost *this,CINSNextBot *param_1,flo
   __i686_get_pc_thunk_bx();
   if (**(int **)(unaff_EBX + 0x46c00d /* &g_pGameRules */) == 0) {
 LAB_0073aa20:
-    *(undefined4 *)param_1 = 0;
+    *(undefined4 *)param_1 = 0 /* Continue */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
     return param_1;
@@ -158,7 +158,7 @@ LAB_0073aa20:
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar10;
         *(int *)(param_1 + 8) = unaff_EBX + 0x245cd2 /* "Attacking nearby threats" */;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         return param_1;
       }
     }
@@ -187,7 +187,7 @@ LAB_0073aa20:
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar10;
-        *(undefined4 *)param_1 = 2;
+        *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(undefined1 **)(param_1 + 8) = local_123;
         return param_1;
       }
@@ -220,7 +220,7 @@ LAB_0073aa20:
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(CNavArea **)(param_1 + 4) = pCVar15;
-      *(undefined4 *)param_1 = 2;
+      *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(int *)(param_1 + 8) = unaff_EBX + 0x247863 /* "I have an investigation!" */;
       return param_1;
     }
@@ -231,7 +231,7 @@ LAB_0073aa20:
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar10;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x247bd2 /* "Capturing our target" */;
   }
   else {
@@ -242,7 +242,7 @@ LAB_0073aa20:
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar10;
-    *(undefined4 *)param_1 = 2;
+    *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24796d /* "Escorting " */;
   }
   return param_1;
