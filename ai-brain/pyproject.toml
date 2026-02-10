@@ -2,7 +2,7 @@
 name = "smartbots"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = ["duckdb>=1.2.0", "numpy>=1.26.0"]
+dependencies = ["duckdb>=1.2.0", "numpy>=1.26.0", "psycopg[binary]>=3.1.0"]
 
 [tool.uv]
 package = true

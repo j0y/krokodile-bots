@@ -390,6 +390,9 @@ class PathFollower:
         self.terrain = terrain
         self.clearance = clearance
         self.goal_idx = 1  # first goal is the second segment (bot starts at first)
+        # Telemetry: cached results from the last tick
+        self.last_scan: tuple[float, int | None] = (float("inf"), None)
+        self.last_steer: tuple[float, float, float] = (0.0, 0.0, 0.0)
 
     @property
     def total_length(self) -> float:
@@ -542,6 +545,7 @@ class PathFollower:
                     worst_clr = clr
                     worst_idx = i
 
+        self.last_scan = (worst_clr, worst_idx)
         return (worst_clr, worst_idx)
 
     # ── Movement targets ──
@@ -604,6 +608,7 @@ class PathFollower:
             sdx, sdy, best_clr = self.clearance.get_steering_direction(
                 area_id, bot_pos[0], bot_pos[1], goal_pos[0], goal_pos[1],
             )
+            self.last_steer = (sdx, sdy, best_clr)
             if abs(sdx) > 0.001 or abs(sdy) > 0.001:
                 dx = goal_pos[0] - bot_pos[0]
                 dy = goal_pos[1] - bot_pos[1]

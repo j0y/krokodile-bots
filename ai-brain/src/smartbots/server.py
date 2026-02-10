@@ -15,6 +15,7 @@ from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.spatial_recorder import SpatialRecorder
 from smartbots.state import GameState
 from smartbots.strategy import GatheringStrategy
+from smartbots.telemetry import TelemetryClient
 from smartbots.terrain import TerrainAnalyzer
 from smartbots.visibility import VisibilityMap
 
@@ -42,8 +43,6 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
             return
 
         self.last_state = state
-        bot_count = len(state.bots)
-        alive_count = sum(1 for b in state.bots.values() if b.alive)
 
         # Record positions and traces when enabled
         if self.recorder is not None:
@@ -54,29 +53,14 @@ class AIBrainProtocol(asyncio.DatagramProtocol):
                         self.recorder.record_traces(b.id, b.pos, b.traces)
             self.recorder.maybe_save(state.tick)
 
-        # Log per-bot details every ~5 seconds (tick divisible by 40 at 8Hz)
-        if state.tick % 40 == 0:
-            log.info("tick=%d bots=%d alive=%d from=%s", state.tick, bot_count, alive_count, addr)
-            for b in state.bots.values():
-                log.info(
-                    "  bot=%d alive=%s team=%d hp=%d pos=(%.0f,%.0f,%.0f) ang=(%.0f,%.0f,%.0f)",
-                    b.id, b.alive, b.team, b.health,
-                    b.pos[0], b.pos[1], b.pos[2],
-                    b.ang[0], b.ang[1], b.ang[2],
-                )
-
         # Compute commands and send back
         commands: list[BotCommand] = self.manager.compute_commands(state)
         if commands and self.transport is not None:
             payload = encode_commands(commands)
             self.transport.sendto(payload, addr)
-            if state.tick % 40 == 0:
-                log.info("  -> sent %d commands (%d bytes)", len(commands), len(payload))
-        elif state.tick % 40 == 0:
-            log.info("  -> no commands (no alive bots or all arrived)")
 
 
-def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
+def _build_manager() -> tuple[BotManager, SpatialRecorder | None, TelemetryClient | None]:
     """Load nav mesh and create the bot manager."""
     nav_map = os.environ.get("NAV_MAP", "ministry_coop")
     maps_dir = os.environ.get("NAV_MAPS_DIR", "/app/maps")
@@ -114,14 +98,23 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None]:
         recorder = SpatialRecorder(nav_map, data_dir)
         log.info("Position recording enabled (dir=%s)", data_dir)
 
-    return BotManager(nav, terrain, strategy, vis, clr), recorder
+    telemetry: TelemetryClient | None = None
+    if os.environ.get("TELEMETRY", "").strip() == "1":
+        tel_host = os.environ.get("TELEMETRY_HOST", "localhost")
+        tel_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
+        try:
+            telemetry = TelemetryClient(host=tel_host, port=tel_port)
+        except Exception:
+            log.exception("Failed to connect to telemetry DB at %s:%d", tel_host, tel_port)
+
+    return BotManager(nav, terrain, strategy, vis, clr, telemetry), recorder, telemetry
 
 
 async def run_server(host: str, port: int) -> None:
     """Start the UDP server and run forever."""
     log.info("Starting AI brain on %s:%d", host, port)
 
-    manager, recorder = _build_manager()
+    manager, recorder, telemetry = _build_manager()
 
     loop = asyncio.get_running_loop()
     transport, _ = await loop.create_datagram_endpoint(
@@ -137,4 +130,6 @@ async def run_server(host: str, port: int) -> None:
     log.info("Shutdown signal received")
     if recorder is not None:
         recorder.save()
+    if telemetry is not None:
+        telemetry.close()
     transport.close()

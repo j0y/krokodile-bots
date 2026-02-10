@@ -35,14 +35,38 @@ services:
     volumes:
       - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
       - ./ai-brain/data:/app/data
+      - ./ai-brain/src:/app/src:ro
     environment:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
       - NAV_MAP=${NAV_MAP:-ministry_coop}
       - RECORD_POSITIONS=${RECORD_POSITIONS:-0}
       - SPATIAL_DATA_DIR=/app/data
-    depends_on:
-      - insurgency
+      - TELEMETRY=${TELEMETRY:-0}
+      - TELEMETRY_HOST=localhost
+      - TELEMETRY_PORT=5432
+    profiles:
+      - ai
+
+  telemetry-db:
+    image: postgres:17-alpine
+    container_name: telemetry-db
+    restart: unless-stopped
+    network_mode: host
+    tmpfs:
+      - /var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=telemetry
+      - POSTGRES_USER=smartbots
+      - POSTGRES_PASSWORD=smartbots
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: >
+      postgres
+      -c shared_buffers=32MB
+      -c work_mem=4MB
+      -c fsync=off
+      -c synchronous_commit=off
+      -c full_page_writes=off
     profiles:
       - ai
 
@@ -81,13 +105,12 @@ services:
     volumes:
       - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
       - ./ai-brain/data:/app/data
+      - ./ai-brain/src:/app/src:ro
     environment:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000
       - NAV_MAP=${NAV_MAP:-ministry_coop}
       - RECORD_POSITIONS=1
       - SPATIAL_DATA_DIR=/app/data
-    depends_on:
-      - insurgency-record
     profiles:
       - record

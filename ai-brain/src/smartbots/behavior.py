@@ -17,6 +17,7 @@ from smartbots.terrain import TerrainAnalyzer
 if TYPE_CHECKING:
     from smartbots.clearance import ClearanceMap
     from smartbots.strategy import Strategy
+    from smartbots.telemetry import TelemetryClient
     from smartbots.visibility import VisibilityMap
 
 log = logging.getLogger(__name__)
@@ -85,12 +86,14 @@ class BotManager:
         strategy: Strategy,
         visibility: VisibilityMap | None = None,
         clearance: ClearanceMap | None = None,
+        telemetry: TelemetryClient | None = None,
     ) -> None:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
         self.visibility = visibility
         self.clearance = clearance
+        self.telemetry = telemetry
         self._brains: dict[int, BotBrain] = {}
 
     def _get_brain(self, bot_id: int) -> BotBrain:
@@ -332,21 +335,26 @@ class BotManager:
                                 brain.bot_id, pf.goal_idx, len(pf.segments),
                             )
 
-        if tick % 40 == 0:
+        # Telemetry recording
+        if self.telemetry is not None:
+            from smartbots.telemetry import NavTelemetryRow
+
             goal = pf.get_goal()
             goal_pos = goal.pos if goal else move_target
-            dx = bot.pos[0] - goal_pos[0]
-            dy = bot.pos[1] - goal_pos[1]
-            dist = math.sqrt(dx * dx + dy * dy)
-            stuck_info = f" stuck={nav.stuck_repaths}" if nav.stuck_repaths else ""
-            log.info(
-                "  bot=%d state=%s seg=%d/%d pos=(%.0f,%.0f) -> goal=(%.0f,%.0f)"
-                " dist=%.0f flags=%d%s",
-                brain.bot_id, brain.state.name,
-                pf.goal_idx, len(pf.segments),
-                bot.pos[0], bot.pos[1], goal_pos[0], goal_pos[1], dist,
-                flags, stuck_info,
-            )
+            area_id = self.nav.find_area(bot.pos)
+            scan_clr, scan_seg = pf.last_scan
+            sdx, sdy, sclr = pf.last_steer
+            self.telemetry.record_tick(NavTelemetryRow(
+                tick=tick, bot_id=bot.id,
+                x=bot.pos[0], y=bot.pos[1], z=bot.pos[2],
+                goal_x=goal_pos[0], goal_y=goal_pos[1], goal_z=goal_pos[2],
+                seg_idx=pf.goal_idx, seg_total=len(pf.segments),
+                move_x=move_target[0], move_y=move_target[1], move_z=move_target[2],
+                steer_dx=sdx, steer_dy=sdy, steer_clr=sclr,
+                path_min_clr=scan_clr, path_tight_seg=scan_seg,
+                deviation=deviation, stuck_count=nav.stuck_repaths,
+                flags=flags, area_id=area_id,
+            ))
 
         return BotCommand(
             id=bot.id, move_target=move_target,
