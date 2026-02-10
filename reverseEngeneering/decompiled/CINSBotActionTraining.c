@@ -30,7 +30,7 @@ CINSBotActionTraining::OnStart(CINSBotActionTraining *this,CINSNextBot *param_1,
   __i686_get_pc_thunk_bx();
   CINSPathFollower::Invalidate(this_00);
   fVar5 = (float10)CINSNextBot::GetDesiredPathLookAheadRange(this_01);
-  puVar4 = *(undefined4 **)(unaff_EBX + 0x469481 /* &vec3_origin */);
+  puVar4 = *(undefined4 **)(unaff_EBX + 0x469481 /* &vec3_origin */ /* &vec3_origin */);
   *(float *)(param_2 + 0x4818) = (float)fVar5;
   *(undefined4 *)(param_2 + 0x48b8) = *puVar4;
   uVar1 = puVar4[2];
@@ -40,7 +40,7 @@ CINSBotActionTraining::OnStart(CINSBotActionTraining *this,CINSNextBot *param_1,
   if ((char *)in_stack_0000000c[0x36] == (char *)0x0) {
     pcVar3 = &UNK_0021c930 + unaff_EBX;
   }
-  iVar2 = _V_stricmp(pcVar3,(char *)(unaff_EBX + 0x1f6a00 /* "vip_trainer" */));
+  iVar2 = _V_stricmp(pcVar3,(char *)(unaff_EBX + 0x1f6a00 /* "vip_trainer" */ /* "vip_trainer" */));
   if (iVar2 == 0) {
     *(undefined4 *)(param_2 + 0x38) = 0;
   }
@@ -49,11 +49,11 @@ CINSBotActionTraining::OnStart(CINSBotActionTraining *this,CINSNextBot *param_1,
     if ((char *)in_stack_0000000c[0x36] == (char *)0x0) {
       pcVar3 = &UNK_0021c930 + unaff_EBX;
     }
-    iVar2 = _V_stricmp(pcVar3,(char *)(unaff_EBX + 0x1f69f9 /* "driver" */));
+    iVar2 = _V_stricmp(pcVar3,(char *)(unaff_EBX + 0x1f69f9 /* "driver" */ /* "driver" */));
     if (iVar2 == 0) {
       *(undefined4 *)(param_2 + 0x38) = 1;
       puVar4 = (undefined4 *)(**(code **)(*in_stack_0000000c + 0xc))(in_stack_0000000c);
-      *(undefined4 *)(unaff_EBX + 0x5b02b5 /* CINSBotActionTraining::m_pDriver */) = *puVar4;
+      *(undefined4 *)(unaff_EBX + 0x5b02b5 /* CINSBotActionTraining::m_pDriver */ /* CINSBotActionTraining::m_pDriver */) = *puVar4;
     }
     else {
       iVar2 = CBaseEntity::GetTeamNumber(this_02);
@@ -157,7 +157,7 @@ CINSBotActionTraining::Update(CINSBotActionTraining *this,CINSNextBot *param_1,f
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar12;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2432d2 /* "Attacking nearby threats" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2432d2 /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
       return param_1;
     }
   }
@@ -165,7 +165,7 @@ CINSBotActionTraining::Update(CINSBotActionTraining *this,CINSNextBot *param_1,f
   if (iVar7 == 2) {
     local_74 = *(int **)(&DAT_004694ed + unaff_EBX);
     local_70 = (int *)*local_74;
-    local_78 = *(int **)(unaff_EBX + 0x46960d /* &g_pGameRules */);
+    local_78 = *(int **)(unaff_EBX + 0x46960d /* &g_pGameRules */ /* &g_pGameRules */);
     uVar14 = *(uint *)(*local_78 + 0x270);
     if (uVar14 != 0xffffffff) goto LAB_0073d391;
 LAB_0073d460:
@@ -174,7 +174,7 @@ LAB_0073d460:
   else {
     local_74 = *(int **)(&DAT_004694ed + unaff_EBX);
     local_70 = (int *)*local_74;
-    local_78 = *(int **)(unaff_EBX + 0x46960d /* &g_pGameRules */);
+    local_78 = *(int **)(unaff_EBX + 0x46960d /* &g_pGameRules */ /* &g_pGameRules */);
     uVar14 = *(uint *)(*local_78 + 0x26c);
     if (uVar14 == 0xffffffff) goto LAB_0073d460;
 LAB_0073d391:
@@ -196,7 +196,7 @@ LAB_0073d391:
     fVar17 = SQRT(fVar17 * fVar17 +
                   ((float)in_stack_0000000c[0x82] - fVar19) *
                   ((float)in_stack_0000000c[0x82] - fVar19) + fVar18 * fVar18);
-    if (fVar17 < *(float *)(unaff_EBX + 0x1ebedd /* typeinfo name for CTraceFilterIgnoreWeapons+0x3d */) || fVar17 == *(float *)(unaff_EBX + 0x1ebedd /* typeinfo name for CTraceFilterIgnoreWeapons+0x3d */)) {
+    if (fVar17 < *(float *)(unaff_EBX + 0x1ebedd /* 64.0f */ /* 64.0f */) || fVar17 == *(float *)(unaff_EBX + 0x1ebedd /* 64.0f */ /* 64.0f */)) {
       iVar7 = *(int *)((int)param_2 + 0x38);
       goto LAB_0073d460;
     }
@@ -209,9 +209,9 @@ LAB_0073d391:
     *(undefined4 *)((int)param_2 + 0x48c0) = *(undefined4 *)(iVar8 + 0x210);
     iVar7 = *(int *)((int)param_2 + 0x38);
   }
-  pfVar2 = (float *)(unaff_EBX + 0x1ebee1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
-  if (((((fVar19 < *(float *)(unaff_EBX + 0x1ebee1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */) || fVar19 == *(float *)(unaff_EBX + 0x1ebee1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */))
-        || (fVar17 = *(float *)(unaff_EBX + 0x1e7d45 /* typeinfo name for ITraceFilter+0x40 */), fVar17 <= fVar19)) ||
+  pfVar2 = (float *)(unaff_EBX + 0x1ebee1 /* -0.01f */ /* -0.01f */);
+  if (((((fVar19 < *(float *)(unaff_EBX + 0x1ebee1 /* -0.01f */ /* -0.01f */) || fVar19 == *(float *)(unaff_EBX + 0x1ebee1 /* -0.01f */ /* -0.01f */))
+        || (fVar17 = *(float *)(unaff_EBX + 0x1e7d45 /* 0.01f */ /* 0.01f */), fVar17 <= fVar19)) ||
        (fVar19 = *(float *)((int)param_2 + 0x48bc), fVar19 < *pfVar2 || fVar19 == *pfVar2)) ||
       ((fVar17 <= fVar19 ||
        (fVar19 = *(float *)((int)param_2 + 0x48c0), fVar19 < *pfVar2 || fVar19 == *pfVar2)))) ||
@@ -242,7 +242,7 @@ LAB_0073d391:
         local_4c = 0xffffffff;
         local_60 = pVVar21;
         iVar7 = CNavMesh::GetNearestNavArea
-                          (local_54,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),&local_58,0,0x461c4000 /* 10000.0f */,0
+                          (local_54,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */ /* &TheNavMesh */),&local_58,0,0x461c4000 /* 10000.0f */,0
                            ,1,0);
         if ((iVar7 != 0) && (iVar7 = CINSNavArea::GetAssociatedControlPoint(this_02), iVar7 != -1))
         {
@@ -258,22 +258,22 @@ LAB_0073d391:
         fVar16 = (float10)(**(code **)(*piVar20 + 0x154 /* CBaseEntity::HasTarget */))(piVar20);
         this_07 = (Path *)((int)param_2 + 0x3c);
         local_40 = (float)fVar16;
-        local_1d = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
+        local_1d = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
         if (((bool)local_1d) &&
-           (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar8 = ThreadGetCurrentId(),
+           (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar8 = ThreadGetCurrentId(),
            iVar7 == iVar8)) {
-          piVar20 = *(int **)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
-          if (*piVar20 != unaff_EBX + 0x1ec8f8 /* "Path::Compute(goal)" */) {
+          piVar20 = *(int **)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+          if (*piVar20 != unaff_EBX + 0x1ec8f8 /* "Path::Compute(goal)" */ /* "Path::Compute(goal)" */) {
             piVar20 = (int *)CVProfNode::GetSubNode
-                                       ((char *)piVar20,unaff_EBX + 0x1ec8f8 /* "Path::Compute(goal)" */,(char *)0x0,
-                                        unaff_EBX + 0x1ec8c3 /* "NextBotSpiky" */);
-            *(int **)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar20;
+                                       ((char *)piVar20,unaff_EBX + 0x1ec8f8 /* "Path::Compute(goal)" */ /* "Path::Compute(goal)" */,(char *)0x0,
+                                        unaff_EBX + 0x1ec8c3 /* "NextBotSpiky" */ /* "NextBotSpiky" */);
+            *(int **)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar20;
           }
-          puVar1 = (uint *)(piVar20[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) +
+          puVar1 = (uint *)(piVar20[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) +
                            4);
           *puVar1 = *puVar1 | 4;
           CVProfNode::EnterScope();
-          *(undefined1 *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) = 0;
+          *(undefined1 *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) = 0;
         }
         (**(code **)(*(int *)((int)param_2 + 0x3c) + 0x44))(this_07);
         uVar13 = (**(code **)(in_stack_0000000c[0x818] + 0xe4))(pVVar21);
@@ -291,7 +291,7 @@ LAB_0073db65:
           uVar25 = 0x43480000 /* 200.0f */;
           pVVar10 = (Vector *)
                     CNavMesh::GetNearestNavArea
-                              (this_08,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),this_08,1,0x43480000 /* 200.0f */,
+                              (this_08,**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */ /* &TheNavMesh */),this_08,1,0x43480000 /* 200.0f */,
                                1,1,1);
           if (pCVar9 == (CNavArea *)pVVar10) {
 LAB_0073ddaa:
@@ -311,7 +311,7 @@ LAB_0073ddaa:
               uVar25 = 0;
               pVVar24 = (Vector *)local_34;
               CNavMesh::GetGroundHeight
-                        ((CNavMesh *)0x0,(Vector *)**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */),
+                        ((CNavMesh *)0x0,(Vector *)**(undefined4 **)(unaff_EBX + 0x4693cd /* &TheNavMesh */ /* &TheNavMesh */),
                          (float *)ppppfVar22,pVVar24);
             }
             else {
@@ -386,20 +386,20 @@ LAB_0073da84:
           }
         }
         if ((local_1d != '\0') &&
-           (((*(char *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
-             (*(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)) &&
-            (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8),
+           (((*(char *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
+             (*(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)) &&
+            (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8),
             iVar8 = ThreadGetCurrentId(pCVar11,pVVar10,pCVar23), iVar7 == iVar8)))) {
           cVar4 = CVProfNode::ExitScope();
           if (cVar4 == '\0') {
-            iVar7 = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+            iVar7 = *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
           }
           else {
-            iVar7 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) + 100);
-            *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar7;
+            iVar7 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) + 100);
+            *(int *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar7;
           }
-          *(bool *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
-               iVar7 == *(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
+          *(bool *)(*(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+               iVar7 == *(int *)(unaff_EBX + 0x469689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
         }
       }
       local_70 = in_stack_0000000c + 0x818;
@@ -416,7 +416,7 @@ LAB_0073da84:
 LAB_0073d4ea:
     piVar6 = piVar20;
     if (iVar7 == 0) {
-      uVar14 = *(uint *)(unaff_EBX + 0x5b0115 /* CINSBotActionTraining::m_pDriver */);
+      uVar14 = *(uint *)(unaff_EBX + 0x5b0115 /* CINSBotActionTraining::m_pDriver */ /* CINSBotActionTraining::m_pDriver */);
       if (uVar14 != 0xffffffff) {
         iVar8 = *local_74 + (uVar14 & 0xffff) * 0x18;
         if ((*(CBaseCombatCharacter **)(iVar8 + 8) == (CBaseCombatCharacter *)(uVar14 >> 0x10)) &&
@@ -426,13 +426,13 @@ LAB_0073d4ea:
           if (cVar4 != '\0') {
             piVar20 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
             uVar13 = 0;
-            uVar14 = *(uint *)(unaff_EBX + 0x5b0115 /* CINSBotActionTraining::m_pDriver */);
+            uVar14 = *(uint *)(unaff_EBX + 0x5b0115 /* CINSBotActionTraining::m_pDriver */ /* CINSBotActionTraining::m_pDriver */);
             if ((uVar14 != 0xffffffff) &&
                (iVar7 = *local_74 + (uVar14 & 0xffff) * 0x18, *(uint *)(iVar7 + 8) == uVar14 >> 0x10
                )) {
               uVar13 = *(undefined4 *)(iVar7 + 4);
             }
-            (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454e3 /* "Watching the driver." */);
+            (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454e3 /* "Watching the driver." */ /* "Watching the driver." */);
             goto LAB_0073d622;
           }
           iVar7 = *(int *)((int)param_2 + 0x38);
@@ -447,9 +447,9 @@ LAB_0073d547:
     }
     piVar6 = piVar20;
     fVar19 = *(float *)((int)param_2 + 0x48b8);
-    pfVar2 = (float *)(unaff_EBX + 0x1ebee1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
-    if ((((fVar19 < *(float *)(unaff_EBX + 0x1ebee1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */) || fVar19 == *(float *)(unaff_EBX + 0x1ebee1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */))
-         || (fVar17 = *(float *)(unaff_EBX + 0x1e7d45 /* typeinfo name for ITraceFilter+0x40 */), fVar17 <= fVar19)) ||
+    pfVar2 = (float *)(unaff_EBX + 0x1ebee1 /* -0.01f */ /* -0.01f */);
+    if ((((fVar19 < *(float *)(unaff_EBX + 0x1ebee1 /* -0.01f */ /* -0.01f */) || fVar19 == *(float *)(unaff_EBX + 0x1ebee1 /* -0.01f */ /* -0.01f */))
+         || (fVar17 = *(float *)(unaff_EBX + 0x1e7d45 /* 0.01f */ /* 0.01f */), fVar17 <= fVar19)) ||
         (fVar19 = *(float *)((int)param_2 + 0x48bc), fVar19 < *pfVar2 || fVar19 == *pfVar2)) ||
        (((fVar17 <= fVar19 ||
          (fVar19 = *(float *)((int)param_2 + 0x48c0), fVar19 < *pfVar2 || fVar19 == *pfVar2)) ||
@@ -459,7 +459,7 @@ LAB_0073d547:
         (iVar7 = *local_74 + (uVar14 & 0xffff) * 0x18, *(uint *)(iVar7 + 8) == uVar14 >> 0x10)) &&
        (iVar7 = *(int *)(iVar7 + 4), iVar7 != 0)) {
       piVar20 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-      (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,iVar7,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
+      (**(code **)(*piVar20 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar20,iVar7,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */ /* "Watching the player." */);
       goto LAB_0073d622;
     }
   }
@@ -467,7 +467,7 @@ LAB_0073dd60:
   piVar20 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c,piVar6);
   pcVar3 = *(code **)(*piVar20 + 0xd8);
   uVar13 = UTIL_GetListenServerHost();
-  (*pcVar3)(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */);
+  (*pcVar3)(piVar20,uVar13,2,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x2454f8 /* "Watching the player." */ /* "Watching the player." */);
 LAB_0073d622:
   *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -505,7 +505,7 @@ int CINSBotActionTraining::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f5d67 /* "Training" */;
+  return extraout_ECX + 0x1f5d67 /* "Training" */ /* "Training" */;
 }
 
 
@@ -562,13 +562,13 @@ void CINSBotActionTraining::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
   __i686_get_pc_thunk_bx();
   *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
-  puVar1 = *(undefined4 **)(unaff_EBX + 0x4696eb /* &vec3_origin */);
+  puVar1 = *(undefined4 **)(unaff_EBX + 0x4696eb /* &vec3_origin */ /* &vec3_origin */);
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0xc) = 1;
-  *(undefined4 *)(extraout_EDX + 0x48b8 /* CINSBotTacticalMonitor::CheckPosture */) = *puVar1;
+  *(undefined4 *)(extraout_EDX + 0x48b8 /* CINSBotTacticalMonitor::CheckPosture */ /* CINSBotTacticalMonitor::CheckPosture */) = *puVar1;
   uVar2 = puVar1[2];
-  *(undefined4 *)(extraout_EDX + 0x48bc /* CINSBotTacticalMonitor::CheckPosture */) = puVar1[1];
-  *(undefined4 *)(extraout_EDX + 0x48c0 /* CINSBotTacticalMonitor::CheckPosture */) = uVar2;
+  *(undefined4 *)(extraout_EDX + 0x48bc /* CINSBotTacticalMonitor::CheckPosture */ /* CINSBotTacticalMonitor::CheckPosture */) = puVar1[1];
+  *(undefined4 *)(extraout_EDX + 0x48c0 /* CINSBotTacticalMonitor::CheckPosture */ /* CINSBotTacticalMonitor::CheckPosture */) = uVar2;
   return;
 }
 
@@ -588,6 +588,7 @@ undefined4 * CINSBotActionTraining::OnMoveToFailure(undefined4 *param_1)
   
   __i686_get_pc_thunk_bx();
   Warning(unaff_EBX + 0x24582c /* "BOT PATH FAILED, CRITICAL
+" */ /* "BOT PATH FAILED, CRITICAL
 " */);
   *param_1 = 0;
   param_1[1] = 0;
@@ -616,10 +617,11 @@ CINSNextBot * CINSBotActionTraining::OnStuck(CINSNextBot *param_1)
   
   __i686_get_pc_thunk_bx();
   Warning(unaff_EBX + 0x245747 /* "BOT GOT STUCK, CRITICAL
+" */ /* "BOT GOT STUCK, CRITICAL
 " */);
-  fVar1 = *(float *)(unaff_EBX + 0x1ec15e /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
+  fVar1 = *(float *)(unaff_EBX + 0x1ec15e /* -0.01f */ /* -0.01f */);
   if (((((*(float *)(in_stack_00000008 + 0x48b8) <= fVar1) ||
-        (fVar2 = *(float *)(unaff_EBX + 0x1e7fc2 /* typeinfo name for ITraceFilter+0x40 */), fVar2 <= *(float *)(in_stack_00000008 + 0x48b8)))
+        (fVar2 = *(float *)(unaff_EBX + 0x1e7fc2 /* 0.01f */ /* 0.01f */), fVar2 <= *(float *)(in_stack_00000008 + 0x48b8)))
        || (*(float *)(in_stack_00000008 + 0x48bc) <= fVar1)) ||
       (((fVar2 <= *(float *)(in_stack_00000008 + 0x48bc) ||
         (*(float *)(in_stack_00000008 + 0x48c0) <= fVar1)) ||
@@ -669,8 +671,8 @@ void __thiscall CINSBotActionTraining::~CINSBotActionTraining(CINSBotActionTrain
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45c8fa /* vtable for CINSBotActionTraining+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x45ca8e /* vtable for CINSBotActionTraining+0x19c */;
+  *in_stack_00000004 = unaff_EBX + 0x45c8fa /* vtable for CINSBotActionTraining+0x8 */ /* vtable for CINSBotActionTraining+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45ca8e /* vtable for CINSBotActionTraining+0x19c */ /* vtable for CINSBotActionTraining+0x19c */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -710,8 +712,8 @@ void __thiscall CINSBotActionTraining::~CINSBotActionTraining(CINSBotActionTrain
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45c88a /* vtable for CINSBotActionTraining+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x45ca1e /* vtable for CINSBotActionTraining+0x19c */;
+  *in_stack_00000004 = unaff_EBX + 0x45c88a /* vtable for CINSBotActionTraining+0x8 */ /* vtable for CINSBotActionTraining+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45ca1e /* vtable for CINSBotActionTraining+0x19c */ /* vtable for CINSBotActionTraining+0x19c */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

@@ -78,6 +78,7 @@ CINSNextBot * CINSBotInvestigationMonitor::OnStart(CINSNextBot *param_1,Action *
           (iVar5 = **(int **)(&DAT_00467a7d + unaff_EBX) + (uVar1 & 0xffff) * 0x18,
           *(uint *)(iVar5 + 8) != uVar1 >> 0x10)) || (*(int *)(iVar5 + 4) == 0)) {
         Warning(unaff_EBX + 0x243b69 /* "Investigation state could not locate objective
+" */ /* "Investigation state could not locate objective
 " */);
       }
     }
@@ -87,6 +88,7 @@ CINSNextBot * CINSBotInvestigationMonitor::OnStart(CINSNextBot *param_1,Action *
     return param_1;
   }
   Warning(unaff_EBX + 0x243b3d /* "Could not initialize investigation data
+" */ /* "Could not initialize investigation data
 " */);
   *(undefined4 *)param_1 = 0 /* Continue */;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -112,7 +114,7 @@ void __cdecl CINSBotInvestigationMonitor::InitialContainedAction(CINSNextBot *pa
   
   __i686_get_pc_thunk_bx();
   piVar2 = (int *)::operator_new(0x38);
-  iVar1 = *(int *)(unaff_EBX + 0x468323 /* &vtable for CINSBotGamemodeMonitor */);
+  iVar1 = *(int *)(unaff_EBX + 0x468323 /* &vtable for CINSBotGamemodeMonitor */ /* &vtable for CINSBotGamemodeMonitor */);
   piVar2[8] = 0;
   piVar2[9] = 0;
   piVar2[10] = 0;
@@ -158,7 +160,7 @@ CINSNextBot * CINSBotInvestigationMonitor::Update(CINSNextBot *param_1,float par
   piVar4 = (int *)(**(code **)(*piVar4 + 0x974 /* CINSNextBot::GetVisionInterface */))(piVar4);
   iVar5 = (**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
   if (((iVar5 == 0) && (**(int **)(&DAT_00467987 + unaff_EBX) != 0)) &&
-     (**(int **)(unaff_EBX + 0x467dab /* &g_pObjectiveResource */) != 0)) {
+     (**(int **)(unaff_EBX + 0x467dab /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) != 0)) {
     cVar3 = CINSRules::IsCheckpoint(this);
     if (cVar3 != '\0') {
       fVar7 = (float10)CountdownTimer::Now();
@@ -167,15 +169,15 @@ CINSNextBot * CINSBotInvestigationMonitor::Update(CINSNextBot *param_1,float par
         iVar5 = 0;
         uVar2 = *(uint *)((int)param_2 + 0x5c);
         if ((uVar2 != 0xffffffff) &&
-           (iVar1 = **(int **)(unaff_EBX + 0x467867 /* &g_pEntityList */) + (uVar2 & 0xffff) * 0x18,
+           (iVar1 = **(int **)(unaff_EBX + 0x467867 /* &g_pEntityList */ /* &g_pEntityList */) + (uVar2 & 0xffff) * 0x18,
            *(uint *)(iVar1 + 8) == uVar2 >> 0x10)) {
           iVar5 = *(int *)(iVar1 + 4);
         }
-        iVar1 = *(int *)(**(int **)(unaff_EBX + 0x467dab /* &g_pObjectiveResource */) + 0x770);
+        iVar1 = *(int *)(**(int **)(unaff_EBX + 0x467dab /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x770);
         if (*(int *)(iVar5 + 900) != iVar1) {
-          uVar2 = *(uint *)(**(int **)(unaff_EBX + 0x467dab /* &g_pObjectiveResource */) + 0x7cc + iVar1 * 4);
+          uVar2 = *(uint *)(**(int **)(unaff_EBX + 0x467dab /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x7cc + iVar1 * 4);
           if (((uVar2 == 0xffffffff) ||
-              (iVar5 = **(int **)(unaff_EBX + 0x467867 /* &g_pEntityList */) + (uVar2 & 0xffff) * 0x18,
+              (iVar5 = **(int **)(unaff_EBX + 0x467867 /* &g_pEntityList */ /* &g_pEntityList */) + (uVar2 & 0xffff) * 0x18,
               *(uint *)(iVar5 + 8) != uVar2 >> 0x10)) ||
              (piVar4 = *(int **)(iVar5 + 4), piVar4 == (int *)0x0)) {
             *(undefined4 *)((int)param_2 + 0x5c) = 0xffffffff;
@@ -186,7 +188,7 @@ CINSNextBot * CINSBotInvestigationMonitor::Update(CINSNextBot *param_1,float par
           }
         }
         fVar7 = (float10)CountdownTimer::Now();
-        fVar8 = (float)fVar7 + *(float *)(unaff_EBX + 0x1e57fb /* typeinfo name for CBaseGameSystem+0x32 */);
+        fVar8 = (float)fVar7 + *(float *)(unaff_EBX + 0x1e57fb /* 5.0f */ /* 5.0f */);
         if (*(float *)((int)param_2 + 0x58) != fVar8) {
           (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x58);
           *(float *)((int)param_2 + 0x58) = fVar8;
@@ -219,7 +221,7 @@ int CINSBotInvestigationMonitor::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x242c4d /* "Investigations" */;
+  return extraout_ECX + 0x242c4d /* "Investigations" */ /* "Investigations" */;
 }
 
 
@@ -282,8 +284,8 @@ CINSBotInvestigationMonitor::OnOtherKilled
     piVar10 = (int *)(**(code **)(*(int *)param_3 + 0x974 /* CINSNextBot::GetVisionInterface */))(param_3);
     cVar9 = (**(code **)(*piVar10 + 0x104 /* CINSBotVision::IsAbleToSee */))(piVar10,in_stack_00000010,0,0);
     if (cVar9 == '\0') {
-      piVar10 = (int *)(*(int **)(unaff_EBX + 0x467f29 /* &ins_bot_friendly_death_hearing_distance */))[7];
-      if (piVar10 == *(int **)(unaff_EBX + 0x467f29 /* &ins_bot_friendly_death_hearing_distance */)) {
+      piVar10 = (int *)(*(int **)(unaff_EBX + 0x467f29 /* &ins_bot_friendly_death_hearing_distance */ /* &ins_bot_friendly_death_hearing_distance */))[7];
+      if (piVar10 == *(int **)(unaff_EBX + 0x467f29 /* &ins_bot_friendly_death_hearing_distance */ /* &ins_bot_friendly_death_hearing_distance */)) {
         fVar12 = (float)((uint)piVar10 ^ piVar10[0xb]);
       }
       else {
@@ -300,8 +302,8 @@ CINSBotInvestigationMonitor::OnOtherKilled
       CINSNextBot::BotSpeakConceptIfAllowed
                 (this,(int)param_3,(char *)0x49,(char *)0x0,0,(IRecipientFilter *)0x0);
       fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
-      if ((float)fVar14 < *(float *)(unaff_EBX + 0x1f8bb5 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0xa0 */) ||
-          (float)fVar14 == *(float *)(unaff_EBX + 0x1f8bb5 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0xa0 */)) {
+      if ((float)fVar14 < *(float *)(unaff_EBX + 0x1f8bb5 /* 0.8f */ /* 0.8f */) ||
+          (float)fVar14 == *(float *)(unaff_EBX + 0x1f8bb5 /* 0.8f */ /* 0.8f */)) {
         CINSNextBot::AddInvestigation();
       }
       else {
@@ -309,7 +311,7 @@ CINSBotInvestigationMonitor::OnOtherKilled
         iVar11 = 0;
         pCVar13 = extraout_ECX;
         if ((uVar8 != 0xffffffff) &&
-           (pCVar13 = (CBaseEntity *)(**(int **)(unaff_EBX + 0x4676ad /* &g_pEntityList */) + (uVar8 & 0xffff) * 0x18),
+           (pCVar13 = (CBaseEntity *)(**(int **)(unaff_EBX + 0x4676ad /* &g_pEntityList */ /* &g_pEntityList */) + (uVar8 & 0xffff) * 0x18),
            *(uint *)(pCVar13 + 8) == uVar8 >> 0x10)) {
           iVar11 = *(int *)(pCVar13 + 4);
         }
@@ -398,11 +400,11 @@ CINSBotInvestigationMonitor::OnWeaponFired
           if (cVar6 != '\0') {
             fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
             this_02 = extraout_ECX;
-            if (*(float *)(unaff_EBX + 0x179408 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */) <= (float)fVar14 &&
-                (float)fVar14 != *(float *)(unaff_EBX + 0x179408 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */)) {
+            if (*(float *)(unaff_EBX + 0x179408 /* 0.1f */ /* 0.1f */) <= (float)fVar14 &&
+                (float)fVar14 != *(float *)(unaff_EBX + 0x179408 /* 0.1f */ /* 0.1f */)) {
               CINSNextBot::AddInvestigation(in_stack_00000010,param_3,in_stack_00000010,2);
               fVar14 = (float10)CountdownTimer::Now();
-              fVar15 = (float)fVar14 + *(float *)(unaff_EBX + 0x1e5058 /* typeinfo name for CBaseGameSystem+0x32 */);
+              fVar15 = (float)fVar14 + *(float *)(unaff_EBX + 0x1e5058 /* 5.0f */ /* 5.0f */);
               if (*(float *)(param_2 + 0x40) != fVar15) {
                 (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x40);
                 *(float *)(param_2 + 0x40) = fVar15;
@@ -418,12 +420,12 @@ CINSBotInvestigationMonitor::OnWeaponFired
             cVar6 = CINSNextBot::HasInvestigations(this_02);
             if ((cVar6 == '\0') && (iVar8 != 1)) {
               fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
-              if (*(float *)(unaff_EBX + 0x1e4378 /* typeinfo name for ISaveRestoreOps+0x67 */) <= (float)fVar14 &&
-                  (float)fVar14 != *(float *)(unaff_EBX + 0x1e4378 /* typeinfo name for ISaveRestoreOps+0x67 */)) {
+              if (*(float *)(unaff_EBX + 0x1e4378 /* 0.25f */ /* 0.25f */) <= (float)fVar14 &&
+                  (float)fVar14 != *(float *)(unaff_EBX + 0x1e4378 /* 0.25f */ /* 0.25f */)) {
                 uVar16 = 2;
                 CINSNextBot::AddInvestigation();
                 fVar14 = (float10)CountdownTimer::Now();
-                fVar15 = (float)fVar14 + *(float *)(unaff_EBX + 0x1e5058 /* typeinfo name for CBaseGameSystem+0x32 */);
+                fVar15 = (float)fVar14 + *(float *)(unaff_EBX + 0x1e5058 /* 5.0f */ /* 5.0f */);
                 if (*(float *)(param_2 + 0x40) != fVar15) {
                   (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x40,uVar16);
                   *(float *)(param_2 + 0x40) = fVar15;
@@ -437,13 +439,13 @@ CINSBotInvestigationMonitor::OnWeaponFired
             }
           }
           if (SQRT((fVar1 - fVar4) * (fVar1 - fVar4) + (fVar15 - fVar3) * (fVar15 - fVar3) +
-                   (fVar2 - fVar5) * (fVar2 - fVar5)) < *(float *)(unaff_EBX + 0x1e58fc /* typeinfo name for ITraceFilter+0x20 */)) {
+                   (fVar2 - fVar5) * (fVar2 - fVar5)) < *(float *)(unaff_EBX + 0x1e58fc /* 1000.0f */ /* 1000.0f */)) {
             fVar14 = (float10)RandomFloat(0,0x3f800000 /* 1.0f */);
-            if (*(float *)(unaff_EBX + 0x1edf80 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x34 */) <= (float)fVar14 &&
-                (float)fVar14 != *(float *)(unaff_EBX + 0x1edf80 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x34 */)) {
+            if (*(float *)(unaff_EBX + 0x1edf80 /* 0.33f */ /* 0.33f */) <= (float)fVar14 &&
+                (float)fVar14 != *(float *)(unaff_EBX + 0x1edf80 /* 0.33f */ /* 0.33f */)) {
               CINSNextBot::AddInvestigation(in_stack_00000010,param_3,in_stack_00000010,2);
               fVar14 = (float10)CountdownTimer::Now();
-              fVar15 = (float)fVar14 + *(float *)(unaff_EBX + 0x1e4a9c /* typeinfo name for CTraceFilterNoCombatCharacters+0x30 */);
+              fVar15 = (float)fVar14 + *(float *)(unaff_EBX + 0x1e4a9c /* 10.0f */ /* 10.0f */);
               if (*(float *)(param_2 + 0x40) != fVar15) {
                 (**(code **)(*(int *)(param_2 + 0x38) + 4))(pCVar13,param_2 + 0x40);
                 *(float *)(param_2 + 0x40) = fVar15;
@@ -525,7 +527,7 @@ CINSBotInvestigationMonitor::OnHeardFootsteps
                (*pfVar4 - *pfVar3) * (*pfVar4 - *pfVar3) +
                (pfVar4[2] - pfVar3[2]) * (pfVar4[2] - pfVar3[2]));
   this = extraout_ECX_00;
-  if (*(float *)(unaff_EBX + 0x20d37d /* typeinfo name for CEntityFactory<CBaseFlex>+0x20 */) <= fVar8 && fVar8 != *(float *)(unaff_EBX + 0x20d37d /* typeinfo name for CEntityFactory<CBaseFlex>+0x20 */)) {
+  if (*(float *)(unaff_EBX + 0x20d37d /* 128.0f */ /* 128.0f */) <= fVar8 && fVar8 != *(float *)(unaff_EBX + 0x20d37d /* 128.0f */ /* 128.0f */)) {
     piVar5 = (int *)(**(code **)(*(int *)param_3 + 0x974 /* CINSNextBot::GetVisionInterface */))(param_3);
     iVar6 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
     if (iVar6 != 0) goto LAB_0073f403;
@@ -559,6 +561,7 @@ CINSBotInvestigationMonitor::OnHeardFootsteps
       cVar2 = (**(code **)(*(int *)param_3 + 0x980 /* CINSNextBot::IsDebugging */))(param_3,1);
       if (cVar2 != '\0') {
         DevMsg((char *)(unaff_EBX + 0x24346d /* "Adding new investigation area for OnHeardFootsteps
+" */ /* "Adding new investigation area for OnHeardFootsteps
 " */));
       }
     }
@@ -567,7 +570,7 @@ CINSBotInvestigationMonitor::OnHeardFootsteps
     piVar5 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
     pcVar1 = *(code **)(*piVar5 + 0xd4);
     CINSNextBot::GetTargetPosition(local_28);
-    (*pcVar1)(piVar5,local_28,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x24351d /* "Looking at source of footsteps" */);
+    (*pcVar1)(piVar5,local_28,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x24351d /* "Looking at source of footsteps" */ /* "Looking at source of footsteps" */);
   }
 LAB_0073f403:
   *(undefined4 *)param_1 = 0 /* Continue */;
@@ -634,6 +637,7 @@ CINSBotInvestigationMonitor::OnSeeSomethingSuspicious
             cVar1 = (**(code **)(*(int *)param_3 + 0x980 /* CINSNextBot::IsDebugging */))(param_3,1);
             if (cVar1 != '\0') {
               DevMsg((char *)(unaff_EBX + 0x243d60 /* "Adding new investigation area for OnHeardFootsteps
+" */ /* "Adding new investigation area for OnHeardFootsteps
 " */));
             }
           }
@@ -641,7 +645,7 @@ CINSBotInvestigationMonitor::OnSeeSomethingSuspicious
         else {
           piVar3 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
           (**(code **)(*piVar3 + 0xd4 /* PlayerBody::AimHeadTowards */))
-                    (piVar3,in_stack_00000014,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x243d94 /* "Looking at something suspicious" */);
+                    (piVar3,in_stack_00000014,2,0x3f400000 /* 0.75f */,0,unaff_EBX + 0x243d94 /* "Looking at something suspicious" */ /* "Looking at something suspicious" */);
         }
       }
     }
@@ -702,8 +706,8 @@ CINSBotInvestigationMonitor::~CINSBotInvestigationMonitor(CINSBotInvestigationMo
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x45af73 /* vtable for CINSBotInvestigationMonitor+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x45b103 /* vtable for CINSBotInvestigationMonitor+0x198 */;
+  *in_stack_00000004 = extraout_ECX + 0x45af73 /* vtable for CINSBotInvestigationMonitor+0x8 */ /* vtable for CINSBotInvestigationMonitor+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x45b103 /* vtable for CINSBotInvestigationMonitor+0x198 */ /* vtable for CINSBotInvestigationMonitor+0x198 */;
   Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(CFogVolume::InputDisable + extraout_ECX + 3))
   ;
   return;
@@ -744,8 +748,8 @@ CINSBotInvestigationMonitor::~CINSBotInvestigationMonitor(CINSBotInvestigationMo
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45af2a /* vtable for CINSBotInvestigationMonitor+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x45b0ba /* vtable for CINSBotInvestigationMonitor+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x45af2a /* vtable for CINSBotInvestigationMonitor+0x8 */ /* vtable for CINSBotInvestigationMonitor+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45b0ba /* vtable for CINSBotInvestigationMonitor+0x198 */ /* vtable for CINSBotInvestigationMonitor+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

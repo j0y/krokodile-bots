@@ -29,8 +29,8 @@ CINSBotInvestigateGunshot::CINSBotInvestigateGunshot
   __i686_get_pc_thunk_bx();
   param_2[8] = 0;
   param_2[9] = 0;
-  *param_2 = unaff_EBX + 0x4729fd /* vtable for CINSBotInvestigateGunshot+0x8 */;
-  param_2[1] = unaff_EBX + 0x472b95 /* vtable for CINSBotInvestigateGunshot+0x1a0 */;
+  *param_2 = unaff_EBX + 0x4729fd /* vtable for CINSBotInvestigateGunshot+0x8 */ /* vtable for CINSBotInvestigateGunshot+0x8 */;
+  param_2[1] = unaff_EBX + 0x472b95 /* vtable for CINSBotInvestigateGunshot+0x1a0 */ /* vtable for CINSBotInvestigateGunshot+0x1a0 */;
   param_2[10] = 0;
   param_2[3] = 0;
   param_2[4] = 0;
@@ -43,9 +43,9 @@ CINSBotInvestigateGunshot::CINSBotInvestigateGunshot
   param_2[0xb] = 0;
   param_2[0xd] = 0;
   CINSPathFollower::CINSPathFollower(this);
-  pcVar1 = (code *)(unaff_EBX + -0x4f45db /* CountdownTimer::NetworkStateChanged */);
+  pcVar1 = (code *)(unaff_EBX + -0x4f45db /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
   param_2[0x122e] = 0;
-  iVar2 = unaff_EBX + 0x40346d /* vtable for CountdownTimer+0x8 */;
+  iVar2 = unaff_EBX + 0x40346d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
   param_2[0x122d] = iVar2;
   (*pcVar1)(param_2 + 0x122d,param_2 + 0x122e);
   param_2[0x122f] = -0x40800000 /* -1.0f */;
@@ -155,86 +155,86 @@ CINSBotInvestigateGunshot::Update
   __i686_get_pc_thunk_bx();
   if (0 < in_stack_0000000c[0x2d1a]) {
     iVar6 = in_stack_0000000c[0x2d17];
-    if (((*(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0xc)) ||
-        (*(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0x10))) ||
-       (*(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0x14))) {
+    if (((*(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0xc)) ||
+        (*(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0x10))) ||
+       (*(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) != *(float *)(iVar6 + 0x14))) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x25c4d1 /* "Leaving investigation, we changed targets." */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x25c4d1 /* "Leaving investigation, we changed targets." */ /* "Leaving investigation, we changed targets." */;
       return param_1;
     }
     fVar9 = (float10)CountdownTimer::Now();
     if (*(float *)(iVar6 + 8) <= (float)fVar9 && (float)fVar9 != *(float *)(iVar6 + 8)) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x25c4fd /* "Leaving investigation, time elapsed." */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x25c4fd /* "Leaving investigation, time elapsed." */ /* "Leaving investigation, time elapsed." */;
       return param_1;
     }
   }
   piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))();
   iVar6 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
   if (iVar6 == 0) {
-    fVar10 = *(float *)(unaff_EBX + 0x204175 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
-    if ((((*(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */) <= fVar10) ||
-         (fVar1 = *(float *)(&DAT_001fffd9 + unaff_EBX), fVar1 <= *(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */)))
-        || ((*(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */) <= fVar10 ||
-            ((fVar1 <= *(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */) ||
-             (*(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */) <= fVar10)))))) ||
-       (fVar1 <= *(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */))) {
+    fVar10 = *(float *)(unaff_EBX + 0x204175 /* -0.01f */ /* -0.01f */);
+    if ((((*(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) <= fVar10) ||
+         (fVar1 = *(float *)(&DAT_001fffd9 + unaff_EBX), fVar1 <= *(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */)))
+        || ((*(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) <= fVar10 ||
+            ((fVar1 <= *(float *)(extraout_EDX + 0x3c /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) ||
+             (*(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) <= fVar10)))))) ||
+       (fVar1 <= *(float *)(extraout_EDX + 0x40 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */))) {
       fVar9 = (float10)CountdownTimer::Now();
-      if (*(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
-          (float)fVar9 != *(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */)) {
+      if (*(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
+          (float)fVar9 != *(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */)) {
         piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))();
         pfVar8 = (float *)(**(code **)(*piVar5 + 0x148 /* PlayerLocomotion::GetFeet */))(piVar5);
         fVar10 = pfVar8[1];
         fVar1 = pfVar8[2];
-        fVar13 = *(float *)(extraout_EDX + 0x48d8 /* CollectIdealPatrolAreas::operator */) - *pfVar8;
-        fVar11 = *(float *)(extraout_EDX + 0x48dc /* CollectIdealPatrolAreas::operator */) - fVar10;
-        fVar12 = *(float *)(extraout_EDX + 0x48e0 /* CollectIdealPatrolAreas::operator */) - fVar1;
+        fVar13 = *(float *)(extraout_EDX + 0x48d8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) - *pfVar8;
+        fVar11 = *(float *)(extraout_EDX + 0x48dc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) - fVar10;
+        fVar12 = *(float *)(extraout_EDX + 0x48e0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) - fVar1;
         if (SQRT(fVar11 * fVar11 + fVar13 * fVar13 + fVar12 * fVar12) <
-            *(float *)(unaff_EBX + 0x1fea31 /* typeinfo name for ISaveRestoreOps+0x63 */)) {
+            *(float *)(unaff_EBX + 0x1fea31 /* 16.0f */ /* 16.0f */)) {
           if (0 < in_stack_0000000c[0x2d1a]) {
             CUtlVector<InvestigationData_t,CUtlMemory<InvestigationData_t,int>>::Remove
                       ((int)(in_stack_0000000c + 0x2d17));
           }
           *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x25c47d /* "Gave up investigating, took too long." */;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x25c47d /* "Gave up investigating, took too long." */ /* "Gave up investigating, took too long." */;
           return param_1;
         }
-        *(float *)(extraout_EDX + 0x48d8 /* CollectIdealPatrolAreas::operator */) = *pfVar8;
-        *(float *)(extraout_EDX + 0x48dc /* CollectIdealPatrolAreas::operator */) = fVar10;
-        *(float *)(extraout_EDX + 0x48e0 /* CollectIdealPatrolAreas::operator */) = fVar1;
+        *(float *)(extraout_EDX + 0x48d8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = *pfVar8;
+        *(float *)(extraout_EDX + 0x48dc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = fVar10;
+        *(float *)(extraout_EDX + 0x48e0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = fVar1;
         fVar9 = (float10)CountdownTimer::Now();
         fVar10 = *(float *)(&LAB_001ff715 + unaff_EBX);
-        if (*(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */) != (float)fVar9 + fVar10) {
-          (**(code **)(*(int *)(extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */) + 4))
-                    (extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */);
-          *(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */) = (float)fVar9 + fVar10;
+        if (*(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) != (float)fVar9 + fVar10) {
+          (**(code **)(*(int *)(extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) + 4))
+                    (extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */);
+          *(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = (float)fVar9 + fVar10;
         }
-        if (*(int *)(extraout_EDX + 0x48b8 /* CollectIdealPatrolAreas::operator */) != 0x40a00000 /* 5.0f */) {
-          (**(code **)(*(int *)(extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */) + 4))
-                    (extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48b8 /* CollectIdealPatrolAreas::operator */);
-          *(undefined4 *)(extraout_EDX + 0x48b8 /* CollectIdealPatrolAreas::operator */) = 0x40a00000 /* 5.0f */;
+        if (*(int *)(extraout_EDX + 0x48b8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) != 0x40a00000 /* 5.0f */) {
+          (**(code **)(*(int *)(extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) + 4))
+                    (extraout_EDX + 0x48b4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48b8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */);
+          *(undefined4 *)(extraout_EDX + 0x48b8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = 0x40a00000 /* 5.0f */;
         }
       }
       fVar9 = (float10)CountdownTimer::Now();
-      if (*(float *)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
-          (float)fVar9 != *(float *)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */)) {
+      if (*(float *)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
+          (float)fVar9 != *(float *)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */)) {
         fVar9 = (float10)RandomFloat(0x40200000 /* 2.5f */,0x40a00000 /* 5.0f */);
         fVar10 = (float)fVar9;
         fVar9 = (float10)CountdownTimer::Now();
         this_01 = (CBaseEntity *)((float)fVar9 + fVar10);
-        if (*(CBaseEntity **)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */) != this_01) {
-          (**(code **)(*(int *)(extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */) + 4))
-                    (extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */);
-          *(CBaseEntity **)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */) = this_01;
+        if (*(CBaseEntity **)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) != this_01) {
+          (**(code **)(*(int *)(extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) + 4))
+                    (extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */);
+          *(CBaseEntity **)(extraout_EDX + 0x48c8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = this_01;
           this_01 = extraout_ECX;
         }
-        if (*(float *)(extraout_EDX + 0x48c4 /* CollectIdealPatrolAreas::operator */) != fVar10) {
-          (**(code **)(*(int *)(extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */) + 4))
-                    (extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48c4 /* CollectIdealPatrolAreas::operator */);
-          *(float *)(extraout_EDX + 0x48c4 /* CollectIdealPatrolAreas::operator */) = fVar10;
+        if (*(float *)(extraout_EDX + 0x48c4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) != fVar10) {
+          (**(code **)(*(int *)(extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) + 4))
+                    (extraout_EDX + 0x48c0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48c4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */);
+          *(float *)(extraout_EDX + 0x48c4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = fVar10;
           this_01 = extraout_ECX_00;
         }
         this_00 = (CINSNextBotManager *)CBaseEntity::GetTeamNumber(this_01);
@@ -243,21 +243,21 @@ CINSBotInvestigateGunshot::Update
         if (cVar4 != '\0') {
           fVar9 = (float10)CINSNextBot::MaxPathLength();
           CINSPathFollower::ComputePath
-                    ((CINSPathFollower *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */),
-                     (CINSPathFollower *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */),in_stack_0000000c + 0x818,
-                     extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */,0,(float)fVar9,0,0x41f00000 /* 30.0f */);
+                    ((CINSPathFollower *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */),
+                     (CINSPathFollower *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */),in_stack_0000000c + 0x818,
+                     extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */,0,(float)fVar9,0,0x41f00000 /* 30.0f */);
         }
       }
-      local_20 = (CINSPathFollower *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */);
-      local_2c = extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */;
+      local_20 = (CINSPathFollower *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */);
+      local_2c = extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */;
       local_28 = in_stack_0000000c + 0x818;
       fVar9 = (float10)CountdownTimer::Now();
-      if (*(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
-          (float)fVar9 != *(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */)) {
+      if (*(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
+          (float)fVar9 != *(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */)) {
         piVar14 = local_28;
         CINSPathFollower::Update(local_20,(INextBot *)local_20);
-        piVar5 = (int *)(*(int **)(unaff_EBX + 0x481d39 /* &ins_bot_path_update_interval */))[7];
-        if (piVar5 == *(int **)(unaff_EBX + 0x481d39 /* &ins_bot_path_update_interval */)) {
+        piVar5 = (int *)(*(int **)(unaff_EBX + 0x481d39 /* &ins_bot_path_update_interval */ /* &ins_bot_path_update_interval */))[7];
+        if (piVar5 == *(int **)(unaff_EBX + 0x481d39 /* &ins_bot_path_update_interval */ /* &ins_bot_path_update_interval */)) {
           local_30 = (float)((uint)piVar5 ^ piVar5[0xb]);
         }
         else {
@@ -265,43 +265,44 @@ CINSBotInvestigateGunshot::Update
           local_30 = (float)fVar9;
         }
         fVar9 = (float10)CountdownTimer::Now();
-        if (*(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */) != (float)fVar9 + local_30) {
-          (**(code **)(*(int *)(extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */) + 4))
-                    (extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */);
-          *(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */) = (float)fVar9 + local_30;
+        if (*(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) != (float)fVar9 + local_30) {
+          (**(code **)(*(int *)(extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) + 4))
+                    (extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */);
+          *(float *)(extraout_EDX + 0x48d4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = (float)fVar9 + local_30;
         }
-        if (*(float *)(extraout_EDX + 0x48d0 /* CollectIdealPatrolAreas::operator */) != local_30) {
-          (**(code **)(*(int *)(extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */) + 4))
-                    (extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48d0 /* CollectIdealPatrolAreas::operator */);
-          *(float *)(extraout_EDX + 0x48d0 /* CollectIdealPatrolAreas::operator */) = local_30;
+        if (*(float *)(extraout_EDX + 0x48d0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) != local_30) {
+          (**(code **)(*(int *)(extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) + 4))
+                    (extraout_EDX + 0x48cc /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */,extraout_EDX + 0x48d0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */);
+          *(float *)(extraout_EDX + 0x48d0 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = local_30;
         }
       }
-      pcVar2 = *(code **)(*(int *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */) + 0x28);
+      pcVar2 = *(code **)(*(int *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) + 0x28);
       uVar7 = (**(code **)(in_stack_0000000c[0x818] + 0xe4))(local_28);
       (*pcVar2)(local_20,uVar7,0,0);
-      iVar6 = (**(code **)(*(int *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */) + 0x3c))(local_20);
+      iVar6 = (**(code **)(*(int *)(extraout_EDX + 0x44 /* CINSBotInvestigateGunshot::Update */ /* CINSBotInvestigateGunshot::Update */) + 0x3c))(local_20);
       fVar10 = 0.0;
       for (iVar6 = *(int *)(iVar6 + 0x1c); iVar6 != 0;
           iVar6 = (**(code **)(*(int *)local_20 + 0x54))(local_20,iVar6)) {
         fVar10 = fVar10 + *(float *)(iVar6 + 0x28);
       }
-      *(float *)(extraout_EDX + 0x48e4 /* CollectIdealPatrolAreas::operator */) = fVar10;
+      *(float *)(extraout_EDX + 0x48e4 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = fVar10;
       uVar3 = (**(code **)(*in_stack_0000000c + 0x444 /* CINSPlayer::IsLineOfSightClear */))(in_stack_0000000c,local_2c,1,0);
       *(undefined4 *)param_1 = 0 /* Continue */;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
-      *(undefined1 *)(extraout_EDX + 0x48e8 /* CollectIdealPatrolAreas::operator */) = uVar3;
+      *(undefined1 *)(extraout_EDX + 0x48e8 /* CollectIdealPatrolAreas::operator */ /* CollectIdealPatrolAreas::operator */) = uVar3;
     }
     else {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x25c45d /* "Goal position no longer valid?" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x25c45d /* "Goal position no longer valid?" */ /* "Goal position no longer valid?" */;
     }
   }
   else {
     *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x25c525 /* "Not investigating, we have a threat.
+" */ /* "Not investigating, we have a threat.
 " */;
   }
   return param_1;
@@ -373,7 +374,7 @@ int CINSBotInvestigateGunshot::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x25be7f /* "Gunshot Investigate" */;
+  return extraout_ECX + 0x25be7f /* "Gunshot Investigate" */ /* "Gunshot Investigate" */;
 }
 
 
@@ -408,7 +409,7 @@ int __cdecl CINSBotInvestigateGunshot::ShouldHurry(INextBot *param_1)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  if (*(float *)(param_1 + 0x48e4) <= *(float *)(extraout_ECX + 0x2271b3 /* typeinfo name for CUtlCachedFileData<CModelSoundsCache>+0x38 */)) {
+  if (*(float *)(param_1 + 0x48e4) <= *(float *)(extraout_ECX + 0x2271b3 /* 2000.0f */ /* 2000.0f */)) {
     return 2;
   }
   return 2 - (uint)(param_1[0x48e8] == (INextBot)0x0);
@@ -454,7 +455,7 @@ CINSNextBot * CINSBotInvestigateGunshot::OnMoveToSuccess(CINSNextBot *param_1,Pa
     CUtlVector<InvestigationData_t,CUtlMemory<InvestigationData_t,int>>::Remove(iVar1 + 0xb45c);
   }
   *(undefined4 *)param_1 = 3 /* Done */;
-  *(int *)(param_1 + 8) = unaff_EBX + 0x25c45f /* "Arrived at investigation target." */;
+  *(int *)(param_1 + 8) = unaff_EBX + 0x25c45f /* "Arrived at investigation target." */ /* "Arrived at investigation target." */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(undefined4 *)(param_1 + 0xc) = 3;
   return param_1;
@@ -480,7 +481,7 @@ undefined4 * CINSBotInvestigateGunshot::OnMoveToFailure(undefined4 *param_1)
     CUtlVector<InvestigationData_t,CUtlMemory<InvestigationData_t,int>>::Remove(iVar1 + 0xb45c);
   }
   *param_1 = 3;
-  param_1[2] = unaff_EBX + 0x25c4f3 /* "Failed pathing to investigation target." */;
+  param_1[2] = unaff_EBX + 0x25c4f3 /* "Failed pathing to investigation target." */ /* "Failed pathing to investigation target." */;
   param_1[1] = 0;
   param_1[3] = 3;
   return param_1;
@@ -621,8 +622,8 @@ CINSBotInvestigateGunshot::~CINSBotInvestigateGunshot(CINSBotInvestigateGunshot 
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47207a /* vtable for CINSBotInvestigateGunshot+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x472212 /* vtable for CINSBotInvestigateGunshot+0x1a0 */;
+  *in_stack_00000004 = unaff_EBX + 0x47207a /* vtable for CINSBotInvestigateGunshot+0x8 */ /* vtable for CINSBotInvestigateGunshot+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x472212 /* vtable for CINSBotInvestigateGunshot+0x1a0 */ /* vtable for CINSBotInvestigateGunshot+0x1a0 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -664,8 +665,8 @@ CINSBotInvestigateGunshot::~CINSBotInvestigateGunshot(CINSBotInvestigateGunshot 
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47200a /* vtable for CINSBotInvestigateGunshot+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x4721a2 /* vtable for CINSBotInvestigateGunshot+0x1a0 */;
+  *in_stack_00000004 = unaff_EBX + 0x47200a /* vtable for CINSBotInvestigateGunshot+0x8 */ /* vtable for CINSBotInvestigateGunshot+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x4721a2 /* vtable for CINSBotInvestigateGunshot+0x1a0 */ /* vtable for CINSBotInvestigateGunshot+0x1a0 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

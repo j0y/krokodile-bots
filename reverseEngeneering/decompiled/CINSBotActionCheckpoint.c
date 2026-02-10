@@ -101,7 +101,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x249b62 /* "Attacking nearby threats" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x249b62 /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
       return param_1;
     }
   }
@@ -112,7 +112,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
     CINSBotEscort::CINSBotEscort(this_03);
     *(undefined4 *)param_1 = 2 /* SuspendFor */;
     *(void **)(param_1 + 4) = pvVar6;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x24b74b /* "Escorting nearest Human" */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x24b74b /* "Escorting nearest Human" */ /* "Escorting nearest Human" */;
     *(undefined4 *)((int)param_2 + 0x20) = 0;
     *(undefined4 *)((int)param_2 + 0x24) = 0;
     *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -128,14 +128,14 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       CINSBotInvestigate::CINSBotInvestigate(this_10,pCVar8);
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(CNavArea **)(param_1 + 4) = pCVar8;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24b6f3 /* "I have an investigation!" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24b6f3 /* "I have an investigation!" */ /* "I have an investigation!" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       return param_1;
     }
-    iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x46faf1 /* &ins_bot_knives_only */) + 0x40))(*(int **)(unaff_EBX + 0x46faf1 /* &ins_bot_knives_only */));
+    iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x46faf1 /* &ins_bot_knives_only */ /* &ins_bot_knives_only */) + 0x40))(*(int **)(unaff_EBX + 0x46faf1 /* &ins_bot_knives_only */ /* &ins_bot_knives_only */));
     if (iVar4 != 0) {
       iVar4 = CBaseEntity::GetTeamNumber(this_07);
       if ((*(byte *)((int)in_stack_0000000c + 0xd1) & 8) != 0) {
@@ -154,7 +154,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         CINSBotInvestigate::CINSBotInvestigate(this_09,pCVar8);
         *(undefined4 *)param_1 = 2 /* SuspendFor */;
         *(CNavArea **)(param_1 + 4) = pCVar8;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24b722 /* "Knifing a player" */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24b722 /* "Knifing a player" */ /* "Knifing a player" */;
         *(undefined4 *)((int)param_2 + 0x20) = 0;
         *(undefined4 *)((int)param_2 + 0x24) = 0;
         *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -164,7 +164,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
     }
     pCVar9 = (CINSNextBot *)TheINSNextBots();
     fVar10 = (float)CINSNextBotManager::GetDesiredPushTypeObjective(pCVar9);
-    iVar4 = **(int **)(unaff_EBX + 0x4702c1 /* &g_pObjectiveResource */);
+    iVar4 = **(int **)(unaff_EBX + 0x4702c1 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
     iVar5 = *(int *)(iVar4 + 0x770);
     iVar1 = *(int *)(iVar4 + 0x450 + iVar5 * 4);
     if (iVar1 == 2) {
@@ -176,20 +176,20 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         local_34 = *(int *)(iVar4 + 0x550 + iVar5 * 4);
       }
     }
-    pCVar9 = *(CINSNextBot **)(unaff_EBX + 0x46fe9d /* &g_pGameRules */);
+    pCVar9 = *(CINSNextBot **)(unaff_EBX + 0x46fe9d /* &g_pGameRules */ /* &g_pGameRules */);
     if (*(char *)(*(int *)pCVar9 + 0x3ac) != '\0') {
       uVar7 = CBaseEntity::GetTeamNumber((CBaseEntity *)pCVar9);
       iVar4 = TheINSNextBots();
       CINSNextBotManager::GenerateCPGrenadeTargets(this_13,iVar4,(int)fVar10);
-      piVar3 = *(int **)(unaff_EBX + 0x46fe45 /* &gpGlobals */);
+      piVar3 = *(int **)(unaff_EBX + 0x46fe45 /* &gpGlobals */ /* &gpGlobals */);
       fVar12 = *(float *)((int)param_2 + 0x3c);
       if (fVar12 < 0.0) {
         fVar12 = *(float *)(*piVar3 + 0xc);
         *(float *)((int)param_2 + 0x3c) = fVar12;
       }
-      fVar13 = *(float *)(unaff_EBX + 0x1820b9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
-      fVar12 = ((*(float *)(unaff_EBX + 0x201281 /* typeinfo name for NetworkVarEmbedded<CountdownTimer, CINSPlayerShared, CINSPlayerShared::GetOffset_m_StanceTransitionTimer>+0x9c */) + *(float *)(*piVar3 + 0xc)) - fVar12) *
-               *(float *)(unaff_EBX + 0x241491 /* typeinfo name for CEntityFactory<CRocketSuppressTrigger>+0x2c */);
+      fVar13 = *(float *)(unaff_EBX + 0x1820b9 /* 1.0f */ /* 1.0f */);
+      fVar12 = ((*(float *)(unaff_EBX + 0x201281 /* -20.0f */ /* -20.0f */) + *(float *)(*piVar3 + 0xc)) - fVar12) *
+               *(float *)(unaff_EBX + 0x241491 /* 0.025f */ /* 0.025f */);
       if (fVar13 <= fVar12) {
         fVar12 = fVar13;
       }
@@ -199,7 +199,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         fVar13 = fVar12;
       }
       if ((float)fVar11 < fVar13) {
-        iVar4 = (int)fVar10 * 0xc + **(int **)(unaff_EBX + 0x4702c1 /* &g_pObjectiveResource */);
+        iVar4 = (int)fVar10 * 0xc + **(int **)(unaff_EBX + 0x4702c1 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
         local_28 = *(undefined4 *)(iVar4 + 0x5d0);
         local_24 = *(undefined4 *)(iVar4 + 0x5d4);
         local_20 = *(undefined4 *)(iVar4 + 0x5d8);
@@ -214,7 +214,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
           CINSBotInvestigate::CINSBotInvestigate(this_14,pCVar8);
           *(undefined4 *)param_1 = 2 /* SuspendFor */;
           *(CNavArea **)(param_1 + 4) = pCVar8;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x24b765 /* "Counter-attacking enemy directly" */;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x24b765 /* "Counter-attacking enemy directly" */ /* "Counter-attacking enemy directly" */;
           *(undefined4 *)((int)param_2 + 0x20) = 0;
           *(undefined4 *)((int)param_2 + 0x24) = 0;
           *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -226,7 +226,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       CINSBotCaptureCP::CINSBotCaptureCP(this_16,(int)pvVar6,SUB41(fVar10,0));
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24b789 /* "It's a counter-attack and we're not hunting, re-cap" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24b789 /* "It's a counter-attack and we're not hunting, re-cap" */ /* "It's a counter-attack and we're not hunting, re-cap" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -250,7 +250,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         *(undefined4 *)((int)param_2 + 0x24) = 0;
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24b7bd /* "Counter-attacking contested point" */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24b7bd /* "Counter-attacking contested point" */ /* "Counter-attacking contested point" */;
         return param_1;
       }
     }
@@ -259,7 +259,7 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       CINSBotGuardDefensive::CINSBotGuardDefensive(this_12,(int)pvVar6);
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24b733 /* "Defending." */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24b733 /* "Defending." */ /* "Defending." */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -269,13 +269,13 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
     uVar7 = 0;
     fVar11 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                                 (pCVar9,(float)in_stack_0000000c,0x40800000 /* 4.0f */);
-    if ((float)fVar11 < *(float *)(unaff_EBX + 0x1edcfd /* typeinfo name for CBaseGameSystem+0x1e */)) {
+    if ((float)fVar11 < *(float *)(unaff_EBX + 0x1edcfd /* 0.5f */ /* 0.5f */)) {
       RandomFloat(0x40a00000 /* 5.0f */,0x41700000 /* 15.0f */,uVar7);
       pvVar6 = ::operator_new(0x48fc);
       CINSBotGuardCP::CINSBotGuardCP(this_15,(int)pvVar6,fVar10);
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
       *(void **)(param_1 + 4) = pvVar6;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24b73e /* "Guarding CP." */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24b73e /* "Guarding CP." */ /* "Guarding CP." */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -320,7 +320,7 @@ int CINSBotActionCheckpoint::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f6e06 /* "Checkpoint" */;
+  return extraout_ECX + 0x1f6e06 /* "Checkpoint" */ /* "Checkpoint" */;
 }
 
 
@@ -372,8 +372,8 @@ CINSBotActionCheckpoint::ShouldHurry(CINSBotActionCheckpoint *this,INextBot *par
         piVar3 = (int *)(**(code **)(*in_stack_00000008 + 0x114))();
         (**(code **)(*piVar3 + 0x18))(piVar3);
         fVar5 = (float10)(*pcVar1)();
-        cVar4 = ((float)fVar5 < *(float *)(unaff_EBX + 0x24b880 /* typeinfo name for CINSBotActionCheckpoint+0x1a */) ||
-                (float)fVar5 == *(float *)(unaff_EBX + 0x24b880 /* typeinfo name for CINSBotActionCheckpoint+0x1a */)) + '\x01';
+        cVar4 = ((float)fVar5 < *(float *)(unaff_EBX + 0x24b880 /* 1400.0f */ /* 1400.0f */) ||
+                (float)fVar5 == *(float *)(unaff_EBX + 0x24b880 /* 1400.0f */ /* 1400.0f */)) + '\x01';
       }
     }
   }
@@ -446,9 +446,9 @@ void __thiscall CINSBotActionCheckpoint::~CINSBotActionCheckpoint(CINSBotActionC
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x461d93 /* vtable for CINSBotActionCheckpoint+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x461f2b /* vtable for CINSBotActionCheckpoint+0x1a0 */;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46fe43 /* &_DYNAMIC */));
+  *in_stack_00000004 = extraout_ECX + 0x461d93 /* vtable for CINSBotActionCheckpoint+0x8 */ /* vtable for CINSBotActionCheckpoint+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x461f2b /* vtable for CINSBotActionCheckpoint+0x1a0 */ /* vtable for CINSBotActionCheckpoint+0x1a0 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46fe43 /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -485,8 +485,8 @@ void __thiscall CINSBotActionCheckpoint::~CINSBotActionCheckpoint(CINSBotActionC
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x461d4a /* vtable for CINSBotActionCheckpoint+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x461ee2 /* vtable for CINSBotActionCheckpoint+0x1a0 */;
+  *in_stack_00000004 = unaff_EBX + 0x461d4a /* vtable for CINSBotActionCheckpoint+0x8 */ /* vtable for CINSBotActionCheckpoint+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x461ee2 /* vtable for CINSBotActionCheckpoint+0x1a0 */ /* vtable for CINSBotActionCheckpoint+0x1a0 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

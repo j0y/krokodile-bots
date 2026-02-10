@@ -11,17 +11,20 @@ First run Ghidra headless decompilation, then the annotation scripts in order:
 # 2. Resolve PIC GOT-relative references (strings, symbols)
 python3 reverseEngeneering/scripts/resolve_pic_refs.py
 
-# 3. Annotate vtable dispatches with method names
+# 3. Replace misleading .rodata PIC annotations with actual float values
+python3 reverseEngeneering/scripts/annotate_rodata_floats.py
+
+# 4. Annotate vtable dispatches with method names
 python3 reverseEngeneering/scripts/annotate_vtable.py
 
-# 4. Annotate IEEE 754 float constants
+# 5. Annotate IEEE 754 float constants in hex literals
 python3 reverseEngeneering/scripts/annotate_floats.py
 
-# 5. Annotate ActionResult type codes (Continue/ChangeTo/SuspendFor/Done)
+# 6. Annotate ActionResult type codes (Continue/ChangeTo/SuspendFor/Done)
 python3 reverseEngeneering/scripts/annotate_actionresult.py
 ```
 
-Order matters: `resolve_pic_refs` must run first since `annotate_vtable` can replace its annotations on vtable dispatches.
+Order matters: `resolve_pic_refs` must run first. `annotate_rodata_floats` must run before `annotate_vtable` since both replace PIC annotations — rodata_floats handles float constants, then vtable replaces remaining PIC annotations on vtable dispatches.
 
 ## Analysis Scripts (Ghidra postScripts)
 

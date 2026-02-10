@@ -21,12 +21,12 @@ void __thiscall CINSBotBody::CINSBotBody(CINSBotBody *this,INextBot *param_1)
   int unaff_EBX;
   
   __i686_get_pc_thunk_bx();
-  iVar1 = unaff_EBX + 0x3d2dfd /* vtable for CountdownTimer+0x8 */;
+  iVar1 = unaff_EBX + 0x3d2dfd /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
   PlayerBody::PlayerBody(this_00,param_1);
   *(int *)(param_1 + 0xd0) = iVar1;
-  *(int *)param_1 = unaff_EBX + 0x447aed /* vtable for CINSBotBody+0x8 */;
+  *(int *)param_1 = unaff_EBX + 0x447aed /* vtable for CINSBotBody+0x8 */ /* vtable for CINSBotBody+0x8 */;
   *(undefined4 *)(param_1 + 0xd4) = 0;
-  pcVar2 = (code *)(unaff_EBX + -0x524c4b /* CountdownTimer::NetworkStateChanged */);
+  pcVar2 = (code *)(unaff_EBX + -0x524c4b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
   (*pcVar2)(param_1 + 0xd0,param_1 + 0xd4);
   *(undefined4 *)(param_1 + 0xd8) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0xd0) + 4))(param_1 + 0xd0,param_1 + 0xd8);
@@ -60,7 +60,7 @@ void __thiscall CINSBotBody::CINSBotBody(CINSBotBody *this,INextBot *param_1)
   (*pcVar2)(param_1 + 0x148,param_1 + 0x14c);
   *(undefined4 *)(param_1 + 0x150) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x148) + 4))(param_1 + 0x148,param_1 + 0x150);
-  iVar1 = *(int *)(unaff_EBX + 0x451895 /* &vtable for IntervalTimer */);
+  iVar1 = *(int *)(unaff_EBX + 0x451895 /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */);
   *(undefined4 *)(param_1 + 0x170) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x16c) = iVar1 + 8;
   (**(code **)(iVar1 + 0x10))(param_1 + 0x16c,param_1 + 0x170);
@@ -125,7 +125,7 @@ void __thiscall CINSBotBody::Update(CINSBotBody *this)
       if (cVar1 != '\0') {
         UpdatePosture(this_02);
         fVar4 = (float10)CountdownTimer::Now();
-        fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f3990 /* typeinfo name for CUtlCachedFileData<CModelSoundsCache>+0x44 */);
+        fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f3990 /* 0.125f */ /* 0.125f */);
         this_00 = extraout_ECX_01;
         if ((float)in_stack_00000004[0x39] != fVar5) {
           (**(code **)(in_stack_00000004[0x37] + 4))
@@ -167,11 +167,11 @@ CINSBotBody::CalculateArousalFrac(undefined4 param_1,undefined4 param_2,uint par
   if (param_3 < 6) {
                     /* WARNING: Could not recover jumptable at 0x007568b3. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    fVar1 = (float10)(*(code *)(*(int *)(unaff_EBX + 0x22cefa /* typeinfo name for CINSBotMainAction+0x12a */ + param_3 * 4) + unaff_EBX + 0x4508ee /* &_DYNAMIC */)
+    fVar1 = (float10)(*(code *)(*(int *)(unaff_EBX + 0x22cefa /* rodata:0xFFBAF898 */ /* rodata:0xFFBAF898 */ + param_3 * 4) + unaff_EBX + 0x4508ee /* &_DYNAMIC */ /* &_DYNAMIC */)
                      )();
     return fVar1;
   }
-  return (float10)*(float *)(unaff_EBX + 0x16228a /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
+  return (float10)*(float *)(unaff_EBX + 0x16228a /* 1.0f */ /* 1.0f */);
 }
 
 
@@ -208,7 +208,7 @@ CINSBotBody::CanTransition(undefined4 param_1,int *param_2,int param_3,uint para
       iVar2 = (**(code **)(*param_2 + 0x15c))(param_2);
       if (iVar2 != 0) {
         piVar3 = (int *)__dynamic_cast(iVar2,*(undefined4 *)(&DAT_00450086 + unaff_EBX),
-                                       *(undefined4 *)(unaff_EBX + 0x44f9aa /* &typeinfo for CINSNextBot */),0);
+                                       *(undefined4 *)(unaff_EBX + 0x44f9aa /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0);
         if (piVar3 != (int *)0x0) {
           uVar4 = -(uint)(param_3 - 1U < 2) & 2;
           if ((param_3 == 6) || (param_3 == 3)) {
@@ -229,8 +229,8 @@ CINSBotBody::CanTransition(undefined4 param_1,int *param_2,int param_3,uint para
               if (param_4 < 0xf) {
                     /* WARNING: Could not recover jumptable at 0x007571bc. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-                uVar6 = (*(code *)(*(int *)(unaff_EBX + 0x22c752 /* typeinfo name for CINSBotMainAction+0x176 */ + param_4 * 4) +
-                                  unaff_EBX + 0x4500fa /* &_DYNAMIC */))();
+                uVar6 = (*(code *)(*(int *)(unaff_EBX + 0x22c752 /* rodata:0xFFBB0026 */ /* rodata:0xFFBB0026 */ + param_4 * 4) +
+                                  unaff_EBX + 0x4500fa /* &_DYNAMIC */ /* &_DYNAMIC */))();
                 return uVar6;
               }
               uVar6 = 1;
@@ -335,7 +335,7 @@ void __thiscall CINSBotBody::CheckBadViewTarget(CINSBotBody *this,bool param_1)
   
   uStack_14 = 0x75570b;
   __i686_get_pc_thunk_bx();
-  piVar9 = *(int **)(unaff_EBX + 0x4511ed /* &g_pGameRules */);
+  piVar9 = *(int **)(unaff_EBX + 0x4511ed /* &g_pGameRules */ /* &g_pGameRules */);
   cVar5 = CINSRules::IsGameState(this_00,*piVar9);
   if (cVar5 == '\0') {
     uVar16 = 3;
@@ -347,7 +347,7 @@ void __thiscall CINSBotBody::CheckBadViewTarget(CINSBotBody *this,bool param_1)
     iVar7 = (**(code **)(*piVar6 + 200))(piVar6);
     iVar10 = 0;
     if (*(int *)(iVar7 + 0x20) != 0) {
-      iVar10 = *(int *)(iVar7 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x451195 /* &gpGlobals */) + 0x5c) >> 4;
+      iVar10 = *(int *)(iVar7 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x451195 /* &gpGlobals */ /* &gpGlobals */) + 0x5c) >> 4;
     }
     piVar6 = (int *)UTIL_PlayerByIndex(iVar10);
     if (((piVar6 != (int *)0x0) && (cVar5 = (**(code **)(*piVar6 + 0x158))(piVar6), cVar5 != '\0'))
@@ -361,7 +361,7 @@ void __thiscall CINSBotBody::CheckBadViewTarget(CINSBotBody *this,bool param_1)
     return;
   }
   fVar13 = (float10)CountdownTimer::Now();
-  fVar14 = (float)fVar13 + *(float *)(unaff_EBX + 0x1ce381 /* typeinfo name for ISaveRestoreOps+0x67 */);
+  fVar14 = (float)fVar13 + *(float *)(unaff_EBX + 0x1ce381 /* 0.25f */ /* 0.25f */);
   if ((float)_param_1[0x36] != fVar14) {
     (**(code **)(_param_1[0x34] + 4))(_param_1 + 0x34,_param_1 + 0x36);
     _param_1[0x36] = (int)fVar14;
@@ -376,11 +376,11 @@ void __thiscall CINSBotBody::CheckBadViewTarget(CINSBotBody *this,bool param_1)
   }
   pVVar8 = (Vector *)
            __dynamic_cast(iVar7,*(undefined4 *)(&DAT_004519f9 + unaff_EBX),
-                          *(undefined4 *)(unaff_EBX + 0x45131d /* &typeinfo for CINSNextBot */),0);
+                          *(undefined4 *)(unaff_EBX + 0x45131d /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0);
   if (pVVar8 == (Vector *)0x0) {
     return;
   }
-  piVar9 = *(int **)(unaff_EBX + 0x451195 /* &gpGlobals */);
+  piVar9 = *(int **)(unaff_EBX + 0x451195 /* &gpGlobals */ /* &gpGlobals */);
   if (in_stack_00000008 != '\0') {
 LAB_007558c3:
     if (_param_1[0x5c] != -0x40800000 /* -1.0f */) {
@@ -390,7 +390,7 @@ LAB_007558c3:
     _param_1[0x5d] = *(int *)(*piVar9 + 0xc);
     piVar9 = (int *)(**(code **)(*_param_1 + 0x15c))(_param_1);
     (**(code **)(*piVar9 + 0x20c /* CINSNextBot::EyePosition */))(&local_4c,piVar9);
-    pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */);
+    pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */ /* &vec3_origin */);
     local_6c = *pfVar1;
     local_64 = pfVar1[2];
     local_68 = pfVar1[1];
@@ -411,12 +411,12 @@ LAB_007558c3:
     fVar15 = local_30;
     fVar11 = local_34;
     local_e0 = 0;
-    fVar14 = *(float *)(unaff_EBX + 0x1cf911 /* typeinfo name for ITraceFilter+0x2c */);
+    fVar14 = *(float *)(unaff_EBX + 0x1cf911 /* 300.0f */ /* 300.0f */);
     local_64 = local_2c * fVar14 + local_44;
     local_6c = local_34 * fVar14 + local_4c;
     local_68 = fVar14 * local_30 + local_48;
-    fVar14 = *(float *)(unaff_EBX + 0x163401 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x2c */);
-    if ((float)((uint)(local_64 - local_44) & *(uint *)(unaff_EBX + 0x1cf945 /* typeinfo name for ITraceFilter+0x60 */)) <= fVar14) {
+    fVar14 = *(float *)(unaff_EBX + 0x163401 /* 76.0f */ /* 76.0f */);
+    if ((float)((uint)(local_64 - local_44) & *(uint *)(unaff_EBX + 0x1cf945 /* rodata:0x7FFFFFFF */ /* rodata:0x7FFFFFFF */)) <= fVar14) {
       (**(code **)(*(int *)pVVar8 + 0x20c /* CINSNextBot::EyePosition */))(&local_28,pVVar8,uVar16,uVar18);
       local_68 = fVar15 * fVar14 + local_24;
       local_64 = fVar2 * fVar14 + local_20;
@@ -428,18 +428,18 @@ LAB_007558c3:
         return;
       }
     }
-    pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */);
+    pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */ /* &vec3_origin */);
     local_144 = 0.0;
-    piVar9 = *(int **)(unaff_EBX + 0x451335 /* &r_visualizetraces */);
-    fVar14 = *(float *)(unaff_EBX + 0x208965 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xd0 */);
+    piVar9 = *(int **)(unaff_EBX + 0x451335 /* &r_visualizetraces */ /* &r_visualizetraces */);
+    fVar14 = *(float *)(unaff_EBX + 0x208965 /* 38.0f */ /* 38.0f */);
     local_5c = *pfVar1;
     local_58 = pfVar1[1];
     local_54 = pfVar1[2];
     iVar7 = 0x10;
     do {
       sincosf(local_144,&local_130,&local_134);
-      local_68 = local_130 * *(float *)(unaff_EBX + 0x1cf905 /* typeinfo name for ITraceFilter+0x20 */) + local_48;
-      local_6c = *(float *)(unaff_EBX + 0x1cf905 /* typeinfo name for ITraceFilter+0x20 */) * local_134 + local_4c;
+      local_68 = local_130 * *(float *)(unaff_EBX + 0x1cf905 /* 1000.0f */ /* 1000.0f */) + local_48;
+      local_6c = *(float *)(unaff_EBX + 0x1cf905 /* 1000.0f */ /* 1000.0f */) * local_134 + local_4c;
       local_64 = local_44 + fVar14;
       iVar10 = (**(code **)(*_param_1 + 0x15c))(_param_1);
       local_8c = 0;
@@ -479,31 +479,31 @@ LAB_007558c3:
         local_54 = local_64;
       }
       iVar7 = iVar7 + -1;
-      local_144 = *(float *)(unaff_EBX + 0x1d067d /* typeinfo name for ICollideable+0x4b */) + local_144;
+      local_144 = *(float *)(unaff_EBX + 0x1d067d /* rodata:0x3EC90FDB */ /* rodata:0x3EC90FDB */) + local_144;
     } while (iVar7 != 0);
-    pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */);
+    pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */ /* &vec3_origin */);
     if (((*pfVar1 == local_5c) && (pfVar1[1] == local_58)) && (pfVar1[2] == local_54)) {
       return;
     }
-    (**(code **)(*_param_1 + 0xd4))(_param_1,&local_5c,3,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x22df89 /* "Looking at longest distance I can see" */);
+    (**(code **)(*_param_1 + 0xd4))(_param_1,&local_5c,3,0x3f800000 /* 1.0f */,0,unaff_EBX + 0x22df89 /* "Looking at longest distance I can see" */ /* "Looking at longest distance I can see" */);
     return;
   }
   (**(code **)(*(int *)pVVar8 + 0x96c /* CINSNextBot::GetLocomotionInterface */))(pVVar8);
   fVar13 = (float10)CINSBotLocomotion::GetStillDuration(this_03);
-  if (*(float *)(unaff_EBX + 0x1d16a5 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) <= (float)fVar13 &&
-      (float)fVar13 != *(float *)(unaff_EBX + 0x1d16a5 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */)) {
-    fVar14 = *(float *)(unaff_EBX + 0x1ceaa5 /* typeinfo name for CTraceFilterNoCombatCharacters+0x30 */);
+  if (*(float *)(unaff_EBX + 0x1d16a5 /* 2.0f */ /* 2.0f */) <= (float)fVar13 &&
+      (float)fVar13 != *(float *)(unaff_EBX + 0x1d16a5 /* 2.0f */ /* 2.0f */)) {
+    fVar14 = *(float *)(unaff_EBX + 0x1ceaa5 /* 10.0f */ /* 10.0f */);
     if (fVar14 < *(float *)(*piVar9 + 0xc) - (float)_param_1[0x5d]) goto LAB_007558c3;
   }
   else {
-    fVar14 = *(float *)(unaff_EBX + 0x1ceaa5 /* typeinfo name for CTraceFilterNoCombatCharacters+0x30 */);
+    fVar14 = *(float *)(unaff_EBX + 0x1ceaa5 /* 10.0f */ /* 10.0f */);
   }
   piVar9 = (int *)(**(code **)(*(int *)pVVar8 + 0x96c /* CINSNextBot::GetLocomotionInterface */))(pVVar8);
   fVar13 = (float10)(**(code **)(*piVar9 + 0x16c /* ILocomotion::GetSpeed */))(piVar9);
   if ((float)fVar13 <= fVar14) {
     return;
   }
-  pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */);
+  pfVar1 = *(float **)(unaff_EBX + 0x450ec1 /* &vec3_origin */ /* &vec3_origin */);
   local_4c = *pfVar1;
   local_48 = pfVar1[1];
   local_44 = pfVar1[2];
@@ -519,7 +519,7 @@ LAB_007558c3:
   uVar18 = 0;
   uVar16 = 0;
   CBasePlayer::EyeVectors((CBasePlayer *)this_05,pVVar8,pVVar17,(Vector *)0x0);
-  fVar14 = *(float *)(unaff_EBX + 0x163415 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x40 */);
+  fVar14 = *(float *)(unaff_EBX + 0x163415 /* 100.0f */ /* 100.0f */);
   local_4c = local_4c * fVar14;
   local_48 = local_48 * fVar14;
   local_44 = fVar14 * local_44;
@@ -577,7 +577,7 @@ LAB_00755fb4:
   if (cVar5 == '\0') {
     fVar12 = (float)_param_1[0x5c];
     if (((fVar3 - fVar14) * local_144 + (fVar2 - fVar11) * local_140 + local_13c * (fVar4 - fVar15)
-         < *(float *)(unaff_EBX + 0x20a8fd /* CSWTCH.586+0x24 */)) && (fVar12 <= 0.0)) {
+         < *(float *)(unaff_EBX + 0x20a8fd /* CSWTCH.586+0x24 */ /* CSWTCH.586+0x24 */)) && (fVar12 <= 0.0)) {
       fVar13 = (float10)IntervalTimer::Now();
       fVar11 = (float)fVar13;
       fVar14 = (float)_param_1[0x5c];
@@ -601,8 +601,8 @@ LAB_00755fb4:
 LAB_007561ab:
   if (0.0 < fVar14) {
     fVar13 = (float10)IntervalTimer::Now();
-    if ((*(float *)(unaff_EBX + 0x1cfa59 /* typeinfo name for CEntityFactory<CBaseViewModel>+0x24 */) <= (float)fVar13 - (float)_param_1[0x5c] &&
-         (float)fVar13 - (float)_param_1[0x5c] != *(float *)(unaff_EBX + 0x1cfa59 /* typeinfo name for CEntityFactory<CBaseViewModel>+0x24 */)) &&
+    if ((*(float *)(unaff_EBX + 0x1cfa59 /* 1.5f */ /* 1.5f */) <= (float)fVar13 - (float)_param_1[0x5c] &&
+         (float)fVar13 - (float)_param_1[0x5c] != *(float *)(unaff_EBX + 0x1cfa59 /* 1.5f */ /* 1.5f */)) &&
        ((**(code **)(*_param_1 + 0x160))(_param_1), _param_1[0x5c] != -0x40800000 /* -1.0f */)) {
       (**(code **)(_param_1[0x5b] + 8))(_param_1 + 0x5b,_param_1 + 0x5c);
       _param_1[0x5c] = -0x40800000 /* -1.0f */;
@@ -644,8 +644,8 @@ void __thiscall CINSBotBody::DetermineCurrentStance(CINSBotBody *this)
   if (iVar2 != 0) {
     iVar2 = (**(code **)(*in_stack_00000004 + 0x15c))();
     if (iVar2 != 0) {
-      piVar3 = (int *)__dynamic_cast(iVar2,*(undefined4 *)(unaff_EBX + 0x450310 /* &typeinfo for CBaseEntity */),
-                                     *(undefined4 *)(unaff_EBX + 0x44fc34 /* &typeinfo for CINSNextBot */),0);
+      piVar3 = (int *)__dynamic_cast(iVar2,*(undefined4 *)(unaff_EBX + 0x450310 /* &typeinfo for CBaseEntity */ /* &typeinfo for CBaseEntity */),
+                                     *(undefined4 *)(unaff_EBX + 0x44fc34 /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0);
       if (piVar3 != (int *)0x0) {
         piVar4 = (int *)(**(code **)(*piVar3 + 0x96c /* CINSNextBot::GetLocomotionInterface */))(piVar3);
         cVar1 = (**(code **)(*piVar4 + 0x10c /* PlayerLocomotion::IsOnGround */))(piVar4);
@@ -660,8 +660,8 @@ void __thiscall CINSBotBody::DetermineCurrentStance(CINSBotBody *this)
             return;
           }
           fVar5 = (float10)CINSPlayer::GetSuppressionFrac(this_01);
-          if ((float)fVar5 < *(float *)(unaff_EBX + 0x1ccc9c /* typeinfo name for ISaveRestoreOps+0x6b */) ||
-              (float)fVar5 == *(float *)(unaff_EBX + 0x1ccc9c /* typeinfo name for ISaveRestoreOps+0x6b */)) {
+          if ((float)fVar5 < *(float *)(unaff_EBX + 0x1ccc9c /* 0.75f */ /* 0.75f */) ||
+              (float)fVar5 == *(float *)(unaff_EBX + 0x1ccc9c /* 0.75f */ /* 0.75f */)) {
             cVar1 = CINSPlayer::HasPlayerFlag(this_02,(int)piVar3);
             if (cVar1 == '\0') {
               cVar1 = CINSPlayer::IsProned(this_03);
@@ -780,8 +780,8 @@ float10 __thiscall CINSBotBody::GetArousalFalloff(CINSBotBody *this)
     if (cVar1 == '\0') {
       cVar1 = (**(code **)(*(int *)(iVar2 + -0x2060) + 0x8ac))(iVar5);
       if (cVar1 == '\0') {
-        piVar3 = (int *)(*(int **)(unaff_EBX + 0x450384 /* &ins_bot_arousal_default_falloff */))[7];
-        if (piVar3 != *(int **)(unaff_EBX + 0x450384 /* &ins_bot_arousal_default_falloff */)) {
+        piVar3 = (int *)(*(int **)(unaff_EBX + 0x450384 /* &ins_bot_arousal_default_falloff */ /* &ins_bot_arousal_default_falloff */))[7];
+        if (piVar3 != *(int **)(unaff_EBX + 0x450384 /* &ins_bot_arousal_default_falloff */ /* &ins_bot_arousal_default_falloff */)) {
 LAB_00756601:
           fVar6 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
           return fVar6;
@@ -789,8 +789,8 @@ LAB_00756601:
       }
       else {
         iVar2 = (**(code **)(*in_stack_00000004 + 0x134))();
-        piVar3 = (int *)(*(int **)(unaff_EBX + 0x450290 /* &ins_bot_arousal_combat_max */))[7];
-        if (piVar3 == *(int **)(unaff_EBX + 0x450290 /* &ins_bot_arousal_combat_max */)) {
+        piVar3 = (int *)(*(int **)(unaff_EBX + 0x450290 /* &ins_bot_arousal_combat_max */ /* &ins_bot_arousal_combat_max */))[7];
+        if (piVar3 == *(int **)(unaff_EBX + 0x450290 /* &ins_bot_arousal_combat_max */ /* &ins_bot_arousal_combat_max */)) {
           fVar4 = (float)((uint)piVar3 ^ piVar3[0xb]);
         }
         else {
@@ -804,8 +804,8 @@ LAB_00756601:
     }
     else {
       iVar2 = (**(code **)(*in_stack_00000004 + 0x134))();
-      piVar3 = (int *)(*(int **)(unaff_EBX + 0x450890 /* &ins_bot_arousal_firing_max */))[7];
-      if (piVar3 == *(int **)(unaff_EBX + 0x450890 /* &ins_bot_arousal_firing_max */)) {
+      piVar3 = (int *)(*(int **)(unaff_EBX + 0x450890 /* &ins_bot_arousal_firing_max */ /* &ins_bot_arousal_firing_max */))[7];
+      if (piVar3 == *(int **)(unaff_EBX + 0x450890 /* &ins_bot_arousal_firing_max */ /* &ins_bot_arousal_firing_max */)) {
         fVar4 = (float)((uint)piVar3 ^ piVar3[0xb]);
       }
       else {
@@ -813,14 +813,14 @@ LAB_00756601:
         fVar4 = (float)fVar6;
       }
       if (fVar4 <= (float)iVar2) goto LAB_007564ee;
-      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4505d4 /* &ins_bot_arousal_firing_falloff */))[7];
-      if (piVar3 != *(int **)(unaff_EBX + 0x4505d4 /* &ins_bot_arousal_firing_falloff */)) goto LAB_00756601;
+      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4505d4 /* &ins_bot_arousal_firing_falloff */ /* &ins_bot_arousal_firing_falloff */))[7];
+      if (piVar3 != *(int **)(unaff_EBX + 0x4505d4 /* &ins_bot_arousal_firing_falloff */ /* &ins_bot_arousal_firing_falloff */)) goto LAB_00756601;
     }
   }
   else {
     iVar2 = (**(code **)(*in_stack_00000004 + 0x134))();
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4505bc /* &ins_bot_arousal_suppression_max */))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x4505bc /* &ins_bot_arousal_suppression_max */)) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4505bc /* &ins_bot_arousal_suppression_max */ /* &ins_bot_arousal_suppression_max */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x4505bc /* &ins_bot_arousal_suppression_max */ /* &ins_bot_arousal_suppression_max */)) {
       fVar4 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
@@ -831,8 +831,8 @@ LAB_00756601:
 LAB_007564ee:
       return (float10)0;
     }
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4508a0 /* &ins_bot_arousal_suppression_falloff */))[7];
-    if (piVar3 != *(int **)(unaff_EBX + 0x4508a0 /* &ins_bot_arousal_suppression_falloff */)) goto LAB_00756601;
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4508a0 /* &ins_bot_arousal_suppression_falloff */ /* &ins_bot_arousal_suppression_falloff */))[7];
+    if (piVar3 != *(int **)(unaff_EBX + 0x4508a0 /* &ins_bot_arousal_suppression_falloff */ /* &ins_bot_arousal_suppression_falloff */)) goto LAB_00756601;
   }
   return (float10)(float)((uint)piVar3 ^ piVar3[0xb]);
 }
@@ -935,8 +935,8 @@ float10 __thiscall CINSBotBody::GetHeadAimTrackingInterval(CINSBotBody *this)
   if (iVar2 != 0) {
     iVar4 = iVar2 + -0x2060;
   }
-  piVar3 = (int *)(*(int **)(unaff_EBX + 0x451a2b /* &bot_aimtracking_base */))[7];
-  if (piVar3 == *(int **)(unaff_EBX + 0x451a2b /* &bot_aimtracking_base */)) {
+  piVar3 = (int *)(*(int **)(unaff_EBX + 0x451a2b /* &bot_aimtracking_base */ /* &bot_aimtracking_base */))[7];
+  if (piVar3 == *(int **)(unaff_EBX + 0x451a2b /* &bot_aimtracking_base */ /* &bot_aimtracking_base */)) {
     fVar10 = (float)((uint)piVar3 ^ piVar3[0xb]);
     pCVar8 = extraout_ECX;
   }
@@ -950,24 +950,24 @@ LAB_00754f65:
     return (float10)fVar10;
   }
   if ((*(byte *)(iVar4 + 0x2294) & 8) != 0) {
-    fVar10 = *(float *)(unaff_EBX + 0x1d011f /* typeinfo name for ITraceFilter+0x3c */);
+    fVar10 = *(float *)(unaff_EBX + 0x1d011f /* 0.001f */ /* 0.001f */);
     goto LAB_00754f65;
   }
   iVar2 = CINSNextBot::GetDifficulty(pCVar8);
   if (iVar2 == 3) {
-    local_20 = *(int **)(unaff_EBX + 0x4519eb /* &g_pGameRules */);
+    local_20 = *(int **)(unaff_EBX + 0x4519eb /* &g_pGameRules */ /* &g_pGameRules */);
     pCVar8 = extraout_ECX_01;
 LAB_00755209:
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4519ef /* &bot_aimtracking_frac_impossible */))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x4519ef /* &bot_aimtracking_frac_impossible */)) goto LAB_00755285;
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4519ef /* &bot_aimtracking_frac_impossible */ /* &bot_aimtracking_frac_impossible */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x4519ef /* &bot_aimtracking_frac_impossible */ /* &bot_aimtracking_frac_impossible */)) goto LAB_00755285;
 LAB_00755220:
     fVar9 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
     fVar7 = (float)fVar9;
     pCVar8 = extraout_ECX_08;
   }
   else {
-    iVar2 = (**(code **)(**(int **)(unaff_EBX + 0x451bbf /* &mp_coop_ai_teammates */) + 0x40))(*(int **)(unaff_EBX + 0x451bbf /* &mp_coop_ai_teammates */));
-    local_20 = *(int **)(unaff_EBX + 0x4519eb /* &g_pGameRules */);
+    iVar2 = (**(code **)(**(int **)(unaff_EBX + 0x451bbf /* &mp_coop_ai_teammates */ /* &mp_coop_ai_teammates */) + 0x40))(*(int **)(unaff_EBX + 0x451bbf /* &mp_coop_ai_teammates */ /* &mp_coop_ai_teammates */));
+    local_20 = *(int **)(unaff_EBX + 0x4519eb /* &g_pGameRules */ /* &g_pGameRules */);
     pCVar8 = extraout_ECX_02;
     if ((((iVar2 != 0) && (piVar3 = (int *)*local_20, piVar3 != (int *)0x0)) &&
         (cVar1 = (**(code **)(*piVar3 + 0x29c /* CBaseEntity::HasPhysicsAttacker */))(piVar3), pCVar8 = extraout_ECX_03, cVar1 != '\0'))
@@ -991,8 +991,8 @@ LAB_00755220:
         cVar1 = *(char *)(iVar4 + 0xb49c);
         goto joined_r0x00755245;
       }
-      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4515b3 /* &bot_aimtracking_frac_easy */))[7];
-      if (piVar3 != *(int **)(unaff_EBX + 0x4515b3 /* &bot_aimtracking_frac_easy */)) goto LAB_00755220;
+      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4515b3 /* &bot_aimtracking_frac_easy */ /* &bot_aimtracking_frac_easy */))[7];
+      if (piVar3 != *(int **)(unaff_EBX + 0x4515b3 /* &bot_aimtracking_frac_easy */ /* &bot_aimtracking_frac_easy */)) goto LAB_00755220;
     }
 LAB_00755285:
     fVar7 = (float)((uint)piVar3 ^ piVar3[0xb]);
@@ -1001,8 +1001,8 @@ LAB_00755285:
   fVar10 = fVar10 * fVar7;
 joined_r0x00755245:
   if (cVar1 != '\0') {
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x45218f /* &bot_aimtracking_uber */))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x45218f /* &bot_aimtracking_uber */)) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x45218f /* &bot_aimtracking_uber */ /* &bot_aimtracking_uber */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x45218f /* &bot_aimtracking_uber */ /* &bot_aimtracking_uber */)) {
       fVar10 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
@@ -1012,8 +1012,8 @@ joined_r0x00755245:
     }
   }
   if ((*local_20 != 0) && (cVar1 = CINSRules::IsSurvival((CINSRules *)pCVar8), cVar1 != '\0')) {
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x45182b /* &bot_aimtracking_frac_survival_end */))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x45182b /* &bot_aimtracking_frac_survival_end */)) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x45182b /* &bot_aimtracking_frac_survival_end */ /* &bot_aimtracking_frac_survival_end */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x45182b /* &bot_aimtracking_frac_survival_end */ /* &bot_aimtracking_frac_survival_end */)) {
       fVar7 = (float)((uint)piVar3 ^ piVar3[0xb]);
       pCVar8 = extraout_ECX_05;
     }
@@ -1022,8 +1022,8 @@ joined_r0x00755245:
       fVar7 = (float)fVar9;
       pCVar8 = extraout_ECX_06;
     }
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4515e3 /* &bot_aimtracking_frac_survival_start */))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x4515e3 /* &bot_aimtracking_frac_survival_start */)) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4515e3 /* &bot_aimtracking_frac_survival_start */ /* &bot_aimtracking_frac_survival_start */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x4515e3 /* &bot_aimtracking_frac_survival_start */ /* &bot_aimtracking_frac_survival_start */)) {
       fVar6 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
@@ -1031,27 +1031,27 @@ joined_r0x00755245:
       fVar6 = (float)fVar9;
       pCVar8 = extraout_ECX_07;
     }
-    fVar11 = ((float)*(int *)(*local_20 + 1000) + *(float *)(unaff_EBX + 0x163c03 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */)) *
-             *(float *)(unaff_EBX + 0x1dec33 /* typeinfo name for CINSRules_Survival+0x20 */);
-    if (*(float *)(unaff_EBX + 0x163c07 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) <= fVar11) {
-      fVar11 = *(float *)(unaff_EBX + 0x163c07 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
+    fVar11 = ((float)*(int *)(*local_20 + 1000) + *(float *)(unaff_EBX + 0x163c03 /* -1.0f */ /* -1.0f */)) *
+             *(float *)(unaff_EBX + 0x1dec33 /* rodata:0x3DAAAAAB */ /* rodata:0x3DAAAAAB */);
+    if (*(float *)(unaff_EBX + 0x163c07 /* 1.0f */ /* 1.0f */) <= fVar11) {
+      fVar11 = *(float *)(unaff_EBX + 0x163c07 /* 1.0f */ /* 1.0f */);
     }
-    if (fVar11 <= *(float *)(unaff_EBX + 0x163bfb /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
-      fVar11 = *(float *)(unaff_EBX + 0x163bfb /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */);
+    if (fVar11 <= *(float *)(unaff_EBX + 0x163bfb /* 0.0f */ /* 0.0f */)) {
+      fVar11 = *(float *)(unaff_EBX + 0x163bfb /* 0.0f */ /* 0.0f */);
     }
     fVar10 = fVar10 * ((fVar7 - fVar6) * fVar11 + fVar6);
     piVar3 = (int *)CINSNextBot::GetTarget(pCVar8);
     if (((piVar3 != (int *)0x0) && (iVar4 = (**(code **)(*piVar3 + 0x10 /* CBaseEntity::GetCollideable */))(piVar3), iVar4 != 0)) &&
        ((cVar1 = (**(code **)(*piVar3 + 0x38 /* CBaseAnimating::TestCollision */))(piVar3), cVar1 != '\0' &&
         ((((fVar9 = (float10)(**(code **)(*piVar3 + 0x30 /* CINSPlayer::GetDataDescMap */))(piVar3),
-           *(float *)(unaff_EBX + 0x1d1ea3 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) <= (float)fVar9 &&
-           (float)fVar9 != *(float *)(unaff_EBX + 0x1d1ea3 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) &&
+           *(float *)(unaff_EBX + 0x1d1ea3 /* 2.0f */ /* 2.0f */) <= (float)fVar9 &&
+           (float)fVar9 != *(float *)(unaff_EBX + 0x1d1ea3 /* 2.0f */ /* 2.0f */) &&
            (piVar3 = (int *)(**(code **)(*piVar3 + 0x10 /* CBaseEntity::GetCollideable */))(piVar3), piVar3 != (int *)0x0)) &&
           (cVar1 = (**(code **)(*piVar3 + 0x158 /* CBasePlayer::IsPlayer */))(piVar3), cVar1 != '\0')) &&
          ((cVar1 = (**(code **)(*piVar3 + 0x118 /* CBaseEntity::IsAlive */))(piVar3), cVar1 != '\0' &&
           (cVar1 = CINSPlayer::IsSprinting(this_01), cVar1 != '\0')))))))) {
-      piVar3 = (int *)(*(int **)(unaff_EBX + 0x451b7f /* &bot_aimtracking_frac_sprinting_target */))[7];
-      if (piVar3 == *(int **)(unaff_EBX + 0x451b7f /* &bot_aimtracking_frac_sprinting_target */)) {
+      piVar3 = (int *)(*(int **)(unaff_EBX + 0x451b7f /* &bot_aimtracking_frac_sprinting_target */ /* &bot_aimtracking_frac_sprinting_target */))[7];
+      if (piVar3 == *(int **)(unaff_EBX + 0x451b7f /* &bot_aimtracking_frac_sprinting_target */ /* &bot_aimtracking_frac_sprinting_target */)) {
         fVar7 = (float)((uint)piVar3 ^ piVar3[0xb]);
       }
       else {
@@ -1079,7 +1079,7 @@ float10 CINSBotBody::GetHullWidth(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return (float10)*(float *)(extraout_ECX + 0x1df993 /* typeinfo name for CUseTraceFilter+0x19 */);
+  return (float10)*(float *)(extraout_ECX + 0x1df993 /* 32.0f */ /* 32.0f */);
 }
 
 
@@ -1100,7 +1100,7 @@ undefined4 __thiscall CINSBotBody::GetMaxArousal(undefined4 param_1,undefined4 p
   __i686_get_pc_thunk_cx();
   uVar1 = 2;
   if (param_3 - 2U < 8) {
-    uVar1 = *(undefined4 *)(extraout_ECX + 0x22d1eb /* CSWTCH.521 */ + (param_3 - 2U) * 4);
+    uVar1 = *(undefined4 *)(extraout_ECX + 0x22d1eb /* CSWTCH.521 */ /* CSWTCH.521 */ + (param_3 - 2U) * 4);
   }
   return uVar1;
 }
@@ -1169,8 +1169,8 @@ LAB_00754d01:
   cVar1 = (**(code **)(*piVar6 + 0x8ac /* CINSNextBot::IsInCombat */))(piVar6,uVar8);
   this_01 = extraout_ECX_01;
   if (cVar1 != '\0') {
-    piVar4 = (int *)(*(int **)(unaff_EBX + 0x451e98 /* &bot_angularvelocity_base */))[7];
-    if (piVar4 == *(int **)(unaff_EBX + 0x451e98 /* &bot_angularvelocity_base */)) {
+    piVar4 = (int *)(*(int **)(unaff_EBX + 0x451e98 /* &bot_angularvelocity_base */ /* &bot_angularvelocity_base */))[7];
+    if (piVar4 == *(int **)(unaff_EBX + 0x451e98 /* &bot_angularvelocity_base */ /* &bot_angularvelocity_base */)) {
       local_20 = (float)((uint)piVar4 ^ piVar4[0xb]);
     }
     else {
@@ -1182,8 +1182,8 @@ LAB_00754d01:
   iVar2 = CINSNextBot::GetDifficulty(this_01);
   if (iVar2 == 3) {
 LAB_00754e18:
-    piVar4 = (int *)(*(int **)(unaff_EBX + 0x452278 /* &bot_angularvelocity_frac_impossible */))[7];
-    if (piVar4 == *(int **)(unaff_EBX + 0x452278 /* &bot_angularvelocity_frac_impossible */)) goto LAB_00754e28;
+    piVar4 = (int *)(*(int **)(unaff_EBX + 0x452278 /* &bot_angularvelocity_frac_impossible */ /* &bot_angularvelocity_frac_impossible */))[7];
+    if (piVar4 == *(int **)(unaff_EBX + 0x452278 /* &bot_angularvelocity_frac_impossible */ /* &bot_angularvelocity_frac_impossible */)) goto LAB_00754e28;
 LAB_00754e9d:
     fVar7 = (float10)(**(code **)(*piVar4 + 0x3c))(piVar4);
     fVar5 = (float)fVar7;
@@ -1199,14 +1199,14 @@ LAB_00754e9d:
     }
     iVar2 = CINSNextBot::GetDifficulty((CINSNextBot *)this_03);
     if (iVar2 == 2) {
-      piVar4 = (int *)(*(int **)(unaff_EBX + 0x4524cc /* &bot_angularvelocity_frac_hard */))[7];
-      if (piVar4 != *(int **)(unaff_EBX + 0x4524cc /* &bot_angularvelocity_frac_hard */)) goto LAB_00754e9d;
+      piVar4 = (int *)(*(int **)(unaff_EBX + 0x4524cc /* &bot_angularvelocity_frac_hard */ /* &bot_angularvelocity_frac_hard */))[7];
+      if (piVar4 != *(int **)(unaff_EBX + 0x4524cc /* &bot_angularvelocity_frac_hard */ /* &bot_angularvelocity_frac_hard */)) goto LAB_00754e9d;
     }
     else {
       iVar2 = CINSNextBot::GetDifficulty(this_04);
       if (iVar2 != 0) goto LAB_00754d78;
-      piVar4 = (int *)(*(int **)(unaff_EBX + 0x45248c /* &bot_angularvelocity_frac_easy */))[7];
-      if (piVar4 != *(int **)(unaff_EBX + 0x45248c /* &bot_angularvelocity_frac_easy */)) goto LAB_00754e9d;
+      piVar4 = (int *)(*(int **)(unaff_EBX + 0x45248c /* &bot_angularvelocity_frac_easy */ /* &bot_angularvelocity_frac_easy */))[7];
+      if (piVar4 != *(int **)(unaff_EBX + 0x45248c /* &bot_angularvelocity_frac_easy */ /* &bot_angularvelocity_frac_easy */)) goto LAB_00754e9d;
     }
 LAB_00754e28:
     fVar5 = (float)((uint)piVar4 ^ piVar4[0xb]);
@@ -1218,8 +1218,8 @@ LAB_00754d78:
     local_20 = local_20 * (float)piVar6[0x2cd1];
   }
   if ((char)piVar6[0x2d27] != '\0') {
-    piVar6 = (int *)(*(int **)(unaff_EBX + 0x452178 /* &bot_angularvelocity_uber */))[7];
-    if (piVar6 == *(int **)(unaff_EBX + 0x452178 /* &bot_angularvelocity_uber */)) {
+    piVar6 = (int *)(*(int **)(unaff_EBX + 0x452178 /* &bot_angularvelocity_uber */ /* &bot_angularvelocity_uber */))[7];
+    if (piVar6 == *(int **)(unaff_EBX + 0x452178 /* &bot_angularvelocity_uber */ /* &bot_angularvelocity_uber */)) {
       fVar5 = (float)((uint)piVar6 ^ piVar6[0xb]);
     }
     else {
@@ -1247,7 +1247,7 @@ float10 __thiscall CINSBotBody::GetTimeSinceLastTransition(CINSBotBody *this)
   int in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  return (float10)(*(float *)(**(int **)(extraout_ECX + 0x44f2fb /* &gpGlobals */) + 0xc) -
+  return (float10)(*(float *)(**(int **)(extraout_ECX + 0x44f2fb /* &gpGlobals */ /* &gpGlobals */) + 0xc) -
                   *(float *)(in_stack_00000004 + 0x114));
 }
 
@@ -1307,7 +1307,7 @@ void __thiscall CINSBotBody::IncrementArousal(undefined4 param_1,undefined4 para
   if (param_3 < 9) {
                     /* WARNING: Could not recover jumptable at 0x007566d2. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-    (*(code *)(*(int *)(unaff_EBX + 0x22d0ac /* typeinfo name for CINSBotMainAction+0x106 */ + param_3 * 4) + unaff_EBX + 0x450ac4 /* &_DYNAMIC */))();
+    (*(code *)(*(int *)(unaff_EBX + 0x22d0ac /* rodata:0xFFBAF5EA */ /* rodata:0xFFBAF5EA */ + param_3 * 4) + unaff_EBX + 0x450ac4 /* &_DYNAMIC */ /* &_DYNAMIC */))();
     return;
   }
   return;
@@ -1447,7 +1447,7 @@ CINSBotBody::IsPostureCompatible(undefined4 param_1,undefined4 param_2,uint para
   }
                     /* WARNING: Could not recover jumptable at 0x00757001. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  uVar1 = (*(code *)(*(int *)(unaff_EBX + 0x22c7c3 /* typeinfo name for CINSBotMainAction+0x142 */ + param_3 * 4) + unaff_EBX + 0x45019f /* &_DYNAMIC */))();
+  uVar1 = (*(code *)(*(int *)(unaff_EBX + 0x22c7c3 /* rodata:0xFFBAFEC8 */ /* rodata:0xFFBAFEC8 */ + param_3 * 4) + unaff_EBX + 0x45019f /* &_DYNAMIC */ /* &_DYNAMIC */))();
   return (bool)uVar1;
 }
 
@@ -1514,8 +1514,8 @@ void __thiscall CINSBotBody::ReleaseAllStanceButtons(CINSBotBody *this)
   if (iVar2 != 0) {
     iVar2 = (**(code **)(*in_stack_00000004 + 0x15c))(in_stack_00000004);
     if (iVar2 != 0) {
-      piVar3 = (int *)__dynamic_cast(iVar2,*(undefined4 *)(unaff_EBX + 0x44fe0a /* &typeinfo for CBaseEntity */),
-                                     *(undefined4 *)(unaff_EBX + 0x44f72e /* &typeinfo for CINSNextBot */),0);
+      piVar3 = (int *)__dynamic_cast(iVar2,*(undefined4 *)(unaff_EBX + 0x44fe0a /* &typeinfo for CBaseEntity */ /* &typeinfo for CBaseEntity */),
+                                     *(undefined4 *)(unaff_EBX + 0x44f72e /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0);
       if (piVar3 != (int *)0x0) {
         (**(code **)(*piVar3 + 0x914 /* NextBotPlayer::ReleaseCrouchButton */))(piVar3);
         (**(code **)(*piVar3 + 0x940 /* CINSNextBot::ReleaseProneButton */))(piVar3);
@@ -1550,7 +1550,7 @@ void __thiscall CINSBotBody::SetArousal(undefined4 param_1,int param_2,uint para
   
   __i686_get_pc_thunk_cx();
   *(float *)(param_2 + 0x138) =
-       (float)(param_3 >> 0x10) * *(float *)(extraout_ECX + 0x1d14c7 /* typeinfo name for ICollideable+0xf */) + (float)(param_3 & 0xffff);
+       (float)(param_3 >> 0x10) * *(float *)(extraout_ECX + 0x1d14c7 /* 65536.0f */ /* 65536.0f */) + (float)(param_3 & 0xffff);
   return;
 }
 
@@ -1571,7 +1571,7 @@ CINSBotBody::SetDesiredPosture(undefined4 param_1,undefined4 param_2,undefined4 
   int unaff_EBX;
   
   __i686_get_pc_thunk_bx();
-  SetPosture(extraout_ECX,param_2,param_3,3,0x3f000000 /* 0.5f */,unaff_EBX + 0x22bee5 /* "SetDesired Override" */);
+  SetPosture(extraout_ECX,param_2,param_3,3,0x3f000000 /* 0.5f */,unaff_EBX + 0x22bee5 /* "SetDesired Override" */ /* "SetDesired Override" */);
   return;
 }
 
@@ -1593,7 +1593,7 @@ CINSBotBody::SetDesiredPosture
   int unaff_EBX;
   
   __i686_get_pc_thunk_bx();
-  SetPosture(extraout_ECX,param_2,param_3,3,param_4,unaff_EBX + 0x22be95 /* "SetDesired Override" */);
+  SetPosture(extraout_ECX,param_2,param_3,3,param_4,unaff_EBX + 0x22be95 /* "SetDesired Override" */ /* "SetDesired Override" */);
   return;
 }
 
@@ -1633,15 +1633,15 @@ CINSBotBody::SetPosture
   cVar2 = (**(code **)(*piVar3 + 0x140 /* CBaseEntity::IsMoving */))(piVar3,0x400);
   iVar4 = param_4;
   if ((cVar2 != '\0') && (iVar4 = 4, param_4 != 4)) {
-    iVar4 = unaff_EBX + 0x1cc87d /* "Unknown" */;
+    iVar4 = unaff_EBX + 0x1cc87d /* "Unknown" */ /* "Unknown" */;
     if (param_6 != 0) {
       iVar4 = param_6;
     }
     CFmtStrN<256,false>::CFmtStrN
-              (this,local_140,unaff_EBX + 0x22c0d1 /* "Stance Request: %s , type:%i , prio: %i , len: %3.2f" */,iVar4,param_3,param_4,(double)param_5);
+              (this,local_140,unaff_EBX + 0x22c0d1 /* "Stance Request: %s , type:%i , prio: %i , len: %3.2f" */ /* "Stance Request: %s , type:%i , prio: %i , len: %3.2f" */,iVar4,param_3,param_4,(double)param_5);
     piVar3 = (int *)(**(code **)(*param_2 + 0x15c))(param_2);
     (**(code **)(*piVar3 + 0x20c /* CINSNextBot::EyePosition */))(&local_34,piVar3);
-    local_20 = *(float *)(unaff_EBX + 0x1d0d49 /* typeinfo name for IPartitionEnumerator+0x21 */) + local_2c;
+    local_20 = *(float *)(unaff_EBX + 0x1d0d49 /* 12.0f */ /* 12.0f */) + local_2c;
     local_28 = local_34;
     local_24 = local_30;
     NDebugOverlay::Text((Vector *)&local_28,local_13b,true,3.0);
@@ -1651,11 +1651,11 @@ CINSBotBody::SetPosture
     param_3 = 0xc;
   }
   if (param_2[0x42] < iVar4) {
-    iVar4 = **(int **)(unaff_EBX + 0x44f2b5 /* &gpGlobals */);
+    iVar4 = **(int **)(unaff_EBX + 0x44f2b5 /* &gpGlobals */ /* &gpGlobals */);
   }
   else {
     fVar1 = (float)param_2[0x43];
-    iVar4 = **(int **)(unaff_EBX + 0x44f2b5 /* &gpGlobals */);
+    iVar4 = **(int **)(unaff_EBX + 0x44f2b5 /* &gpGlobals */ /* &gpGlobals */);
     if (*(float *)(iVar4 + 0xc) <= fVar1) {
       if (param_2[0x40] != param_3) {
         return;
@@ -1736,18 +1736,18 @@ void __cdecl CINSBotBody::TransitionToStance(int *param_1,uint param_2)
   if (iVar1 != 0) {
     iVar1 = (**(code **)(*param_1 + 0x15c))(param_1);
     if (iVar1 != 0) {
-      piVar2 = (int *)__dynamic_cast(iVar1,*(undefined4 *)(unaff_EBX + 0x44fd40 /* &typeinfo for CBaseEntity */),
-                                     *(undefined4 *)(unaff_EBX + 0x44f664 /* &typeinfo for CINSNextBot */),0);
+      piVar2 = (int *)__dynamic_cast(iVar1,*(undefined4 *)(unaff_EBX + 0x44fd40 /* &typeinfo for CBaseEntity */ /* &typeinfo for CBaseEntity */),
+                                     *(undefined4 *)(unaff_EBX + 0x44f664 /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0);
       if (piVar2 != (int *)0x0) {
         ReleaseAllStanceButtons(this);
         if (param_2 < 0x11) {
                     /* WARNING: Could not recover jumptable at 0x00757469. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-          (*(code *)(*(int *)(unaff_EBX + 0x22c448 /* typeinfo name for CINSBotMainAction+0x1b2 */ + param_2 * 4) + unaff_EBX + 0x44fdb4 /* &_DYNAMIC */))();
+          (*(code *)(*(int *)(unaff_EBX + 0x22c448 /* rodata:0xFFBB02B1 */ /* rodata:0xFFBB02B1 */ + param_2 * 4) + unaff_EBX + 0x44fdb4 /* &_DYNAMIC */ /* &_DYNAMIC */))();
           return;
         }
         (**(code **)(*piVar2 + 0x934 /* CINSNextBot::PressSprintButton */))(piVar2,0x3f000000 /* 0.5f */);
-        param_1[0x45] = *(int *)(**(int **)(unaff_EBX + 0x44f4dc /* &gpGlobals */) + 0xc);
+        param_1[0x45] = *(int *)(**(int **)(unaff_EBX + 0x44f4dc /* &gpGlobals */ /* &gpGlobals */) + 0xc);
       }
     }
   }
@@ -1788,7 +1788,7 @@ void __thiscall CINSBotBody::UpdateArousal(CINSBotBody *this)
   cVar1 = (**(code **)(*piVar2 + 0x140 /* CBaseEntity::IsMoving */))(piVar2,0x800);
   if (cVar1 != '\0') {
     CFmtStrN<256,false>::CFmtStrN
-              (this_00,local_134,unaff_EBX + 0x22b785 /* "Arousal: %3.2f,%3.2f,%3.2f,%3.2f," */,(double)(float)in_stack_00000004[0x57],
+              (this_00,local_134,unaff_EBX + 0x22b785 /* "Arousal: %3.2f,%3.2f,%3.2f,%3.2f," */ /* "Arousal: %3.2f,%3.2f,%3.2f,%3.2f," */,(double)(float)in_stack_00000004[0x57],
                (double)(float)in_stack_00000004[0x58],(double)(float)in_stack_00000004[0x5a],
                (double)(float)in_stack_00000004[0x59]);
     piVar2 = (int *)(**(code **)(*in_stack_00000004 + 0x15c))(in_stack_00000004);
@@ -1818,7 +1818,7 @@ void __thiscall CINSBotBody::UpdateArousal(CINSBotBody *this)
         }
         in_stack_00000004[0x4e] = (int)fVar6;
         fVar4 = (float10)CountdownTimer::Now();
-        fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x160b69 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
+        fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x160b69 /* 1.0f */ /* 1.0f */);
         if ((float)in_stack_00000004[0x54] != fVar5) {
           (**(code **)(in_stack_00000004[0x52] + 4))
                     (in_stack_00000004 + 0x52,in_stack_00000004 + 0x54);
@@ -1838,7 +1838,7 @@ void __thiscall CINSBotBody::UpdateArousal(CINSBotBody *this)
       iVar3 = iVar3 + 1;
     } while (iVar3 != 6);
     fVar4 = (float10)CountdownTimer::Now();
-    fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1cbae1 /* typeinfo name for ISaveRestoreOps+0x67 */);
+    fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1cbae1 /* 0.25f */ /* 0.25f */);
     if ((float)in_stack_00000004[0x51] != fVar5) {
       (**(code **)(in_stack_00000004[0x4f] + 4))(in_stack_00000004 + 0x4f,in_stack_00000004 + 0x51);
       in_stack_00000004[0x51] = (int)fVar5;
@@ -1908,8 +1908,8 @@ void __thiscall CINSBotBody::UpdatePosture(CINSBotBody *this)
   if (iVar5 == 0) {
     return;
   }
-  piVar6 = (int *)__dynamic_cast(iVar5,*(undefined4 *)(unaff_EBX + 0x44f8d9 /* &typeinfo for CBaseEntity */),
-                                 *(undefined4 *)(unaff_EBX + 0x44f1fd /* &typeinfo for CINSNextBot */),0);
+  piVar6 = (int *)__dynamic_cast(iVar5,*(undefined4 *)(unaff_EBX + 0x44f8d9 /* &typeinfo for CBaseEntity */ /* &typeinfo for CBaseEntity */),
+                                 *(undefined4 *)(unaff_EBX + 0x44f1fd /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0);
   if (piVar6 == (int *)0x0) {
     return;
   }
@@ -1955,7 +1955,7 @@ void __thiscall CINSBotBody::UpdatePosture(CINSBotBody *this)
       uVar14 = (ulonglong)(uint)in_stack_00000004[0x41];
       piVar7 = (int *)in_stack_00000004[0x40];
       TransitionToStance(in_stack_00000004,piVar7,in_stack_00000004[0x41]);
-      fVar12 = *(float *)(unaff_EBX + 0x1612e9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
+      fVar12 = *(float *)(unaff_EBX + 0x1612e9 /* 1.0f */ /* 1.0f */);
       *(undefined1 *)(in_stack_00000004 + 0x47) = 1;
       fVar12 = fVar12 + (float)in_stack_00000004[0x41];
       fVar11 = (float10)CountdownTimer::Now();
@@ -1975,8 +1975,8 @@ void __thiscall CINSBotBody::UpdatePosture(CINSBotBody *this)
   }
   else {
 LAB_00757aad:
-    fVar12 = *(float *)(**(int **)(unaff_EBX + 0x44f075 /* &gpGlobals */) + 0xc) - (float)in_stack_00000004[0x45];
-    if (fVar12 < *(float *)(unaff_EBX + 0x1cf585 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) || fVar12 == *(float *)(unaff_EBX + 0x1cf585 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */))
+    fVar12 = *(float *)(**(int **)(unaff_EBX + 0x44f075 /* &gpGlobals */ /* &gpGlobals */) + 0xc) - (float)in_stack_00000004[0x45];
+    if (fVar12 < *(float *)(unaff_EBX + 0x1cf585 /* 2.0f */ /* 2.0f */) || fVar12 == *(float *)(unaff_EBX + 0x1cf585 /* 2.0f */ /* 2.0f */))
     goto LAB_00757925;
     uVar14 = (ulonglong)(uint)in_stack_00000004[0x41];
     TransitionToStance(in_stack_00000004,piVar9,in_stack_00000004[0x41]);
@@ -2010,7 +2010,7 @@ LAB_00757925:
     local_250 = local_247;
     iVar5 = in_stack_00000004[0x42];
     this_00 = (CFmtStrN<256,false> *)in_stack_00000004[0x44];
-    fVar12 = *(float *)(**(int **)(unaff_EBX + 0x44f075 /* &gpGlobals */) + 0xc);
+    fVar12 = *(float *)(**(int **)(unaff_EBX + 0x44f075 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
     iVar3 = in_stack_00000004[0x40];
     fVar1 = (float)in_stack_00000004[0x43];
     fVar11 = (float10)CountdownTimer::Now();
@@ -2021,7 +2021,7 @@ LAB_00757925:
       dVar13 = (double)(fVar2 - (float)fVar11);
     }
     CFmtStrN<256,false>::CFmtStrN
-              (this_00,local_13c,unaff_EBX + 0x22bec9 /* " cooldown:%3.2f, cur: %i , des %i , prio %i , exp: %3.1f" */,dVar13,this_00,iVar3,iVar5,
+              (this_00,local_13c,unaff_EBX + 0x22bec9 /* " cooldown:%3.2f, cur: %i , des %i , prio %i , exp: %3.1f" */ /* " cooldown:%3.2f, cur: %i , des %i , prio %i , exp: %3.1f" */,dVar13,this_00,iVar3,iVar5,
                (double)(fVar12 - fVar1));
     pcVar8 = local_247 + local_144;
     if (pcVar8 < local_148) {
@@ -2067,7 +2067,7 @@ LAB_00757925:
       }
     }
     fVar11 = (float10)CountdownTimer::Now();
-    fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x1ccf2d /* typeinfo name for CBaseGameSystem+0x1e */);
+    fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x1ccf2d /* 0.5f */ /* 0.5f */);
     if ((float)in_stack_00000004[0x3f] != fVar12) {
       (**(code **)(in_stack_00000004[0x3d] + 4))
                 (in_stack_00000004 + 0x3d,in_stack_00000004 + 0x3f,uVar14);
@@ -2098,7 +2098,7 @@ void __thiscall CINSBotBody::~CINSBotBody(CINSBotBody *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x44827f /* vtable for CINSBotBody+0x8 */;
+  *in_stack_00000004 = unaff_EBX + 0x44827f /* vtable for CINSBotBody+0x8 */ /* vtable for CINSBotBody+0x8 */;
   PlayerBody::~PlayerBody(this_00);
   return;
 }

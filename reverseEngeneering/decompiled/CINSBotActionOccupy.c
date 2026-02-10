@@ -79,7 +79,7 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar4;
     *(undefined4 *)param_1 = 2 /* SuspendFor */;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x248587 /* "Escorting " */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x248587 /* "Escorting " */ /* "Escorting " */;
     return param_1;
   }
   piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
@@ -98,7 +98,7 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar4;
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2468ec /* "Attacking nearby threats" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2468ec /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
       return param_1;
     }
   }
@@ -122,10 +122,10 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
     if (1 < iVar6 - 2U) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x246905 /* "Bot is not on a playteam" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x246905 /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */;
       return param_1;
     }
-    iVar1 = **(int **)(unaff_EBX + 0x46d04b /* &g_pObjectiveResource */);
+    iVar1 = **(int **)(unaff_EBX + 0x46d04b /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
     if (0 < *(int *)(iVar1 + 0x37c)) {
       bVar11 = false;
       iVar10 = (iVar6 == 2) + 2;
@@ -133,9 +133,10 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
       if (iVar6 == iVar2) {
         bVar11 = iVar10 == *(int *)(iVar1 + 0x450);
       }
-      iVar1 = **(int **)(unaff_EBX + 0x46c9e7 /* &TheNavMesh */);
+      iVar1 = **(int **)(unaff_EBX + 0x46c9e7 /* &TheNavMesh */ /* &TheNavMesh */);
       if ((iVar1 == -0x834) || (*(int *)(iVar1 + 0x840) < 1)) {
         DevWarning((char *)(unaff_EBX + 0x2487ab /* "[CINSBotActionOccupy] No objective areas!
+" */ /* "[CINSBotActionOccupy] No objective areas!
 " */));
       }
       else {
@@ -160,7 +161,7 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
             *(undefined4 *)((int)param_2 + 0x2c) = 0;
             *(CNavArea **)(param_1 + 4) = pCVar7;
             *(undefined4 *)param_1 = 2 /* SuspendFor */;
-            *(int *)(param_1 + 8) = unaff_EBX + 0x248771 /* "Attacking enemy directly" */;
+            *(int *)(param_1 + 8) = unaff_EBX + 0x248771 /* "Attacking enemy directly" */ /* "Attacking enemy directly" */;
             return param_1;
           }
           if (iVar6 != iVar2) {
@@ -172,7 +173,7 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
             *(undefined4 *)((int)param_2 + 0x2c) = 0;
             *(void **)(param_1 + 4) = pvVar4;
             *(undefined4 *)param_1 = 2 /* SuspendFor */;
-            *(int *)(param_1 + 8) = unaff_EBX + 0x24878a /* "Attacking point" */;
+            *(int *)(param_1 + 8) = unaff_EBX + 0x24878a /* "Attacking point" */ /* "Attacking point" */;
             return param_1;
           }
           CINSNextBot::AddInvestigation(in_stack_0000000c,in_stack_0000000c,iVar1,0);
@@ -184,7 +185,7 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
           *(CNavArea **)(param_1 + 4) = pCVar7;
           *(undefined4 *)param_1 = 2 /* SuspendFor */;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x24879a /* "Defending point" */;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x24879a /* "Defending point" */ /* "Defending point" */;
           return param_1;
         }
       }
@@ -227,7 +228,7 @@ int CINSBotActionOccupy::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f72ec /* "Occupy" */;
+  return extraout_ECX + 0x1f72ec /* "Occupy" */ /* "Occupy" */;
 }
 
 
@@ -295,9 +296,9 @@ void __thiscall CINSBotActionOccupy::~CINSBotActionOccupy(CINSBotActionOccupy *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x45f973 /* vtable for CINSBotActionOccupy+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x45fb07 /* vtable for CINSBotActionOccupy+0x19c */;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46cea3 /* &_DYNAMIC */));
+  *in_stack_00000004 = extraout_ECX + 0x45f973 /* vtable for CINSBotActionOccupy+0x8 */ /* vtable for CINSBotActionOccupy+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x45fb07 /* vtable for CINSBotActionOccupy+0x19c */ /* vtable for CINSBotActionOccupy+0x19c */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46cea3 /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -334,7 +335,7 @@ void __thiscall CINSBotActionOccupy::~CINSBotActionOccupy(CINSBotActionOccupy *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45f92a /* vtable for CINSBotActionOccupy+0x8 */;
+  *in_stack_00000004 = unaff_EBX + 0x45f92a /* vtable for CINSBotActionOccupy+0x8 */ /* vtable for CINSBotActionOccupy+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_0045fabe + unaff_EBX);
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);

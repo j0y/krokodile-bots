@@ -81,7 +81,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
       *(undefined1 *)((int)piVar5 + 0x31) = 0;
       piVar5[0xb] = 0;
       piVar5[0xd] = 0;
-      iVar2 = *(int *)(unaff_EBX + 0x468521 /* &vtable for CINSBotActionCheckpoint */);
+      iVar2 = *(int *)(unaff_EBX + 0x468521 /* &vtable for CINSBotActionCheckpoint */ /* &vtable for CINSBotActionCheckpoint */);
       piVar5[1] = iVar2 + 0x1a0;
       *piVar5 = iVar2 + 8;
       return piVar5;
@@ -104,10 +104,10 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
         *(undefined1 *)((int)piVar5 + 0x31) = 0;
         piVar5[0xb] = 0;
         piVar5[0xd] = 0;
-        iVar2 = *(int *)(unaff_EBX + 0x468945 /* &vtable for CINSBotActionOutpost */);
+        iVar2 = *(int *)(unaff_EBX + 0x468945 /* &vtable for CINSBotActionOutpost */ /* &vtable for CINSBotActionOutpost */);
         piVar5[0x10] = 0;
         piVar5[1] = iVar2 + 0x1a4;
-        piVar5[0xf] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
+        piVar5[0xf] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
         *piVar5 = iVar2 + 8;
         CountdownTimer::NetworkStateChanged(piVar5 + 0xf);
         piVar5[0x11] = -0x40800000 /* -1.0f */;
@@ -134,7 +134,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
             *(undefined1 *)((int)piVar5 + 0x31) = 0;
             piVar5[0xb] = 0;
             piVar5[0xd] = 0;
-            iVar2 = *(int *)(unaff_EBX + 0x468ef1 /* &vtable for CINSBotActionFirefight */);
+            iVar2 = *(int *)(unaff_EBX + 0x468ef1 /* &vtable for CINSBotActionFirefight */ /* &vtable for CINSBotActionFirefight */);
             *piVar5 = iVar2 + 8;
             piVar5[1] = iVar2 + 0x19c;
             return piVar5;
@@ -155,7 +155,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
             *(undefined1 *)((int)piVar5 + 0x31) = 0;
             piVar5[0xb] = 0;
             piVar5[0xd] = 0;
-            iVar2 = *(int *)(unaff_EBX + 0x4685d9 /* &vtable for CINSBotActionInfiltrate */);
+            iVar2 = *(int *)(unaff_EBX + 0x4685d9 /* &vtable for CINSBotActionInfiltrate */ /* &vtable for CINSBotActionInfiltrate */);
             *piVar5 = iVar2 + 8;
             piVar5[1] = iVar2 + 0x19c;
             return piVar5;
@@ -200,12 +200,12 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
             *(undefined1 *)((int)piVar5 + 0x31) = 0;
             piVar5[0xb] = 0;
             piVar5[0xd] = 0;
-            iVar2 = *(int *)(unaff_EBX + 0x468565 /* &vtable for CINSBotActionTraining */);
+            iVar2 = *(int *)(unaff_EBX + 0x468565 /* &vtable for CINSBotActionTraining */ /* &vtable for CINSBotActionTraining */);
             piVar5[1] = iVar2 + 0x19c;
             *piVar5 = iVar2 + 8;
             CINSPathFollower::CINSPathFollower(this_18);
             piVar5[0x122c] = 0;
-            piVar5[0x122b] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
+            piVar5[0x122b] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
             CountdownTimer::NetworkStateChanged(piVar5 + 0x122b);
             piVar5[0x122d] = -0x40800000 /* -1.0f */;
             (**(code **)(piVar5[0x122b] + 4))(piVar5 + 0x122b,piVar5 + 0x122d);
@@ -253,7 +253,7 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
           iVar2 = *(int *)(&DAT_00468d6d + unaff_EBX);
           piVar5[0x10] = 0;
           piVar5[1] = iVar2 + 0x1a0;
-          piVar5[0xf] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
+          piVar5[0xf] = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
           *piVar5 = iVar2 + 8;
           CountdownTimer::NetworkStateChanged(piVar5 + 0xf);
           piVar5[0x11] = -0x40800000 /* -1.0f */;
@@ -293,13 +293,13 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
         *(undefined1 *)((int)piVar5 + 0x31) = 0;
         piVar5[0xb] = 0;
         piVar5[0xd] = 0;
-        iVar2 = *(int *)(unaff_EBX + 0x468eb9 /* &vtable for CINSBotActionOccupy */);
+        iVar2 = *(int *)(unaff_EBX + 0x468eb9 /* &vtable for CINSBotActionOccupy */ /* &vtable for CINSBotActionOccupy */);
         *piVar5 = iVar2 + 8;
         piVar5[1] = iVar2 + 0x19c;
       }
     }
     else {
-      iVar2 = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */;
+      iVar2 = unaff_EBX + 0x3ea1ad /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
       piVar5 = (int *)::operator_new(100);
       piVar5[8] = 0;
       piVar5[9] = 0;
@@ -314,12 +314,12 @@ int * __cdecl CINSBotGamemodeMonitor::InitialContainedAction(CINSNextBot *param_
       *(undefined1 *)((int)piVar5 + 0x31) = 0;
       piVar5[0xb] = 0;
       piVar5[0xd] = 0;
-      iVar3 = *(int *)(unaff_EBX + 0x468b5d /* &vtable for CINSBotActionHunt */);
+      iVar3 = *(int *)(unaff_EBX + 0x468b5d /* &vtable for CINSBotActionHunt */ /* &vtable for CINSBotActionHunt */);
       piVar5[0x10] = iVar2;
       piVar5[0x11] = 0;
       piVar5[1] = iVar3 + 0x1a4;
       *piVar5 = iVar3 + 8;
-      pcVar1 = (code *)(unaff_EBX + -0x50d89b /* CountdownTimer::NetworkStateChanged */);
+      pcVar1 = (code *)(unaff_EBX + -0x50d89b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
       (*pcVar1)(piVar5 + 0x10,piVar5 + 0x11);
       piVar5[0x12] = -0x40800000 /* -1.0f */;
       (**(code **)(piVar5[0x10] + 4))(piVar5 + 0x10,piVar5 + 0x12);
@@ -371,7 +371,7 @@ int CINSBotGamemodeMonitor::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x243eab /* "Gamemode" */;
+  return extraout_ECX + 0x243eab /* "Gamemode" */ /* "Gamemode" */;
 }
 
 
@@ -406,9 +406,9 @@ void __thiscall CINSBotGamemodeMonitor::~CINSBotGamemodeMonitor(CINSBotGamemodeM
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x45c013 /* vtable for CINSBotGamemodeMonitor+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x45c1a3 /* vtable for CINSBotGamemodeMonitor+0x198 */;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x4687e3 /* &_DYNAMIC */));
+  *in_stack_00000004 = extraout_ECX + 0x45c013 /* vtable for CINSBotGamemodeMonitor+0x8 */ /* vtable for CINSBotGamemodeMonitor+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x45c1a3 /* vtable for CINSBotGamemodeMonitor+0x198 */ /* vtable for CINSBotGamemodeMonitor+0x198 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x4687e3 /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -445,8 +445,8 @@ void __thiscall CINSBotGamemodeMonitor::~CINSBotGamemodeMonitor(CINSBotGamemodeM
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45bfca /* vtable for CINSBotGamemodeMonitor+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x45c15a /* vtable for CINSBotGamemodeMonitor+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x45bfca /* vtable for CINSBotGamemodeMonitor+0x8 */ /* vtable for CINSBotGamemodeMonitor+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45c15a /* vtable for CINSBotGamemodeMonitor+0x198 */ /* vtable for CINSBotGamemodeMonitor+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

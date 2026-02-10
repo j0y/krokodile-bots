@@ -38,7 +38,7 @@ CINSNextBotSurvivalCacheNotify::operator()(CINSNextBotSurvivalCacheNotify *this,
   
   uVar13 = 0;
   __i686_get_pc_thunk_bx();
-  if ((**(int **)(unaff_EBX + 0x43f85b /* &g_pGameRules */) != 0) && (**(int **)(unaff_EBX + 0x43fc7f /* &g_pObjectiveResource */) != 0)) {
+  if ((**(int **)(unaff_EBX + 0x43f85b /* &g_pGameRules */ /* &g_pGameRules */) != 0) && (**(int **)(unaff_EBX + 0x43fc7f /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) != 0)) {
     if (in_stack_00000008 == (int *)0x0) {
       return 1;
     }
@@ -49,35 +49,35 @@ CINSNextBotSurvivalCacheNotify::operator()(CINSNextBotSurvivalCacheNotify *this,
       cVar4 = (**(code **)(*piVar6 + 0x118))(piVar6);
       if (cVar4 != '\0') {
         pfVar1 = *(float **)param_1;
-        pfVar2 = *(float **)(unaff_EBX + 0x43f52f /* &vec3_origin */);
+        pfVar2 = *(float **)(unaff_EBX + 0x43f52f /* &vec3_origin */ /* &vec3_origin */);
         if (((*pfVar2 != *pfVar1) || (pfVar2[1] != pfVar1[1])) || (pfVar2[2] != pfVar1[2])) {
           uVar13 = 1;
-          iVar5 = __dynamic_cast(in_stack_00000008,*(undefined4 *)(unaff_EBX + 0x43ff33 /* &typeinfo for INextBot */),
-                                 *(undefined4 *)(unaff_EBX + 0x43f98b /* &typeinfo for CINSNextBot */),0x2060);
+          iVar5 = __dynamic_cast(in_stack_00000008,*(undefined4 *)(unaff_EBX + 0x43ff33 /* &typeinfo for INextBot */ /* &typeinfo for INextBot */),
+                                 *(undefined4 *)(unaff_EBX + 0x43f98b /* &typeinfo for CINSNextBot */ /* &typeinfo for CINSNextBot */),0x2060);
           if (iVar5 != 0) {
-            piVar6 = (int *)(*(int **)(unaff_EBX + 0x43fd5b /* &ins_bot_survival_cache_notify_radius_max */))[7];
-            if (piVar6 == *(int **)(unaff_EBX + 0x43fd5b /* &ins_bot_survival_cache_notify_radius_max */)) {
+            piVar6 = (int *)(*(int **)(unaff_EBX + 0x43fd5b /* &ins_bot_survival_cache_notify_radius_max */ /* &ins_bot_survival_cache_notify_radius_max */))[7];
+            if (piVar6 == *(int **)(unaff_EBX + 0x43fd5b /* &ins_bot_survival_cache_notify_radius_max */ /* &ins_bot_survival_cache_notify_radius_max */)) {
               fVar10 = (float)((uint)piVar6 ^ piVar6[0xb]);
             }
             else {
               fVar14 = (float10)(**(code **)(*piVar6 + 0x3c))(piVar6);
               fVar10 = (float)fVar14;
             }
-            piVar6 = (int *)(*(int **)(unaff_EBX + 0x43fd4b /* &ins_bot_survival_cache_notify_radius_min */))[7];
-            if (piVar6 == *(int **)(unaff_EBX + 0x43fd4b /* &ins_bot_survival_cache_notify_radius_min */)) {
+            piVar6 = (int *)(*(int **)(unaff_EBX + 0x43fd4b /* &ins_bot_survival_cache_notify_radius_min */ /* &ins_bot_survival_cache_notify_radius_min */))[7];
+            if (piVar6 == *(int **)(unaff_EBX + 0x43fd4b /* &ins_bot_survival_cache_notify_radius_min */ /* &ins_bot_survival_cache_notify_radius_min */)) {
               fVar9 = (float)((uint)piVar6 ^ piVar6[0xb]);
             }
             else {
               fVar14 = (float10)(**(code **)(*piVar6 + 0x3c))(piVar6);
               fVar9 = (float)fVar14;
             }
-            fVar15 = ((float)*(int *)(**(int **)(unaff_EBX + 0x43f85b /* &g_pGameRules */) + 1000) +
-                     *(float *)(unaff_EBX + 0x21fec3 /* CSWTCH.989+0x1c */)) * *(float *)(unaff_EBX + 0x21fec7 /* CSWTCH.989+0x20 */);
-            if (*(float *)(unaff_EBX + 0x151a77 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) <= fVar15) {
-              fVar15 = *(float *)(unaff_EBX + 0x151a77 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
+            fVar15 = ((float)*(int *)(**(int **)(unaff_EBX + 0x43f85b /* &g_pGameRules */ /* &g_pGameRules */) + 1000) +
+                     *(float *)(unaff_EBX + 0x21fec3 /* CSWTCH.989+0x1c */ /* CSWTCH.989+0x1c */)) * *(float *)(unaff_EBX + 0x21fec7 /* CSWTCH.989+0x20 */ /* CSWTCH.989+0x20 */);
+            if (*(float *)(unaff_EBX + 0x151a77 /* 1.0f */ /* 1.0f */) <= fVar15) {
+              fVar15 = *(float *)(unaff_EBX + 0x151a77 /* 1.0f */ /* 1.0f */);
             }
-            if (fVar15 <= *(float *)(unaff_EBX + 0x151a6b /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
-              fVar15 = *(float *)(unaff_EBX + 0x151a6b /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */);
+            if (fVar15 <= *(float *)(unaff_EBX + 0x151a6b /* 0.0f */ /* 0.0f */)) {
+              fVar15 = *(float *)(unaff_EBX + 0x151a6b /* 0.0f */ /* 0.0f */);
             }
             cVar4 = (**(code **)(*in_stack_00000008 + 0x124))
                               (in_stack_00000008,*(undefined4 *)param_1,
@@ -85,11 +85,11 @@ CINSNextBotSurvivalCacheNotify::operator()(CINSNextBotSurvivalCacheNotify *this,
             if (cVar4 == '\0') {
               iVar12 = 0;
               local_30 = -1;
-              iVar11 = **(int **)(unaff_EBX + 0x43fc7f /* &g_pObjectiveResource */);
+              iVar11 = **(int **)(unaff_EBX + 0x43fc7f /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
               do {
                 iVar7 = RandomInt(0,*(int *)(iVar11 + 0x37c) + -1);
                 iVar8 = CINSRules::GetHumanTeam(this_00);
-                iVar11 = **(int **)(unaff_EBX + 0x43fc7f /* &g_pObjectiveResource */);
+                iVar11 = **(int **)(unaff_EBX + 0x43fc7f /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
                 if (iVar8 == 2) {
                   cVar4 = *(char *)(iVar11 + 0x690 + iVar7);
 LAB_0076727b:

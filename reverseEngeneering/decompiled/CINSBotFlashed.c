@@ -68,7 +68,7 @@ void __thiscall CINSBotFlashed::Update(CINSBotFlashed *this,CINSNextBot *param_1
   }
   *puVar1 = 3;
   puVar1[1] = 0;
-  puVar1[2] = unaff_EBX + 0x261372 /* "No longer blind." */;
+  puVar1[2] = unaff_EBX + 0x261372 /* "No longer blind." */ /* "No longer blind." */;
   return;
 }
 
@@ -87,7 +87,7 @@ int CINSBotFlashed::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x2611cf /* "Flashed" */;
+  return extraout_ECX + 0x2611cf /* "Flashed" */ /* "Flashed" */;
 }
 
 
@@ -122,7 +122,7 @@ void __thiscall CINSBotFlashed::~CINSBotFlashed(CINSBotFlashed *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x476d63 /* vtable for CINSBotFlashed+0x8 */;
+  *in_stack_00000004 = extraout_ECX + 0x476d63 /* vtable for CINSBotFlashed+0x8 */ /* vtable for CINSBotFlashed+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_00476ef3 + extraout_ECX);
   Action<CINSNextBot>::~Action
             ((Action<CINSNextBot> *)(CTimedEventMgr::~CTimedEventMgr + extraout_ECX + 3));
@@ -162,8 +162,8 @@ void __thiscall CINSBotFlashed::~CINSBotFlashed(CINSBotFlashed *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x476d1a /* vtable for CINSBotFlashed+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x476eaa /* vtable for CINSBotFlashed+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x476d1a /* vtable for CINSBotFlashed+0x8 */ /* vtable for CINSBotFlashed+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x476eaa /* vtable for CINSBotFlashed+0x198 */ /* vtable for CINSBotFlashed+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

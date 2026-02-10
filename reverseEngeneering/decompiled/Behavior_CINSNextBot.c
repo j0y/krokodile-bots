@@ -44,14 +44,14 @@ void __cdecl Behavior<CINSNextBot>::Update(CINSNextBot *param_1,float param_2)
     if (iVar4 != 0) {
       cVar3 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
       if (cVar3 != '\0') {
-        local_134 = unaff_EBX + 0x3d036d /* vtable for CFmtStrN<256, false>+0x8 */;
+        local_134 = unaff_EBX + 0x3d036d /* vtable for CFmtStrN<256, false>+0x8 */ /* vtable for CFmtStrN<256, false>+0x8 */;
         local_130 = 0;
         local_12f = 0;
         local_2c = 0;
         pcVar2 = *(code **)(*(int *)((int)param_2 + 0x2060) + 0x14c);
         uVar5 = Action<CINSNextBot>::DebugString(this);
         uVar5 = CFmtStrN<256,false>::sprintf
-                          (this_00,(char *)&local_134,unaff_EBX + 0x22191c /* "%s: %s" */,param_1 + 0x11,uVar5);
+                          (this_00,(char *)&local_134,unaff_EBX + 0x22191c /* "%s: %s" */ /* "%s: %s" */,param_1 + 0x11,uVar5);
         (*pcVar2)((int)param_2 + 0x2060,uVar5);
       }
     }
@@ -70,8 +70,8 @@ void __cdecl Behavior<CINSNextBot>::Update(CINSNextBot *param_1,float param_2)
     *(undefined4 *)(param_1 + 0x48) = 0;
     if (-1 < *(int *)(param_1 + 0x44)) {
       if (iVar4 != 0) {
-        (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4537bd /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                  ((int *)**(undefined4 **)(unaff_EBX + 0x4537bd /* &GCSDK::GetPchTempTextBuffer */),iVar4);
+        (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4537bd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                  ((int *)**(undefined4 **)(unaff_EBX + 0x4537bd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar4);
         *(undefined4 *)(param_1 + 0x3c) = 0;
       }
       *(undefined4 *)(param_1 + 0x40) = 0;
@@ -586,7 +586,7 @@ void Behavior<CINSNextBot>::SelectTargetPoint(INextBot *param_1,CBaseCombatChara
   
   uStack_14 = 0x74ce0b;
   __i686_get_pc_thunk_bx();
-  pfVar1 = *(float **)(unaff_EBX + 0x4597c1 /* &vec3_origin */);
+  pfVar1 = *(float **)(unaff_EBX + 0x4597c1 /* &vec3_origin */ /* &vec3_origin */);
   *(float *)param_1 = *pfVar1;
   *(float *)(param_1 + 4) = pfVar1[1];
   *(float *)(param_1 + 8) = pfVar1[2];
@@ -892,8 +892,8 @@ void __thiscall Behavior<CINSNextBot>::~Behavior(Behavior<CINSNextBot> *this)
   Action *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *(int *)in_stack_00000004 = unaff_EBX + 0x44b2ad /* vtable for Behavior<CINSNextBot>+0x8 */;
-  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x44b39d /* vtable for Behavior<CINSNextBot>+0xf8 */;
+  *(int *)in_stack_00000004 = unaff_EBX + 0x44b2ad /* vtable for Behavior<CINSNextBot>+0x8 */ /* vtable for Behavior<CINSNextBot>+0x8 */;
+  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x44b39d /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */;
   if (*(Behavior **)(in_stack_00000004 + 0x38) == (Behavior *)0x0) {
 LAB_00750c24:
     piVar1 = *(int **)(in_stack_00000004 + 8);
@@ -930,8 +930,8 @@ LAB_00750c24:
   }
   else {
     if (iVar3 != 0) {
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x455c9d /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x455c9d /* &GCSDK::GetPchTempTextBuffer */),iVar3);
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x455c9d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x455c9d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar3);
       iVar4 = *(int *)(in_stack_00000004 + 0x44);
       *(undefined4 *)(in_stack_00000004 + 0x3c) = 0;
     }
@@ -943,8 +943,8 @@ LAB_00750c24:
   }
   *(int *)(in_stack_00000004 + 0x4c) = iVar3;
 LAB_00750cce:
-  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x3d84ed /* vtable for IContextualQuery+0x8 */;
-  *(int *)in_stack_00000004 = unaff_EBX + 0x3d842d /* vtable for INextBotEventResponder+0x8 */;
+  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x3d84ed /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */;
+  *(int *)in_stack_00000004 = unaff_EBX + 0x3d842d /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */;
   return;
 }
 
@@ -985,8 +985,8 @@ void __thiscall Behavior<CINSNextBot>::~Behavior(Behavior<CINSNextBot> *this)
   Action *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *(int *)in_stack_00000004 = unaff_EBX + 0x44b0cd /* vtable for Behavior<CINSNextBot>+0x8 */;
-  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x44b1bd /* vtable for Behavior<CINSNextBot>+0xf8 */;
+  *(int *)in_stack_00000004 = unaff_EBX + 0x44b0cd /* vtable for Behavior<CINSNextBot>+0x8 */ /* vtable for Behavior<CINSNextBot>+0x8 */;
+  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x44b1bd /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */;
   if (*(Behavior **)(in_stack_00000004 + 0x38) == (Behavior *)0x0) {
 LAB_00750e04:
     piVar1 = *(int **)(in_stack_00000004 + 8);
@@ -1023,8 +1023,8 @@ LAB_00750e04:
   }
   else {
     if (iVar3 != 0) {
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x455abd /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x455abd /* &GCSDK::GetPchTempTextBuffer */),iVar3);
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x455abd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x455abd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar3);
       iVar4 = *(int *)(in_stack_00000004 + 0x44);
       *(undefined4 *)(in_stack_00000004 + 0x3c) = 0;
     }
@@ -1036,8 +1036,8 @@ LAB_00750e04:
   }
   *(int *)(in_stack_00000004 + 0x4c) = iVar3;
 LAB_00750eae:
-  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x3d830d /* vtable for IContextualQuery+0x8 */;
-  *(int *)in_stack_00000004 = unaff_EBX + 0x3d824d /* vtable for INextBotEventResponder+0x8 */;
+  *(int *)(in_stack_00000004 + 4) = unaff_EBX + 0x3d830d /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */;
+  *(int *)in_stack_00000004 = unaff_EBX + 0x3d824d /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */;
   operator_delete(in_stack_00000004);
   return;
 }
