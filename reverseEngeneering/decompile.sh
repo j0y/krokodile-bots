@@ -19,6 +19,7 @@ PROJECT_DIR="$SCRIPT_DIR/.ghidra_project"
 PROJECT_NAME="insurgency_server"
 GHIDRA_IMAGE="blacktop/ghidra:11.3"
 MAXMEM="6G"
+DOCKER_USER="$(id -u):$(id -g)"
 
 # Verify binary exists
 if [ ! -f "$BINARY" ]; then
@@ -54,6 +55,7 @@ if [ -d "$PROJECT_DIR/${PROJECT_NAME}.rep" ]; then
     # Re-run: process existing project, skip analysis
     docker run --rm \
         --memory=8g \
+        --user "$DOCKER_USER" \
         --entrypoint /ghidra/support/analyzeHeadless \
         -e MAXMEM="$MAXMEM" \
         -v "$BINARY:/input/server_srv.so:ro" \
@@ -74,6 +76,7 @@ else
     # First run: import + full analysis + decompile
     docker run --rm \
         --memory=8g \
+        --user "$DOCKER_USER" \
         --entrypoint /ghidra/support/analyzeHeadless \
         -e MAXMEM="$MAXMEM" \
         -v "$BINARY:/input/server_srv.so:ro" \
