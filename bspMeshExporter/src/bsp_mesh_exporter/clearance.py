@@ -1,8 +1,8 @@
 """Precompute radial clearance from BSP mesh for each nav area.
 
-For each nav area, generates an adaptive grid of sample points (64u spacing),
+For each nav area, generates an adaptive grid of sample points (20u spacing),
 then casts horizontal rays from 3 body heights (foot=8u, knee=32u, eye=64u)
-at 36 azimuth angles (10 degree steps).  Hit distances are stored as float16.
+at 72 azimuth angles (5 degree steps).  Hit distances are stored as float16.
 
 Result is saved as a compressed .npz for runtime use by the AI brain.
 """
@@ -21,10 +21,10 @@ from bsp_mesh_exporter.nav_parser import NavArea, NavMesh
 log = logging.getLogger(__name__)
 
 # Defaults
-DEFAULT_GRID_SPACING = 64.0
+DEFAULT_GRID_SPACING = 20.0
 DEFAULT_MAX_RANGE = 500.0
 DEFAULT_RAY_HEIGHTS = (8.0, 32.0, 64.0)  # foot, knee, eye
-NUM_AZIMUTHS = 36
+NUM_AZIMUTHS = 72
 HULL_INSET = 16.0  # inset samples from area edges (half hull width)
 RAYCAST_CHUNK = 500_000
 

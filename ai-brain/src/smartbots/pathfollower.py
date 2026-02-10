@@ -61,6 +61,10 @@ CORNER_BLEND_RANGE = 80.0
 # ── Clearance-steered movement ──
 # How far ahead to place the steered move target (caps at dist-to-goal)
 STEER_AHEAD_DIST = 120.0
+# Forward probe distances: check for walls along the chosen steer direction
+_FORWARD_PROBES = (32.0, 64.0, 96.0)
+# Clearance below this at a probe point triggers re-steering
+_FORWARD_PROBE_MIN = 28.0
 
 # ── Path clearance validation ──
 # Hard wall: clearance below this triggers segment skip
@@ -605,6 +609,29 @@ class PathFollower:
                 dy = goal_pos[1] - bot_pos[1]
                 dist = math.sqrt(dx * dx + dy * dy)
                 step = min(dist, STEER_AHEAD_DIST)
+
+                # Forward probe: check clearance along the chosen direction.
+                # If it hits a wall ahead, re-steer from that probe point.
+                steer_angle = math.atan2(sdy, sdx)
+                for probe in _FORWARD_PROBES:
+                    if probe > step:
+                        break
+                    px = bot_pos[0] + sdx * probe
+                    py = bot_pos[1] + sdy * probe
+                    probe_area = self.nav.find_area((px, py, 0.0))
+                    clr = self.clearance.get_clearance_at(
+                        probe_area, px, py, steer_angle, height=1,
+                    )
+                    if clr < _FORWARD_PROBE_MIN:
+                        # Re-steer from the probe point — aims around obstacle
+                        sdx2, sdy2, _ = self.clearance.get_steering_direction(
+                            probe_area, px, py, goal_pos[0], goal_pos[1],
+                        )
+                        if abs(sdx2) > 0.001 or abs(sdy2) > 0.001:
+                            sdx, sdy = sdx2, sdy2
+                            step = min(dist, probe)  # shorter step
+                        break
+
                 return (
                     bot_pos[0] + sdx * step,
                     bot_pos[1] + sdy * step,

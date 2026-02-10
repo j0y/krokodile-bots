@@ -30,6 +30,10 @@ class ClearanceMap:
         self._max_range: float = float(data["max_range"])
         self._num_azimuths: int = len(self._ray_azimuths)
         self._azimuth_step: float = 2.0 * math.pi / self._num_azimuths
+        # Min-filter half-window: enough bins to cover hull half-width (16u)
+        # at typical steering distance (~80u). atan(16/80) ≈ 0.20 rad.
+        # Capped at 2 to avoid over-filtering at high azimuth resolutions.
+        self._filter_half: int = min(2, max(1, math.ceil(_HULL_FILTER_ANGLE / self._azimuth_step)))
 
         # area_id → index lookup
         self._id_to_idx: dict[int, int] = {
@@ -255,16 +259,16 @@ class ClearanceMap:
         n = self._num_azimuths
         goal_angle = math.atan2(goal_y - y, goal_x - x)
 
-        # Min-filter: for each bin, use the minimum clearance across ±1 neighbor
-        # to account for hull width (~32u).  A "clear" bin next to a wall is not
-        # actually passable.
+        # Min-filter: for each bin, use the minimum clearance across ±K neighbors
+        # to account for hull width (~32u).  K scales with azimuth resolution
+        # so the angular coverage stays ~18° regardless of bin count.
+        fh = self._filter_half
         filtered = [0.0] * n
         for i in range(n):
-            filtered[i] = min(
-                float(ring[(i - 1) % n]),
-                float(ring[i]),
-                float(ring[(i + 1) % n]),
-            )
+            worst = float(ring[i])
+            for k in range(1, fh + 1):
+                worst = min(worst, float(ring[(i - k) % n]), float(ring[(i + k) % n]))
+            filtered[i] = worst
 
         best_score = -1.0
         best_bin = -1
@@ -295,3 +299,5 @@ _REPULSION_RADIUS = 80.0
 _STEERING_RADIUS = 120.0
 # Directions with less clearance than this are impassable (hull width)
 _MIN_PASSABLE = 20.0
+# Angular half-window for hull-width min-filter: atan(16u hull_half / 100u typical dist)
+_HULL_FILTER_ANGLE = math.atan2(16.0, 100.0)

@@ -251,7 +251,7 @@ def main() -> None:
     p_clr.add_argument("--maps-dir", type=Path, required=True, help="Directory with .nav files")
     p_clr.add_argument("--mesh-dir", type=Path, required=True, help="Directory with .glb files")
     p_clr.add_argument("--output-dir", type=Path, required=True, help="Output directory for .npz")
-    p_clr.add_argument("--grid-spacing", type=float, default=64.0, help="Sample grid spacing (u)")
+    p_clr.add_argument("--grid-spacing", type=float, default=20.0, help="Sample grid spacing (u)")
     p_clr.add_argument("--max-range", type=float, default=500.0, help="Max ray distance (u)")
     p_clr.add_argument("--eye-height", type=float, default=64.0, help="Eye-level height offset (u)")
 

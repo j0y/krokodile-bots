@@ -219,25 +219,28 @@ class BotManager:
         # (mirrors Valve PathFollower::CheckProgress m_minLookAheadRange)
         pf.skip_close_goals(bot.pos)
 
-        # Proactive path clearance scan: skip hard-blocked segments.
-        # Gradient response (aim-past for caution zone) is handled inside
-        # get_move_target(); here we only skip truly blocked segments.
+        # Proactive path clearance scan: skip the blocked segment (max 1).
+        # Only runs after the path has been active for a while to avoid
+        # skip→repath→skip loops on freshly computed paths.
         from smartbots.pathfollower import _PATH_CLEARANCE_BLOCKED
 
-        min_clr, tight_idx = pf.scan_path_clearance()
-        if tight_idx is not None and min_clr < _PATH_CLEARANCE_BLOCKED:
-            skipped = 0
-            while pf.goal_idx <= tight_idx:
-                if not pf.advance():
-                    break
-                skipped += 1
-            if skipped > 0:
-                pf.skip_close_goals(bot.pos)
-                log.info(
-                    "bot=%d: path blocked (clr=%.0f), skipped %d segs past %d, now %d/%d",
-                    brain.bot_id, min_clr, skipped, tight_idx,
-                    pf.goal_idx, len(pf.segments),
-                )
+        if (tick - nav.last_repath_tick) >= REPATH_INTERVAL:
+            min_clr, tight_idx = pf.scan_path_clearance()
+            if tight_idx is not None and min_clr < _PATH_CLEARANCE_BLOCKED:
+                if pf.goal_idx <= tight_idx:
+                    # Skip to the blocked segment (advance to it), not past it —
+                    # clearance steering will guide the bot around.
+                    pf.goal_idx = tight_idx
+                    if pf.advance():
+                        pf.skip_close_goals(bot.pos)
+                    # Suppress deviation repath — let the bot navigate to the
+                    # new goal with clearance steering before re-evaluating.
+                    nav.last_repath_tick = tick
+                    log.info(
+                        "bot=%d: path blocked (clr=%.0f) at seg %d, now %d/%d",
+                        brain.bot_id, min_clr, tight_idx,
+                        pf.goal_idx, len(pf.segments),
+                    )
 
         # Stuck detection
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
