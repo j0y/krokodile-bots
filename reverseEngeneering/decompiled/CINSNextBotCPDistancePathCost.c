@@ -37,17 +37,17 @@ CINSNextBotCPDistancePathCost::operator()
   float local_30;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x4b9dd9);
+  iVar2 = *(int *)(unaff_EBX + 0x4b9dd9 /* &GCSDK::GetPchTempTextBuffer */);
   this = *(CNavArea **)(iVar2 + 0x100c);
   bVar7 = this != (CNavArea *)0x0;
   if ((bVar7) &&
      (iVar5 = *(int *)(iVar2 + 0x19b8), iVar4 = ThreadGetCurrentId(), this = extraout_ECX,
      iVar5 == iVar4)) {
     piVar6 = *(int **)(iVar2 + 0x1014);
-    if (*piVar6 != unaff_EBX + 0x2921a1) {
+    if (*piVar6 != unaff_EBX + 0x2921a1 /* "CINSNextBotCPDistancePathCost::operator()" */) {
       piVar6 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar6,unaff_EBX + 0x2921a1,(char *)0x0,
-                                 unaff_EBX + 0x2940ce);
+                                ((char *)piVar6,unaff_EBX + 0x2921a1 /* "CINSNextBotCPDistancePathCost::operator()" */,(char *)0x0,
+                                 unaff_EBX + 0x2940ce /* "NextBot" */);
       *(int **)(iVar2 + 0x1014) = piVar6;
     }
     puVar1 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar6[0x1c] * 8 + 4);
@@ -60,7 +60,7 @@ CINSNextBotCPDistancePathCost::operator()
     fVar9 = 0.0;
     goto LAB_006ecd5a;
   }
-  local_30 = *(float *)(unaff_EBX + 0x23c611);
+  local_30 = *(float *)(unaff_EBX + 0x23c611 /* typeinfo name for CTraceFilterIgnoreWeapons+0x21 */);
   iVar5 = 0;
   do {
     if (iVar5 == 2) {
@@ -120,9 +120,9 @@ CINSNextBotCPDistancePathCost::operator()
   fVar8 = (float10)CNavArea::ComputeAdjacentConnectionHeightChange(this,(CNavArea *)param_3);
   fVar10 = (float)fVar8;
   if (fVar10 < *(float *)(param_1 + 0x10)) {
-    if (fVar10 <= (float)((uint)*(float *)(param_1 + 0x10) ^ *(uint *)(unaff_EBX + 0x238065))) {
+    if (fVar10 <= (float)((uint)*(float *)(param_1 + 0x10) ^ *(uint *)(unaff_EBX + 0x238065 /* typeinfo name for CBroadcastRecipientFilter+0x44 */))) {
       fVar9 = *(float *)(CBaseAchievement::~CBaseAchievement + unaff_EBX + 5);
-      if (fVar10 <= (float)(*(uint *)(param_1 + 0x18) ^ *(uint *)(unaff_EBX + 0x238065)))
+      if (fVar10 <= (float)(*(uint *)(param_1 + 0x18) ^ *(uint *)(unaff_EBX + 0x238065 /* typeinfo name for CBroadcastRecipientFilter+0x44 */)))
       goto LAB_006ecd5a;
       goto LAB_006ecd3b;
     }
@@ -131,7 +131,7 @@ CINSNextBotCPDistancePathCost::operator()
     fVar9 = *(float *)(CBaseAchievement::~CBaseAchievement + unaff_EBX + 5);
     if (*(float *)(param_1 + 0x14) <= fVar10) goto LAB_006ecd5a;
 LAB_006ecd3b:
-    local_30 = local_30 * *(float *)(unaff_EBX + 0x1cc3e1);
+    local_30 = local_30 * *(float *)(unaff_EBX + 0x1cc3e1 /* typeinfo name for IServerBenchmark+0x13 */);
   }
   fVar9 = local_30 + *(float *)(param_3 + 0x54);
 LAB_006ecd5a:

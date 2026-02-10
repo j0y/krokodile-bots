@@ -20,7 +20,7 @@ void __thiscall CINSBotActionStrike::CINSBotActionStrike(CINSBotActionStrike *th
   
   __i686_get_pc_thunk_cx();
   in_stack_00000004[8] = 0;
-  *in_stack_00000004 = extraout_ECX + 0x45e3c3;
+  *in_stack_00000004 = extraout_ECX + 0x45e3c3 /* vtable for CINSBotActionStrike+0x8 */;
   in_stack_00000004[9] = 0;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
@@ -33,7 +33,7 @@ void __thiscall CINSBotActionStrike::CINSBotActionStrike(CINSBotActionStrike *th
   *(undefined1 *)((int)in_stack_00000004 + 0x31) = 0;
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
-  in_stack_00000004[1] = extraout_ECX + 0x45e553;
+  in_stack_00000004[1] = extraout_ECX + 0x45e553 /* vtable for CINSBotActionStrike+0x198 */;
   return;
 }
 
@@ -107,7 +107,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x244372;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x244372 /* "Attacking nearby threats" */;
       return param_1;
     }
   }
@@ -126,7 +126,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2464bd;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2464bd /* "Defending a cache" */;
     }
     else {
       iVar3 = CBaseEntity::GetTeamNumber(this_04);
@@ -147,7 +147,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2464cf;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2464cf /* "Attacking a cache" */;
     }
   }
   else {
@@ -160,7 +160,7 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
     *(undefined4 *)((int)param_2 + 0x24) = 0;
     *(undefined4 *)((int)param_2 + 0x28) = 0;
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x245f03;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x245f03 /* "I have an investigation!" */;
   }
   return param_1;
 }
@@ -195,7 +195,7 @@ int CINSBotActionStrike::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f65c5;
+  return extraout_ECX + 0x1f65c5 /* "Strike" */;
 }
 
 
@@ -231,7 +231,7 @@ undefined4 __cdecl CINSBotActionStrike::GetDesiredObjective(CINSNextBot *param_1
   local_3c[1] = 0;
   local_3c[2] = 0;
   local_30 = (int *)0x0;
-  iVar2 = **(int **)(unaff_EBX + 0x46ac71);
+  iVar2 = **(int **)(unaff_EBX + 0x46ac71 /* &g_pObjectiveResource */);
   local_2c = 0;
   local_20[0] = 0;
   this = extraout_ECX;
@@ -243,7 +243,7 @@ undefined4 __cdecl CINSBotActionStrike::GetDesiredObjective(CINSNextBot *param_1
         CUtlVector<int,CUtlMemory<int,int>>::InsertBefore
                   ((CUtlVector<int,CUtlMemory<int,int>> *)local_20,(int)local_3c,local_30);
       }
-      this = *(CINSRules **)(unaff_EBX + 0x46ac71);
+      this = *(CINSRules **)(unaff_EBX + 0x46ac71 /* &g_pObjectiveResource */);
       iVar2 = *(int *)this;
       local_20[0] = local_20[0] + 1;
     } while (local_20[0] < *(int *)(iVar2 + 0x37c));
@@ -257,8 +257,8 @@ undefined4 __cdecl CINSBotActionStrike::GetDesiredObjective(CINSNextBot *param_1
 LAB_0073c180:
   local_30 = (int *)0x0;
   if ((-1 < local_3c[2]) && (local_3c[0] != 0)) {
-    (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x46a7cd) + 8))
-              ((int *)**(undefined4 **)(unaff_EBX + 0x46a7cd),local_3c[0]);
+    (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x46a7cd /* &GCSDK::GetPchTempTextBuffer */) + 8))
+              ((int *)**(undefined4 **)(unaff_EBX + 0x46a7cd /* &GCSDK::GetPchTempTextBuffer */),local_3c[0]);
   }
   return uVar3;
 }
@@ -295,9 +295,9 @@ void __thiscall CINSBotActionStrike::~CINSBotActionStrike(CINSBotActionStrike *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x45deb3;
-  in_stack_00000004[1] = extraout_ECX + 0x45e043;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46ac43));
+  *in_stack_00000004 = extraout_ECX + 0x45deb3 /* vtable for CINSBotActionStrike+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x45e043 /* vtable for CINSBotActionStrike+0x198 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46ac43 /* &_DYNAMIC */));
   return;
 }
 
@@ -334,8 +334,8 @@ void __thiscall CINSBotActionStrike::~CINSBotActionStrike(CINSBotActionStrike *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45de6a;
-  in_stack_00000004[1] = unaff_EBX + 0x45dffa;
+  *in_stack_00000004 = unaff_EBX + 0x45de6a /* vtable for CINSBotActionStrike+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45dffa /* vtable for CINSBotActionStrike+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

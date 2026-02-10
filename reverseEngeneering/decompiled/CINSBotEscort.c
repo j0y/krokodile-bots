@@ -24,11 +24,11 @@ void __thiscall CINSBotEscort::CINSBotEscort(CINSBotEscort *this)
   in_stack_00000004[8] = 0;
   in_stack_00000004[9] = 0;
   *in_stack_00000004 = &UNK_0047c5bd + unaff_EBX;
-  in_stack_00000004[1] = unaff_EBX + 0x47c75d;
+  in_stack_00000004[1] = unaff_EBX + 0x47c75d /* vtable for CINSBotEscort+0x1a8 */;
   puVar1 = &UNK_0040ddcd + unaff_EBX;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
-  pcVar2 = (code *)(unaff_EBX + -0x4e9c7b);
+  pcVar2 = (code *)(unaff_EBX + -0x4e9c7b /* CountdownTimer::NetworkStateChanged */);
   in_stack_00000004[4] = 0;
   in_stack_00000004[5] = 0;
   in_stack_00000004[6] = 0;
@@ -155,7 +155,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
           *(undefined4 *)((int)param_2 + 0x2c) = 0;
           *(undefined4 *)param_1 = 2;
           *(void **)(param_1 + 4) = pvVar6;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x264a98;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x264a98 /* "Combat time!" */;
           return param_1;
         }
       }
@@ -166,11 +166,11 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
       (float)fVar8 != *(float *)((int)param_2 + 100)) {
     if (((*(int *)((int)param_2 + 0x38) < 1) ||
         (this_02 = this_01,
-        *(int *)(**(int **)(unaff_EBX + 0x48a545) + 0x14) < *(int *)((int)param_2 + 0x38))) &&
+        *(int *)(**(int **)(unaff_EBX + 0x48a545 /* &gpGlobals */) + 0x14) < *(int *)((int)param_2 + 0x38))) &&
        (SetEscortTarget(this_01), this_02 = extraout_ECX, *(int *)((int)param_2 + 0x38) == -1)) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x264aa5;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x264aa5 /* "Unable to get escort Target" */;
       return param_1;
     }
     piVar3 = (int *)GetEscortTarget(this_02);
@@ -209,7 +209,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
         (float)fVar8 != *(float *)((int)param_2 + 0x7c)) {
       UpdateEscortLookaround(this_06,(CINSNextBot *)param_2);
       fVar8 = (float10)CountdownTimer::Now();
-      fVar9 = (float)fVar8 + *(float *)(unaff_EBX + 0x19c7b9);
+      fVar9 = (float)fVar8 + *(float *)(unaff_EBX + 0x19c7b9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
       if (*(float *)((int)param_2 + 0x7c) != fVar9) {
         (**(code **)(*(int *)((int)param_2 + 0x74) + 4))((int)param_2 + 0x74,(int)param_2 + 0x7c);
         *(float *)((int)param_2 + 0x7c) = fVar9;
@@ -220,7 +220,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
       }
     }
     fVar8 = (float10)CountdownTimer::Now();
-    fVar9 = (float)fVar8 + *(float *)(unaff_EBX + 0x20aa9d);
+    fVar9 = (float)fVar8 + *(float *)(unaff_EBX + 0x20aa9d /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x78 */);
     if (*(float *)((int)param_2 + 100) != fVar9) {
       (**(code **)(*(int *)((int)param_2 + 0x5c) + 4))((int)param_2 + 0x5c,(int)param_2 + 100);
       *(float *)((int)param_2 + 100) = fVar9;
@@ -235,7 +235,7 @@ CINSBotEscort::Update(CINSBotEscort *this,CINSNextBot *param_1,float param_2)
   if (9 < *(int *)(in_stack_0000000c + 0xb324)) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x264c15;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x264c15 /* "Path compute failed. Let's go back to Game Mode" */;
     return param_1;
   }
   *(undefined4 *)param_1 = 0;
@@ -325,7 +325,7 @@ int CINSBotEscort::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x26456b;
+  return extraout_ECX + 0x26456b /* "Escort" */;
 }
 
 
@@ -426,17 +426,17 @@ char __cdecl CINSBotEscort::ShouldRetreat(INextBot *param_1)
   float fVar5;
   
   __i686_get_pc_thunk_bx();
-  iVar1 = *(int *)(extraout_EDX + 0x1c);
+  iVar1 = *(int *)(extraout_EDX + 0x1c /* CINSBotEscort::ShouldRetreat */);
   if (iVar1 != 0) {
     cVar2 = CINSNextBot::IsSuppressed(this);
     if (cVar2 != '\0') {
       if ((*(byte *)(iVar1 + 0xd1) & 8) != 0) {
         CBaseEntity::CalcAbsolutePosition(this_00);
       }
-      fVar5 = *(float *)(extraout_EDX + 0x3c) - *(float *)(iVar1 + 0x208);
-      fVar3 = *(float *)(extraout_EDX + 0x40) - *(float *)(iVar1 + 0x20c);
-      fVar4 = *(float *)(extraout_EDX + 0x44) - *(float *)(iVar1 + 0x210);
-      return (*(float *)(unaff_EBX + 0x222aaf) <=
+      fVar5 = *(float *)(extraout_EDX + 0x3c /* CINSBotEscort::ShouldRetreat */) - *(float *)(iVar1 + 0x208);
+      fVar3 = *(float *)(extraout_EDX + 0x40 /* CINSBotEscort::ShouldRetreat */) - *(float *)(iVar1 + 0x20c);
+      fVar4 = *(float *)(extraout_EDX + 0x44 /* CINSBotEscort::ShouldRetreat */) - *(float *)(iVar1 + 0x210);
+      return (*(float *)(unaff_EBX + 0x222aaf /* typeinfo name for CTheaterEntityFactory<CINSWeaponBallistic>+0x30 */) <=
              SQRT(fVar3 * fVar3 + fVar5 * fVar5 + fVar4 * fVar4)) + '\x01';
     }
   }
@@ -696,7 +696,7 @@ CINSNextBot * CINSBotEscort::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
   }
   if (((cVar1 != '\0') && (cVar1 = CBaseEntity::InSameTeam(in_stack_0000000c), cVar1 == '\0')) &&
      (iVar2 = CINSPlayer::GetActiveINSWeapon(), iVar2 != 0)) {
-    if ((**(int **)(unaff_EBX + 0x48cac2) != 0) &&
+    if ((**(int **)(unaff_EBX + 0x48cac2 /* &TheNavMesh */) != 0) &&
        (iVar2 = TheINSNextBots(), *(char *)(iVar2 + 0x129) != '\0')) {
       pCVar3 = (CBaseEntity *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
       iVar2 = CINSBotVision::GetSilhouetteType(this,pCVar3);
@@ -704,7 +704,7 @@ CINSNextBot * CINSBotEscort::OnSight(CINSNextBot *param_1,CBaseEntity *param_2)
       cVar1 = CINSWeapon::HasFlashlight(this_00);
       if ((cVar1 != '\0') && (cVar1 = CINSWeapon::IsFlashlightOn(this_01), cVar1 == '\0')) {
         fVar5 = (float10)CountdownTimer::Now();
-        fVar6 = (float)fVar5 + *(float *)(unaff_EBX + 0x20ab76);
+        fVar6 = (float)fVar5 + *(float *)(unaff_EBX + 0x20ab76 /* typeinfo name for CBaseGameSystem+0x32 */);
         if (*(float *)(param_2 + 0x70) != fVar6) {
           (**(code **)(*(int *)(param_2 + 0x68) + 4))(param_2 + 0x68,param_2 + 0x70);
           *(float *)(param_2 + 0x70) = fVar6;
@@ -746,8 +746,8 @@ void CINSBotEscort::OnLostSight(CINSNextBot *param_1,CBaseEntity *param_2)
   
   __i686_get_pc_thunk_bx();
   iVar1 = 0;
-  if (*(int *)(extraout_EDX + 0x20) != 0) {
-    iVar1 = *(int *)(extraout_EDX + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48d7ff) + 0x5c) >> 4;
+  if (*(int *)(extraout_EDX + 0x20 /* CINSBotEscort::OnLostSight */) != 0) {
+    iVar1 = *(int *)(extraout_EDX + 0x20 /* CINSBotEscort::OnLostSight */) - *(int *)(**(int **)(unaff_EBX + 0x48d7ff /* &gpGlobals */) + 0x5c) >> 4;
   }
   if (*(int *)(param_2 + 0x38) == iVar1) {
     param_2[0x48] = (CBaseEntity)0x0;
@@ -842,26 +842,26 @@ CINSBotEscort::OnWeaponFired
   if (cVar2 != '\0') {
     iVar6 = CBaseEntity::GetTeamNumber(this_00);
     iVar7 = CBaseEntity::GetTeamNumber(this_01);
-    if ((iVar6 == iVar7) || (*(float *)(unaff_EBX + 0x267201) <= fVar10)) {
+    if ((iVar6 == iVar7) || (*(float *)(unaff_EBX + 0x267201 /* typeinfo name for CINSBotEscort+0x10 */) <= fVar10)) {
       iVar6 = CBaseEntity::GetTeamNumber(this_02);
       iVar7 = CBaseEntity::GetTeamNumber(this_03);
       if (iVar6 == iVar7) {
         iVar6 = (**(code **)(*(int *)param_2 + 0x974))(param_2);
-        fVar11 = *(float *)(**(int **)(unaff_EBX + 0x48cad1) + 0xc) - *(float *)(iVar6 + 600);
+        fVar11 = *(float *)(**(int **)(unaff_EBX + 0x48cad1 /* &gpGlobals */) + 0xc) - *(float *)(iVar6 + 600);
         if ((*(float *)(&DAT_0020a99d + unaff_EBX) <= fVar11 &&
              fVar11 != *(float *)(&DAT_0020a99d + unaff_EBX)) &&
-           (fVar10 < *(float *)(unaff_EBX + 0x20b241))) {
+           (fVar10 < *(float *)(unaff_EBX + 0x20b241 /* typeinfo name for ITraceFilter+0x20 */))) {
           cVar2 = (**(code **)(*(int *)param_3 + 0x158))(param_3);
           if (cVar2 != '\0') {
             local_b4 = 0;
-            pfVar3 = *(float **)(unaff_EBX + 0x48c7fd);
+            pfVar3 = *(float **)(unaff_EBX + 0x48c7fd /* &vec3_origin */);
             local_40 = *pfVar3;
             local_3c = pfVar3[1];
             local_38 = pfVar3[2];
             uVar13 = 0;
             uVar8 = 0;
             CBasePlayer::EyeVectors(this_04,(Vector *)param_3,(Vector *)&local_40,(Vector *)0x0);
-            fVar10 = *(float *)(unaff_EBX + 0x20b249);
+            fVar10 = *(float *)(unaff_EBX + 0x20b249 /* typeinfo name for ITraceFilter+0x28 */);
             fVar12 = local_40 * fVar10;
             fVar11 = local_3c * fVar10;
             fVar10 = fVar10 * local_38;
@@ -888,8 +888,8 @@ CINSBotEscort::OnWeaponFired
             CTraceFilterSimple::CTraceFilterSimple
                       ((CTraceFilterSimple *)&local_50,(IHandleEntity *)&local_50,(int)param_3,
                        (_func_bool_IHandleEntity_ptr_int *)0x0);
-            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x48c9a9) + 0x14))
-                      ((int *)**(undefined4 **)(unaff_EBX + 0x48c9a9),&local_ac,0x2006241,&local_50,
+            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x48c9a9 /* &enginetrace */) + 0x14))
+                      ((int *)**(undefined4 **)(unaff_EBX + 0x48c9a9 /* &enginetrace */),&local_ac,0x2006241,&local_50,
                        local_100);
             piVar5 = *(int **)(&DAT_0048cc71 + unaff_EBX);
             this = (CNavMesh *)(**(code **)(*piVar5 + 0x40))(piVar5);
@@ -910,10 +910,10 @@ CINSBotEscort::OnWeaponFired
               uVar8 = local_f0;
               fVar9 = (float10)CNavArea::GetZ(this_05,fVar10,local_f4);
               local_50 = local_f4;
-              local_48 = (float)fVar9 + *(float *)(unaff_EBX + 0x2442a9);
+              local_48 = (float)fVar9 + *(float *)(unaff_EBX + 0x2442a9 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xd8 */);
               local_4c = local_f0;
               piVar5 = (int *)(**(code **)(*(int *)param_2 + 0x970))(param_2,fVar11,uVar8);
-              (**(code **)(*piVar5 + 0xd4))(piVar5,&local_50,3,0x3f19999a,0,unaff_EBX + 0x267075);
+              (**(code **)(*piVar5 + 0xd4))(piVar5,&local_50,3,0x3f19999a,0,unaff_EBX + 0x267075 /* "Looking at where friendly shooter is aiming" */);
             }
           }
         }
@@ -923,7 +923,7 @@ CINSBotEscort::OnWeaponFired
       piVar5 = (int *)(**(code **)(*(int *)param_2 + 0x970))(param_2);
       pcVar1 = *(code **)(*piVar5 + 0xd4);
       uVar8 = (**(code **)(*(int *)param_3 + 0x260))(param_3);
-      (*pcVar1)(piVar5,uVar8,3,0x3ecccccd,0,unaff_EBX + 0x26704d);
+      (*pcVar1)(piVar5,uVar8,3,0x3ecccccd,0,unaff_EBX + 0x26704d /* "Looking in direction of enemy gun fire" */);
     }
   }
   *in_EAX = 0;
@@ -990,16 +990,16 @@ int __cdecl CINSBotEscort::AddToEscortFormation(CINSNextBot *param_1)
   int iVar8;
   
   __i686_get_pc_thunk_bx();
-  if (0 < *(int *)(unaff_EBX + 0x5d0f7c)) {
+  if (0 < *(int *)(unaff_EBX + 0x5d0f7c /* CINSBotEscort::m_escortFormations+0xc */)) {
     iVar8 = 0;
     do {
       this = (CBaseEntity *)(iVar8 * 4);
-      iVar7 = *(int *)(*(int *)(unaff_EBX + 0x5d0f70) + iVar8 * 4);
+      iVar7 = *(int *)(*(int *)(unaff_EBX + 0x5d0f70 /* CINSBotEscort::m_escortFormations */) + iVar8 * 4);
       piVar3 = (int *)UTIL_PlayerByIndex(*(int *)(iVar7 + 8));
       if (((piVar3 != (int *)0x0) &&
           (cVar2 = (**(code **)(*piVar3 + 0x7b0))(piVar3),
           *(int *)(iVar7 + 0x2c) < (int)((-(uint)(cVar2 == '\0') & 2) + 3))) &&
-         (iVar7 = *(int *)(*(int *)(this + *(int *)(unaff_EBX + 0x5d0f70)) + 4),
+         (iVar7 = *(int *)(*(int *)(this + *(int *)(unaff_EBX + 0x5d0f70 /* CINSBotEscort::m_escortFormations */)) + 4),
          iVar4 = CBaseEntity::GetTeamNumber(this), iVar7 == iVar4)) {
         iVar7 = 0;
         if (*(int *)(param_1 + 0x20) != 0) {
@@ -1007,7 +1007,7 @@ int __cdecl CINSBotEscort::AddToEscortFormation(CINSNextBot *param_1)
                   *(int *)(**(int **)(CGameWeaponManager::~CGameWeaponManager + unaff_EBX) + 0x5c)
                   >> 4;
         }
-        iVar4 = *(int *)(this + *(int *)(unaff_EBX + 0x5d0f70));
+        iVar4 = *(int *)(this + *(int *)(unaff_EBX + 0x5d0f70 /* CINSBotEscort::m_escortFormations */));
         if (iVar7 == *(int *)(iVar4 + 8)) {
           return -1;
         }
@@ -1036,7 +1036,7 @@ int __cdecl CINSBotEscort::AddToEscortFormation(CINSNextBot *param_1)
         }
         iVar7 = CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>>::InsertBefore
                           (*(CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>>
-                             **)(*(int *)(unaff_EBX + 0x48affc) + 4),iVar4 + 0x20,
+                             **)(*(int *)(unaff_EBX + 0x48affc /* &vec3_origin */) + 4),iVar4 + 0x20,
                            *(t_INSBotEscortMember **)(iVar4 + 0x2c));
         if (iVar7 == -1) {
           return -1;
@@ -1045,7 +1045,7 @@ int __cdecl CINSBotEscort::AddToEscortFormation(CINSNextBot *param_1)
         return iVar8;
       }
       iVar8 = iVar8 + 1;
-    } while (iVar8 < *(int *)(unaff_EBX + 0x5d0f7c));
+    } while (iVar8 < *(int *)(unaff_EBX + 0x5d0f7c /* CINSBotEscort::m_escortFormations+0xc */));
   }
   return -1;
 }
@@ -1072,15 +1072,15 @@ int __cdecl CINSBotEscort::GetEscortFormation(CBaseEntity *param_1)
   int local_1c;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x5d1f21);
+  iVar2 = *(int *)(unaff_EBX + 0x5d1f21 /* CINSBotEscort::m_escortFormations+0xc */);
   if ((iVar2 != 0) && (0 < iVar2)) {
     local_1c = 0;
     do {
       iVar6 = 0;
       if (*(int *)(param_1 + 0x20) != 0) {
-        iVar6 = *(int *)(param_1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48c275) + 0x5c) >> 4;
+        iVar6 = *(int *)(param_1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48c275 /* &gpGlobals */) + 0x5c) >> 4;
       }
-      iVar3 = *(int *)(*(int *)(unaff_EBX + 0x5d1f15) + local_1c * 4);
+      iVar3 = *(int *)(*(int *)(unaff_EBX + 0x5d1f15 /* CINSBotEscort::m_escortFormations */) + local_1c * 4);
       if (iVar6 == *(int *)(iVar3 + 8)) {
         return iVar3;
       }
@@ -1157,7 +1157,7 @@ bool __cdecl CINSBotEscort::HasEscortTarget(CINSNextBot *param_1)
   if ((pcVar1 != (char *)0x0) && (*pcVar1 != '\0')) {
     iVar3 = 0;
     if (*(int *)(param_1 + 0x20) != 0) {
-      iVar3 = *(int *)(param_1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48c18f) + 0x5c) >> 4;
+      iVar3 = *(int *)(param_1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48c18f /* &gpGlobals */) + 0x5c) >> 4;
     }
     if (iVar3 == *(int *)(pcVar1 + 8)) {
       return true;
@@ -1255,7 +1255,7 @@ CINSBotEscort::OnHeardFootsteps
     iVar3 = CBaseEntity::GetTeamNumber(this_00);
     if ((iVar2 != iVar3) &&
        (((iVar2 = CINSPlayer::GetActiveINSWeapon(), iVar2 != 0 &&
-         (iVar2 = **(int **)(unaff_EBX + 0x48d1e4), iVar2 != 0)) &&
+         (iVar2 = **(int **)(unaff_EBX + 0x48d1e4 /* &TheNavMesh */), iVar2 != 0)) &&
         (iVar3 = TheINSNextBots(), *(char *)(iVar3 + 0x129) != '\0')))) {
       pCVar4 = (CNavMesh *)param_3;
       if (((byte)param_3[0xd1] & 8) != 0) {
@@ -1265,12 +1265,12 @@ CINSBotEscort::OnHeardFootsteps
       iVar2 = CNavMesh::GetNearestNavArea(pCVar4,iVar2,param_3 + 0x208,0,0x461c4000,0,1,0);
       if (((iVar2 != 0) &&
           ((*(float *)(iVar2 + 0xe4) + *(float *)(iVar2 + 0xe0) + *(float *)(iVar2 + 0xe8) +
-           *(float *)(iVar2 + 0xec)) * *(float *)(unaff_EBX + 0x20a5b8) <
-           *(float *)(unaff_EBX + 0x20b284))) &&
+           *(float *)(iVar2 + 0xec)) * *(float *)(unaff_EBX + 0x20a5b8 /* typeinfo name for ISaveRestoreOps+0x67 */) <
+           *(float *)(unaff_EBX + 0x20b284 /* typeinfo name for CBaseGameSystem+0x1e */))) &&
          ((cVar1 = CINSWeapon::HasFlashlight(this_01), cVar1 != '\0' &&
           (cVar1 = CINSWeapon::IsFlashlightOn(this_02), cVar1 == '\0')))) {
         fVar5 = (float10)CountdownTimer::Now();
-        fVar6 = (float)fVar5 + *(float *)(unaff_EBX + 0x20b298);
+        fVar6 = (float)fVar5 + *(float *)(unaff_EBX + 0x20b298 /* typeinfo name for CBaseGameSystem+0x32 */);
         if (*(float *)(param_2 + 0x70) != fVar6) {
           (**(code **)(*(int *)(param_2 + 0x68) + 4))(param_2 + 0x68,param_2 + 0x70);
           *(float *)(param_2 + 0x70) = fVar6;
@@ -1322,7 +1322,7 @@ CINSBotEscort::OnNavAreaChanged
     if ((*(char *)(iVar2 + 0x129) != '\0') &&
        ((*(float *)(in_stack_00000010 + 0xe4) + *(float *)(in_stack_00000010 + 0xe0) +
          *(float *)(in_stack_00000010 + 0xe8) + *(float *)(in_stack_00000010 + 0xec)) *
-        *(float *)(unaff_EBX + 0x20a2c8) < *(float *)(unaff_EBX + 0x20f9f0))) {
+        *(float *)(unaff_EBX + 0x20a2c8 /* typeinfo name for ISaveRestoreOps+0x67 */) < *(float *)(unaff_EBX + 0x20f9f0 /* typeinfo name for CTraceFilterIgnoreWeapons+0x29 */))) {
       cVar1 = CINSPlayer::IsSprinting(this_00);
       if (cVar1 == '\0') {
         iVar2 = CINSPlayer::GetActiveINSWeapon();
@@ -1332,7 +1332,7 @@ CINSBotEscort::OnNavAreaChanged
             cVar1 = CINSWeapon::IsFlashlightOn(this_02);
             if (cVar1 == '\0') {
               fVar3 = (float10)CountdownTimer::Now();
-              fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x19f7b8);
+              fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x19f7b8 /* typeinfo name for IServerBenchmark+0x13 */);
               if (*(float *)(param_2 + 0x70) != fVar4) {
                 (**(code **)(*(int *)(param_2 + 0x68) + 4))(param_2 + 0x68,param_2 + 0x70);
                 *(float *)(param_2 + 0x70) = fVar4;
@@ -1449,22 +1449,22 @@ void __thiscall CINSBotEscort::SetEscortTarget(CINSBotEscort *this)
   else {
     iVar4 = GetEscortFormation(pCVar1);
   }
-  iVar5 = *(int *)(unaff_EBX + 0x5d0db1);
+  iVar5 = *(int *)(unaff_EBX + 0x5d0db1 /* CINSBotEscort::m_escortFormations+0xc */);
   if (iVar5 == 0) {
-    iVar4 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5) + 0x40))(unaff_EBX + 0x5d0dc5);
+    iVar4 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */) + 0x40))(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */);
     if (iVar4 != 0) {
       CBaseEntity::GetDebugName(this_03);
       CBaseEntity::GetDebugName(this_07);
-      DevMsg((char *)(unaff_EBX + 0x265711));
+      DevMsg((char *)(unaff_EBX + 0x265711 /* "Bot%s Creating first formation for nearest player: %s" */));
     }
     iVar4 = 0;
     if (*(int *)(local_94 + 0x20) != 0) {
-      iVar4 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+      iVar4 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
     }
     puVar10 = (undefined1 *)::operator_new(0x40);
     *(int *)(puVar10 + 8) = iVar4;
     pCVar2 = *(CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>> **)
-              (unaff_EBX + 0x48ae31);
+              (unaff_EBX + 0x48ae31 /* &vec3_origin */);
     *(undefined4 *)(puVar10 + 0x20) = 0;
     *(undefined4 *)(puVar10 + 0x24) = 0;
     *(undefined4 *)(puVar10 + 0x28) = 0;
@@ -1475,7 +1475,7 @@ void __thiscall CINSBotEscort::SetEscortTarget(CINSBotEscort *this)
     *(undefined4 *)(puVar10 + 0x14) = uVar12;
     *(undefined4 *)(puVar10 + 0x18) = *(undefined4 *)(pCVar2 + 4);
     *(undefined4 *)(puVar10 + 0x1c) = *(undefined4 *)(pCVar2 + 8);
-    *(int *)(puVar10 + 0x34) = unaff_EBX + 0x40ca1d;
+    *(int *)(puVar10 + 0x34) = unaff_EBX + 0x40ca1d /* vtable for CountdownTimer+0x8 */;
     CountdownTimer::NetworkStateChanged(puVar10 + 0x34);
     *(undefined4 *)(puVar10 + 0x3c) = 0xbf800000;
     (**(code **)(*(int *)(puVar10 + 0x34) + 4))(puVar10 + 0x34,puVar10 + 0x3c);
@@ -1495,17 +1495,17 @@ void __thiscall CINSBotEscort::SetEscortTarget(CINSBotEscort *this)
       pCVar13 = extraout_ECX_03;
     }
     ppuVar18 = &local_24;
-    ppIVar17 = *(INSBotEscortFormation ***)(unaff_EBX + 0x5d0db1);
+    ppIVar17 = *(INSBotEscortFormation ***)(unaff_EBX + 0x5d0db1 /* CINSBotEscort::m_escortFormations+0xc */);
     local_24 = puVar10;
     CUtlVector<INSBotEscortFormation*,CUtlMemory<INSBotEscortFormation*,int>>::InsertBefore
-              (pCVar13,unaff_EBX + 0x5d0da5,ppIVar17);
+              (pCVar13,unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */,ppIVar17);
     iVar4 = GetEscortFormation((CBaseEntity *)local_94);
     if (iVar4 == 0) {
       return;
     }
     iVar5 = 0;
     if (*(int *)(pCVar1 + 0x20) != 0) {
-      iVar5 = *(int *)(pCVar1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+      iVar5 = *(int *)(pCVar1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
     }
     if (iVar5 == *(int *)(iVar4 + 8)) {
       return;
@@ -1549,9 +1549,9 @@ void __thiscall CINSBotEscort::SetEscortTarget(CINSBotEscort *this)
     while( true ) {
       iVar4 = 0;
       if (*(int *)(local_94 + 0x20) != 0) {
-        iVar4 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+        iVar4 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
       }
-      iVar16 = *(int *)(*(int *)(unaff_EBX + 0x5d0da5) + local_98 * 4);
+      iVar16 = *(int *)(*(int *)(unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */) + local_98 * 4);
       if (iVar4 == *(int *)(iVar16 + 8)) break;
       if (0 < *(int *)(iVar16 + 0x2c)) {
         if (iVar4 == **(int **)(iVar16 + 0x20)) break;
@@ -1569,35 +1569,35 @@ void __thiscall CINSBotEscort::SetEscortTarget(CINSBotEscort *this)
       }
     }
 LAB_0071c050:
-    iVar4 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5) + 0x40))(unaff_EBX + 0x5d0dc5);
+    iVar4 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */) + 0x40))(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */);
     if (iVar4 != 0) {
       CBaseEntity::GetDebugName(this_08);
       CBaseEntity::GetDebugName(this_09);
-      DevMsg((char *)(unaff_EBX + 0x2657a9));
+      DevMsg((char *)(unaff_EBX + 0x2657a9 /* "Bot%s Joining nearest players formation: %s" */));
     }
     iVar4 = 0;
     if (*(int *)(pCVar1 + 0x20) != 0) {
-      iVar4 = *(int *)(pCVar1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+      iVar4 = *(int *)(pCVar1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
     }
-    local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5);
+    local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */);
     iVar5 = *(int *)((int)local_94 + local_98 * 4);
     if (iVar4 != *(int *)(iVar5 + 8)) {
       if (*(int *)(iVar5 + 0x2c) < 1) {
 LAB_0071c121:
         piVar7 = (int *)UTIL_PlayerByIndex(*(int *)(iVar5 + 8));
-        local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5);
+        local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */);
         if (piVar7 != (int *)0x0) {
           cVar3 = (**(code **)(*piVar7 + 0x7b0))(piVar7);
           if ((int)*(t_INSBotEscortMember **)(iVar5 + 0x2c) <
               (int)((-(uint)(cVar3 == '\0') & 2) + 3)) {
             CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>>::InsertBefore
                       (*(CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>> **)
-                        (*(int *)(unaff_EBX + 0x48ae31) + 4),iVar5 + 0x20,
+                        (*(int *)(unaff_EBX + 0x48ae31 /* &vec3_origin */) + 4),iVar5 + 0x20,
                        *(t_INSBotEscortMember **)(iVar5 + 0x2c));
-            local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5);
+            local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */);
           }
           else {
-            local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5);
+            local_94 = *(CINSNextBot **)(unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */);
           }
         }
       }
@@ -1620,7 +1620,7 @@ LAB_0071c121:
   }
   iVar5 = 0;
   if (*(int *)(local_94 + 0x20) != 0) {
-    iVar5 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+    iVar5 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
   }
   if (*(int *)(iVar4 + 8) == iVar5) {
     *(int *)(in_stack_00000004 + 0x38) = *(int *)(iVar4 + 8);
@@ -1628,7 +1628,7 @@ LAB_0071c121:
   }
   pCVar6 = (CINSNextBot *)GetEscortFormation((CBaseEntity *)local_94);
   if (pCVar6 == (CINSNextBot *)0x0) {
-    iVar4 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5) + 0x40))(unaff_EBX + 0x5d0dc5);
+    iVar4 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */) + 0x40))(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */);
     if (iVar4 != 0) {
       CBaseEntity::GetDebugName(this_05);
       CBaseEntity::GetDebugName(this_10);
@@ -1636,12 +1636,12 @@ LAB_0071c121:
     }
     iVar4 = 0;
     if (*(int *)(local_94 + 0x20) != 0) {
-      iVar4 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+      iVar4 = *(int *)(local_94 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
     }
     puVar10 = (undefined1 *)::operator_new(0x40);
     *(int *)(puVar10 + 8) = iVar4;
     pCVar2 = *(CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>> **)
-              (unaff_EBX + 0x48ae31);
+              (unaff_EBX + 0x48ae31 /* &vec3_origin */);
     *(undefined4 *)(puVar10 + 0x20) = 0;
     *(undefined4 *)(puVar10 + 0x24) = 0;
     *(undefined4 *)(puVar10 + 0x28) = 0;
@@ -1652,7 +1652,7 @@ LAB_0071c121:
     *(undefined4 *)(puVar10 + 0x14) = uVar12;
     *(undefined4 *)(puVar10 + 0x18) = *(undefined4 *)(pCVar2 + 4);
     *(undefined4 *)(puVar10 + 0x1c) = *(undefined4 *)(pCVar2 + 8);
-    *(int *)(puVar10 + 0x34) = unaff_EBX + 0x40ca1d;
+    *(int *)(puVar10 + 0x34) = unaff_EBX + 0x40ca1d /* vtable for CountdownTimer+0x8 */;
     CountdownTimer::NetworkStateChanged(puVar10 + 0x34);
     *(undefined4 *)(puVar10 + 0x3c) = 0xbf800000;
     (**(code **)(*(int *)(puVar10 + 0x34) + 4))(puVar10 + 0x34,puVar10 + 0x3c);
@@ -1674,7 +1674,7 @@ LAB_0071c121:
     ppuVar18 = local_20;
     local_20[0] = puVar10;
     CUtlVector<INSBotEscortFormation*,CUtlMemory<INSBotEscortFormation*,int>>::InsertBefore
-              (pCVar13,unaff_EBX + 0x5d0da5,*(INSBotEscortFormation ***)(unaff_EBX + 0x5d0db1));
+              (pCVar13,unaff_EBX + 0x5d0da5 /* CINSBotEscort::m_escortFormations */,*(INSBotEscortFormation ***)(unaff_EBX + 0x5d0db1 /* CINSBotEscort::m_escortFormations+0xc */));
     iVar4 = GetEscortFormation((CBaseEntity *)local_94);
     if (iVar4 == 0) {
       return;
@@ -1684,7 +1684,7 @@ LAB_0071c121:
     iVar5 = iVar4;
     CINSNextBot::SetEscortFormation(in_stack_00000004,(INSBotEscortFormation *)pCVar1);
     if (*(int *)(pCVar1 + 0x20) != 0) {
-      iVar16 = *(int *)(pCVar1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4;
+      iVar16 = *(int *)(pCVar1 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4;
     }
     if (iVar16 == *(int *)(iVar4 + 8)) {
       return;
@@ -1723,15 +1723,15 @@ LAB_0071c121:
   if ((int)((-(uint)(cVar3 == '\0') & 2) + 3) <= *(int *)(pCVar6 + 0x2c)) {
     return;
   }
-  iVar5 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5) + 0x40))(unaff_EBX + 0x5d0dc5);
+  iVar5 = (**(code **)(*(int *)(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */) + 0x40))(unaff_EBX + 0x5d0dc5 /* ins_bot_debug_escort_formations */);
   if (iVar5 != 0) {
     CBaseEntity::GetDebugName(this_01);
-    DevMsg((char *)(unaff_EBX + 0x265749));
+    DevMsg((char *)(unaff_EBX + 0x265749 /* "Bot:%s leaving old and joining new Formation" */));
   }
   local_94 = (CINSNextBot *)0x0;
   local_98 = *(int *)(pCVar1 + 0x20);
   if (local_98 != 0) {
-    local_94 = (CINSNextBot *)(local_98 - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4);
+    local_94 = (CINSNextBot *)(local_98 - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4);
   }
   pCVar15 = *(CINSNextBot **)(iVar4 + 0x2c);
   this_02 = pCVar15;
@@ -1753,7 +1753,7 @@ LAB_0071c121:
 LAB_0071b909:
   pCVar15 = (CINSNextBot *)0x0;
   if (local_98 != 0) {
-    pCVar15 = (CINSNextBot *)(local_98 - *(int *)(**(int **)(unaff_EBX + 0x48b105) + 0x5c) >> 4);
+    pCVar15 = (CINSNextBot *)(local_98 - *(int *)(**(int **)(unaff_EBX + 0x48b105 /* &gpGlobals */) + 0x5c) >> 4);
   }
   if (pCVar15 != *(CINSNextBot **)(pCVar6 + 8)) {
     if (*(int *)(pCVar6 + 0x2c) < 1) {
@@ -1767,7 +1767,7 @@ LAB_0071b985:
            ) {
           CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>>::InsertBefore
                     (*(CUtlVector<t_INSBotEscortMember,CUtlMemory<t_INSBotEscortMember,int>> **)
-                      (*(int *)(unaff_EBX + 0x48ae31) + 4),(int)(pCVar6 + 0x20),
+                      (*(int *)(unaff_EBX + 0x48ae31 /* &vec3_origin */) + 4),(int)(pCVar6 + 0x20),
                      *(t_INSBotEscortMember **)(pCVar6 + 0x2c));
           this_02 = extraout_ECX_00;
         }
@@ -1842,8 +1842,8 @@ char __cdecl CINSBotEscort::ShouldWalk(INextBot *param_1)
   if (param_1[0x48] == (INextBot)0x0) {
     return '\x02';
   }
-  return (*(float *)(unaff_EBX + 0x222e1c) < *(float *)(param_1 + 0x4c) ||
-         *(float *)(unaff_EBX + 0x222e1c) == *(float *)(param_1 + 0x4c)) + '\x01';
+  return (*(float *)(unaff_EBX + 0x222e1c /* typeinfo name for CTheaterEntityFactory<CINSWeaponBallistic>+0x30 */) < *(float *)(param_1 + 0x4c) ||
+         *(float *)(unaff_EBX + 0x222e1c /* typeinfo name for CTheaterEntityFactory<CINSWeaponBallistic>+0x30 */) == *(float *)(param_1 + 0x4c)) + '\x01';
 }
 
 
@@ -1873,18 +1873,18 @@ void CINSBotEscort::UpdateEscortFormations(void)
   int local_28;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x5d1181);
+  iVar2 = *(int *)(unaff_EBX + 0x5d1181 /* CINSBotEscort::m_escortFormations+0xc */);
   if (0 < iVar2) {
     local_28 = iVar2 + -1;
     local_2c = (INSBotEscortFormation *)(iVar2 << 2);
     do {
       while (pCVar1 = (CUtlMemory<t_INSBotEscortMember,int> *)(local_2c + -4),
-            **(char **)(local_2c + *(int *)(unaff_EBX + 0x5d1175) + -4) == '\0') {
-        iVar2 = (**(code **)(*(int *)(unaff_EBX + 0x5d1195) + 0x40))(unaff_EBX + 0x5d1195);
+            **(char **)(local_2c + *(int *)(unaff_EBX + 0x5d1175 /* CINSBotEscort::m_escortFormations */) + -4) == '\0') {
+        iVar2 = (**(code **)(*(int *)(unaff_EBX + 0x5d1195 /* ins_bot_debug_escort_formations */) + 0x40))(unaff_EBX + 0x5d1195 /* ins_bot_debug_escort_formations */);
         if (iVar2 != 0) {
-          DevMsg((char *)(unaff_EBX + 0x265a11));
+          DevMsg((char *)(unaff_EBX + 0x265a11 /* "Removing Formation: %i" */));
         }
-        pvVar3 = *(void **)(pCVar1 + *(int *)(unaff_EBX + 0x5d1175));
+        pvVar3 = *(void **)(pCVar1 + *(int *)(unaff_EBX + 0x5d1175 /* CINSBotEscort::m_escortFormations */));
         this_00 = pCVar1;
         if (0 < *(int *)((int)pvVar3 + 0x2c)) {
           iVar7 = 0;
@@ -1893,15 +1893,15 @@ void CINSBotEscort::UpdateEscortFormations(void)
             iVar4 = UTIL_PlayerByIndex(*(int *)(*(int *)((int)pvVar3 + 0x20) + iVar2));
             if ((iVar4 != 0) &&
                (pIVar5 = (INSBotEscortFormation *)
-                         __dynamic_cast(iVar4,*(undefined4 *)(unaff_EBX + 0x48bd39),
-                                        *(undefined4 *)(unaff_EBX + 0x48b65d),0),
+                         __dynamic_cast(iVar4,*(undefined4 *)(unaff_EBX + 0x48bd39 /* &typeinfo for CBaseEntity */),
+                                        *(undefined4 *)(unaff_EBX + 0x48b65d /* &typeinfo for CINSNextBot */),0),
                pIVar5 != (INSBotEscortFormation *)0x0)) {
               CINSNextBot::SetEscortFormation(this,pIVar5);
             }
             this_00 = (CUtlMemory<t_INSBotEscortMember,int> *)0x1453c8;
             iVar7 = iVar7 + 1;
             iVar2 = iVar2 + 0x18;
-            pvVar3 = *(void **)(pCVar1 + *(int *)(unaff_EBX + 0x5d1175));
+            pvVar3 = *(void **)(pCVar1 + *(int *)(unaff_EBX + 0x5d1175 /* CINSBotEscort::m_escortFormations */));
           } while (iVar7 < *(int *)((int)pvVar3 + 0x2c));
         }
         *(undefined4 *)((int)pvVar3 + 0x2c) = 0;
@@ -1911,8 +1911,8 @@ void CINSBotEscort::UpdateEscortFormations(void)
         else {
           this_00 = *(CUtlMemory<t_INSBotEscortMember,int> **)((int)pvVar3 + 0x20);
           if (this_00 != (CUtlMemory<t_INSBotEscortMember,int> *)0x0) {
-            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x48b4ad) + 8))
-                      ((int *)**(undefined4 **)(unaff_EBX + 0x48b4ad),this_00);
+            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x48b4ad /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                      ((int *)**(undefined4 **)(unaff_EBX + 0x48b4ad /* &GCSDK::GetPchTempTextBuffer */),this_00);
             *(undefined4 *)((int)pvVar3 + 0x20) = 0;
             this_00 = extraout_ECX;
           }
@@ -1922,15 +1922,15 @@ void CINSBotEscort::UpdateEscortFormations(void)
         *(undefined4 *)((int)pvVar3 + 0x30) = uVar6;
         CUtlMemory<t_INSBotEscortMember,int>::~CUtlMemory(this_00);
         operator_delete(pvVar3);
-        iVar2 = *(int *)(unaff_EBX + 0x5d1181);
+        iVar2 = *(int *)(unaff_EBX + 0x5d1181 /* CINSBotEscort::m_escortFormations+0xc */);
         iVar7 = (iVar2 - local_28) + -1;
         if (0 < iVar7) {
-          _V_memmove(pCVar1 + *(int *)(unaff_EBX + 0x5d1175),
-                     local_2c + *(int *)(unaff_EBX + 0x5d1175),iVar7 * 4);
-          iVar2 = *(int *)(unaff_EBX + 0x5d1181);
+          _V_memmove(pCVar1 + *(int *)(unaff_EBX + 0x5d1175 /* CINSBotEscort::m_escortFormations */),
+                     local_2c + *(int *)(unaff_EBX + 0x5d1175 /* CINSBotEscort::m_escortFormations */),iVar7 * 4);
+          iVar2 = *(int *)(unaff_EBX + 0x5d1181 /* CINSBotEscort::m_escortFormations+0xc */);
         }
         local_28 = local_28 + -1;
-        *(int *)(unaff_EBX + 0x5d1181) = iVar2 + -1;
+        *(int *)(unaff_EBX + 0x5d1181 /* CINSBotEscort::m_escortFormations+0xc */) = iVar2 + -1;
         local_2c = (INSBotEscortFormation *)pCVar1;
         if (local_28 == -1) {
           return;
@@ -2014,12 +2014,12 @@ void __thiscall CINSBotEscort::UpdateEscortLookaround(CINSBotEscort *this,CINSNe
   
   __i686_get_pc_thunk_bx();
   iVar3 = (**(code **)(*in_stack_00000008 + 0x974))();
-  fVar7 = *(float *)(**(int **)(unaff_EBX + 0x48ba09) + 0xc) - *(float *)(iVar3 + 600);
-  if (*(float *)(unaff_EBX + 0x20aeb9) <= fVar7 && fVar7 != *(float *)(unaff_EBX + 0x20aeb9)) {
+  fVar7 = *(float *)(**(int **)(unaff_EBX + 0x48ba09 /* &gpGlobals */) + 0xc) - *(float *)(iVar3 + 600);
+  if (*(float *)(unaff_EBX + 0x20aeb9 /* typeinfo name for ICollideable+0x13 */) <= fVar7 && fVar7 != *(float *)(unaff_EBX + 0x20aeb9 /* typeinfo name for ICollideable+0x13 */)) {
     cVar2 = (**(code **)(*in_stack_00000008 + 0x8ac))();
     if ((cVar2 == '\0') && (param_1[0x48] != (CINSNextBot)0x0)) {
       local_b4 = 0;
-      pfVar1 = *(float **)(unaff_EBX + 0x48b735);
+      pfVar1 = *(float **)(unaff_EBX + 0x48b735 /* &vec3_origin */);
       local_40 = *pfVar1;
       local_3c = pfVar1[1];
       local_38 = pfVar1[2];
@@ -2035,15 +2035,15 @@ void __thiscall CINSBotEscort::UpdateEscortLookaround(CINSBotEscort *this,CINSNe
         cVar2 = (**(code **)(*piVar5 + 0x158))(piVar5,pVVar10,uVar11,uVar12);
         if (cVar2 != '\0') {
           fVar6 = (float10)RandomFloat(0,0x3f800000);
-          if (*(float *)(unaff_EBX + 0x208bf5) <= (float)fVar6 &&
-              (float)fVar6 != *(float *)(unaff_EBX + 0x208bf5)) {
+          if (*(float *)(unaff_EBX + 0x208bf5 /* typeinfo name for ISaveRestoreOps+0x67 */) <= (float)fVar6 &&
+              (float)fVar6 != *(float *)(unaff_EBX + 0x208bf5 /* typeinfo name for ISaveRestoreOps+0x67 */)) {
             piVar5 = (int *)GetEscortTarget(this_04);
             if (piVar5 != (int *)0x0) {
               cVar2 = (**(code **)(*piVar5 + 0x158))(piVar5);
               if (cVar2 != '\0') {
                 cVar2 = CINSPlayer::IsSprinting(this_05);
                 if (cVar2 == '\0') {
-                  fVar7 = *(float *)(unaff_EBX + 0x245169);
+                  fVar7 = *(float *)(unaff_EBX + 0x245169 /* CSWTCH.586+0x1c */);
                   fVar9 = local_40 * fVar7;
                   fVar8 = local_3c * fVar7;
                   fVar7 = fVar7 * local_38;
@@ -2071,10 +2071,10 @@ void __thiscall CINSBotEscort::UpdateEscortLookaround(CINSBotEscort *this,CINSNe
                   CTraceFilterSimple::CTraceFilterSimple
                             (this_07,(IHandleEntity *)&local_50,iVar3,
                              (_func_bool_IHandleEntity_ptr_int *)0x0);
-                  (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x48b8e1) + 0x14))
-                            ((int *)**(undefined4 **)(unaff_EBX + 0x48b8e1),&local_ac,0x2006241,
+                  (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x48b8e1 /* &enginetrace */) + 0x14))
+                            ((int *)**(undefined4 **)(unaff_EBX + 0x48b8e1 /* &enginetrace */),&local_ac,0x2006241,
                              &local_50,local_100);
-                  piVar5 = *(int **)(unaff_EBX + 0x48bba9);
+                  piVar5 = *(int **)(unaff_EBX + 0x48bba9 /* &r_visualizetraces */);
                   this_00 = (CNavMesh *)(**(code **)(*piVar5 + 0x40))(piVar5);
                   if (this_00 != (CNavMesh *)0x0) {
                     iVar3 = (**(code **)(*piVar5 + 0x40))(piVar5);
@@ -2088,17 +2088,17 @@ void __thiscall CINSBotEscort::UpdateEscortLookaround(CINSBotEscort *this,CINSNe
                   uVar11 = 0;
                   fVar7 = (float)CNavMesh::GetNearestNavAreaFast
                                            (this_00,(Vector *)
-                                                    **(undefined4 **)(unaff_EBX + 0x48b821),
+                                                    **(undefined4 **)(unaff_EBX + 0x48b821 /* &TheNavMesh */),
                                             SUB41(&local_f4,0));
                   if (fVar7 != 0.0) {
                     fVar6 = (float10)CNavArea::GetZ(this_08,fVar7,local_f4);
                     local_50 = local_f4;
-                    local_48 = (float)fVar6 + *(float *)(unaff_EBX + 0x2431e1);
+                    local_48 = (float)fVar6 + *(float *)(unaff_EBX + 0x2431e1 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xd8 */);
                     local_4c = local_f0;
                     piVar5 = (int *)(**(code **)(*in_stack_00000008 + 0x970))();
                     uVar11 = 3;
                     (**(code **)(*piVar5 + 0xd4))
-                              (piVar5,&local_50,3,0x3f19999a,0,unaff_EBX + 0x265fd9);
+                              (piVar5,&local_50,3,0x3f19999a,0,unaff_EBX + 0x265fd9 /* "Looking at whatever Escort Target is paying attention to" */);
                   }
                 }
               }
@@ -2177,7 +2177,7 @@ void __thiscall CINSBotEscort::UpdateEscortPostures(CINSBotEscort *this,CINSNext
     CBaseEntity::CalcAbsolutePosition(this_01);
     this_02 = (CBaseEntity *)extraout_ECX_01;
   }
-  if (*(float *)(unaff_EBX + 0x266746) <=
+  if (*(float *)(unaff_EBX + 0x266746 /* typeinfo name for CINSBotEscort+0x14 */) <=
       ((float)in_stack_00000008[0x83] - *(float *)(param_1 + 0x40)) *
       ((float)in_stack_00000008[0x83] - *(float *)(param_1 + 0x40)) +
       ((float)in_stack_00000008[0x82] - *(float *)(param_1 + 0x3c)) *
@@ -2195,8 +2195,8 @@ void __thiscall CINSBotEscort::UpdateEscortPostures(CINSBotEscort *this,CINSNext
     cVar3 = (*pcVar2)(piVar6,uVar7);
     if ((cVar3 != '\0') ||
        (fVar9 = (float10)RandomFloat(0,0x3f800000), this_03 = (CINSPlayer *)extraout_ECX_03,
-       *(float *)(unaff_EBX + 0x20a77a) <= (float)fVar9 &&
-       (float)fVar9 != *(float *)(unaff_EBX + 0x20a77a))) {
+       *(float *)(unaff_EBX + 0x20a77a /* typeinfo name for ITraceFilter+0x18 */) <= (float)fVar9 &&
+       (float)fVar9 != *(float *)(unaff_EBX + 0x20a77a /* typeinfo name for ITraceFilter+0x18 */))) {
       (**(code **)(*in_stack_00000008 + 0x95c))(in_stack_00000008,0x3f19999a);
       this_03 = (CINSPlayer *)extraout_ECX_02;
     }
@@ -2207,7 +2207,7 @@ void __thiscall CINSBotEscort::UpdateEscortPostures(CINSBotEscort *this,CINSNext
   }
   fVar10 = SQRT((float)piVar4[0x6b] * (float)piVar4[0x6b] +
                 (float)piVar4[0x6a] * (float)piVar4[0x6a]);
-  if (((*(float *)(unaff_EBX + 0x209ece) <= fVar10 && fVar10 != *(float *)(unaff_EBX + 0x209ece)) &&
+  if (((*(float *)(unaff_EBX + 0x209ece /* typeinfo name for CBaseGameSystem+0x22 */) <= fVar10 && fVar10 != *(float *)(unaff_EBX + 0x209ece /* typeinfo name for CBaseGameSystem+0x22 */)) &&
       (cVar3 = CINSPlayer::IsCrouched(this_03), cVar3 == '\0')) &&
      (cVar3 = CINSPlayer::IsProned(this_07), cVar3 == '\0')) {
     piVar4 = (int *)(**(code **)(*in_stack_00000008 + 0x970))(in_stack_00000008);
@@ -2231,21 +2231,21 @@ void __thiscall CINSBotEscort::UpdateEscortPostures(CINSBotEscort *this,CINSNext
   if (cVar3 == '\0') {
     cVar3 = CINSPlayer::IsProned(this_05);
     if (cVar3 != '\0') {
-      if (*(float *)(unaff_EBX + 0x209eca) <= fVar1 && fVar1 != *(float *)(unaff_EBX + 0x209eca))
+      if (*(float *)(unaff_EBX + 0x209eca /* typeinfo name for CBaseGameSystem+0x1e */) <= fVar1 && fVar1 != *(float *)(unaff_EBX + 0x209eca /* typeinfo name for CBaseGameSystem+0x1e */))
       goto LAB_0071ab90;
-      if (fVar1 < *(float *)(unaff_EBX + 0x19e28e) || fVar1 == *(float *)(unaff_EBX + 0x19e28e))
+      if (fVar1 < *(float *)(unaff_EBX + 0x19e28e /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */) || fVar1 == *(float *)(unaff_EBX + 0x19e28e /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */))
       goto LAB_0071aa16;
       goto LAB_0071ac30;
     }
     iVar8 = *in_stack_00000008;
-    if (*(float *)(unaff_EBX + 0x212e06) <= fVar1 && fVar1 != *(float *)(unaff_EBX + 0x212e06)) {
+    if (*(float *)(unaff_EBX + 0x212e06 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x34 */) <= fVar1 && fVar1 != *(float *)(unaff_EBX + 0x212e06 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x34 */)) {
       (**(code **)(iVar8 + 0x970))(in_stack_00000008);
       CINSBotBody::SetPosture();
       goto LAB_0071aa16;
     }
   }
   else {
-    if (*(float *)(unaff_EBX + 0x20c55a) <= fVar1 && fVar1 != *(float *)(unaff_EBX + 0x20c55a)) {
+    if (*(float *)(unaff_EBX + 0x20c55a /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x68 */) <= fVar1 && fVar1 != *(float *)(unaff_EBX + 0x20c55a /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x68 */)) {
 LAB_0071ab90:
       (**(code **)(*in_stack_00000008 + 0x970))(in_stack_00000008);
       CINSBotBody::SetPosture();
@@ -2311,10 +2311,10 @@ CINSBotEscort::UpdateFormationMovement
     pCVar12 = param_2;
     CINSNextBot::SetEscortFormation(this_00,in_stack_0000000c);
     if (*(int *)(in_stack_0000000c + 0x20) != 0) {
-      iVar8 = *(int *)(in_stack_0000000c + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48bbd5) + 0x5c)
+      iVar8 = *(int *)(in_stack_0000000c + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x48bbd5 /* &gpGlobals */) + 0x5c)
               >> 4;
     }
-    pfVar3 = *(float **)(unaff_EBX + 0x48b901);
+    pfVar3 = *(float **)(unaff_EBX + 0x48b901 /* &vec3_origin */);
     fVar10 = *pfVar3;
     fVar9 = pfVar3[1];
     fVar11 = pfVar3[2];
@@ -2356,7 +2356,7 @@ LAB_0071ad56:
                   (fVar10 - *(float *)(in_stack_0000000c + 0x208)) +
                   (fVar11 - *(float *)(in_stack_0000000c + 0x210)) *
                   (fVar11 - *(float *)(in_stack_0000000c + 0x210)));
-    if ((*(float *)(unaff_EBX + 0x2129b9) <= fVar10) ||
+    if ((*(float *)(unaff_EBX + 0x2129b9 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x24 */) <= fVar10) ||
        (param_1[0x48] == (INSBotEscortFormation)0x0)) {
       if (*(int *)(in_stack_0000000c + 0xb324) < 10) {
         GetEscortTarget((CINSBotEscort *)this_01);
@@ -2364,8 +2364,8 @@ LAB_0071ad56:
         return;
       }
     }
-    else if (*(float *)(unaff_EBX + 0x231a89) <= fVar10 &&
-             fVar10 != *(float *)(unaff_EBX + 0x231a89)) {
+    else if (*(float *)(unaff_EBX + 0x231a89 /* typeinfo name for CEntityFactory<CBaseFlex>+0x20 */) <= fVar10 &&
+             fVar10 != *(float *)(unaff_EBX + 0x231a89 /* typeinfo name for CEntityFactory<CBaseFlex>+0x20 */)) {
       piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c,pCVar12);
       (**(code **)(*piVar6 + 200))(piVar6,param_1 + 0x3c,0x3f800000);
     }
@@ -2405,9 +2405,9 @@ void __thiscall CINSBotEscort::~CINSBotEscort(CINSBotEscort *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x47a143;
-  in_stack_00000004[1] = extraout_ECX + 0x47a2e3;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x48a913));
+  *in_stack_00000004 = extraout_ECX + 0x47a143 /* vtable for CINSBotEscort+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x47a2e3 /* vtable for CINSBotEscort+0x1a8 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x48a913 /* &_DYNAMIC */));
   return;
 }
 
@@ -2444,8 +2444,8 @@ void __thiscall CINSBotEscort::~CINSBotEscort(CINSBotEscort *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47a03a;
-  in_stack_00000004[1] = unaff_EBX + 0x47a1da;
+  *in_stack_00000004 = unaff_EBX + 0x47a03a /* vtable for CINSBotEscort+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x47a1da /* vtable for CINSBotEscort+0x1a8 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

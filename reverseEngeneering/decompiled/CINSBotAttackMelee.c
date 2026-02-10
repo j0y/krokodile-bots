@@ -24,9 +24,9 @@ void __thiscall CINSBotAttackMelee::CINSBotAttackMelee(CINSBotAttackMelee *this)
   in_stack_00000004[8] = 0;
   piVar1 = in_stack_00000004 + 0xe;
   in_stack_00000004[9] = 0;
-  *in_stack_00000004 = unaff_EBX + 0x4865dd;
+  *in_stack_00000004 = unaff_EBX + 0x4865dd /* vtable for CINSBotAttackMelee+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_00486785 + unaff_EBX);
-  in_stack_00000004[0xe] = unaff_EBX + 0x418f6d;
+  in_stack_00000004[0xe] = unaff_EBX + 0x418f6d /* vtable for CountdownTimer+0x8 */;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
@@ -71,14 +71,14 @@ CINSBotAttackMelee::OnStart(CINSBotAttackMelee *this,CINSNextBot *param_1,Action
   int in_stack_0000000c;
   
   __i686_get_pc_thunk_bx();
-  if (**(int **)(unaff_EBX + 0x497eda) == 0) {
+  if (**(int **)(unaff_EBX + 0x497eda /* &g_pGameRules */) == 0) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x27145e;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x27145e /* "INSRules failed to initialize." */;
   }
   else {
     fVar3 = (float10)CountdownTimer::Now();
-    fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x215d4e);
+    fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x215d4e /* typeinfo name for CBaseGameSystem+0x32 */);
     if (*(float *)(in_stack_0000000c + 0xb384) != fVar4) {
       (**(code **)(*(int *)(in_stack_0000000c + 0xb37c) + 4))
                 (in_stack_0000000c + 0xb37c,in_stack_0000000c + 0xb384);
@@ -89,7 +89,7 @@ CINSBotAttackMelee::OnStart(CINSBotAttackMelee *this,CINSNextBot *param_1,Action
                 (in_stack_0000000c + 0xb37c,in_stack_0000000c + 0xb380);
       *(undefined4 *)(in_stack_0000000c + 0xb380) = 0x40a00000;
     }
-    puVar1 = *(undefined4 **)(unaff_EBX + 0x497bae);
+    puVar1 = *(undefined4 **)(unaff_EBX + 0x497bae /* &vec3_origin */);
     *(undefined4 *)param_1 = 0;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
@@ -142,7 +142,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
   float local_24;
   
   __i686_get_pc_thunk_bx();
-  piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974))(extraout_EDX);
+  piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSBotAttackPistol::ShouldHurry */))(extraout_EDX);
   piVar3 = (int *)(**(code **)(*piVar3 + 0xd0))(piVar3,0);
   if (((piVar3 != (int *)0x0) && (iVar4 = (**(code **)(*piVar3 + 0x10))(piVar3), iVar4 != 0)) &&
      (cVar2 = (**(code **)(*piVar3 + 0x54))(piVar3), cVar2 == '\0')) {
@@ -162,7 +162,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
             pfVar7 = (float *)(**(code **)(*piVar3 + 0x14))(piVar3,uVar11);
             local_2c = *pfVar7;
             local_28 = pfVar7[1];
-            piVar5 = *(int **)(unaff_EBX + 0x497edb);
+            piVar5 = *(int **)(unaff_EBX + 0x497edb /* &ins_bot_knives_only_sprint_range */);
             local_24 = pfVar7[2];
             piVar1 = (int *)piVar5[7];
             if (piVar1 == piVar5) {
@@ -184,7 +184,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
               (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
               uVar13 = 0x3f19999a;
               uVar12 = 7;
-              iVar4 = unaff_EBX + 0x2719ae;
+              iVar4 = unaff_EBX + 0x2719ae /* "Jog at Target" */;
               uVar11 = 0xc;
               CINSBotBody::SetPosture();
             }
@@ -192,12 +192,12 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
               (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
               uVar13 = 0x3f19999a;
               uVar12 = 7;
-              iVar4 = unaff_EBX + 0x27199d;
+              iVar4 = unaff_EBX + 0x27199d /* "Sprint at Target" */;
               uVar11 = 0xd;
               CINSBotBody::SetPosture();
             }
-            iVar8 = (**(code **)(**(int **)(unaff_EBX + 0x497dd7) + 0x40))
-                              (*(int **)(unaff_EBX + 0x497dd7),uVar11,uVar12,uVar13,iVar4);
+            iVar8 = (**(code **)(**(int **)(unaff_EBX + 0x497dd7 /* &ins_bot_knives_only_enable_slide */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x497dd7 /* &ins_bot_knives_only_enable_slide */),uVar11,uVar12,uVar13,iVar4);
             local_38 = *(float *)(&DAT_00215c17 + unaff_EBX);
             if ((iVar8 != 0) &&
                (cVar2 = CINSPlayer::IsSprinting((CINSPlayer *)this_00), cVar2 != '\0')) {
@@ -206,7 +206,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
                                 (in_stack_0000000c,&local_2c,0x3f666666);
               if (cVar2 != '\0') {
                 fVar9 = (float10)ConVar::GetFloat((ConVar *)this_00);
-                fVar10 = (float)fVar9 + *(float *)(unaff_EBX + 0x21a687);
+                fVar10 = (float)fVar9 + *(float *)(unaff_EBX + 0x21a687 /* typeinfo name for CTraceFilterIgnoreWeapons+0x3d */);
                 if (((byte)in_stack_0000000c[0xd1] & 8) != 0) {
                   CBaseEntity::CalcAbsolutePosition((CBaseEntity *)this_00);
                 }
@@ -222,7 +222,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
                     (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
                     uVar13 = 0x40400000;
                     uVar12 = 8;
-                    iVar4 = unaff_EBX + 0x2719bc;
+                    iVar4 = unaff_EBX + 0x2719bc /* "Slide like a G" */;
                     CINSBotBody::SetPosture();
                   }
                 }
@@ -246,14 +246,14 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
                 (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
                 uVar13 = 0x40a00000;
                 uVar12 = 7;
-                iVar4 = unaff_EBX + 0x24af3a;
+                iVar4 = unaff_EBX + 0x24af3a /* typeinfo name for CGlobalState+0x5c */;
                 CINSBotBody::SetPosture();
               }
               else {
                 (**(code **)(*(int *)in_stack_0000000c + 0x970))();
                 uVar13 = 0x40a00000;
                 uVar12 = 7;
-                iVar4 = unaff_EBX + 0x24af3a;
+                iVar4 = unaff_EBX + 0x24af3a /* typeinfo name for CGlobalState+0x5c */;
                 CINSBotBody::SetPosture();
               }
             }
@@ -296,12 +296,12 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
     }
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x271810;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x271810 /* "Non INS Player Enemy?" */;
     return param_1;
   }
   *(undefined4 *)param_1 = 3;
   *(undefined4 *)(param_1 + 4) = 0;
-  *(int *)(param_1 + 8) = unaff_EBX + 0x27198c;
+  *(int *)(param_1 + 8) = unaff_EBX + 0x27198c /* "Lost our threat." */;
   return param_1;
 }
 
@@ -325,7 +325,7 @@ void __cdecl CINSBotAttackMelee::OnEnd(CINSNextBot *param_1,Action *param_2)
     *(undefined4 *)(param_2 + 0xb384) = 0xbf800000;
   }
   *(undefined4 *)(param_2 + 0xb338) = 0xffffffff;
-  *(undefined4 *)(param_2 + 0xb33c) = *(undefined4 *)(**(int **)(unaff_EBX + 0x49844c) + 0xc);
+  *(undefined4 *)(param_2 + 0xb33c) = *(undefined4 *)(**(int **)(unaff_EBX + 0x49844c /* &gpGlobals */) + 0xc);
   return;
 }
 
@@ -344,7 +344,7 @@ int CINSBotAttackMelee::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x27115c;
+  return extraout_ECX + 0x27115c /* "AttackMelee" */;
 }
 
 
@@ -974,7 +974,7 @@ void __thiscall CINSBotAttackMelee::~CINSBotAttackMelee(CINSBotAttackMelee *this
   
   __i686_get_pc_thunk_bx();
   *in_stack_00000004 = &UNK_0048648a + unaff_EBX;
-  in_stack_00000004[1] = unaff_EBX + 0x486632;
+  in_stack_00000004[1] = unaff_EBX + 0x486632 /* vtable for CINSBotAttackMelee+0x1b0 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -1014,8 +1014,8 @@ void __thiscall CINSBotAttackMelee::~CINSBotAttackMelee(CINSBotAttackMelee *this
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x48641a;
-  in_stack_00000004[1] = unaff_EBX + 0x4865c2;
+  *in_stack_00000004 = unaff_EBX + 0x48641a /* vtable for CINSBotAttackMelee+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x4865c2 /* vtable for CINSBotAttackMelee+0x1b0 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

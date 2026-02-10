@@ -20,7 +20,7 @@ void __thiscall CINSBotActionFlashpoint::CINSBotActionFlashpoint(CINSBotActionFl
   
   __i686_get_pc_thunk_cx();
   in_stack_00000004[8] = 0;
-  *in_stack_00000004 = extraout_ECX + 0x461203;
+  *in_stack_00000004 = extraout_ECX + 0x461203 /* vtable for CINSBotActionFlashpoint+0x8 */;
   in_stack_00000004[9] = 0;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
@@ -33,7 +33,7 @@ void __thiscall CINSBotActionFlashpoint::CINSBotActionFlashpoint(CINSBotActionFl
   *(undefined1 *)((int)in_stack_00000004 + 0x31) = 0;
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
-  in_stack_00000004[1] = extraout_ECX + 0x461397;
+  in_stack_00000004[1] = extraout_ECX + 0x461397 /* vtable for CINSBotActionFlashpoint+0x19c */;
   return;
 }
 
@@ -110,7 +110,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x247eb2;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x247eb2 /* "Attacking nearby threats" */;
       return param_1;
     }
   }
@@ -123,7 +123,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       CINSBotInvestigate::CINSBotInvestigate(this_04,pCVar4);
       *(undefined4 *)param_1 = 2;
       *(CNavArea **)(param_1 + 4) = pCVar4;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x249a43;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x249a43 /* "I have an investigation!" */;
       *(undefined4 *)((int)param_2 + 0x20) = 0;
       *(undefined4 *)((int)param_2 + 0x24) = 0;
       *(undefined4 *)((int)param_2 + 0x28) = 0;
@@ -132,7 +132,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
     }
     fVar6 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                                (this_03,(float)in_stack_0000000c,0x42480000);
-    *(bool *)((int)param_2 + 0x38) = (float)fVar6 < *(float *)(unaff_EBX + 0x1eb381);
+    *(bool *)((int)param_2 + 0x38) = (float)fVar6 < *(float *)(unaff_EBX + 0x1eb381 /* typeinfo name for ISaveRestoreOps+0x67 */);
     this_00 = (CFmtStrN<256,false> *)GetDesiredObjective((CINSNextBot *)param_2);
     iVar3 = CBaseEntity::GetTeamNumber(this_06);
     if (this_00 != (CFmtStrN<256,false> *)0xffffffff) {
@@ -145,8 +145,8 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
       }
       if (*(int *)(local_24c + 0x6f0 + (int)this_00 * 4) == 0) {
         cVar1 = CINSBotDestroyCache::CanIDestroyCache(in_stack_0000000c);
-        if ((cVar1 != '\0') && (*(int *)(*(int *)(unaff_EBX + 0x46e901) + (int)this_00 * 4) < 1)) {
-          CFmtStrN<256,false>::CFmtStrN(this_00,local_234,unaff_EBX + 0x249c41,this_00);
+        if ((cVar1 != '\0') && (*(int *)(*(int *)(unaff_EBX + 0x46e901 /* &CINSBotDestroyCache::m_nTotalDestroyers */) + (int)this_00 * 4) < 1)) {
+          CFmtStrN<256,false>::CFmtStrN(this_00,local_234,unaff_EBX + 0x249c41 /* "Destroying %i" */,this_00);
           pvVar5 = ::operator_new(0x4900);
           CINSBotDestroyCache::CINSBotDestroyCache((CINSBotDestroyCache *)this_00,(int)pvVar5);
           *(undefined4 *)param_1 = 2;
@@ -161,7 +161,7 @@ CINSBotActionFlashpoint::Update(CINSBotActionFlashpoint *this,CINSNextBot *param
         CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(&DAT_0046dfad + unaff_EBX));
         CINSNextBot::AddInvestigation();
       }
-      CFmtStrN<256,false>::CFmtStrN(this_00,local_128,unaff_EBX + 0x249c4f,this_00);
+      CFmtStrN<256,false>::CFmtStrN(this_00,local_128,unaff_EBX + 0x249c4f /* "Capturing %i" */,this_00);
       pvVar5 = ::operator_new(0x88);
       CINSBotCaptureCP::CINSBotCaptureCP((CINSBotCaptureCP *)this_00,(int)pvVar5,SUB41(this_00,0));
       *(undefined4 *)param_1 = 2;
@@ -210,7 +210,7 @@ int CINSBotActionFlashpoint::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f75e0;
+  return extraout_ECX + 0x1f75e0 /* "Flashpoint" */;
 }
 
 
@@ -269,7 +269,7 @@ uint __cdecl CINSBotActionFlashpoint::GetDesiredObjective(CINSNextBot *param_1)
   
   __i686_get_pc_thunk_bx();
   iVar2 = CBaseEntity::GetTeamNumber(this);
-  piVar1 = *(int **)(unaff_EBX + 0x46e80b);
+  piVar1 = *(int **)(unaff_EBX + 0x46e80b /* &g_pObjectiveResource */);
   iVar5 = (iVar2 == 2) + 2;
   if (param_1[0x38] == (CINSNextBot)0x0) {
     if (iVar2 != 2) goto LAB_00738580;
@@ -366,9 +366,9 @@ void __thiscall CINSBotActionFlashpoint::~CINSBotActionFlashpoint(CINSBotActionF
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x460b63;
-  in_stack_00000004[1] = extraout_ECX + 0x460cf7;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46e653));
+  *in_stack_00000004 = extraout_ECX + 0x460b63 /* vtable for CINSBotActionFlashpoint+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x460cf7 /* vtable for CINSBotActionFlashpoint+0x19c */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46e653 /* &_DYNAMIC */));
   return;
 }
 
@@ -405,8 +405,8 @@ void __thiscall CINSBotActionFlashpoint::~CINSBotActionFlashpoint(CINSBotActionF
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x460b1a;
-  in_stack_00000004[1] = unaff_EBX + 0x460cae;
+  *in_stack_00000004 = unaff_EBX + 0x460b1a /* vtable for CINSBotActionFlashpoint+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x460cae /* vtable for CINSBotActionFlashpoint+0x19c */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

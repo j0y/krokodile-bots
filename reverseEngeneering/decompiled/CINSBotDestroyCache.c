@@ -30,12 +30,12 @@ void __thiscall CINSBotDestroyCache::CINSBotDestroyCache(CINSBotDestroyCache *th
   *(undefined4 *)(param_1 + 0x20) = 0;
   *(undefined4 *)(param_1 + 0x24) = 0;
   *(undefined **)param_1 = &UNK_0047e5ed + unaff_EBX;
-  *(int *)(param_1 + 4) = unaff_EBX + 0x47e781;
+  *(int *)(param_1 + 4) = unaff_EBX + 0x47e781 /* vtable for CINSBotDestroyCache+0x19c */;
   iVar1 = param_1 + 0x3c;
-  iVar2 = unaff_EBX + 0x40ffdd;
+  iVar2 = unaff_EBX + 0x40ffdd /* vtable for CountdownTimer+0x8 */;
   *(undefined4 *)(param_1 + 0x28) = 0;
   *(undefined4 *)(param_1 + 0xc) = 0;
-  pcVar3 = (code *)(unaff_EBX + -0x4e7a6b);
+  pcVar3 = (code *)(unaff_EBX + -0x4e7a6b /* CountdownTimer::NetworkStateChanged */);
   *(undefined4 *)(param_1 + 0x10) = 0;
   *(undefined4 *)(param_1 + 0x14) = 0;
   *(undefined4 *)(param_1 + 0x18) = 0;
@@ -57,7 +57,7 @@ void __thiscall CINSBotDestroyCache::CINSBotDestroyCache(CINSBotDestroyCache *th
   *(undefined4 *)(param_1 + 0x48c0) = 0xbf800000;
   (**(code **)(*(int *)(param_1 + 0x48b8) + 4))(param_1 + 0x48b8,param_1 + 0x48c0);
   *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000;
-  iVar6 = *(int *)(unaff_EBX + 0x48ea75);
+  iVar6 = *(int *)(unaff_EBX + 0x48ea75 /* &vtable for IntervalTimer */);
   *(int *)(param_1 + 0x48d4) = iVar6 + 8;
   (**(code **)(iVar6 + 0x10))(param_1 + 0x48d4,param_1 + 0x48d8);
   *(int *)(param_1 + 0x48dc) = iVar2;
@@ -95,7 +95,7 @@ void __thiscall CINSBotDestroyCache::CINSBotDestroyCache(CINSBotDestroyCache *th
     (**(code **)(*(int *)(param_1 + 0x3c) + 4))(iVar1,param_1 + 0x44);
     *(undefined4 *)(param_1 + 0x44) = 0xbf800000;
   }
-  piVar5 = (int *)(unaff_EBX + 0x5d42c5 + *(int *)(param_1 + 0x38) * 4);
+  piVar5 = (int *)(unaff_EBX + 0x5d42c5 /* CINSBotDestroyCache::m_nTotalDestroyers */ + *(int *)(param_1 + 0x38) * 4);
   *piVar5 = *piVar5 + 1;
   return;
 }
@@ -129,13 +129,13 @@ CINSBotDestroyCache::OnStart(CINSBotDestroyCache *this,CINSNextBot *param_1,Acti
   __i686_get_pc_thunk_bx();
   CINSNextBot::ResetIdleStatus(this_00);
   uVar3 = *(undefined4 *)(param_2 + 0x38);
-  uVar4 = **(undefined4 **)(unaff_EBX + 0x48e7dd);
+  uVar4 = **(undefined4 **)(unaff_EBX + 0x48e7dd /* &TheNavMesh */);
   CINSNavMesh::GetControlPointHidingSpot((int)&local_28);
-  fVar1 = *(float *)(unaff_EBX + 0x2112f1);
+  fVar1 = *(float *)(unaff_EBX + 0x2112f1 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
   *(float *)(param_2 + 0x48c4) = local_28;
   *(float *)(param_2 + 0x48c8) = local_24;
   *(float *)(param_2 + 0x48cc) = local_20;
-  if ((((local_28 <= fVar1) || (fVar2 = *(float *)(unaff_EBX + 0x20d155), fVar2 <= local_28)) ||
+  if ((((local_28 <= fVar1) || (fVar2 = *(float *)(unaff_EBX + 0x20d155 /* typeinfo name for ITraceFilter+0x40 */), fVar2 <= local_28)) ||
       (local_24 <= fVar1)) || (((fVar2 <= local_24 || (local_20 <= fVar1)) || (fVar2 <= local_20))))
   {
     uVar3 = (**(code **)(*in_stack_0000000c + 0x96c))(in_stack_0000000c,uVar4,uVar3);
@@ -149,7 +149,7 @@ CINSBotDestroyCache::OnStart(CINSBotDestroyCache *this,CINSNextBot *param_1,Acti
   else {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x2687f5;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x2687f5 /* "Unable to find hiding spots at this control point, falling back to investigate" */;
   }
   return param_1;
 }
@@ -219,7 +219,7 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
   if (*(float *)((int)param_2 + 0x44) <= local_a0 && local_a0 != *(float *)((int)param_2 + 0x44)) {
     fVar12 = (float10)CountdownTimer::Now();
     local_a0 = (float)fVar12;
-    fVar13 = local_a0 + *(float *)(unaff_EBX + 0x20c0a7);
+    fVar13 = local_a0 + *(float *)(unaff_EBX + 0x20c0a7 /* typeinfo name for CBaseGameSystem+0x1e */);
     if (*(float *)((int)param_2 + 0x44) != fVar13) {
       local_9c = fVar13;
       (**(code **)(*(int *)((int)param_2 + 0x3c) + 4))((int)param_2 + 0x3c);
@@ -239,7 +239,7 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
       if (iVar6 == 1) {
         *(undefined4 *)param_1 = 3;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x267f0c;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x267f0c /* "Attacking nearby threats" */;
         return param_1;
       }
     }
@@ -247,33 +247,34 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
     if (1 < iVar6 - 2U) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x267f25;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x267f25 /* "Bot is not on a playteam" */;
       return param_1;
     }
-    piVar5 = *(int **)(unaff_EBX + 0x48e66b);
+    piVar5 = *(int **)(unaff_EBX + 0x48e66b /* &g_pObjectiveResource */);
     iVar6 = *piVar5;
     iVar1 = *(int *)(iVar6 + 0x6f0 + *(int *)((int)param_2 + 0x38) * 4);
     if ((((iVar1 != 0) && (iVar1 != 8)) && (iVar1 != 9)) && (iVar1 != 0xb)) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x26863f;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x26863f /* "Not a weapon cache, radio or misc target?
+" */;
       return param_1;
     }
     uVar2 = *(uint *)(iVar6 + 0x7cc + *(int *)((int)param_2 + 0x38) * 4);
     if (((uVar2 == 0xffffffff) ||
         (this_01 = (CPoint_ControlPoint *)
-                   ((uVar2 & 0xffff) * 0x18 + **(int **)(unaff_EBX + 0x48e127)),
+                   ((uVar2 & 0xffff) * 0x18 + **(int **)(unaff_EBX + 0x48e127 /* &g_pEntityList */)),
         *(uint *)(this_01 + 8) != uVar2 >> 0x10)) || (*(int *)(this_01 + 4) == 0)) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2685c0;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2685c0 /* "No CP" */;
       return param_1;
     }
     piVar8 = (int *)CPoint_ControlPoint::GetAssociatedObject(this_01);
     if (piVar8 == (int *)0x0) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2685c6;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2685c6 /* "No object" */;
       return param_1;
     }
     iVar6 = *(int *)(*piVar5 + 0x6f0 + *(int *)((int)param_2 + 0x38) * 4);
@@ -282,7 +283,8 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
       if (cVar3 == '\0') {
         *(undefined4 *)param_1 = 3;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x2685d0;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x2685d0 /* "Can no longer destroy it.
+" */;
         return param_1;
       }
       puVar9 = (undefined4 *)(**(code **)(*piVar8 + 0x260))(piVar8);
@@ -295,7 +297,7 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
       piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
       local_64[3] = local_84;
       local_54 = local_80;
-      local_50 = (float)local_78 + *(float *)(unaff_EBX + 0x2459c7);
+      local_50 = (float)local_78 + *(float *)(unaff_EBX + 0x2459c7 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xd8 */);
       uVar4 = (**(code **)(*piVar5 + 0x108))(piVar5);
       *(undefined1 *)((int)param_2 + 0x48d0) = uVar4;
       if (0.0 < *(float *)((int)param_2 + 0x48f0)) {
@@ -318,7 +320,7 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
       fVar12 = (float10)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x134))
                                   (in_stack_0000000c + 0x2060);
       local_a0 = (float)fVar12;
-      if (((local_a0 < *(float *)(unaff_EBX + 0x20c967)) &&
+      if (((local_a0 < *(float *)(unaff_EBX + 0x20c967 /* typeinfo name for ITraceFilter+0x28 */)) &&
           (*(char *)((int)param_2 + 0x48d0) != '\0')) && (*(float *)((int)param_2 + 0x48d8) <= 0.0))
       {
         fVar12 = (float10)IntervalTimer::Now();
@@ -329,9 +331,9 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
           *(float *)((int)param_2 + 0x48d8) = fVar13;
         }
       }
-      local_74 = (void *)CINSNavMesh::GetRandomControlPointArea(**(int **)(unaff_EBX + 0x48e007));
+      local_74 = (void *)CINSNavMesh::GetRandomControlPointArea(**(int **)(unaff_EBX + 0x48e007 /* &TheNavMesh */));
       if (local_74 == (void *)0x0) {
-        Warning(unaff_EBX + 0x26866b);
+        Warning(unaff_EBX + 0x26866b /* "NAV MESH: Unable to find a random area around cache %i for a grenade target, ..." */);
       }
       if (*(char *)((int)param_2 + 0x48d0) != '\0') {
         local_7c = (float)((int)param_2 + 0x48f4);
@@ -409,9 +411,9 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
       }
     }
   }
-  else if ((*(int *)(**(int **)(unaff_EBX + 0x48e66b) + 0x6f0 + *(int *)((int)param_2 + 0x38) * 4)
+  else if ((*(int *)(**(int **)(unaff_EBX + 0x48e66b /* &g_pObjectiveResource */) + 0x6f0 + *(int *)((int)param_2 + 0x38) * 4)
             == 8) && (*(char *)((int)param_2 + 0x48d0) != '\0')) {
-    iVar6 = **(int **)(unaff_EBX + 0x48e66b) + *(int *)((int)param_2 + 0x38) * 0xc;
+    iVar6 = **(int **)(unaff_EBX + 0x48e66b /* &g_pObjectiveResource */) + *(int *)((int)param_2 + 0x38) * 0xc;
     local_28 = *(undefined4 *)(iVar6 + 0x5d0);
     local_24 = *(undefined4 *)(iVar6 + 0x5d4);
     local_20 = *(undefined4 *)(iVar6 + 0x5d8);
@@ -420,14 +422,14 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
     CINSBotSuppressTarget::CINSBotSuppressTarget();
     *(undefined4 *)param_1 = 1;
     *(void **)(param_1 + 4) = pvVar7;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x2685eb;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x2685eb /* "Attacking the cache" */;
     return param_1;
   }
-  fVar13 = *(float *)(**(int **)(unaff_EBX + 0x48e1ef) + 0xc) - *(float *)((int)param_2 + 0x34);
-  if ((fVar13 < *(float *)(unaff_EBX + 0x20e6ff) || fVar13 == *(float *)(unaff_EBX + 0x20e6ff)) ||
+  fVar13 = *(float *)(**(int **)(unaff_EBX + 0x48e1ef /* &gpGlobals */) + 0xc) - *(float *)((int)param_2 + 0x34);
+  if ((fVar13 < *(float *)(unaff_EBX + 0x20e6ff /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) || fVar13 == *(float *)(unaff_EBX + 0x20e6ff /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */)) ||
      (fVar12 = (float10)CINSNextBot::GetIdleDuration((CINSNextBot *)param_2),
-     (float)fVar12 < *(float *)(unaff_EBX + 0x20c0bb) ||
-     (float)fVar12 == *(float *)(unaff_EBX + 0x20c0bb))) {
+     (float)fVar12 < *(float *)(unaff_EBX + 0x20c0bb /* typeinfo name for CBaseGameSystem+0x32 */) ||
+     (float)fVar12 == *(float *)(unaff_EBX + 0x20c0bb /* typeinfo name for CBaseGameSystem+0x32 */))) {
     *(undefined4 *)param_1 = 0;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined4 *)(param_1 + 8) = 0;
@@ -435,7 +437,7 @@ CINSBotDestroyCache::Update(CINSBotDestroyCache *this,CINSNextBot *param_1,float
   else {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x2685ff;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x2685ff /* "Idling in destroy cache" */;
   }
   return param_1;
 }
@@ -456,7 +458,7 @@ void __cdecl CINSBotDestroyCache::OnEnd(CINSNextBot *param_1,Action *param_2)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  piVar1 = (int *)(extraout_ECX + 0x5d460b + *(int *)(param_1 + 0x38) * 4);
+  piVar1 = (int *)(extraout_ECX + 0x5d460b /* CINSBotDestroyCache::m_nTotalDestroyers */ + *(int *)(param_1 + 0x38) * 4);
   *piVar1 = *piVar1 + -1;
   return;
 }
@@ -476,7 +478,7 @@ int CINSBotDestroyCache::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x267d50;
+  return extraout_ECX + 0x267d50 /* "Destroying cache" */;
 }
 
 
@@ -564,7 +566,7 @@ undefined4 __cdecl CINSBotDestroyCache::CanIDestroyCache(CINSNextBot *param_1)
   undefined4 uVar9;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x48e459);
+  iVar2 = *(int *)(unaff_EBX + 0x48e459 /* &GCSDK::GetPchTempTextBuffer */);
   this = *(CINSPlayer **)(iVar2 + 0x100c);
   bVar7 = this != (CINSPlayer *)0x0;
   if (bVar7) {
@@ -573,10 +575,10 @@ undefined4 __cdecl CINSBotDestroyCache::CanIDestroyCache(CINSNextBot *param_1)
     this = extraout_ECX;
     if (iVar6 == iVar4) {
       piVar5 = *(int **)(iVar2 + 0x1014);
-      if (*piVar5 != unaff_EBX + 0x2687ad) {
+      if (*piVar5 != unaff_EBX + 0x2687ad /* "CINSBotDestroyCache::CanIDestroyCache" */) {
         piVar5 = (int *)CVProfNode::GetSubNode
-                                  ((char *)piVar5,unaff_EBX + 0x2687ad,(char *)0x0,
-                                   unaff_EBX + 0x26874b);
+                                  ((char *)piVar5,unaff_EBX + 0x2687ad /* "CINSBotDestroyCache::CanIDestroyCache" */,(char *)0x0,
+                                   unaff_EBX + 0x26874b /* "INSNextBot" */);
         *(int **)(iVar2 + 0x1014) = piVar5;
       }
       puVar1 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar5[0x1c] * 8 + 4);
@@ -652,8 +654,8 @@ void __thiscall CINSBotDestroyCache::~CINSBotDestroyCache(CINSBotDestroyCache *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47d88a;
-  in_stack_00000004[1] = unaff_EBX + 0x47da1e;
+  *in_stack_00000004 = unaff_EBX + 0x47d88a /* vtable for CINSBotDestroyCache+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x47da1e /* vtable for CINSBotDestroyCache+0x19c */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -693,8 +695,8 @@ void __thiscall CINSBotDestroyCache::~CINSBotDestroyCache(CINSBotDestroyCache *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47d81a;
-  in_stack_00000004[1] = unaff_EBX + 0x47d9ae;
+  *in_stack_00000004 = unaff_EBX + 0x47d81a /* vtable for CINSBotDestroyCache+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x47d9ae /* vtable for CINSBotDestroyCache+0x19c */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

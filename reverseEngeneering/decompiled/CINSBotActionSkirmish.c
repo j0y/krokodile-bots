@@ -20,7 +20,7 @@ void __thiscall CINSBotActionSkirmish::CINSBotActionSkirmish(CINSBotActionSkirmi
   
   __i686_get_pc_thunk_cx();
   in_stack_00000004[8] = 0;
-  *in_stack_00000004 = extraout_ECX + 0x45ebd3;
+  *in_stack_00000004 = extraout_ECX + 0x45ebd3 /* vtable for CINSBotActionSkirmish+0x8 */;
   in_stack_00000004[9] = 0;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
@@ -33,7 +33,7 @@ void __thiscall CINSBotActionSkirmish::CINSBotActionSkirmish(CINSBotActionSkirmi
   *(undefined1 *)((int)in_stack_00000004 + 0x31) = 0;
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
-  in_stack_00000004[1] = extraout_ECX + 0x45ed67;
+  in_stack_00000004[1] = extraout_ECX + 0x45ed67 /* vtable for CINSBotActionSkirmish+0x19c */;
   *(undefined1 *)(in_stack_00000004 + 0xe) = 0;
   return;
 }
@@ -123,7 +123,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar2;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x244ca2;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x244ca2 /* "Attacking nearby threats" */;
         *(undefined4 *)param_1 = 2;
         return param_1;
       }
@@ -144,7 +144,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
     }
     fVar7 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                                (this_03,(float)in_stack_0000000c,0x42480000);
-    *(bool *)((int)param_2 + 0x38) = (float)fVar7 < *(float *)(unaff_EBX + 0x1e8171);
+    *(bool *)((int)param_2 + 0x38) = (float)fVar7 < *(float *)(unaff_EBX + 0x1e8171 /* typeinfo name for ISaveRestoreOps+0x67 */);
     this_00 = (CFmtStrN<256,false> *)GetDesiredObjective(in_stack_0000000c,(CINSNextBot *)param_2);
     iVar4 = CBaseEntity::GetTeamNumber(this_05);
     if (this_00 == (CFmtStrN<256,false> *)0xffffffff) {
@@ -153,22 +153,22 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
       *(undefined4 *)(param_1 + 8) = 0;
     }
     else {
-      iVar6 = **(int **)(unaff_EBX + 0x46b401);
+      iVar6 = **(int **)(unaff_EBX + 0x46b401 /* &g_pObjectiveResource */);
       this_08 = *(CFmtStrN<256,false> **)(iVar6 + 0x450 + (int)this_00 * 4);
       if ((*(char *)((int)param_2 + 0x38) != '\0') ||
          ((CFmtStrN<256,false> *)((iVar4 == 2) + 2) == this_08)) {
-        iVar4 = CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(unaff_EBX + 0x46ad9d));
+        iVar4 = CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(unaff_EBX + 0x46ad9d /* &TheNavMesh */));
         if (iVar4 != 0) {
           CNavArea::GetRandomPoint();
           CINSNextBot::AddInvestigation(in_stack_0000000c,local_34,local_30,local_2c,0);
         }
-        this_08 = *(CFmtStrN<256,false> **)(unaff_EBX + 0x46b401);
+        this_08 = *(CFmtStrN<256,false> **)(unaff_EBX + 0x46b401 /* &g_pObjectiveResource */);
         iVar6 = *(int *)this_08;
       }
       if (*(int *)(iVar6 + 0x6f0 + (int)this_00 * 4) == 0) {
         cVar1 = CINSBotDestroyCache::CanIDestroyCache((CINSNextBot *)in_stack_0000000c);
-        if ((cVar1 != '\0') && (*(int *)(*(int *)(unaff_EBX + 0x46b6f1) + (int)this_00 * 4) < 1)) {
-          CFmtStrN<256,false>::CFmtStrN(this_00,local_24c,unaff_EBX + 0x246a31,this_00);
+        if ((cVar1 != '\0') && (*(int *)(*(int *)(unaff_EBX + 0x46b6f1 /* &CINSBotDestroyCache::m_nTotalDestroyers */) + (int)this_00 * 4) < 1)) {
+          CFmtStrN<256,false>::CFmtStrN(this_00,local_24c,unaff_EBX + 0x246a31 /* "Destroying %i" */,this_00);
           pvVar2 = ::operator_new(0x4900);
           CINSBotDestroyCache::CINSBotDestroyCache(this_06,(int)pvVar2);
           *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -180,7 +180,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
           *(undefined1 **)(param_1 + 8) = local_247;
           return param_1;
         }
-        iVar4 = CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(unaff_EBX + 0x46ad9d));
+        iVar4 = CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(unaff_EBX + 0x46ad9d /* &TheNavMesh */));
         this_08 = extraout_ECX_01;
         if (iVar4 != 0) {
           CNavArea::GetRandomPoint();
@@ -188,7 +188,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
           this_08 = extraout_ECX_02;
         }
       }
-      CFmtStrN<256,false>::CFmtStrN(this_08,local_140,unaff_EBX + 0x246a3f,this_00);
+      CFmtStrN<256,false>::CFmtStrN(this_08,local_140,unaff_EBX + 0x246a3f /* "Capturing %i" */,this_00);
       pvVar2 = ::operator_new(0x88);
       CINSBotCaptureCP::CINSBotCaptureCP(this_09,(int)pvVar2,SUB41(this_00,0));
       *(undefined4 *)((int)param_2 + 0x20) = 0;
@@ -209,7 +209,7 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar2;
     *(undefined4 *)param_1 = 2;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x24693d;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x24693d /* "Escorting " */;
   }
   return param_1;
 }
@@ -244,7 +244,7 @@ int CINSBotActionSkirmish::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f6ae6;
+  return extraout_ECX + 0x1f6ae6 /* "Skirmish" */;
 }
 
 
@@ -314,8 +314,8 @@ CINSBotActionSkirmish::GetDesiredObjective(CINSBotActionSkirmish *this,CINSNextB
   iVar6 = (iVar4 == 2) + 2;
   if (param_1[0x38] != (CINSNextBot)0x0) {
     if (iVar4 == 2) {
-      piVar9 = (int *)(**(int **)(unaff_EBX + 0x46b661) + 0x450);
-      piVar10 = (int *)(**(int **)(unaff_EBX + 0x46b661) + 0x490);
+      piVar9 = (int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x450);
+      piVar10 = (int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x490);
       iVar1 = *piVar10;
       iVar8 = *piVar9;
       iVar7 = 0;
@@ -331,7 +331,7 @@ CINSBotActionSkirmish::GetDesiredObjective(CINSBotActionSkirmish *this,CINSNextB
       }
     }
     else {
-      iVar1 = **(int **)(unaff_EBX + 0x46b661);
+      iVar1 = **(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */);
       iVar8 = *(int *)(iVar1 + 0x4a0);
       iVar2 = *(int *)(iVar1 + 0x460);
       iVar7 = 4;
@@ -353,8 +353,8 @@ CINSBotActionSkirmish::GetDesiredObjective(CINSBotActionSkirmish *this,CINSNextB
   if (iVar4 == 2) {
     iVar7 = 0;
     do {
-      if ((*(int *)(**(int **)(unaff_EBX + 0x46b661) + 0x490 + iVar7 * 4) != 2) ||
-         (iVar6 == *(int *)(**(int **)(unaff_EBX + 0x46b661) + 0x450 + iVar7 * 4)))
+      if ((*(int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x490 + iVar7 * 4) != 2) ||
+         (iVar6 == *(int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x450 + iVar7 * 4)))
       goto LAB_0073b7b6;
       iVar7 = iVar7 + 1;
     } while (iVar7 != 5);
@@ -363,8 +363,8 @@ CINSBotActionSkirmish::GetDesiredObjective(CINSBotActionSkirmish *this,CINSNextB
   else {
     iVar7 = 4;
     do {
-      if ((iVar4 != *(int *)(**(int **)(unaff_EBX + 0x46b661) + 0x490 + iVar7 * 4)) ||
-         (iVar6 == *(int *)(**(int **)(unaff_EBX + 0x46b661) + 0x450 + iVar7 * 4)))
+      if ((iVar4 != *(int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x490 + iVar7 * 4)) ||
+         (iVar6 == *(int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x450 + iVar7 * 4)))
       goto LAB_0073b7b6;
       iVar7 = iVar7 + -1;
     } while (iVar7 != -1);
@@ -374,7 +374,7 @@ LAB_0073b7b6:
   fVar11 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                               (in_stack_00000008,(float)in_stack_00000008,0x42480000);
   iVar6 = iVar7;
-  if (((double)(float)fVar11 < *(double *)(unaff_EBX + 0x245c65)) && (iVar6 = -1, iVar7 != -1)) {
+  if (((double)(float)fVar11 < *(double *)(unaff_EBX + 0x245c65 /* typeinfo name for CINSBotGuardCP+0x11 */)) && (iVar6 = -1, iVar7 != -1)) {
     iVar6 = (uint)(iVar4 == 2) * 2 + -1 + iVar7;
     iVar8 = 4;
     if (iVar6 < 5) {
@@ -384,7 +384,7 @@ LAB_0073b7b6:
     if (-1 < iVar8) {
       iVar6 = iVar8;
     }
-    if (iVar4 == *(int *)(**(int **)(unaff_EBX + 0x46b661) + 0x490 + iVar6 * 4)) {
+    if (iVar4 == *(int *)(**(int **)(unaff_EBX + 0x46b661 /* &g_pObjectiveResource */) + 0x490 + iVar6 * 4)) {
       iVar6 = iVar7;
     }
   }
@@ -424,8 +424,8 @@ void __thiscall CINSBotActionSkirmish::~CINSBotActionSkirmish(CINSBotActionSkirm
   
   __i686_get_pc_thunk_cx();
   *in_stack_00000004 = &UNK_0045e3e3 + extraout_ECX;
-  in_stack_00000004[1] = extraout_ECX + 0x45e577;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46b353));
+  in_stack_00000004[1] = extraout_ECX + 0x45e577 /* vtable for CINSBotActionSkirmish+0x19c */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46b353 /* &_DYNAMIC */));
   return;
 }
 
@@ -462,8 +462,8 @@ void __thiscall CINSBotActionSkirmish::~CINSBotActionSkirmish(CINSBotActionSkirm
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45e39a;
-  in_stack_00000004[1] = unaff_EBX + 0x45e52e;
+  *in_stack_00000004 = unaff_EBX + 0x45e39a /* vtable for CINSBotActionSkirmish+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45e52e /* vtable for CINSBotActionSkirmish+0x19c */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

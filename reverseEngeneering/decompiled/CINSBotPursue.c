@@ -22,9 +22,9 @@ void __thiscall CINSBotPursue::CINSBotPursue(CINSBotPursue *this)
   in_stack_00000004[8] = 0;
   in_stack_00000004[9] = 0;
   in_stack_00000004[10] = 0;
-  *in_stack_00000004 = unaff_EBX + 0x46d3ba;
-  in_stack_00000004[1] = unaff_EBX + 0x46d552;
-  in_stack_00000004[0xe] = unaff_EBX + 0x3fda2a;
+  *in_stack_00000004 = unaff_EBX + 0x46d3ba /* vtable for CINSBotPursue+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x46d552 /* vtable for CINSBotPursue+0x1a0 */;
+  in_stack_00000004[0xe] = unaff_EBX + 0x3fda2a /* vtable for CountdownTimer+0x8 */;
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
   in_stack_00000004[5] = 0;
@@ -72,7 +72,7 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
   piVar2 = (int *)(**(code **)(*piVar2 + 0xd0))(piVar2,0);
   if (piVar2 == (int *)0x0) {
     *(undefined4 *)param_1 = 3;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x2575af;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x2575af /* "No Known Threats" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
   }
@@ -89,7 +89,7 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
     return param_1;
   }
   *(undefined4 *)param_1 = 3;
-  *(int *)(param_1 + 8) = unaff_EBX + 0x257605;
+  *(int *)(param_1 + 8) = unaff_EBX + 0x257605 /* "I should not be pursuing while escorting" */;
   *(undefined4 *)(param_1 + 4) = 0;
   return param_1;
 }
@@ -141,7 +141,7 @@ CINSBotPursue::Update(CINSBotPursue *this,CINSNextBot *param_1,float param_2)
   }
   iVar4 = 0;
   if (*(int *)(iVar3 + 0x20) != 0) {
-    iVar4 = *(int *)(iVar3 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x47c542) + 0x5c) >> 4;
+    iVar4 = *(int *)(iVar3 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x47c542 /* &gpGlobals */) + 0x5c) >> 4;
   }
   if (*(int *)((int)param_2 + 0x50) != iVar4) {
     *(undefined4 *)param_1 = 3;
@@ -174,8 +174,8 @@ LAB_0072a5b0:
   cVar2 = CINSNextBot::IsIdle(this_00);
   if ((cVar2 != '\0') &&
      (fVar10 = (float10)CINSNextBot::GetIdleDuration(this_01),
-     *(float *)(unaff_EBX + 0x1fa40e) <= (float)fVar10 &&
-     (float)fVar10 != *(float *)(unaff_EBX + 0x1fa40e))) {
+     *(float *)(unaff_EBX + 0x1fa40e /* typeinfo name for CBaseGameSystem+0x32 */) <= (float)fVar10 &&
+     (float)fVar10 != *(float *)(unaff_EBX + 0x1fa40e /* typeinfo name for CBaseGameSystem+0x32 */))) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
     *(undefined **)(param_1 + 8) = &UNK_002573a3 + unaff_EBX;
@@ -189,7 +189,7 @@ LAB_0072a5b0:
   cVar2 = CINSPlayer::IsMoving(this_02);
   bVar1 = true;
   if (cVar2 != '\0') {
-    bVar1 = *(float *)(unaff_EBX + 0x20daba) <= fVar11 && fVar11 != *(float *)(unaff_EBX + 0x20daba)
+    bVar1 = *(float *)(unaff_EBX + 0x20daba /* typeinfo name for CUseTraceFilter+0x19 */) <= fVar11 && fVar11 != *(float *)(unaff_EBX + 0x20daba /* typeinfo name for CUseTraceFilter+0x19 */)
     ;
   }
   piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x970))(in_stack_0000000c);
@@ -208,7 +208,7 @@ LAB_0072a67c:
   }
   else if (bVar1) goto LAB_0072a67c;
   fVar10 = (float10)CountdownTimer::Now();
-  fVar11 = (float)fVar10 + *(float *)(unaff_EBX + 0x18e7b6);
+  fVar11 = (float)fVar10 + *(float *)(unaff_EBX + 0x18e7b6 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
   if (*(float *)((int)param_2 + 0x40) != fVar11) {
     (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40);
     *(float *)((int)param_2 + 0x40) = fVar11;
@@ -272,7 +272,7 @@ int CINSBotPursue::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x256e37;
+  return extraout_ECX + 0x256e37 /* "Pursue Threat" */;
 }
 
 
@@ -308,16 +308,16 @@ byte __cdecl CINSBotPursue::ShouldHurry(INextBot *param_1)
   int unaff_EBX;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = (**(code **)(**(int **)(unaff_EBX + 0x47c30e) + 0x40))(*(int **)(unaff_EBX + 0x47c30e));
+  iVar2 = (**(code **)(**(int **)(unaff_EBX + 0x47c30e /* &ins_bot_knives_only */) + 0x40))(*(int **)(unaff_EBX + 0x47c30e /* &ins_bot_knives_only */));
   if (iVar2 == 0) {
     bVar1 = 2;
     if (param_1[0x58] == (INextBot)0x0) {
-      return ~-(*(float *)(unaff_EBX + 0x25750e) < *(float *)(param_1 + 0x54)) & 2;
+      return ~-(*(float *)(unaff_EBX + 0x25750e /* typeinfo name for CINSBotPursue+0x13 */) < *(float *)(param_1 + 0x54)) & 2;
     }
   }
   else {
-    bVar1 = *(float *)(unaff_EBX + 0x1fb59a) <= *(float *)(param_1 + 0x54) &&
-            *(float *)(param_1 + 0x54) != *(float *)(unaff_EBX + 0x1fb59a);
+    bVar1 = *(float *)(unaff_EBX + 0x1fb59a /* typeinfo name for IPlayerAnimState+0x2f */) <= *(float *)(param_1 + 0x54) &&
+            *(float *)(param_1 + 0x54) != *(float *)(unaff_EBX + 0x1fb59a /* typeinfo name for IPlayerAnimState+0x2f */);
   }
   return bVar1;
 }
@@ -358,7 +358,7 @@ void CINSBotPursue::OnMoveToSuccess(CINSNextBot *param_1,Path *param_2)
   __i686_get_pc_thunk_cx();
   *(undefined4 *)param_1 = 3;
   *(undefined4 *)(param_1 + 4) = 0;
-  *(int *)(param_1 + 8) = extraout_ECX + 0x25746b;
+  *(int *)(param_1 + 8) = extraout_ECX + 0x25746b /* "Arrived at investigation target." */;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return;
 }
@@ -476,7 +476,7 @@ byte __cdecl CINSBotPursue::ShouldWalk(INextBot *param_1)
   if (param_1[0x58] != (INextBot)0x0) {
     return 2;
   }
-  return ~-(*(float *)(extraout_ECX + 0x221bd3) < *(float *)(param_1 + 0x54)) & 2;
+  return ~-(*(float *)(extraout_ECX + 0x221bd3 /* typeinfo name for CUtlCachedFileData<CModelSoundsCache>+0x38 */) < *(float *)(param_1 + 0x54)) & 2;
 }
 
 
@@ -511,8 +511,8 @@ void __thiscall CINSBotPursue::~CINSBotPursue(CINSBotPursue *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x46d2a3;
-  in_stack_00000004[1] = extraout_ECX + 0x46d43b;
+  *in_stack_00000004 = extraout_ECX + 0x46d2a3 /* vtable for CINSBotPursue+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x46d43b /* vtable for CINSBotPursue+0x1a0 */;
   Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(&UNK_0047c8d3 + extraout_ECX));
   return;
 }
@@ -551,7 +551,7 @@ void __thiscall CINSBotPursue::~CINSBotPursue(CINSBotPursue *this)
   
   __i686_get_pc_thunk_bx();
   *in_stack_00000004 = &UNK_0046d25a + unaff_EBX;
-  in_stack_00000004[1] = unaff_EBX + 0x46d3f2;
+  in_stack_00000004[1] = unaff_EBX + 0x46d3f2 /* vtable for CINSBotPursue+0x1a0 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

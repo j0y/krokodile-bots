@@ -26,12 +26,12 @@ CINSBotSuppressTarget::CINSBotSuppressTarget
   __i686_get_pc_thunk_bx();
   param_2[8] = 0;
   param_2[9] = 0;
-  *param_2 = unaff_EBX + 0x46576d;
-  param_2[1] = unaff_EBX + 0x465905;
-  iVar1 = unaff_EBX + 0x3f503d;
+  *param_2 = unaff_EBX + 0x46576d /* vtable for CINSBotSuppressTarget+0x8 */;
+  param_2[1] = unaff_EBX + 0x465905 /* vtable for CINSBotSuppressTarget+0x1a0 */;
+  iVar1 = unaff_EBX + 0x3f503d /* vtable for CountdownTimer+0x8 */;
   param_2[10] = 0;
   param_2[3] = 0;
-  pcVar2 = (code *)(unaff_EBX + -0x502a0b);
+  pcVar2 = (code *)(unaff_EBX + -0x502a0b /* CountdownTimer::NetworkStateChanged */);
   param_2[4] = 0;
   param_2[5] = 0;
   param_2[6] = 0;
@@ -64,7 +64,7 @@ CINSBotSuppressTarget::CINSBotSuppressTarget
     piVar4 = (int *)(**(code **)(*param_6 + 0xc))(param_6);
     param_2[0xe] = *piVar4;
   }
-  fVar3 = *(float *)(unaff_EBX + 0x24ed9d);
+  fVar3 = *(float *)(unaff_EBX + 0x24ed9d /* typeinfo name for CINSBotSuppressTarget+0x20 */);
   param_2[0xf] = param_3;
   param_2[0x11] = (int)(fVar3 + param_5);
   param_2[0x10] = param_4;
@@ -162,14 +162,14 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
   piVar6 = (int *)(**(code **)(*piVar6 + 0xd0))();
   if (((piVar6 != (int *)0x0) && (cVar5 = (**(code **)(*piVar6 + 0x38))(), cVar5 != '\0')) &&
      (fVar9 = (float10)(**(code **)(*piVar6 + 0x40))(),
-     *(float *)(unaff_EBX + 0x18603d) <= (float)fVar9 &&
-     (float)fVar9 != *(float *)(unaff_EBX + 0x18603d))) {
+     *(float *)(unaff_EBX + 0x18603d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) <= (float)fVar9 &&
+     (float)fVar9 != *(float *)(unaff_EBX + 0x18603d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */))) {
     piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x97c))();
     iVar8 = (**(code **)(*piVar6 + 0xd4))();
     if (iVar8 != 0) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24f3fd;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24f3fd /* "Spotted a threat while suppressing." */;
       return param_1;
     }
   }
@@ -179,20 +179,20 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
     cVar5 = CINSNextBot::IsIdle(this_00);
     if ((cVar5 == '\0') ||
        (fVar9 = (float10)CINSNextBot::GetIdleDuration(this_01),
-       (float)fVar9 < *(float *)(unaff_EBX + 0x1f1c95) ||
-       (float)fVar9 == *(float *)(unaff_EBX + 0x1f1c95))) {
+       (float)fVar9 < *(float *)(unaff_EBX + 0x1f1c95 /* typeinfo name for CBaseGameSystem+0x32 */) ||
+       (float)fVar9 == *(float *)(unaff_EBX + 0x1f1c95 /* typeinfo name for CBaseGameSystem+0x32 */))) {
       piVar6 = (int *)CINSPlayer::GetActiveINSWeapon();
       if (piVar6 == (int *)0x0) {
         *(undefined4 *)param_1 = 3;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24f3aa;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24f3aa /* "Failed to init weapon entity" */;
       }
       else {
         cVar5 = (**(code **)(*piVar6 + 0x740))();
         if (cVar5 == '\0') {
           uVar1 = *(uint *)((int)param_2 + 0x38);
           if (((uVar1 != 0xffffffff) &&
-              (iVar8 = (uVar1 & 0xffff) * 0x18 + **(int **)(unaff_EBX + 0x473d01),
+              (iVar8 = (uVar1 & 0xffff) * 0x18 + **(int **)(unaff_EBX + 0x473d01 /* &g_pEntityList */),
               *(uint *)(iVar8 + 8) == uVar1 >> 0x10)) && (*(int *)(iVar8 + 4) != 0)) {
             piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974))();
             (**(code **)(*piVar6 + 0xe4))();
@@ -202,18 +202,18 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
           local_6c = *(float *)((int)param_2 + 0x40) - local_60;
           local_68 = *(float *)((int)param_2 + 0x44) - local_5c;
           VectorVectors((Vector *)&local_70,(Vector *)&local_58,(Vector *)&local_4c);
-          fVar13 = *(float *)(**(int **)(unaff_EBX + 0x473dc9) + 0xc);
+          fVar13 = *(float *)(**(int **)(unaff_EBX + 0x473dc9 /* &gpGlobals */) + 0xc);
           local_40 = *(float *)((int)param_2 + 0x3c);
           local_3c = *(float *)((int)param_2 + 0x40);
           local_38 = *(float *)((int)param_2 + 0x44);
-          dVar14 = sin((double)(*(float *)(unaff_EBX + 0x24f43d) * fVar13));
+          dVar14 = sin((double)(*(float *)(unaff_EBX + 0x24f43d /* typeinfo name for CINSBotSuppressTarget+0x1c */) * fVar13));
           fVar4 = local_38;
           fVar3 = local_3c;
-          fVar12 = (float)(dVar14 * *(double *)(unaff_EBX + 0x24f449));
+          fVar12 = (float)(dVar14 * *(double *)(unaff_EBX + 0x24f449 /* typeinfo name for CINSBotSuppressTarget+0x28 */));
           fVar10 = local_54 * fVar12;
           fVar11 = local_50 * fVar12;
           dVar14 = cos((double)(fVar13 * *(float *)(&DAT_001f0fb9 + unaff_EBX)));
-          fVar13 = (float)(dVar14 * *(double *)(unaff_EBX + 0x24f451));
+          fVar13 = (float)(dVar14 * *(double *)(unaff_EBX + 0x24f451 /* typeinfo name for CINSBotSuppressTarget+0x30 */));
           local_3c = local_48 * fVar13 + fVar10 + fVar3;
           local_38 = local_44 * fVar13 + fVar11 + fVar4;
           local_40 = fVar12 * local_58 + fVar13 * local_4c + local_40;
@@ -228,7 +228,7 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
           local_38 = local_44 * fVar13 + local_38;
           local_40 = fVar13 * local_4c + local_40;
           piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x970))();
-          (**(code **)(*piVar6 + 0xd4))(piVar6,&local_40,3,0x3dcccccd,0,unaff_EBX + 0x24f3e2);
+          (**(code **)(*piVar6 + 0xd4))(piVar6,&local_40,3,0x3dcccccd,0,unaff_EBX + 0x24f3e2 /* "Aiming at suppression area" */);
           (**(code **)(*in_stack_0000000c + 0x20c))(&local_28);
           local_34 = local_40 - local_28;
           local_30 = local_3c - local_24;
@@ -250,20 +250,20 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
         else {
           *(undefined4 *)param_1 = 3;
           *(undefined4 *)(param_1 + 4) = 0;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x24f3c7;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x24f3c7 /* "Our weapon is out of ammo." */;
         }
       }
     }
     else {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24f399;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24f399 /* "Idle in suppress" */;
     }
   }
   else {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x24f381;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x24f381 /* "We're done suppressing." */;
   }
   return param_1;
 }
@@ -283,7 +283,7 @@ int CINSBotSuppressTarget::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x24eb37;
+  return extraout_ECX + 0x24eb37 /* "Suppressing" */;
 }
 
 
@@ -346,7 +346,7 @@ int __cdecl CINSBotSuppressTarget::ShouldAttack(INextBot *param_1,CKnownEntity *
     fVar6 = *(float *)(param_1 + 0x40) - *(float *)(iVar3 + 0x20c);
     fVar7 = *(float *)(param_1 + 0x44) - *(float *)(iVar3 + 0x210);
     iVar3 = 0;
-    if (*(float *)(unaff_EBX + 0x24f6b4) <= SQRT(fVar6 * fVar6 + fVar8 * fVar8 + fVar7 * fVar7)) {
+    if (*(float *)(unaff_EBX + 0x24f6b4 /* typeinfo name for CINSBotSuppressTarget+0x18 */) <= SQRT(fVar6 * fVar6 + fVar8 * fVar8 + fVar7 * fVar7)) {
       iVar4 = (**(code **)(*piVar5 + 0x10))(piVar5);
       iVar3 = 1;
       if (iVar4 != 0) {
@@ -363,8 +363,8 @@ int __cdecl CINSBotSuppressTarget::ShouldAttack(INextBot *param_1,CKnownEntity *
         fVar6 = *(float *)(pCVar1 + 0x20c) - *(float *)(iVar4 + 0x20c);
         fVar7 = *(float *)(pCVar1 + 0x210) - *(float *)(iVar4 + 0x210);
         fVar6 = SQRT(fVar6 * fVar6 + fVar8 * fVar8 + fVar7 * fVar7);
-        if ((fVar6 < *(float *)(unaff_EBX + 0x21943c) || fVar6 == *(float *)(unaff_EBX + 0x21943c))
-           && (iVar3 = 1, *(float *)(unaff_EBX + 0x1fae28) <= fVar6)) {
+        if ((fVar6 < *(float *)(unaff_EBX + 0x21943c /* typeinfo name for CUtlCachedFileData<CModelSoundsCache>+0x38 */) || fVar6 == *(float *)(unaff_EBX + 0x21943c /* typeinfo name for CUtlCachedFileData<CModelSoundsCache>+0x38 */))
+           && (iVar3 = 1, *(float *)(unaff_EBX + 0x1fae28 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x24 */) <= fVar6)) {
           fVar6 = (float)(**(code **)(*piVar5 + 0x10))(piVar5);
           cVar2 = CINSPlayer::IsThreatAimingTowardMe(this_02,pCVar1,fVar6);
           iVar3 = ~-(uint)(cVar2 == '\0') + 2;
@@ -466,9 +466,9 @@ void __thiscall CINSBotSuppressTarget::~CINSBotSuppressTarget(CINSBotSuppressTar
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x4655a3;
-  in_stack_00000004[1] = extraout_ECX + 0x46573b;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x473e33));
+  *in_stack_00000004 = extraout_ECX + 0x4655a3 /* vtable for CINSBotSuppressTarget+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x46573b /* vtable for CINSBotSuppressTarget+0x1a0 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x473e33 /* &_DYNAMIC */));
   return;
 }
 
@@ -505,8 +505,8 @@ void __thiscall CINSBotSuppressTarget::~CINSBotSuppressTarget(CINSBotSuppressTar
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x46555a;
-  in_stack_00000004[1] = unaff_EBX + 0x4656f2;
+  *in_stack_00000004 = unaff_EBX + 0x46555a /* vtable for CINSBotSuppressTarget+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x4656f2 /* vtable for CINSBotSuppressTarget+0x1a0 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

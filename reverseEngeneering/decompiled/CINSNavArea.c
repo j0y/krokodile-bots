@@ -67,7 +67,7 @@ CINSNavArea::AddPathingBot(CINSNavArea *this,CBaseCombatCharacter *param_1,float
       else {
         iVar4 = 0;
         do {
-          if (*(int *)((int)param_2 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x4c0755) + 0x5c) >> 4
+          if (*(int *)((int)param_2 + 0x20) - *(int *)(**(int **)(unaff_EBX + 0x4c0755 /* &gpGlobals */) + 0x5c) >> 4
               == *(int *)(*(int *)pCVar1 + iVar4 * 0x10)) {
             return;
           }
@@ -75,7 +75,7 @@ CINSNavArea::AddPathingBot(CINSNavArea *this,CBaseCombatCharacter *param_1,float
         } while (iVar4 != iVar2);
       }
     }
-    local_28 = unaff_EBX + 0x44206d;
+    local_28 = unaff_EBX + 0x44206d /* vtable for CountdownTimer+0x8 */;
     local_24 = 0.0;
     CountdownTimer::NetworkStateChanged(&local_28);
     local_20[0] = -1.0;
@@ -131,17 +131,17 @@ CINSNavArea::AddPotentiallyVisibleActor(CINSNavArea *this,CBaseCombatCharacter *
   int local_30;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x4c0699);
+  iVar2 = *(int *)(unaff_EBX + 0x4c0699 /* &GCSDK::GetPchTempTextBuffer */);
   this_00 = *(CBaseEntity **)(iVar2 + 0x100c);
   bVar13 = this_00 != (CBaseEntity *)0x0;
   if ((bVar13) &&
      (iVar8 = *(int *)(iVar2 + 0x19b8), iVar7 = ThreadGetCurrentId(), this_00 = extraout_ECX,
      iVar8 == iVar7)) {
     piVar9 = *(int **)(iVar2 + 0x1014);
-    if (*piVar9 != unaff_EBX + 0x298651) {
+    if (*piVar9 != unaff_EBX + 0x298651 /* "CINSNavArea::AddPotentiallyVisibleActor" */) {
       piVar9 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar9,unaff_EBX + 0x298651,(char *)0x0,
-                                 unaff_EBX + 0x29832d);
+                                ((char *)piVar9,unaff_EBX + 0x298651 /* "CINSNavArea::AddPotentiallyVisibleActor" */,(char *)0x0,
+                                 unaff_EBX + 0x29832d /* "INSNavMesh" */);
       *(int **)(iVar2 + 0x1014) = piVar9;
     }
     puVar10 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar9[0x1c] * 8 + 4);
@@ -236,9 +236,9 @@ void __cdecl CINSNavArea::AssociateWithControlPoint(int param_1)
   int unaff_EBX;
   
   iVar3 = __i686_get_pc_thunk_bx();
-  uVar2 = *(uint *)(**(int **)(unaff_EBX + 0x4c294b) + 0x7cc + iVar3 * 4);
+  uVar2 = *(uint *)(**(int **)(unaff_EBX + 0x4c294b /* &g_pObjectiveResource */) + 0x7cc + iVar3 * 4);
   if ((uVar2 == 0xffffffff) ||
-     (iVar1 = **(int **)(unaff_EBX + 0x4c2407) + (uVar2 & 0xffff) * 0x18,
+     (iVar1 = **(int **)(unaff_EBX + 0x4c2407 /* &g_pEntityList */) + (uVar2 & 0xffff) * 0x18,
      *(uint *)(iVar1 + 8) != uVar2 >> 0x10)) {
     iVar3 = -1;
   }
@@ -298,8 +298,8 @@ void __thiscall CINSNavArea::CINSNavArea(CINSNavArea *this)
   
   __i686_get_pc_thunk_bx();
   CNavArea::CNavArea(this_00);
-  iVar2 = *(int *)(unaff_EBX + 0x4c0f05);
-  *in_stack_00000004 = unaff_EBX + 0x4ae47d;
+  iVar2 = *(int *)(unaff_EBX + 0x4c0f05 /* &vtable for IntervalTimer */);
+  *in_stack_00000004 = unaff_EBX + 0x4ae47d /* vtable for CINSNavArea+0x8 */;
   in_stack_00000004[0x59] = 0;
   in_stack_00000004[0x5a] = 0;
   in_stack_00000004[100] = iVar2 + 8;
@@ -315,25 +315,25 @@ void __thiscall CINSNavArea::CINSNavArea(CINSNavArea *this)
   in_stack_00000004[0x65] = -0x40800000;
   (*pcVar1)(in_stack_00000004 + 100,in_stack_00000004 + 0x65);
   in_stack_00000004[0x7c] = 0;
-  in_stack_00000004[0x7b] = unaff_EBX + 0x44246d;
-  (*(code *)(unaff_EBX + -0x4b55db))(in_stack_00000004 + 0x7b,in_stack_00000004 + 0x7c);
+  in_stack_00000004[0x7b] = unaff_EBX + 0x44246d /* vtable for CountdownTimer+0x8 */;
+  (*(code *)(unaff_EBX + -0x4b55db /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x7b,in_stack_00000004 + 0x7c);
   in_stack_00000004[0x7d] = -0x40800000;
   (**(code **)(in_stack_00000004[0x7b] + 4))(in_stack_00000004 + 0x7b,in_stack_00000004 + 0x7d);
   piVar3 = in_stack_00000004 + 0x7f;
   do {
-    *piVar3 = unaff_EBX + 0x44246d;
+    *piVar3 = unaff_EBX + 0x44246d /* vtable for CountdownTimer+0x8 */;
     *(undefined4 *)
      ((int)in_stack_00000004 + (int)piVar3 + (0x200 - (int)(in_stack_00000004 + 0x7f))) = 0;
-    (*(code *)(unaff_EBX + -0x4b55db))(piVar3,piVar3 + 1);
+    (*(code *)(unaff_EBX + -0x4b55db /* CountdownTimer::NetworkStateChanged */))(piVar3,piVar3 + 1);
     piVar3[2] = -0x40800000;
     (**(code **)(*piVar3 + 4))(piVar3,piVar3 + 2);
     piVar3 = piVar3 + 3;
   } while (piVar3 != in_stack_00000004 + 0x85);
-  iVar2 = *(int *)(unaff_EBX + 0x4c0f05);
+  iVar2 = *(int *)(unaff_EBX + 0x4c0f05 /* &vtable for IntervalTimer */);
   in_stack_00000004[0x88] = -0x40800000;
   in_stack_00000004[0x87] = iVar2 + 8;
   (*pcVar1)(in_stack_00000004 + 0x87,in_stack_00000004 + 0x88);
-  iVar2 = *(int *)(unaff_EBX + 0x4c0f05);
+  iVar2 = *(int *)(unaff_EBX + 0x4c0f05 /* &vtable for IntervalTimer */);
   in_stack_00000004[0x8a] = -0x40800000;
   in_stack_00000004[0x89] = iVar2 + 8;
   (*pcVar1)(in_stack_00000004 + 0x89,in_stack_00000004 + 0x8a);
@@ -403,21 +403,21 @@ void __thiscall CINSNavArea::CleanupPathingBots(CINSNavArea *this,bool param_1)
   int local_30;
   
   __i686_get_pc_thunk_bx();
-  bVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x100c) != 0;
+  bVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
   if ((bVar7) &&
-     (iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x19b8), iVar4 = ThreadGetCurrentId(),
+     (iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar4 = ThreadGetCurrentId(),
      iVar6 == iVar4)) {
-    piVar5 = *(int **)(*(int *)(unaff_EBX + 0x4c11f9) + 0x1014);
-    if (*piVar5 != unaff_EBX + 0x299191) {
+    piVar5 = *(int **)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+    if (*piVar5 != unaff_EBX + 0x299191 /* "CINSNavArea::CleanupPathingBots" */) {
       piVar5 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar5,unaff_EBX + 0x299191,(char *)0x0,
-                                 unaff_EBX + 0x29088f);
-      *(int **)(*(int *)(unaff_EBX + 0x4c11f9) + 0x1014) = piVar5;
+                                ((char *)piVar5,unaff_EBX + 0x299191 /* "CINSNavArea::CleanupPathingBots" */,(char *)0x0,
+                                 unaff_EBX + 0x29088f /* "NPCs" */);
+      *(int **)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar5;
     }
-    puVar2 = (uint *)(piVar5[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x10a0) + 4);
+    puVar2 = (uint *)(piVar5[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
     *puVar2 = *puVar2 | 4;
     CVProfNode::EnterScope();
-    *(undefined1 *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x1010) = 0;
+    *(undefined1 *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) = 0;
   }
   if (in_stack_00000008 == '\0') {
     if (0 < *(int *)(_param_1 + 0x23c)) {
@@ -453,7 +453,7 @@ void __thiscall CINSNavArea::CleanupPathingBots(CINSNavArea *this,bool param_1)
     if (!bVar7) {
       return;
     }
-    iVar6 = *(int *)(unaff_EBX + 0x4c11f9);
+    iVar6 = *(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */);
     cVar3 = *(char *)(iVar6 + 0x1010);
   }
   else {
@@ -462,20 +462,20 @@ void __thiscall CINSNavArea::CleanupPathingBots(CINSNavArea *this,bool param_1)
     if (!bVar7) {
       return;
     }
-    iVar6 = *(int *)(unaff_EBX + 0x4c11f9);
+    iVar6 = *(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */);
     cVar3 = *(char *)(iVar6 + 0x1010);
   }
   if (((cVar3 == '\0') || (*(int *)(iVar6 + 0x100c) != 0)) &&
-     (iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x19b8), iVar4 = ThreadGetCurrentId(),
+     (iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar4 = ThreadGetCurrentId(),
      iVar6 == iVar4)) {
     cVar3 = CVProfNode::ExitScope();
-    iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x1014);
+    iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
     if (cVar3 != '\0') {
       iVar6 = *(int *)(iVar6 + 100);
-      *(int *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x1014) = iVar6;
+      *(int *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar6;
     }
-    *(bool *)(*(int *)(unaff_EBX + 0x4c11f9) + 0x1010) =
-         iVar6 == *(int *)(unaff_EBX + 0x4c11f9) + 0x1018;
+    *(bool *)(*(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+         iVar6 == *(int *)(unaff_EBX + 0x4c11f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
     return;
   }
   return;
@@ -637,7 +637,7 @@ void __cdecl CINSNavArea::CustomAnalysis(bool param_1)
   local_38 = 1;
   local_78 = *(undefined4 *)(_param_1 + 0x30);
   local_44 = 0;
-  local_74 = *(float *)(unaff_EBX + 0x2793b2) + *(float *)(_param_1 + 0x34);
+  local_74 = *(float *)(unaff_EBX + 0x2793b2 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0x100 */) + *(float *)(_param_1 + 0x34);
   local_48 = 0;
   *(uint *)(_param_1 + 0x160) = *(uint *)(_param_1 + 0x160) & 0x5ef3;
   local_4c = 0;
@@ -645,9 +645,9 @@ void __cdecl CINSNavArea::CustomAnalysis(bool param_1)
   local_58 = 0;
   local_5c = 0;
   CTraceFilterSimple::CTraceFilterSimple(this,local_2c,0,(_func_bool_IHandleEntity_ptr_int *)0x0);
-  (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a) + 0x14))
-            ((int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a),&local_7c,0x2400b,local_2c,local_dc);
-  piVar1 = *(int **)(unaff_EBX + 0x4c1d52);
+  (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a /* &enginetrace */) + 0x14))
+            ((int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a /* &enginetrace */),&local_7c,0x2400b,local_2c,local_dc);
+  piVar1 = *(int **)(unaff_EBX + 0x4c1d52 /* &r_visualizetraces */);
   iVar6 = (**(code **)(*piVar1 + 0x40))(piVar1);
   if (iVar6 != 0) {
     iVar6 = (**(code **)(*piVar1 + 0x40))(piVar1);
@@ -666,7 +666,7 @@ void __cdecl CINSNavArea::CustomAnalysis(bool param_1)
       local_6c = 0;
       local_78 = *(undefined4 *)(_param_1 + 0x30);
       local_68 = 0;
-      local_74 = *(float *)(unaff_EBX + 0x2793b2) + *(float *)(_param_1 + 0x34);
+      local_74 = *(float *)(unaff_EBX + 0x2793b2 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0x100 */) + *(float *)(_param_1 + 0x34);
       local_64 = 0x432d0000;
       local_37 = 1;
       local_44 = 0;
@@ -678,8 +678,8 @@ void __cdecl CINSNavArea::CustomAnalysis(bool param_1)
       local_5c = 0;
       CTraceFilterSimple::CTraceFilterSimple
                 ((CTraceFilterSimple *)local_2c,local_2c,0,(_func_bool_IHandleEntity_ptr_int *)0x0);
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a) + 0x14))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a),&local_7c,0x2400b,local_2c,local_dc)
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a /* &enginetrace */) + 0x14))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x4c1a8a /* &enginetrace */),&local_7c,0x2400b,local_2c,local_dc)
       ;
       iVar6 = (**(code **)(*piVar1 + 0x40))(piVar1);
       if (iVar6 != 0) {
@@ -781,7 +781,7 @@ void __thiscall CINSNavArea::Draw(CINSNavArea *this)
   uStack_14 = 0x6e532b;
   __i686_get_pc_thunk_bx();
   CNavArea::Draw(this_00);
-  iVar3 = (**(code **)(*(int *)(unaff_EBX + 0x605995) + 0x40))(unaff_EBX + 0x605995);
+  iVar3 = (**(code **)(*(int *)(unaff_EBX + 0x605995 /* nb_nav_hiding_spot_show_score */) + 0x40))(unaff_EBX + 0x605995 /* nb_nav_hiding_spot_show_score */);
   if (((iVar3 != 0) && (in_stack_00000004 != (CFmtStrN<256,false> *)0xffffff30)) &&
      (piVar5 = *(int **)(in_stack_00000004 + 0xd0), 0 < *piVar5)) {
     iVar3 = 0;
@@ -789,39 +789,39 @@ void __thiscall CINSNavArea::Draw(CINSNavArea *this)
       iVar2 = piVar5[iVar3 + 1];
       iVar3 = iVar3 + 1;
       CFmtStrN<256,false>::CFmtStrN
-                (local_364,(char *)local_364,unaff_EBX + 0x299301,
+                (local_364,(char *)local_364,unaff_EBX + 0x299301 /* " C1:%3.1f , C2:%3.1f" */,
                  SUB84((double)*(float *)(iVar2 + 0x20),0),
                  (int)((ulonglong)(double)*(float *)(iVar2 + 0x20) >> 0x20),
                  SUB84((double)*(float *)(iVar2 + 0x24),0),
                  (int)((ulonglong)(double)*(float *)(iVar2 + 0x24) >> 0x20));
       local_40 = *(undefined4 *)(iVar2 + 4);
-      local_38 = *(float *)(unaff_EBX + 0x24f8e9) + *(float *)(iVar2 + 0xc);
+      local_38 = *(float *)(unaff_EBX + 0x24f8e9 /* typeinfo name for CINSPlayerRagdollManager+0x1c */) + *(float *)(iVar2 + 0xc);
       local_3c = *(undefined4 *)(iVar2 + 8);
       NDebugOverlay::Text((Vector *)&local_40,local_35f,false,0.01023);
       CFmtStrN<256,false>::CFmtStrN
-                (local_258,(char *)local_258,unaff_EBX + 0x299316,
+                (local_258,(char *)local_258,unaff_EBX + 0x299316 /* " S1:%3.1f , S2:%3.1f" */,
                  SUB84((double)*(float *)(iVar2 + 0x28),0),
                  (int)((ulonglong)(double)*(float *)(iVar2 + 0x28) >> 0x20),
                  SUB84((double)*(float *)(iVar2 + 0x2c),0),
                  (int)((ulonglong)(double)*(float *)(iVar2 + 0x2c) >> 0x20));
       local_34 = *(undefined4 *)(iVar2 + 4);
-      local_2c = *(float *)(unaff_EBX + 0x2586dd) + *(float *)(iVar2 + 0xc);
+      local_2c = *(float *)(unaff_EBX + 0x2586dd /* typeinfo name for CEntityFactory<CINSRemoteBase>+0x28 */) + *(float *)(iVar2 + 0xc);
       local_30 = *(undefined4 *)(iVar2 + 8);
       NDebugOverlay::Text((Vector *)&local_34,local_253,false,0.01023);
       piVar5 = *(int **)(in_stack_00000004 + 0xd0);
     } while (iVar3 < *piVar5);
   }
-  iVar3 = (**(code **)(*(int *)(unaff_EBX + 0x6059f5) + 0x40))(unaff_EBX + 0x6059f5);
+  iVar3 = (**(code **)(*(int *)(unaff_EBX + 0x6059f5 /* ins_nav_debug_distance_to_cp */) + 0x40))(unaff_EBX + 0x6059f5 /* ins_nav_debug_distance_to_cp */);
   if (iVar3 == 0) {
     return;
   }
   iVar3 = 0;
-  CFmtStrN<256,false>::CFmtStrN(this_01,local_14c,unaff_EBX + 0x29932b);
+  CFmtStrN<256,false>::CFmtStrN(this_01,local_14c,unaff_EBX + 0x29932b /* "CPDist: " */);
   do {
     if (0.0 < *(float *)(in_stack_00000004 + iVar3 * 4 + 0x1ac)) {
       dVar7 = (double)*(float *)(in_stack_00000004 + iVar3 * 4 + 0x1ac);
       CFmtStrN<256,false>::CFmtStrN
-                (in_stack_00000004,local_47c,unaff_EBX + 0x299334,iVar3,SUB84(dVar7,0),
+                (in_stack_00000004,local_47c,unaff_EBX + 0x299334 /* "%i:%3.2f " */,iVar3,SUB84(dVar7,0),
                  (int)((ulonglong)dVar7 >> 0x20));
       pcVar4 = local_147 + local_44;
       if (pcVar4 < local_48) {
@@ -842,7 +842,7 @@ void __thiscall CINSNavArea::Draw(CINSNavArea *this)
     iVar3 = iVar3 + 1;
     if (iVar3 == 0x10) {
       local_28 = *(undefined4 *)(in_stack_00000004 + 0x2c);
-      local_20 = *(float *)(unaff_EBX + 0x243009) + *(float *)(in_stack_00000004 + 0x34);
+      local_20 = *(float *)(unaff_EBX + 0x243009 /* typeinfo name for IPartitionEnumerator+0x21 */) + *(float *)(in_stack_00000004 + 0x34);
       local_24 = *(undefined4 *)(in_stack_00000004 + 0x30);
       NDebugOverlay::Text((Vector *)&local_28,local_147,false,0.01023);
       return;
@@ -910,7 +910,7 @@ undefined4 CINSNavArea::GetAssociatedSpawnZone(void)
   if ((*(byte *)(iVar3 + 0x161) & 1) != 0) {
     uVar1 = *(uint *)(iVar3 + 600);
     if ((uVar1 != 0xffffffff) &&
-       (iVar3 = **(int **)(unaff_EBX + 0x4c30f5) + (uVar1 & 0xffff) * 0x18,
+       (iVar3 = **(int **)(unaff_EBX + 0x4c30f5 /* &g_pEntityList */) + (uVar1 & 0xffff) * 0x18,
        *(uint *)(iVar3 + 8) == uVar1 >> 0x10)) {
       uVar2 = *(undefined4 *)(iVar3 + 4);
     }
@@ -946,14 +946,14 @@ float10 __thiscall CINSNavArea::GetCombatIntensity(CINSNavArea *this)
   int in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  iVar3 = *(int *)(unaff_EBX + 0x4c3959);
+  iVar3 = *(int *)(unaff_EBX + 0x4c3959 /* &GCSDK::GetPchTempTextBuffer */);
   bVar9 = *(int *)(iVar3 + 0x100c) != 0;
   if ((bVar9) && (iVar6 = *(int *)(iVar3 + 0x19b8), iVar5 = ThreadGetCurrentId(), iVar6 == iVar5)) {
     piVar7 = *(int **)(iVar3 + 0x1014);
-    if (*piVar7 != unaff_EBX + 0x29b85d) {
+    if (*piVar7 != unaff_EBX + 0x29b85d /* "CINSNavArea::GetCombatIntensity" */) {
       piVar7 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar7,unaff_EBX + 0x29b85d,(char *)0x0,
-                                 unaff_EBX + 0x29b5ed);
+                                ((char *)piVar7,unaff_EBX + 0x29b85d /* "CINSNavArea::GetCombatIntensity" */,(char *)0x0,
+                                 unaff_EBX + 0x29b5ed /* "INSNavMesh" */);
       *(int **)(iVar3 + 0x1014) = piVar7;
     }
     puVar1 = (uint *)(*(int *)(iVar3 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -971,10 +971,10 @@ float10 __thiscall CINSNavArea::GetCombatIntensity(CINSNavArea *this)
   else {
     fVar12 = *(float *)(in_stack_00000004 + 0x18c);
     fVar10 = (float10)IntervalTimer::Now();
-    piVar7 = *(int **)(unaff_EBX + 0x608021);
+    piVar7 = *(int **)(unaff_EBX + 0x608021 /* nb_nav_combat_decay_rate+0x1c */);
     fVar2 = *(float *)(in_stack_00000004 + 0x194);
-    if (piVar7 == (int *)(unaff_EBX + 0x608005U)) {
-      fVar8 = (float)((uint)piVar7 ^ *(uint *)(unaff_EBX + 0x608031));
+    if (piVar7 == (int *)(unaff_EBX + 0x608005 /* nb_nav_combat_decay_rate */U)) {
+      fVar8 = (float)((uint)piVar7 ^ *(uint *)(unaff_EBX + 0x608031 /* nb_nav_combat_decay_rate+0x2c */));
     }
     else {
       fVar11 = (float10)(**(code **)(*piVar7 + 0x3c))(piVar7);
@@ -1028,17 +1028,17 @@ float10 __thiscall CINSNavArea::GetDeathIntensity(CINSNavArea *this,int param_1)
   int in_stack_00000008;
   
   __i686_get_pc_thunk_bx();
-  iVar3 = *(int *)(unaff_EBX + 0x4c3519);
+  iVar3 = *(int *)(unaff_EBX + 0x4c3519 /* &GCSDK::GetPchTempTextBuffer */);
   bVar9 = *(int *)(iVar3 + 0x100c) != 0;
   if (bVar9) {
     iVar6 = *(int *)(iVar3 + 0x19b8);
     iVar5 = ThreadGetCurrentId();
     if (iVar6 == iVar5) {
       piVar7 = *(int **)(iVar3 + 0x1014);
-      if (*piVar7 != unaff_EBX + 0x29b469) {
+      if (*piVar7 != unaff_EBX + 0x29b469 /* "CINSNavArea::GetDeathIntensity" */) {
         piVar7 = (int *)CVProfNode::GetSubNode
-                                  ((char *)piVar7,unaff_EBX + 0x29b469,(char *)0x0,
-                                   unaff_EBX + 0x29b1ad);
+                                  ((char *)piVar7,unaff_EBX + 0x29b469 /* "CINSNavArea::GetDeathIntensity" */,(char *)0x0,
+                                   unaff_EBX + 0x29b1ad /* "INSNavMesh" */);
         *(int **)(iVar3 + 0x1014) = piVar7;
       }
       puVar1 = (uint *)(*(int *)(iVar3 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -1054,10 +1054,10 @@ float10 __thiscall CINSNavArea::GetDeathIntensity(CINSNavArea *this,int param_1)
   else {
     fVar12 = *(float *)(param_1 + 4 + ((in_stack_00000008 != 2) + 0x84) * 4);
     fVar10 = (float10)IntervalTimer::Now();
-    piVar7 = *(int **)(unaff_EBX + 0x607941);
+    piVar7 = *(int **)(unaff_EBX + 0x607941 /* nb_nav_death_decay_rate+0x1c */);
     fVar2 = *(float *)(iVar6 + 4);
-    if (piVar7 == (int *)(unaff_EBX + 0x607925U)) {
-      fVar8 = (float)((uint)piVar7 ^ *(uint *)(unaff_EBX + 0x607951));
+    if (piVar7 == (int *)(unaff_EBX + 0x607925 /* nb_nav_death_decay_rate */U)) {
+      fVar8 = (float)((uint)piVar7 ^ *(uint *)(unaff_EBX + 0x607951 /* nb_nav_death_decay_rate+0x2c */));
     }
     else {
       fVar11 = (float10)(**(code **)(*piVar7 + 0x3c))(piVar7);
@@ -1111,7 +1111,7 @@ CINSNavArea::GetDistanceToNearestHidingSpot(int param_1,float param_2,float para
   fVar7 = *(float *)(&DAT_001d5c16 + unaff_EBX);
   if (param_1 != -0xd0) {
     iVar1 = **(int **)(param_1 + 0xd0);
-    if ((iVar1 != 0) && (fVar7 = *(float *)(unaff_EBX + 0x242116), 0 < iVar1)) {
+    if ((iVar1 != 0) && (fVar7 = *(float *)(unaff_EBX + 0x242116 /* typeinfo name for ITraceFilter+0x20 */), 0 < iVar1)) {
       iVar3 = 0;
       do {
         iVar2 = (*(int **)(param_1 + 0xd0))[iVar3 + 1];
@@ -1199,22 +1199,22 @@ float10 __thiscall CINSNavArea::GetNearbyDeathIntensity(CINSNavArea *this,int pa
   
   uStack_14 = 0x6e447b;
   __i686_get_pc_thunk_bx();
-  local_1d = *(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x100c) != 0;
+  local_1d = *(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
   this_00 = extraout_ECX;
   if (((bool)local_1d) &&
-     (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x19b8), iVar3 = ThreadGetCurrentId(),
+     (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar3 = ThreadGetCurrentId(),
      this_00 = extraout_ECX_00, iVar7 == iVar3)) {
-    piVar6 = *(int **)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1014);
-    if (*piVar6 != unaff_EBX + 0x29a469) {
+    piVar6 = *(int **)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+    if (*piVar6 != unaff_EBX + 0x29a469 /* "CINSNavArea::GetNearbyDeathIntensity" */) {
       piVar6 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar6,unaff_EBX + 0x29a469,(char *)0x0,
-                                 unaff_EBX + 0x29a18d);
-      *(int **)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1014) = piVar6;
+                                ((char *)piVar6,unaff_EBX + 0x29a469 /* "CINSNavArea::GetNearbyDeathIntensity" */,(char *)0x0,
+                                 unaff_EBX + 0x29a18d /* "INSNavMesh" */);
+      *(int **)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar6;
     }
-    puVar1 = (uint *)(piVar6[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x10a0) + 4);
+    puVar1 = (uint *)(piVar6[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
     *puVar1 = *puVar1 | 4;
     CVProfNode::EnterScope();
-    this_00 = *(CNavArea **)(unaff_EBX + 0x4c24f9);
+    this_00 = *(CNavArea **)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */);
     this_00[0x1010] = (CNavArea)0x0;
   }
   pCVar11 = (CINSNavArea *)&local_3c;
@@ -1234,8 +1234,8 @@ float10 __thiscall CINSNavArea::GetNearbyDeathIntensity(CINSNavArea *this,int pa
     do {
       if ((iVar7 < local_30) && (piVar10 = *(int **)(local_3c + iVar7 * 4), piVar10 != (int *)0x0))
       {
-        pCVar11 = *(CINSNavArea **)(unaff_EBX + 0x4c216d);
-        piVar4 = (int *)__dynamic_cast(piVar10,pCVar11,unaff_EBX + 0x4afd25,0);
+        pCVar11 = *(CINSNavArea **)(unaff_EBX + 0x4c216d /* &typeinfo for CNavArea */);
+        piVar4 = (int *)__dynamic_cast(piVar10,pCVar11,unaff_EBX + 0x4afd25 /* typeinfo for CINSNavArea */,0);
         piVar6 = piVar10;
         if (piVar4 != (int *)0x0) {
           pCVar11 = in_stack_00000008;
@@ -1251,23 +1251,23 @@ float10 __thiscall CINSNavArea::GetNearbyDeathIntensity(CINSNavArea *this,int pa
   fVar9 = *(float *)(param_1 + 4 + ((in_stack_00000008 != (CINSNavArea *)0x2) + 0x84) * 4);
   piVar10 = (int *)(param_1 + 0xc + ((in_stack_00000008 != (CINSNavArea *)0x2) + 0x42) * 8);
   if ((float)piVar10[1] <= 0.0) {
-    piVar4 = *(int **)(unaff_EBX + 0x606921);
-    local_44 = *(float *)(unaff_EBX + 0x249215);
-    if (piVar4 != (int *)(unaff_EBX + 0x606905)) goto LAB_006e45cc;
+    piVar4 = *(int **)(unaff_EBX + 0x606921 /* nb_nav_death_decay_rate+0x1c */);
+    local_44 = *(float *)(unaff_EBX + 0x249215 /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x30 */);
+    if (piVar4 != (int *)(unaff_EBX + 0x606905 /* nb_nav_death_decay_rate */)) goto LAB_006e45cc;
   }
   else {
     piVar6 = piVar10;
     fVar8 = (float10)IntervalTimer::Now();
-    piVar4 = *(int **)(unaff_EBX + 0x606921);
+    piVar4 = *(int **)(unaff_EBX + 0x606921 /* nb_nav_death_decay_rate+0x1c */);
     local_44 = (float)fVar8 - (float)piVar10[1];
-    if (piVar4 != (int *)(unaff_EBX + 0x606905)) {
+    if (piVar4 != (int *)(unaff_EBX + 0x606905 /* nb_nav_death_decay_rate */)) {
 LAB_006e45cc:
       fVar8 = (float10)(**(code **)(*piVar4 + 0x3c))(piVar4,pCVar11);
       fVar5 = (float)fVar8;
       goto joined_r0x006e46b6;
     }
   }
-  fVar5 = (float)((uint)piVar4 ^ *(uint *)(unaff_EBX + 0x606931));
+  fVar5 = (float)((uint)piVar4 ^ *(uint *)(unaff_EBX + 0x606931 /* nb_nav_death_decay_rate+0x2c */));
   piVar4 = piVar6;
 joined_r0x006e46b6:
   if (local_34 < 0) {
@@ -1277,7 +1277,7 @@ joined_r0x006e46b6:
   else {
     local_30 = 0;
     if (local_3c != 0) {
-      piVar4 = (int *)**(int **)(unaff_EBX + 0x4c23fd);
+      piVar4 = (int *)**(int **)(unaff_EBX + 0x4c23fd /* &GCSDK::GetPchTempTextBuffer */);
       (**(code **)(*piVar4 + 8))(piVar4,local_3c);
       local_3c = 0;
     }
@@ -1285,20 +1285,20 @@ joined_r0x006e46b6:
     local_2c = 0;
   }
   if ((local_1d != '\0') &&
-     (((*(char *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1010) == '\0' ||
-       (*(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x100c) != 0)) &&
-      (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x19b8), iVar3 = ThreadGetCurrentId(piVar4)
+     (((*(char *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
+       (*(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)) &&
+      (iVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar3 = ThreadGetCurrentId(piVar4)
       , iVar7 == iVar3)))) {
     cVar2 = CVProfNode::ExitScope();
     if (cVar2 == '\0') {
-      iVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1014);
+      iVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
     }
     else {
-      iVar7 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1014) + 100);
-      *(int *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1014) = iVar7;
+      iVar7 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) + 100);
+      *(int *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar7;
     }
-    *(bool *)(*(int *)(unaff_EBX + 0x4c24f9) + 0x1010) =
-         iVar7 == *(int *)(unaff_EBX + 0x4c24f9) + 0x1018;
+    *(bool *)(*(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+         iVar7 == *(int *)(unaff_EBX + 0x4c24f9 /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
   }
   fVar9 = (local_40 + fVar9) - fVar5 * local_44;
   if (fVar9 <= 0.0) {
@@ -1338,11 +1338,11 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
   float local_20;
   
   __i686_get_pc_thunk_bx();
-  fVar6 = *(float *)(**(int **)(unaff_EBX + 0x4c3165) + 0xc);
+  fVar6 = *(float *)(**(int **)(unaff_EBX + 0x4c3165 /* &gpGlobals */) + 0xc);
   iVar2 = ShiftPlayTeamLeft(in_stack_00000008);
   fVar7 = *(float *)(param_1 + 0x1a4 + iVar2 * 4);
-  piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c3971))[7];
-  if (piVar3 == *(int **)(unaff_EBX + 0x4c3971)) {
+  piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c3971 /* &nav_spawn_rescore_time */))[7];
+  if (piVar3 == *(int **)(unaff_EBX + 0x4c3971 /* &nav_spawn_rescore_time */)) {
     fVar8 = (float)((uint)piVar3 ^ piVar3[0xb]);
   }
   else {
@@ -1353,8 +1353,8 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
     iVar2 = ShiftPlayTeamLeft(in_stack_00000008);
     return (float10)*(float *)(param_1 + 0x19c + iVar2 * 4);
   }
-  piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c32c9))[7];
-  if (piVar3 == *(int **)(unaff_EBX + 0x4c32c9)) {
+  piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c32c9 /* &nav_spawn_score_base */))[7];
+  if (piVar3 == *(int **)(unaff_EBX + 0x4c32c9 /* &nav_spawn_score_base */)) {
     local_24 = (float)((uint)piVar3 ^ piVar3[0xb]);
   }
   else {
@@ -1372,19 +1372,19 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
         *(undefined4 *)(param_1 + 0x19c + iVar2 * 4) = 0xbf800000;
         iVar2 = ShiftPlayTeamLeft(in_stack_00000008);
         *(undefined4 *)(param_1 + 0x1a4 + iVar2 * 4) =
-             *(undefined4 *)(**(int **)(unaff_EBX + 0x4c3165) + 0xc);
+             *(undefined4 *)(**(int **)(unaff_EBX + 0x4c3165 /* &gpGlobals */) + 0xc);
         return (float10)-1.0;
       }
-      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c33f5))[7];
-      if (piVar3 == *(int **)(unaff_EBX + 0x4c33f5)) {
+      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c33f5 /* &nav_spawn_score_friendly_spawn_bonus */))[7];
+      if (piVar3 == *(int **)(unaff_EBX + 0x4c33f5 /* &nav_spawn_score_friendly_spawn_bonus */)) {
         local_20 = (float)((uint)piVar3 ^ piVar3[0xb]);
       }
       else {
         fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
         local_20 = (float)fVar5;
       }
-      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c2fed))[7];
-      if (piVar3 == *(int **)(unaff_EBX + 0x4c2fed)) {
+      piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c2fed /* &nav_spawn_score_friendly_spawn_bonus_max_distance */))[7];
+      if (piVar3 == *(int **)(unaff_EBX + 0x4c2fed /* &nav_spawn_score_friendly_spawn_bonus_max_distance */)) {
         local_28 = (float)((uint)piVar3 ^ piVar3[0xb]);
       }
       else {
@@ -1404,8 +1404,8 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
       }
       else {
         fVar6 = fVar6 / local_28;
-        if (*(float *)(unaff_EBX + 0x1d53d9) <= fVar6) {
-          fVar6 = *(float *)(unaff_EBX + 0x1d53d9);
+        if (*(float *)(unaff_EBX + 0x1d53d9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) <= fVar6) {
+          fVar6 = *(float *)(unaff_EBX + 0x1d53d9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
         }
         if (fVar6 <= 0.0) {
           fVar6 = 0.0;
@@ -1417,8 +1417,8 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
   }
   uVar4 = *(uint *)(param_1 + 0x160);
   if ((uVar4 & 0x80) != 0) {
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c336d))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x4c336d)) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c336d /* &nav_spawn_score_inside */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x4c336d /* &nav_spawn_score_inside */)) {
       fVar6 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
@@ -1430,7 +1430,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
   }
   if (((uVar4 & 0x2004) == 0) ||
      (in_stack_00000008 !=
-      *(int *)(**(int **)(unaff_EBX + 0x4c35e1) + 0x490 + *(int *)(param_1 + 0x25c) * 4)))
+      *(int *)(**(int **)(unaff_EBX + 0x4c35e1 /* &g_pObjectiveResource */) + 0x490 + *(int *)(param_1 + 0x25c) * 4)))
   goto LAB_006e395a;
   this_00 = *(CINSRules **)(&DAT_004c31bd + unaff_EBX);
   piVar3 = *(int **)this_00;
@@ -1438,16 +1438,16 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
   if (iVar2 == 3) goto LAB_006e395a;
   cVar1 = CINSRules::IsOutpost(this_00);
   if (cVar1 != '\0') goto LAB_006e395a;
-  if (*(int *)(**(int **)(unaff_EBX + 0x4c35e1) + 0x6f0 + *(int *)(param_1 + 0x25c) * 4) == 0) {
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c365d))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x4c365d)) goto LAB_006e3ae5;
+  if (*(int *)(**(int **)(unaff_EBX + 0x4c35e1 /* &g_pObjectiveResource */) + 0x6f0 + *(int *)(param_1 + 0x25c) * 4) == 0) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c365d /* &nav_spawn_score_cachepoint_bonus */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x4c365d /* &nav_spawn_score_cachepoint_bonus */)) goto LAB_006e3ae5;
 LAB_006e3ab6:
     fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
     fVar6 = (float)fVar5;
   }
   else {
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c357d))[7];
-    if (piVar3 != *(int **)(unaff_EBX + 0x4c357d)) goto LAB_006e3ab6;
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c357d /* &nav_spawn_score_controlpoint_bonus */))[7];
+    if (piVar3 != *(int **)(unaff_EBX + 0x4c357d /* &nav_spawn_score_controlpoint_bonus */)) goto LAB_006e3ab6;
 LAB_006e3ae5:
     fVar6 = (float)((uint)piVar3 ^ piVar3[0xb]);
   }
@@ -1456,8 +1456,8 @@ LAB_006e395a:
   local_20 = local_24 + (float)**(int **)(param_1 + 0xd0);
   cVar1 = (**(code **)(*(int *)param_1 + 0x88))(param_1,(in_stack_00000008 == 2) + '\x02');
   if (cVar1 != '\0') {
-    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c37a9))[7];
-    if (piVar3 == *(int **)(unaff_EBX + 0x4c37a9)) {
+    piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c37a9 /* &nav_spawn_score_potentially_visible */))[7];
+    if (piVar3 == *(int **)(unaff_EBX + 0x4c37a9 /* &nav_spawn_score_potentially_visible */)) {
       fVar6 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
@@ -1471,7 +1471,7 @@ LAB_006e395a:
   *(float *)(param_1 + 0x19c + iVar2 * 4) = (float)fVar5 * local_20;
   iVar2 = ShiftPlayTeamLeft(in_stack_00000008);
   *(undefined4 *)(param_1 + 0x1a4 + iVar2 * 4) =
-       *(undefined4 *)(**(int **)(unaff_EBX + 0x4c3165) + 0xc);
+       *(undefined4 *)(**(int **)(unaff_EBX + 0x4c3165 /* &gpGlobals */) + 0xc);
   return (float10)((float)fVar5 * local_20);
 }
 
@@ -1545,7 +1545,7 @@ void __thiscall CINSNavArea::INSMark(CINSNavArea *this)
   int in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)(in_stack_00000004 + 0x198) = *(undefined4 *)(extraout_ECX + 0x52a47b);
+  *(undefined4 *)(in_stack_00000004 + 0x198) = *(undefined4 *)(extraout_ECX + 0x52a47b /* CINSNavArea::m_masterINSMark */);
   return;
 }
 
@@ -1624,7 +1624,7 @@ bool __thiscall CINSNavArea::IsINSMarked(CINSNavArea *this)
   int in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  return *(int *)(in_stack_00000004 + 0x198) == *(int *)(extraout_ECX + 0x52a4ab);
+  return *(int *)(in_stack_00000004 + 0x198) == *(int *)(extraout_ECX + 0x52a4ab /* CINSNavArea::m_masterINSMark */);
 }
 
 
@@ -1645,8 +1645,8 @@ bool CINSNavArea::IsInCombat(void)
   
   __i686_get_pc_thunk_bx();
   GetCombatIntensity(this);
-  return *(float *)(unaff_EBX + 0x241d27) <= (float)extraout_ST0 &&
-         (float)extraout_ST0 != *(float *)(unaff_EBX + 0x241d27);
+  return *(float *)(unaff_EBX + 0x241d27 /* typeinfo name for ITraceFilter+0x40 */) <= (float)extraout_ST0 &&
+         (float)extraout_ST0 != *(float *)(unaff_EBX + 0x241d27 /* typeinfo name for ITraceFilter+0x40 */);
 }
 
 
@@ -1693,13 +1693,13 @@ undefined4 __thiscall CINSNavArea::IsValid(CINSNavArea *this)
   CUtlVector *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  if ((((*(uint *)(in_stack_00000004 + 0x9c) <= *(uint *)(**(uint **)(unaff_EBX + 0x4c151a) + 0x34))
-       && (iVar4 = CNavMesh::GetNavAreaByID(this_00,**(uint **)(unaff_EBX + 0x4c151a)), iVar4 != 0))
+  if ((((*(uint *)(in_stack_00000004 + 0x9c) <= *(uint *)(**(uint **)(unaff_EBX + 0x4c151a /* &TheNavMesh */) + 0x34))
+       && (iVar4 = CNavMesh::GetNavAreaByID(this_00,**(uint **)(unaff_EBX + 0x4c151a /* &TheNavMesh */)), iVar4 != 0))
       && (fVar1 = *(float *)(in_stack_00000004 + 0x2c), ((uint)fVar1 & 0x7f800000) != 0x7f800000))
      && (fVar2 = *(float *)(in_stack_00000004 + 0x30), ((uint)fVar2 & 0x7f800000) != 0x7f800000)) {
     fVar3 = *(float *)(in_stack_00000004 + 0x34);
     if (((CNavArea *)((uint)fVar3 & 0x7f800000) != (CNavArea *)0x7f800000) &&
-       (SQRT(fVar2 * fVar2 + fVar1 * fVar1 + fVar3 * fVar3) < *(float *)(unaff_EBX + 0x24850a))) {
+       (SQRT(fVar2 * fVar2 + fVar1 * fVar1 + fVar3 * fVar3) < *(float *)(unaff_EBX + 0x24850a /* typeinfo name for CEntityFactory<CINSRulesProxy>+0x48 */))) {
       CNavArea::CollectAdjacentAreas((CNavArea *)((uint)fVar3 & 0x7f800000),in_stack_00000004);
     }
   }
@@ -1737,10 +1737,11 @@ undefined4 __cdecl CINSNavArea::Load(CUtlBuffer *param_1,uint param_2,uint param
   uVar2 = param_2;
   uVar5 = extraout_EDX;
   CNavArea::Load(this,param_1,param_2,param_3);
-  uVar2 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c3e37) + 0x38))
-                    ((int *)**(undefined4 **)(unaff_EBX + 0x4c3e37),uVar2,param_3,uVar5);
+  uVar2 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c3e37 /* &TheNavMesh */) + 0x38))
+                    ((int *)**(undefined4 **)(unaff_EBX + 0x4c3e37 /* &TheNavMesh */),uVar2,param_3,uVar5);
   if (uVar2 < extraout_EDX) {
-    Warning(unaff_EBX + 0x29bf5b);
+    Warning(unaff_EBX + 0x29bf5b /* "Unknown NavArea sub-version number
+" */);
     return 2;
   }
   if (extraout_EDX < 2) {
@@ -1787,7 +1788,8 @@ LAB_006e28f4:
   *(ulong *)(param_1 + 0x160) = local_2c;
   uVar3 = 0;
   if (*(char *)(param_2 + 0x14) != '\0') {
-    Warning(unaff_EBX + 0x29bf7f,__endptr,param_3);
+    Warning(unaff_EBX + 0x29bf7f /* "Can't read INS-specific attributes
+" */,__endptr,param_3);
     uVar3 = 2;
   }
   return uVar3;
@@ -1808,7 +1810,7 @@ void CINSNavArea::MakeNewINSMarker(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(int *)(extraout_ECX + 0x52a4eb) = *(int *)(extraout_ECX + 0x52a4eb) + 1;
+  *(int *)(extraout_ECX + 0x52a4eb /* CINSNavArea::m_masterINSMark */) = *(int *)(extraout_ECX + 0x52a4eb /* CINSNavArea::m_masterINSMark */) + 1;
   return;
 }
 
@@ -1833,16 +1835,16 @@ void __thiscall CINSNavArea::OnCombat(CINSNavArea *this)
   
   __i686_get_pc_thunk_bx();
   fVar4 = *(float *)(in_stack_00000004 + 0x18c);
-  piVar1 = *(int **)(unaff_EBX + 0x607e6e);
-  if (piVar1 == (int *)(unaff_EBX + 0x607e52U)) {
-    fVar2 = (float)((uint)piVar1 ^ *(uint *)(unaff_EBX + 0x607e7e));
+  piVar1 = *(int **)(unaff_EBX + 0x607e6e /* nb_nav_combat_build_rate+0x1c */);
+  if (piVar1 == (int *)(unaff_EBX + 0x607e52 /* nb_nav_combat_build_rate */U)) {
+    fVar2 = (float)((uint)piVar1 ^ *(uint *)(unaff_EBX + 0x607e7e /* nb_nav_combat_build_rate+0x2c */));
   }
   else {
     fVar3 = (float10)(**(code **)(*piVar1 + 0x3c))(piVar1);
     fVar2 = (float)fVar3;
   }
   fVar4 = fVar4 + fVar2;
-  fVar2 = *(float *)(unaff_EBX + 0x1d58e6);
+  fVar2 = *(float *)(unaff_EBX + 0x1d58e6 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
   *(float *)(in_stack_00000004 + 0x18c) = fVar4;
   if (fVar2 < fVar4) {
     *(float *)(in_stack_00000004 + 0x18c) = fVar2;
@@ -1879,10 +1881,10 @@ void __cdecl CINSNavArea::OnDeath(int param_1)
   iVar3 = __i686_get_pc_thunk_bx();
   if (iVar3 - 2U < 2) {
     iVar1 = (iVar3 != 2) + 0x84;
-    piVar2 = *(int **)(unaff_EBX + 0x607aab);
+    piVar2 = *(int **)(unaff_EBX + 0x607aab /* nb_nav_death_build_rate+0x1c */);
     fVar6 = *(float *)(param_1 + 4 + iVar1 * 4);
-    if (piVar2 == (int *)(unaff_EBX + 0x607a8fU)) {
-      fVar4 = (float)((uint)piVar2 ^ *(uint *)(unaff_EBX + 0x607abb));
+    if (piVar2 == (int *)(unaff_EBX + 0x607a8f /* nb_nav_death_build_rate */U)) {
+      fVar4 = (float)((uint)piVar2 ^ *(uint *)(unaff_EBX + 0x607abb /* nb_nav_death_build_rate+0x2c */));
     }
     else {
       fVar5 = (float10)(**(code **)(*piVar2 + 0x3c))(piVar2);
@@ -1890,8 +1892,8 @@ void __cdecl CINSNavArea::OnDeath(int param_1)
     }
     fVar6 = fVar6 + fVar4;
     iVar3 = param_1 + ((iVar3 != 2) + 0x42) * 8;
-    if (*(float *)(unaff_EBX + 0x1d57c3) <= fVar6) {
-      fVar6 = *(float *)(unaff_EBX + 0x1d57c3);
+    if (*(float *)(unaff_EBX + 0x1d57c3 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) <= fVar6) {
+      fVar6 = *(float *)(unaff_EBX + 0x1d57c3 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
     }
     *(float *)(param_1 + 4 + iVar1 * 4) = fVar6;
     fVar5 = (float10)IntervalTimer::Now();
@@ -1902,7 +1904,8 @@ void __cdecl CINSNavArea::OnDeath(int param_1)
     }
   }
   else {
-    Warning(unaff_EBX + 0x29b547,iVar3);
+    Warning(unaff_EBX + 0x29b547 /* "CINSNavArea::OnDeath - Invalid team (%i)
+" */,iVar3);
   }
   return;
 }
@@ -1941,7 +1944,7 @@ void __thiscall CINSNavArea::OnRoundRestart(CINSNavArea *this)
   undefined4 uVar9;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x4c0f69);
+  iVar2 = *(int *)(unaff_EBX + 0x4c0f69 /* &GCSDK::GetPchTempTextBuffer */);
   this_00 = *(CNavArea **)(iVar2 + 0x100c);
   bVar8 = this_00 != (CNavArea *)0x0;
   if (bVar8) {
@@ -1950,10 +1953,10 @@ void __thiscall CINSNavArea::OnRoundRestart(CINSNavArea *this)
     this_00 = extraout_ECX;
     if (iVar6 == iVar4) {
       piVar7 = *(int **)(iVar2 + 0x1014);
-      if (*piVar7 != unaff_EBX + 0x298c5e) {
+      if (*piVar7 != unaff_EBX + 0x298c5e /* "CINSNavArea::OnRoundRestart" */) {
         piVar7 = (int *)CVProfNode::GetSubNode
-                                  ((char *)piVar7,unaff_EBX + 0x298c5e,(char *)0x0,
-                                   unaff_EBX + 0x2905ff);
+                                  ((char *)piVar7,unaff_EBX + 0x298c5e /* "CINSNavArea::OnRoundRestart" */,(char *)0x0,
+                                   unaff_EBX + 0x2905ff /* "NPCs" */);
         *(int **)(iVar2 + 0x1014) = piVar7;
       }
       puVar1 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -1976,10 +1979,10 @@ void __thiscall CINSNavArea::OnRoundRestart(CINSNavArea *this)
     iVar5 = ThreadGetCurrentId(iVar6);
     if (iVar4 == iVar5) {
       piVar7 = *(int **)(iVar2 + 0x1014);
-      if (*piVar7 != unaff_EBX + 0x298e19) {
+      if (*piVar7 != unaff_EBX + 0x298e19 /* "CINSNavArea::ClearAllPotentiallyVisibleActors" */) {
         piVar7 = (int *)CVProfNode::GetSubNode
-                                  ((char *)piVar7,unaff_EBX + 0x298e19,(char *)0x0,
-                                   unaff_EBX + 0x2905ff);
+                                  ((char *)piVar7,unaff_EBX + 0x298e19 /* "CINSNavArea::ClearAllPotentiallyVisibleActors" */,(char *)0x0,
+                                   unaff_EBX + 0x2905ff /* "NPCs" */);
         *(int **)(iVar2 + 0x1014) = piVar7;
       }
       puVar1 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -2091,7 +2094,7 @@ void __thiscall CINSNavArea::OnServerActivate(CINSNavArea *this)
   __i686_get_pc_thunk_bx();
   iVar6 = in_stack_00000004;
   CNavArea::OnServerActivate(this_00);
-  iVar2 = *(int *)(unaff_EBX + 0x4c3e86);
+  iVar2 = *(int *)(unaff_EBX + 0x4c3e86 /* &GCSDK::GetPchTempTextBuffer */);
   if (*(int *)(iVar2 + 0x100c) == 0) {
     *(undefined4 *)(in_stack_00000004 + 0x170) = 0;
     *(undefined4 *)(in_stack_00000004 + 0x184) = 0;
@@ -2101,10 +2104,10 @@ void __thiscall CINSNavArea::OnServerActivate(CINSNavArea *this)
   iVar5 = ThreadGetCurrentId(iVar6);
   if (iVar3 == iVar5) {
     piVar7 = *(int **)(iVar2 + 0x1014);
-    if (*piVar7 != unaff_EBX + 0x29bd36) {
+    if (*piVar7 != unaff_EBX + 0x29bd36 /* "CINSNavArea::ClearAllPotentiallyVisibleActors" */) {
       piVar7 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar7,unaff_EBX + 0x29bd36,(char *)0x0,
-                                 unaff_EBX + 0x29351c);
+                                ((char *)piVar7,unaff_EBX + 0x29bd36 /* "CINSNavArea::ClearAllPotentiallyVisibleActors" */,(char *)0x0,
+                                 unaff_EBX + 0x29351c /* "NPCs" */);
       *(int **)(iVar2 + 0x1014) = piVar7;
     }
     puVar1 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -2246,22 +2249,22 @@ void __thiscall CINSNavArea::ResetHidingSpotScores(CINSNavArea *this)
   int in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  bVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x100c) != 0;
+  bVar7 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
   if (bVar7) {
-    iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x19b8);
+    iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8);
     iVar4 = ThreadGetCurrentId();
     if (iVar6 == iVar4) {
-      piVar5 = *(int **)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1014);
-      if (*piVar5 != unaff_EBX + 0x29bae9) {
+      piVar5 = *(int **)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+      if (*piVar5 != unaff_EBX + 0x29bae9 /* "CINSNavArea::ResetHidingSpotScores" */) {
         piVar5 = (int *)CVProfNode::GetSubNode
-                                  ((char *)piVar5,unaff_EBX + 0x29bae9,(char *)0x0,
-                                   unaff_EBX + 0x29329f);
-        *(int **)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1014) = piVar5;
+                                  ((char *)piVar5,unaff_EBX + 0x29bae9 /* "CINSNavArea::ResetHidingSpotScores" */,(char *)0x0,
+                                   unaff_EBX + 0x29329f /* "NPCs" */);
+        *(int **)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar5;
       }
-      puVar1 = (uint *)(piVar5[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x10a0) + 4);
+      puVar1 = (uint *)(piVar5[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
       *puVar1 = *puVar1 | 4;
       CVProfNode::EnterScope();
-      *(undefined1 *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1010) = 0;
+      *(undefined1 *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) = 0;
     }
   }
   piVar5 = *(int **)(in_stack_00000004 + 0xd0);
@@ -2282,19 +2285,19 @@ void __thiscall CINSNavArea::ResetHidingSpotScores(CINSNavArea *this)
     iVar6 = iVar6 + 1;
   } while (iVar6 != 2);
   if ((bVar7) &&
-     ((*(char *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1010) == '\0' ||
-      (*(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x100c) != 0)))) {
-    iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x19b8);
+     ((*(char *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
+      (*(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)))) {
+    iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8);
     iVar4 = ThreadGetCurrentId();
     if (iVar6 == iVar4) {
       cVar3 = CVProfNode::ExitScope();
-      iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1014);
+      iVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
       if (cVar3 != '\0') {
         iVar6 = *(int *)(iVar6 + 100);
-        *(int *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1014) = iVar6;
+        *(int *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar6;
       }
-      *(bool *)(*(int *)(unaff_EBX + 0x4c3c09) + 0x1010) =
-           iVar6 == *(int *)(unaff_EBX + 0x4c3c09) + 0x1018;
+      *(bool *)(*(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+           iVar6 == *(int *)(unaff_EBX + 0x4c3c09 /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
       return;
     }
   }
@@ -2316,7 +2319,7 @@ void CINSNavArea::ResetINSMarker(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)(extraout_ECX + 0x52a4cb) = 1;
+  *(undefined4 *)(extraout_ECX + 0x52a4cb /* CINSNavArea::m_masterINSMark */) = 1;
   return;
 }
 
@@ -2370,7 +2373,7 @@ void __cdecl CINSNavArea::Save(CUtlBuffer *param_1,uint param_2)
     }
     return;
   }
-  CUtlBuffer::Printf(this_00,(char *)param_2,unaff_EBX + 0x29aa68,local_20[0]);
+  CUtlBuffer::Printf(this_00,(char *)param_2,unaff_EBX + 0x29aa68 /* "%u" */,local_20[0]);
   return;
 }
 
@@ -2415,7 +2418,7 @@ void __thiscall CINSNavArea::ScoreHidingSpot(CINSNavArea *this,HidingSpot *param
   local_30 = in_stack_00000008;
   do {
     iVar9 = local_28 + 2;
-    piVar8 = *(int **)(unaff_EBX + 0x4c2e39);
+    piVar8 = *(int **)(unaff_EBX + 0x4c2e39 /* &nav_spawn_score_base */);
     iVar7 = *(int *)(param_1 + 0x25c);
     piVar2 = (int *)piVar8[7];
     if (piVar2 == piVar8) {
@@ -2428,7 +2431,7 @@ void __thiscall CINSNavArea::ScoreHidingSpot(CINSNavArea *this,HidingSpot *param
       iVar6 = *(int *)(param_1 + 0x25c);
     }
     if (((iVar6 != -1) &&
-        (iVar3 = **(int **)(unaff_EBX + 0x4c3151), iVar7 < *(int *)(iVar3 + 0x37c))) &&
+        (iVar3 = **(int **)(unaff_EBX + 0x4c3151 /* &g_pObjectiveResource */), iVar7 < *(int *)(iVar3 + 0x37c))) &&
        (iVar7 = *(int *)(iVar3 + 0x490 + iVar7 * 4), iVar7 - 2U < 2)) {
       if (iVar9 == 2) {
         cVar5 = *(char *)(iVar3 + 0x690 + iVar6);
@@ -2446,19 +2449,19 @@ void __thiscall CINSNavArea::ScoreHidingSpot(CINSNavArea *this,HidingSpot *param
         if (cVar5 != '\0') goto LAB_006e3c49;
       }
       if (iVar7 == iVar9) {
-        iVar7 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c2d2d) + 0x404))
-                          ((int *)**(undefined4 **)(unaff_EBX + 0x4c2d2d),iVar9);
+        iVar7 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c2d2d /* &g_pGameRules */) + 0x404))
+                          ((int *)**(undefined4 **)(unaff_EBX + 0x4c2d2d /* &g_pGameRules */),iVar9);
         if ((iVar7 != 3) && (cVar5 = CINSRules::IsOutpost(this_03), cVar5 == '\0')) {
-          if (*(int *)(**(int **)(unaff_EBX + 0x4c3151) + 0x6f0 + *(int *)(param_1 + 0x25c) * 4) ==
+          if (*(int *)(**(int **)(unaff_EBX + 0x4c3151 /* &g_pObjectiveResource */) + 0x6f0 + *(int *)(param_1 + 0x25c) * 4) ==
               0) {
-            piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c31cd))[7];
-            if (piVar8 != *(int **)(unaff_EBX + 0x4c31cd)) goto LAB_006e40a0;
+            piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c31cd /* &nav_spawn_score_cachepoint_bonus */))[7];
+            if (piVar8 != *(int **)(unaff_EBX + 0x4c31cd /* &nav_spawn_score_cachepoint_bonus */)) goto LAB_006e40a0;
 LAB_006e40cc:
             fVar11 = (float)((uint)piVar8 ^ piVar8[0xb]);
           }
           else {
-            piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c30ed))[7];
-            if (piVar8 == *(int **)(unaff_EBX + 0x4c30ed)) goto LAB_006e40cc;
+            piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c30ed /* &nav_spawn_score_controlpoint_bonus */))[7];
+            if (piVar8 == *(int **)(unaff_EBX + 0x4c30ed /* &nav_spawn_score_controlpoint_bonus */)) goto LAB_006e40cc;
 LAB_006e40a0:
             fVar10 = (float10)(**(code **)(*piVar8 + 0x3c))(piVar8);
             fVar11 = (float)fVar10;
@@ -2475,10 +2478,10 @@ LAB_006e3c49:
     if ((iVar7 == 0) || (cVar5 = CINSBlockZoneBase::IsActive(this_00), cVar5 == '\0')) {
 LAB_006e3de0:
       local_24 = *(float *)(CINSRules::ClientDisconnected + unaff_EBX + 5);
-      if ((*(float *)(unaff_EBX + 0x1d4f45) <= local_2c &&
-           local_2c != *(float *)(unaff_EBX + 0x1d4f45)) && (((byte)param_1[0x160] & 0x80) != 0)) {
-        piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c2edd))[7];
-        if (piVar8 == *(int **)(unaff_EBX + 0x4c2edd)) {
+      if ((*(float *)(unaff_EBX + 0x1d4f45 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */) <= local_2c &&
+           local_2c != *(float *)(unaff_EBX + 0x1d4f45 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */)) && (((byte)param_1[0x160] & 0x80) != 0)) {
+        piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c2edd /* &nav_spawn_score_inside */))[7];
+        if (piVar8 == *(int **)(unaff_EBX + 0x4c2edd /* &nav_spawn_score_inside */)) {
           fVar11 = (float)((uint)piVar8 ^ piVar8[0xb]);
         }
         else {
@@ -2493,8 +2496,8 @@ LAB_006e3de0:
       GetAssociatedSpawnZone();
       iVar7 = CBaseEntity::GetTeamNumber(this_01);
       if (iVar7 == iVar9) {
-        piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c2f65))[7];
-        if (piVar8 == *(int **)(unaff_EBX + 0x4c2f65)) {
+        piVar8 = (int *)(*(int **)(unaff_EBX + 0x4c2f65 /* &nav_spawn_score_friendly_spawn_bonus */))[7];
+        if (piVar8 == *(int **)(unaff_EBX + 0x4c2f65 /* &nav_spawn_score_friendly_spawn_bonus */)) {
           fVar11 = (float)((uint)piVar8 ^ piVar8[0xb]);
         }
         else {
@@ -2510,15 +2513,15 @@ LAB_006e3de0:
     pHVar1 = param_1 + (local_28 ^ 1) * 0x14 + 0x164;
     iVar7 = *(int *)(pHVar1 + 0xc);
     if (iVar7 == 0) {
-      if (*(float *)(unaff_EBX + 0x1d4f45) <= local_2c &&
-          local_2c != *(float *)(unaff_EBX + 0x1d4f45)) {
-        local_2c = local_2c + *(float *)(unaff_EBX + 0x240ba1);
+      if (*(float *)(unaff_EBX + 0x1d4f45 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */) <= local_2c &&
+          local_2c != *(float *)(unaff_EBX + 0x1d4f45 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */)) {
+        local_2c = local_2c + *(float *)(unaff_EBX + 0x240ba1 /* typeinfo name for CBaseGameSystem+0x32 */);
         pHVar1 = param_1 + local_28 * 0x14 + 0x164;
         if (*(int *)(pHVar1 + 0xc) == 0) {
-          local_2c = *(float *)(unaff_EBX + 0x240ba1) + local_2c;
+          local_2c = *(float *)(unaff_EBX + 0x240ba1 /* typeinfo name for CBaseGameSystem+0x32 */) + local_2c;
         }
         else if (0 < *(int *)(pHVar1 + 0xc)) {
-          piVar8 = *(int **)(unaff_EBX + 0x4c2c0d);
+          piVar8 = *(int **)(unaff_EBX + 0x4c2c0d /* &g_pEntityList */);
           iVar7 = 0;
           do {
             uVar4 = *(uint *)(*(int *)pHVar1 + iVar7 * 4);
@@ -2539,7 +2542,7 @@ LAB_006e3de0:
     else {
       local_24 = local_24 - (float)iVar7;
       if (0 < iVar7) {
-        piVar8 = *(int **)(unaff_EBX + 0x4c2c0d);
+        piVar8 = *(int **)(unaff_EBX + 0x4c2c0d /* &g_pEntityList */);
         iVar7 = 0;
         do {
           uVar4 = *(uint *)(*(int *)pHVar1 + iVar7 * 4);
@@ -2549,7 +2552,7 @@ LAB_006e3de0:
              (cVar5 = (**(code **)(*piVar2 + 0x118))(piVar2), cVar5 != '\0')) {
             cVar5 = (**(code **)(*piVar2 + 0x434))(piVar2,in_stack_00000008 + 4,0x3f666666);
             if (cVar5 != '\0') {
-              local_24 = local_24 - *(float *)(unaff_EBX + 0x1d4f49);
+              local_24 = local_24 - *(float *)(unaff_EBX + 0x1d4f49 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
             }
             if ((*(byte *)((int)piVar2 + 0xd1) & 8) != 0) {
               CBaseEntity::CalcAbsolutePosition(this_02);
@@ -2558,16 +2561,16 @@ LAB_006e3de0:
             fVar11 = *(float *)(in_stack_00000008 + 8) - (float)piVar2[0x83];
             fVar12 = *(float *)(in_stack_00000008 + 0xc) - (float)piVar2[0x84];
             if (SQRT(fVar11 * fVar11 + fVar13 * fVar13 + fVar12 * fVar12) <
-                *(float *)(unaff_EBX + 0x243215)) {
-              local_24 = local_24 - *(float *)(unaff_EBX + 0x1d4f49);
+                *(float *)(unaff_EBX + 0x243215 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x60 */)) {
+              local_24 = local_24 - *(float *)(unaff_EBX + 0x1d4f49 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
             }
           }
           iVar7 = iVar7 + 1;
         } while (iVar7 < *(int *)(pHVar1 + 0xc));
       }
       local_2c = -1.0;
-      if (local_24 <= *(float *)(unaff_EBX + 0x1d4f3d)) {
-        local_24 = *(float *)(unaff_EBX + 0x1d4f3d);
+      if (local_24 <= *(float *)(unaff_EBX + 0x1d4f3d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
+        local_24 = *(float *)(unaff_EBX + 0x1d4f3d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */);
       }
     }
     local_28 = local_28 + 1;
@@ -2610,21 +2613,21 @@ void __thiscall CINSNavArea::UpdateCover(CINSNavArea *this,float *param_1)
   float *in_stack_00000008;
   
   __i686_get_pc_thunk_bx();
-  bVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x100c) != 0;
+  bVar6 = *(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
   if ((bVar6) &&
-     (iVar5 = *(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x19b8), iVar3 = ThreadGetCurrentId(),
+     (iVar5 = *(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar3 = ThreadGetCurrentId(),
      iVar5 == iVar3)) {
-    piVar4 = *(int **)(*(int *)(unaff_EBX + 0x4c2889) + 0x1014);
-    if (*piVar4 != unaff_EBX + 0x29a528) {
+    piVar4 = *(int **)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+    if (*piVar4 != unaff_EBX + 0x29a528 /* "CINSNavArea::UpdateCover" */) {
       piVar4 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar4,unaff_EBX + 0x29a528,(char *)0x0,
-                                 unaff_EBX + 0x29a51d);
-      *(int **)(*(int *)(unaff_EBX + 0x4c2889) + 0x1014) = piVar4;
+                                ((char *)piVar4,unaff_EBX + 0x29a528 /* "CINSNavArea::UpdateCover" */,(char *)0x0,
+                                 unaff_EBX + 0x29a51d /* "INSNavMesh" */);
+      *(int **)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar4;
     }
-    puVar1 = (uint *)(piVar4[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x10a0) + 4);
+    puVar1 = (uint *)(piVar4[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
     *puVar1 = *puVar1 | 4;
     CVProfNode::EnterScope();
-    *(undefined1 *)(*(int *)(unaff_EBX + 0x4c2889) + 0x1010) = 0;
+    *(undefined1 *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) = 0;
   }
   if (in_stack_00000008 == (float *)0x0) {
     fVar7 = (float10)CountdownTimer::Now();
@@ -2634,7 +2637,7 @@ void __thiscall CINSNavArea::UpdateCover(CINSNavArea *this,float *param_1)
            param_1[0x7e] < *in_stack_00000008) goto LAB_006e4220;
   fVar7 = (float10)RandomFloat(0xbf800000,0x3f800000);
   fVar8 = (float10)CountdownTimer::Now();
-  fVar9 = (float)fVar7 + *(float *)(unaff_EBX + 0x240681);
+  fVar9 = (float)fVar7 + *(float *)(unaff_EBX + 0x240681 /* typeinfo name for CBaseGameSystem+0x32 */);
   this_00 = extraout_ECX;
   if (param_1[0x7d] != (float)fVar8 + fVar9) {
     (**(code **)((int)param_1[0x7b] + 4))(param_1 + 0x7b,param_1 + 0x7d);
@@ -2664,20 +2667,20 @@ void __thiscall CINSNavArea::UpdateCover(CINSNavArea *this,float *param_1)
   }
 LAB_006e4220:
   if ((bVar6) &&
-     (((*(char *)(*(int *)(unaff_EBX + 0x4c2889) + 0x1010) == '\0' ||
-       (*(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x100c) != 0)) &&
-      (iVar5 = *(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x19b8), iVar3 = ThreadGetCurrentId(),
+     (((*(char *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
+       (*(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)) &&
+      (iVar5 = *(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar3 = ThreadGetCurrentId(),
       iVar5 == iVar3)))) {
     cVar2 = CVProfNode::ExitScope();
     if (cVar2 == '\0') {
-      iVar5 = *(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x1014);
+      iVar5 = *(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
     }
     else {
-      iVar5 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x1014) + 100);
-      *(int *)(*(int *)(unaff_EBX + 0x4c2889) + 0x1014) = iVar5;
+      iVar5 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) + 100);
+      *(int *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar5;
     }
-    *(bool *)(*(int *)(unaff_EBX + 0x4c2889) + 0x1010) =
-         iVar5 == *(int *)(unaff_EBX + 0x4c2889) + 0x1018;
+    *(bool *)(*(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+         iVar5 == *(int *)(unaff_EBX + 0x4c2889 /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
     return;
   }
   return;
@@ -2709,7 +2712,7 @@ void __thiscall CINSNavArea::~CINSNavArea(CINSNavArea *this)
   
   __i686_get_pc_thunk_bx();
   piVar3 = in_stack_00000004 + 0x96;
-  *in_stack_00000004 = unaff_EBX + 0x4ad98d;
+  *in_stack_00000004 = unaff_EBX + 0x4ad98d /* vtable for CINSNavArea+0x8 */;
   piVar4 = in_stack_00000004 + 0x91;
   pCVar2 = extraout_ECX;
   do {
@@ -2717,8 +2720,8 @@ void __thiscall CINSNavArea::~CINSNavArea(CINSNavArea *this)
     iVar1 = *piVar4;
     if (-1 < piVar3[-3]) {
       if (iVar1 != 0) {
-        (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c003d) + 8))
-                  ((int *)**(undefined4 **)(unaff_EBX + 0x4c003d),iVar1);
+        (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c003d /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                  ((int *)**(undefined4 **)(unaff_EBX + 0x4c003d /* &GCSDK::GetPchTempTextBuffer */),iVar1);
         *piVar4 = 0;
         pCVar2 = extraout_ECX_00;
       }
@@ -2738,8 +2741,8 @@ void __thiscall CINSNavArea::~CINSNavArea(CINSNavArea *this)
     iVar1 = *piVar4;
     if (-1 < piVar3[-3]) {
       if (iVar1 != 0) {
-        (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c003d) + 8))
-                  ((int *)**(undefined4 **)(unaff_EBX + 0x4c003d),iVar1);
+        (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4c003d /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                  ((int *)**(undefined4 **)(unaff_EBX + 0x4c003d /* &GCSDK::GetPchTempTextBuffer */),iVar1);
         *piVar4 = 0;
         pCVar2 = extraout_ECX_02;
       }

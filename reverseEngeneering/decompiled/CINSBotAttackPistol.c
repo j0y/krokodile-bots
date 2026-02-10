@@ -23,10 +23,10 @@ void __thiscall CINSBotAttackPistol::CINSBotAttackPistol(CINSBotAttackPistol *th
   __i686_get_pc_thunk_bx();
   in_stack_00000004[8] = 0;
   in_stack_00000004[9] = 0;
-  *in_stack_00000004 = unaff_EBX + 0x48565d;
-  in_stack_00000004[1] = unaff_EBX + 0x485805;
+  *in_stack_00000004 = unaff_EBX + 0x48565d /* vtable for CINSBotAttackPistol+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x485805 /* vtable for CINSBotAttackPistol+0x1b0 */;
   piVar1 = in_stack_00000004 + 0xe;
-  in_stack_00000004[0xe] = unaff_EBX + 0x417ded;
+  in_stack_00000004[0xe] = unaff_EBX + 0x417ded /* vtable for CountdownTimer+0x8 */;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
@@ -39,13 +39,13 @@ void __thiscall CINSBotAttackPistol::CINSBotAttackPistol(CINSBotAttackPistol *th
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
-  (*(code *)(unaff_EBX + -0x4dfc5b))(piVar1,in_stack_00000004 + 0xf);
+  (*(code *)(unaff_EBX + -0x4dfc5b /* CountdownTimer::NetworkStateChanged */))(piVar1,in_stack_00000004 + 0xf);
   in_stack_00000004[0x10] = -0x40800000;
   (**(code **)(in_stack_00000004[0xe] + 4))(piVar1,in_stack_00000004 + 0x10);
   piVar2 = in_stack_00000004 + 0x11;
   in_stack_00000004[0x12] = 0;
-  in_stack_00000004[0x11] = unaff_EBX + 0x417ded;
-  (*(code *)(unaff_EBX + -0x4dfc5b))(piVar2,in_stack_00000004 + 0x12);
+  in_stack_00000004[0x11] = unaff_EBX + 0x417ded /* vtable for CountdownTimer+0x8 */;
+  (*(code *)(unaff_EBX + -0x4dfc5b /* CountdownTimer::NetworkStateChanged */))(piVar2,in_stack_00000004 + 0x12);
   in_stack_00000004[0x13] = -0x40800000;
   (**(code **)(in_stack_00000004[0x11] + 4))(piVar2,in_stack_00000004 + 0x13);
   if (in_stack_00000004[0x10] != -0x40800000) {
@@ -181,7 +181,7 @@ CINSBotAttackPistol::InitialContainedAction(CINSBotAttackPistol *this,CINSNextBo
     if (piVar4 != (int *)0x0) {
       uVar9 = 1;
       CINSNextBot::GetAttackCover(true);
-      pfVar1 = *(float **)(unaff_EBX + 0x496be8);
+      pfVar1 = *(float **)(unaff_EBX + 0x496be8 /* &vec3_origin */);
       if (((*pfVar1 == local_2c) && (pfVar1[1] == local_28)) && (pfVar1[2] == local_24)) {
         pcVar2 = *(code **)(*(int *)(in_stack_00000008 + 0x2060) + 0x130);
         uVar6 = (**(code **)(*piVar4 + 0x10))(piVar4);
@@ -258,8 +258,8 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
     }
-    iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x496e58) + 0x40))
-                      (*(int **)(unaff_EBX + 0x496e58),uVar7,uVar8);
+    iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x496e58 /* &ins_bot_pistols_only */) + 0x40))
+                      (*(int **)(unaff_EBX + 0x496e58 /* &ins_bot_pistols_only */),uVar7,uVar8);
     if ((iVar4 == 0) || (fVar3 != 0.0)) {
       fVar6 = (float10)CountdownTimer::Now();
       if (*(float *)((int)param_2 + 0x4c) <= (float)fVar6 &&
@@ -301,17 +301,17 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
               (**(code **)(*(int *)in_stack_0000000c + 0x970))();
               uVar8 = 0x3f0ccccd;
               uVar7 = 7;
-              iVar4 = unaff_EBX + 0x27026a;
+              iVar4 = unaff_EBX + 0x27026a /* "Walking At Target" */;
               CINSBotBody::SetPosture();
-              local_24 = *(float *)(unaff_EBX + 0x214904);
+              local_24 = *(float *)(unaff_EBX + 0x214904 /* typeinfo name for CBaseGameSystem+0x1e */);
             }
             else {
               (**(code **)(*(int *)in_stack_0000000c + 0x970))();
               uVar8 = 0x3f0ccccd;
               uVar7 = 7;
-              iVar4 = unaff_EBX + 0x270236;
+              iVar4 = unaff_EBX + 0x270236 /* "Crouching From Suppression" */;
               CINSBotBody::SetPosture();
-              local_24 = *(float *)(unaff_EBX + 0x214904);
+              local_24 = *(float *)(unaff_EBX + 0x214904 /* typeinfo name for CBaseGameSystem+0x1e */);
             }
           }
           else {
@@ -320,19 +320,19 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
             if (cVar1 == '\0') {
               (**(code **)(*(int *)in_stack_0000000c + 0x974))();
               fVar6 = (float10)CINSBotVision::GetCombatIntensity(this_06);
-              local_24 = *(float *)(unaff_EBX + 0x214904);
+              local_24 = *(float *)(unaff_EBX + 0x214904 /* typeinfo name for CBaseGameSystem+0x1e */);
               if ((float)fVar6 <= local_24) {
                 (**(code **)(*(int *)in_stack_0000000c + 0x970))();
                 uVar8 = 0x3f0ccccd;
                 uVar7 = 7;
-                iVar4 = unaff_EBX + 0x270236;
+                iVar4 = unaff_EBX + 0x270236 /* "Crouching From Suppression" */;
                 CINSBotBody::SetPosture();
               }
               else {
                 (**(code **)(*(int *)in_stack_0000000c + 0x970))();
                 uVar8 = 0x3f0ccccd;
                 uVar7 = 7;
-                iVar4 = unaff_EBX + 0x27021c;
+                iVar4 = unaff_EBX + 0x27021c /* "Crawling From Suppression" */;
                 CINSBotBody::SetPosture();
               }
             }
@@ -340,9 +340,9 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
               (**(code **)(*(int *)in_stack_0000000c + 0x970))();
               uVar8 = 0x3f0ccccd;
               uVar7 = 7;
-              iVar4 = unaff_EBX + 0x270251;
+              iVar4 = unaff_EBX + 0x270251 /* "Walking From Suppression" */;
               CINSBotBody::SetPosture();
-              local_24 = *(float *)(unaff_EBX + 0x214904);
+              local_24 = *(float *)(unaff_EBX + 0x214904 /* typeinfo name for CBaseGameSystem+0x1e */);
             }
           }
         }
@@ -350,9 +350,9 @@ CINSBotAttackPistol::Update(CINSBotAttackPistol *this,CINSNextBot *param_1,float
           (**(code **)(*(int *)in_stack_0000000c + 0x970))();
           uVar8 = 0x3f0ccccd;
           uVar7 = 7;
-          iVar4 = unaff_EBX + 0x27027c;
+          iVar4 = unaff_EBX + 0x27027c /* "Sprinting At Target" */;
           CINSBotBody::SetPosture();
-          local_24 = *(float *)(unaff_EBX + 0x214904);
+          local_24 = *(float *)(unaff_EBX + 0x214904 /* typeinfo name for CBaseGameSystem+0x1e */);
         }
         piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))();
         iVar4 = (**(code **)(*piVar5 + 0xec))(piVar5,in_stack_0000000c + 0x2060,uVar7,uVar8,iVar4);
@@ -457,7 +457,7 @@ char __thiscall CINSBotAttackPistol::ShouldHurry(CINSBotAttackPistol *this,INext
     pcVar1 = *(code **)(*in_stack_00000008 + 0x134);
     (**(code **)(*piVar2 + 0x14))(piVar2);
     fVar4 = (float10)(*pcVar1)();
-    cVar3 = (*(float *)(unaff_EBX + 0x215ca8) <= (float)fVar4) * '\x02';
+    cVar3 = (*(float *)(unaff_EBX + 0x215ca8 /* typeinfo name for CEntityFactory<CBaseViewModel>+0x2c */) <= (float)fVar4) * '\x02';
   }
   return cVar3;
 }
@@ -1056,9 +1056,9 @@ void __thiscall CINSBotAttackPistol::~CINSBotAttackPistol(CINSBotAttackPistol *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x4854c3;
-  in_stack_00000004[1] = extraout_ECX + 0x48566b;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x496c13));
+  *in_stack_00000004 = extraout_ECX + 0x4854c3 /* vtable for CINSBotAttackPistol+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x48566b /* vtable for CINSBotAttackPistol+0x1b0 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x496c13 /* &_DYNAMIC */));
   return;
 }
 
@@ -1095,8 +1095,8 @@ void __thiscall CINSBotAttackPistol::~CINSBotAttackPistol(CINSBotAttackPistol *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x48547a;
-  in_stack_00000004[1] = unaff_EBX + 0x485622;
+  *in_stack_00000004 = unaff_EBX + 0x48547a /* vtable for CINSBotAttackPistol+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x485622 /* vtable for CINSBotAttackPistol+0x1b0 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

@@ -71,10 +71,10 @@ void __thiscall CINSBotChatter::Update(CINSBotChatter *this)
      (iVar7 = *(int *)(*(int *)(&LAB_0044d2f9 + unaff_EBX) + 0x19b8), iVar5 = ThreadGetCurrentId(),
      pCVar9 = extraout_ECX, iVar7 == iVar5)) {
     piVar8 = *(int **)(*(int *)(&LAB_0044d2f9 + unaff_EBX) + 0x1014);
-    if (*piVar8 != unaff_EBX + 0x22a277) {
+    if (*piVar8 != unaff_EBX + 0x22a277 /* "CINSBotChatter::Update" */) {
       piVar8 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar8,unaff_EBX + 0x22a277,(char *)0x0,
-                                 unaff_EBX + 0x2275eb);
+                                ((char *)piVar8,unaff_EBX + 0x22a277 /* "CINSBotChatter::Update" */,(char *)0x0,
+                                 unaff_EBX + 0x2275eb /* "INSNextBot" */);
       *(int **)(*(int *)(&LAB_0044d2f9 + unaff_EBX) + 0x1014) = piVar8;
     }
     puVar1 = (uint *)(piVar8[0x1c] * 8 + *(int *)(*(int *)(&LAB_0044d2f9 + unaff_EBX) + 0x10a0) + 4)
@@ -91,7 +91,7 @@ void __thiscall CINSBotChatter::Update(CINSBotChatter *this)
       (pCVar9 = (CINSBotChatter *)in_stack_00000004, *(int *)in_stack_00000004 == *(int *)*puVar6))
      && (cVar4 = BotStatement::Update(in_stack_00000004), pCVar9 = extraout_ECX_07, cVar4 == '\0'))
   {
-    iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x44da6d) + 0x40))(*(int **)(unaff_EBX + 0x44da6d));
+    iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x44da6d /* &ins_debug_chatter */) + 0x40))(*(int **)(unaff_EBX + 0x44da6d /* &ins_debug_chatter */));
     if (iVar7 != 0) {
       DevMsg(&UNK_0022a28e + unaff_EBX);
     }
@@ -119,10 +119,10 @@ void __thiscall CINSBotChatter::Update(CINSBotChatter *this)
     else {
       this_00 = this_02;
       if (pBVar12[0x28] == (BotStatement)0x0) {
-        fVar2 = *(float *)(**(int **)(unaff_EBX + 0x44d225) + 0xc);
+        fVar2 = *(float *)(**(int **)(unaff_EBX + 0x44d225 /* &gpGlobals */) + 0xc);
         if (*(float *)(pBVar12 + 0x20) <= fVar2 && fVar2 != *(float *)(pBVar12 + 0x20)) {
-          iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x44da6d) + 0x40))
-                            (*(int **)(unaff_EBX + 0x44da6d));
+          iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x44da6d /* &ins_debug_chatter */) + 0x40))
+                            (*(int **)(unaff_EBX + 0x44da6d /* &ins_debug_chatter */));
           if (iVar7 != 0) {
             DevMsg(&UNK_0022a2a2 + unaff_EBX);
           }
@@ -133,8 +133,8 @@ void __thiscall CINSBotChatter::Update(CINSBotChatter *this)
         else if ((local_30 != (undefined4 *)0x0) &&
                 (puVar6 = local_30, cVar4 = BotStatement::IsRedundant(this_02,pBVar12),
                 pBVar11 = pBVar12, this_00 = extraout_ECX_01, cVar4 != '\0')) {
-          iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x44da6d) + 0x40))
-                            (*(int **)(unaff_EBX + 0x44da6d),puVar6);
+          iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x44da6d /* &ins_debug_chatter */) + 0x40))
+                            (*(int **)(unaff_EBX + 0x44da6d /* &ins_debug_chatter */),puVar6);
           pCVar9 = extraout_ECX_04;
           if (iVar7 != 0) {
             DevMsg(&UNK_0022a331 + unaff_EBX);
@@ -264,11 +264,11 @@ int __thiscall CINSBotChatter::GetActiveStatement(CINSBotChatter *this)
   float local_20;
   
   __i686_get_pc_thunk_bx();
-  if (*(int *)(**(int **)(unaff_EBX + 0x44d7c5) + 0x14) < 1) {
+  if (*(int *)(**(int **)(unaff_EBX + 0x44d7c5 /* &gpGlobals */) + 0x14) < 1) {
     local_24 = 0;
   }
   else {
-    local_20 = *(float *)(unaff_EBX + 0x22a925);
+    local_20 = *(float *)(unaff_EBX + 0x22a925 /* "(knNWhen to change bot difficulty, 1 = instantly, 0 = when new bots are added" */);
     iVar4 = 1;
     local_24 = 0;
 LAB_00759110:
@@ -278,14 +278,14 @@ LAB_00759110:
         cVar1 = (**(code **)(*piVar2 + 0x7b0))(piVar2);
         if ((cVar1 == '\0') && (cVar1 = (**(code **)(*piVar2 + 0x118))(piVar2), cVar1 == '\0')) {
           iVar4 = iVar4 + 1;
-          iVar3 = **(int **)(unaff_EBX + 0x44d7c5);
+          iVar3 = **(int **)(unaff_EBX + 0x44d7c5 /* &gpGlobals */);
           if (*(int *)(iVar3 + 0x14) < iVar4) break;
           goto LAB_00759110;
         }
         cVar1 = CBaseEntity::InSameTeam((CBaseEntity *)*in_stack_00000004);
         if ((cVar1 != '\0') &&
-           (piVar2 = (int *)__dynamic_cast(piVar2,*(undefined4 *)(unaff_EBX + 0x44d6a9),
-                                           *(undefined4 *)(unaff_EBX + 0x44d94d),0),
+           (piVar2 = (int *)__dynamic_cast(piVar2,*(undefined4 *)(unaff_EBX + 0x44d6a9 /* &typeinfo for CBasePlayer */),
+                                           *(undefined4 *)(unaff_EBX + 0x44d94d /* &typeinfo for CINSNextBot */),0),
            piVar2 != (int *)0x0)) {
           iVar3 = (**(code **)(*piVar2 + 0x978))(piVar2);
           iVar3 = *(int *)(iVar3 + 4);
@@ -307,7 +307,7 @@ LAB_00759110:
         }
       }
       iVar4 = iVar4 + 1;
-      iVar3 = **(int **)(unaff_EBX + 0x44d7c5);
+      iVar3 = **(int **)(unaff_EBX + 0x44d7c5 /* &gpGlobals */);
     } while (iVar4 <= *(int *)(iVar3 + 0x14));
     if ((local_24 != 0) &&
        (*(float *)(iVar3 + 0xc) <= *(float *)(local_24 + 0x1c) &&
@@ -349,15 +349,15 @@ void __thiscall CINSBotChatter::IdleChatter(CINSBotChatter *this)
   BotStatement *pBVar13;
   
   __i686_get_pc_thunk_bx();
-  iVar4 = *(int *)(unaff_EBX + 0x44d019);
+  iVar4 = *(int *)(unaff_EBX + 0x44d019 /* &GCSDK::GetPchTempTextBuffer */);
   bVar11 = *(int *)(iVar4 + 0x100c) != 0;
   if ((bVar11) && (iVar9 = *(int *)(iVar4 + 0x19b8), iVar7 = ThreadGetCurrentId(), iVar9 == iVar7))
   {
     piVar10 = *(int **)(iVar4 + 0x1014);
-    if (*piVar10 != unaff_EBX + 0x229fd6) {
+    if (*piVar10 != unaff_EBX + 0x229fd6 /* "CINSBotChatter::IdleChatter" */) {
       piVar10 = (int *)CVProfNode::GetSubNode
-                                 ((char *)piVar10,unaff_EBX + 0x229fd6,(char *)0x0,
-                                  unaff_EBX + 0x22730b);
+                                 ((char *)piVar10,unaff_EBX + 0x229fd6 /* "CINSBotChatter::IdleChatter" */,(char *)0x0,
+                                  unaff_EBX + 0x22730b /* "INSNextBot" */);
       *(int **)(iVar4 + 0x1014) = piVar10;
     }
     puVar1 = (uint *)(*(int *)(iVar4 + 0x10a0) + piVar10[0x1c] * 8 + 4);
@@ -370,7 +370,7 @@ void __thiscall CINSBotChatter::IdleChatter(CINSBotChatter *this)
   if (cVar6 != '\0') {
     iVar9 = *(int *)in_stack_00000004;
     if (*(int *)(iVar9 + 0xb448) == 0) {
-      pBVar13 = *(BotStatement **)(unaff_EBX + 0x44ced5);
+      pBVar13 = *(BotStatement **)(unaff_EBX + 0x44ced5 /* &nb_blind */);
       iVar9 = (**(code **)(*(int *)pBVar13 + 0x40))(pBVar13);
       if (iVar9 == 0) goto LAB_007599e8;
       iVar9 = *(int *)in_stack_00000004;
@@ -383,10 +383,10 @@ void __thiscall CINSBotChatter::IdleChatter(CINSBotChatter *this)
     }
     puVar8 = (undefined4 *)::operator_new(0x6c);
     puVar8[1] = 0;
-    fVar2 = *(float *)(unaff_EBX + 0x1cae11);
+    fVar2 = *(float *)(unaff_EBX + 0x1cae11 /* typeinfo name for CBaseGameSystem+0x32 */);
     puVar8[2] = 0;
     *puVar8 = in_stack_00000004;
-    iVar9 = **(int **)(unaff_EBX + 0x44cf45);
+    iVar9 = **(int **)(unaff_EBX + 0x44cf45 /* &gpGlobals */);
     uVar5 = *(undefined4 *)(iVar9 + 0xc);
     puVar8[9] = 0;
     puVar8[3] = 2;
@@ -495,21 +495,21 @@ void __thiscall CINSBotChatter::ReportEnemies(CINSBotChatter *this)
   undefined4 uVar16;
   
   __i686_get_pc_thunk_bx();
-  bVar13 = *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x100c) != 0;
+  bVar13 = *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
   if ((bVar13) &&
-     (iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x19b8), iVar5 = ThreadGetCurrentId(),
+     (iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar5 = ThreadGetCurrentId(),
      iVar12 == iVar5)) {
-    piVar6 = *(int **)(*(int *)(unaff_EBX + 0x44d729) + 0x1014);
-    if (*piVar6 != unaff_EBX + 0x22a689) {
+    piVar6 = *(int **)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+    if (*piVar6 != unaff_EBX + 0x22a689 /* "CINSBotChatter::ReportEnemies" */) {
       piVar6 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar6,unaff_EBX + 0x22a689,(char *)0x0,
+                                ((char *)piVar6,unaff_EBX + 0x22a689 /* "CINSBotChatter::ReportEnemies" */,(char *)0x0,
                                  (int)(&UNK_00227a1b + unaff_EBX));
-      *(int **)(*(int *)(unaff_EBX + 0x44d729) + 0x1014) = piVar6;
+      *(int **)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar6;
     }
-    puVar1 = (uint *)(piVar6[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x10a0) + 4);
+    puVar1 = (uint *)(piVar6[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
     *puVar1 = *puVar1 | 4;
     CVProfNode::EnterScope();
-    *(undefined1 *)(*(int *)(unaff_EBX + 0x44d729) + 0x1010) = 0;
+    *(undefined1 *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) = 0;
   }
   pcVar15 = *(code **)in_stack_00000004;
   cVar4 = (**(code **)(*(int *)pcVar15 + 0x118))(pcVar15);
@@ -538,13 +538,13 @@ void __thiscall CINSBotChatter::ReportEnemies(CINSBotChatter *this)
               fVar14 = (float10)(**(code **)(*piVar7 + 0x48))(piVar7);
               iVar5 = CBaseEntity::GetTeamNumber(this_00);
               iVar8 = CBaseEntity::GetTeamNumber(this_01);
-              if ((iVar5 != iVar8) && ((float)fVar14 <= *(float *)(unaff_EBX + 0x1cb521))) {
+              if ((iVar5 != iVar8) && ((float)fVar14 <= *(float *)(unaff_EBX + 0x1cb521 /* typeinfo name for CBaseGameSystem+0x32 */))) {
                 puVar9 = (undefined4 *)::operator_new(0x6c);
                 puVar9[1] = 0;
                 puVar9[2] = 0;
-                fVar2 = *(float *)(unaff_EBX + 0x15f8cd);
+                fVar2 = *(float *)(unaff_EBX + 0x15f8cd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x38 */);
                 *puVar9 = in_stack_00000004;
-                iVar12 = **(int **)(unaff_EBX + 0x44d655);
+                iVar12 = **(int **)(unaff_EBX + 0x44d655 /* &gpGlobals */);
                 uVar16 = *(undefined4 *)(iVar12 + 0xc);
                 puVar9[9] = 0;
                 puVar9[3] = 0;
@@ -570,8 +570,8 @@ void __thiscall CINSBotChatter::ReportEnemies(CINSBotChatter *this)
                 puVar11 = (undefined4 *)(**(code **)(*piVar6 + 0xc))(piVar6);
                 puVar10[1] = *puVar11;
                 puVar9[5] = puVar10;
-                cVar4 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x44d6ad) + 0xe0))
-                                  ((int *)**(undefined4 **)(unaff_EBX + 0x44d6ad));
+                cVar4 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x44d6ad /* &g_pGameRules */) + 0xe0))
+                                  ((int *)**(undefined4 **)(unaff_EBX + 0x44d6ad /* &g_pGameRules */));
                 this_03 = this_02;
                 if (cVar4 != '\0') {
                   BotStatement::AppendConcept(this_02,(int)puVar9);
@@ -582,20 +582,20 @@ void __thiscall CINSBotChatter::ReportEnemies(CINSBotChatter *this)
                 if (!bVar13) {
                   return;
                 }
-                if ((*(char *)(*(int *)(unaff_EBX + 0x44d729) + 0x1010) != '\0') &&
-                   (*(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x100c) == 0)) {
+                if ((*(char *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) != '\0') &&
+                   (*(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) == 0)) {
                   return;
                 }
-                iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x19b8);
+                iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8);
                 iVar5 = ThreadGetCurrentId(in_stack_00000004,puVar9,uVar16);
                 if (iVar12 != iVar5) {
                   return;
                 }
                 cVar4 = CVProfNode::ExitScope();
-                iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x1014);
+                iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
                 if (cVar4 != '\0') {
                   iVar12 = *(int *)(iVar12 + 100);
-                  *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x1014) = iVar12;
+                  *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar12;
                 }
                 goto LAB_00759484;
               }
@@ -610,23 +610,23 @@ void __thiscall CINSBotChatter::ReportEnemies(CINSBotChatter *this)
   }
 LAB_007592ac:
   if ((!bVar13) ||
-     (((*(char *)(*(int *)(unaff_EBX + 0x44d729) + 0x1010) != '\0' &&
-       (*(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x100c) == 0)) ||
-      (iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x19b8),
+     (((*(char *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) != '\0' &&
+       (*(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) == 0)) ||
+      (iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8),
       iVar5 = ThreadGetCurrentId(pcVar15), iVar12 != iVar5)))) {
     return;
   }
   cVar4 = CVProfNode::ExitScope();
   if (cVar4 == '\0') {
-    iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x1014);
+    iVar12 = *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
   }
   else {
-    iVar12 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x1014) + 100);
-    *(int *)(*(int *)(unaff_EBX + 0x44d729) + 0x1014) = iVar12;
+    iVar12 = *(int *)(*(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) + 100);
+    *(int *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar12;
   }
 LAB_00759484:
-  *(bool *)(*(int *)(unaff_EBX + 0x44d729) + 0x1010) =
-       iVar12 == *(int *)(unaff_EBX + 0x44d729) + 0x1018;
+  *(bool *)(*(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+       iVar12 == *(int *)(unaff_EBX + 0x44d729 /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
   return;
 }
 

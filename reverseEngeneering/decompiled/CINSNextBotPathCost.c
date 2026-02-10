@@ -51,17 +51,17 @@ CINSNextBotPathCost::operator()
   float local_30;
   
   __i686_get_pc_thunk_bx();
-  iVar2 = *(int *)(unaff_EBX + 0x4b2129);
+  iVar2 = *(int *)(unaff_EBX + 0x4b2129 /* &GCSDK::GetPchTempTextBuffer */);
   bVar10 = *(int *)(iVar2 + 0x100c) != 0;
   if (bVar10) {
     iVar7 = *(int *)(iVar2 + 0x19b8);
     iVar6 = ThreadGetCurrentId();
     if (iVar7 == iVar6) {
       piVar8 = *(int **)(iVar2 + 0x1014);
-      if (*piVar8 != unaff_EBX + 0x28adc5) {
+      if (*piVar8 != unaff_EBX + 0x28adc5 /* "CINSNextBotPathCost::operator()" */) {
         piVar8 = (int *)CVProfNode::GetSubNode
-                                  ((char *)piVar8,unaff_EBX + 0x28adc5,(char *)0x0,
-                                   unaff_EBX + 0x28c41e);
+                                  ((char *)piVar8,unaff_EBX + 0x28adc5 /* "CINSNextBotPathCost::operator()" */,(char *)0x0,
+                                   unaff_EBX + 0x28c41e /* "NextBot" */);
         *(int **)(iVar2 + 0x1014) = piVar8;
       }
       puVar1 = (uint *)(*(int *)(iVar2 + 0x10a0) + piVar8[0x1c] * 8 + 4);
@@ -72,7 +72,7 @@ CINSNextBotPathCost::operator()
   }
   (**(code **)(**(int **)(param_1 + 4) + 200))(*(int **)(param_1 + 4));
   iVar7 = CBaseEntity::GetTeamNumber(this_00);
-  iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4b24a5) + 0x40))(*(int **)(unaff_EBX + 0x4b24a5));
+  iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4b24a5 /* &ins_nav_enable_pathfinding_updates */) + 0x40))(*(int **)(unaff_EBX + 0x4b24a5 /* &ins_nav_enable_pathfinding_updates */));
   if (iVar6 == 0) {
     if (param_3 != (CNavLadder *)0x0) {
       piVar8 = (int *)(**(code **)(**(int **)(param_1 + 4) + 0xd0))(*(int **)(param_1 + 4));
@@ -80,8 +80,8 @@ CINSNextBotPathCost::operator()
       if (cVar4 == '\0') goto LAB_006f4c30;
       if (param_4 == (CFuncElevator *)0x0) {
         local_34 = in_stack_00000018;
-        if (in_stack_00000018 < *(float *)(unaff_EBX + 0x1c42bd) ||
-            in_stack_00000018 == *(float *)(unaff_EBX + 0x1c42bd)) {
+        if (in_stack_00000018 < *(float *)(unaff_EBX + 0x1c42bd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */) ||
+            in_stack_00000018 == *(float *)(unaff_EBX + 0x1c42bd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
           local_34 = SQRT((*(float *)(param_2 + 0x30) - *(float *)(param_3 + 0x30)) *
                           (*(float *)(param_2 + 0x30) - *(float *)(param_3 + 0x30)) +
                           (*(float *)(param_2 + 0x2c) - *(float *)(param_3 + 0x2c)) *
@@ -94,8 +94,8 @@ CINSNextBotPathCost::operator()
         local_34 = *(float *)(param_4 + 0x18);
       }
       fVar12 = *(float *)(param_3 + 0x54);
-      piVar8 = (int *)(*(int **)(unaff_EBX + 0x4b23b9))[7];
-      if (piVar8 == *(int **)(unaff_EBX + 0x4b23b9)) {
+      piVar8 = (int *)(*(int **)(unaff_EBX + 0x4b23b9 /* &ins_bot_path_simplify_range */))[7];
+      if (piVar8 == *(int **)(unaff_EBX + 0x4b23b9 /* &ins_bot_path_simplify_range */)) {
         fVar13 = (float)((uint)piVar8 ^ piVar8[0xb]);
       }
       else {
@@ -128,7 +128,7 @@ LAB_006f4a18:
           param_4 = (CFuncElevator *)extraout_ECX_00;
         }
         else if (iVar3 < 3) {
-          local_38 = (float)iVar6 * local_34 * *(float *)(unaff_EBX + 0x22ff0d);
+          local_38 = (float)iVar6 * local_34 * *(float *)(unaff_EBX + 0x22ff0d /* typeinfo name for CBaseGameSystem+0x1e */);
         }
         else {
           if (iVar3 != 3) goto LAB_006f4a18;
@@ -144,63 +144,63 @@ LAB_006f4a51:
         cVar4 = (**(code **)(*piVar8 + 0x144))(piVar8);
         if ((cVar4 == '\0') || (*(float *)(param_1 + 0x20) <= fVar12)) {
 LAB_006f4c30:
-          local_30 = *(float *)(unaff_EBX + 0x1c42c5);
+          local_30 = *(float *)(unaff_EBX + 0x1c42c5 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */);
           goto LAB_006f48f0;
         }
         local_34 = local_34 * *(float *)(&DAT_001c4731 + unaff_EBX);
       }
-      else if (fVar12 <= (float)((uint)*(float *)(param_1 + 0x1c) ^ *(uint *)(unaff_EBX + 0x2303b5))
+      else if (fVar12 <= (float)((uint)*(float *)(param_1 + 0x1c) ^ *(uint *)(unaff_EBX + 0x2303b5 /* typeinfo name for CBroadcastRecipientFilter+0x44 */))
               ) {
-        if (fVar12 <= (float)(*(uint *)(param_1 + 0x24) ^ *(uint *)(unaff_EBX + 0x2303b5)))
+        if (fVar12 <= (float)(*(uint *)(param_1 + 0x24) ^ *(uint *)(unaff_EBX + 0x2303b5 /* typeinfo name for CBroadcastRecipientFilter+0x44 */)))
         goto LAB_006f4c30;
         local_34 = local_34 * *(float *)(&DAT_001c4731 + unaff_EBX);
       }
       if (((byte)param_2[0x68] & 0x80) != 0) {
-        local_34 = local_34 * *(float *)(unaff_EBX + 0x22f965);
+        local_34 = local_34 * *(float *)(unaff_EBX + 0x22f965 /* typeinfo name for CTraceFilterNoCombatCharacters+0x30 */);
       }
       iVar6 = *(int *)(**(int **)(&LAB_004b2055 + unaff_EBX) + 0x18);
       if (iVar6 <= *(int *)(param_2 + 0x48)) {
-        local_34 = local_34 * *(float *)(unaff_EBX + 0x22f965);
+        local_34 = local_34 * *(float *)(unaff_EBX + 0x22f965 /* typeinfo name for CTraceFilterNoCombatCharacters+0x30 */);
       }
       if (iVar6 <= *(int *)(param_2 + 0x22c)) {
-        local_34 = local_34 * *(float *)(unaff_EBX + 0x22ff11);
+        local_34 = local_34 * *(float *)(unaff_EBX + 0x22ff11 /* typeinfo name for CBaseGameSystem+0x22 */);
       }
       iVar6 = *(int *)(param_1 + 8);
-      local_3c = *(float *)(unaff_EBX + 0x1c42c9);
+      local_3c = *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
       this_02 = (CINSNavArea *)param_2;
       if (iVar6 == 0) {
         fVar12 = *(float *)(**(int **)(&LAB_004b2055 + unaff_EBX) + 0xc);
         iVar6 = (**(code **)(**(int **)(param_1 + 4) + 200))(*(int **)(param_1 + 4));
         fVar13 = 0.0;
         if (*(int *)(iVar6 + 0x20) != 0) {
-          uVar9 = ((int)(fVar12 * *(float *)(unaff_EBX + 0x1c42d1)) + 1) * *(int *)(param_2 + 0x9c)
+          uVar9 = ((int)(fVar12 * *(float *)(unaff_EBX + 0x1c42d1 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */)) + 1) * *(int *)(param_2 + 0x9c)
                   * (*(int *)(iVar6 + 0x20) - *(int *)(**(int **)(&LAB_004b2055 + unaff_EBX) + 0x5c)
                     >> 4);
-          fVar13 = (float)(uVar9 >> 0x10) * *(float *)(unaff_EBX + 0x231501) +
+          fVar13 = (float)(uVar9 >> 0x10) * *(float *)(unaff_EBX + 0x231501 /* typeinfo name for ICollideable+0xf */) +
                    (float)(uVar9 & 0xffff);
         }
         fVar11 = (float10)FastCos(fVar13);
         iVar6 = *(int *)(param_1 + 8);
-        local_3c = *(float *)(unaff_EBX + 0x1c42c9) +
-                   ((float)fVar11 + *(float *)(unaff_EBX + 0x1c42c9)) *
+        local_3c = *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) +
+                   ((float)fVar11 + *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */)) *
                    *(float *)(&DAT_001c4735 + unaff_EBX);
         this_02 = extraout_ECX_01;
       }
       local_40 = *(float *)(&DAT_001c4731 + unaff_EBX);
       if (iVar6 == 2) {
         cVar4 = CINSNavArea::IsInCombat();
-        local_40 = *(float *)(unaff_EBX + 0x28b1d9);
+        local_40 = *(float *)(unaff_EBX + 0x28b1d9 /* typeinfo name for NextBotTraversableTraceFilter+0x24 */);
         this_02 = this_04;
         if (cVar4 != '\0') {
           fVar11 = (float10)CINSNavArea::GetCombatIntensity(this_04);
-          local_40 = *(float *)(unaff_EBX + 0x28b1d9);
+          local_40 = *(float *)(unaff_EBX + 0x28b1d9 /* typeinfo name for NextBotTraversableTraceFilter+0x24 */);
           local_34 = (float)fVar11 * local_34 * *(float *)(&DAT_001c4731 + unaff_EBX);
           this_02 = extraout_ECX_02;
         }
       }
       fVar11 = (float10)CINSNavArea::GetDeathIntensity(this_02,(int)param_2);
-      if (*(float *)(unaff_EBX + 0x1c42bd) <= (float)fVar11 &&
-          (float)fVar11 != *(float *)(unaff_EBX + 0x1c42bd)) {
+      if (*(float *)(unaff_EBX + 0x1c42bd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */) <= (float)fVar11 &&
+          (float)fVar11 != *(float *)(unaff_EBX + 0x1c42bd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
         fVar11 = (float10)CINSNavArea::GetDeathIntensity(this_03,(int)param_2);
         local_34 = (float)fVar11 * local_40 * local_34;
       }
@@ -211,7 +211,7 @@ LAB_006f4c30:
         CVar5 = param_2[iVar7 % 2 + 0x4c];
       }
       local_30 = local_38 + *(float *)(param_3 + 0x54) +
-                 (local_34 * *(float *)(unaff_EBX + 0x22ff21) * (float)(byte)CVar5 + local_34) *
+                 (local_34 * *(float *)(unaff_EBX + 0x22ff21 /* typeinfo name for CBaseGameSystem+0x32 */) * (float)(byte)CVar5 + local_34) *
                  local_3c;
       goto LAB_006f48f0;
     }
@@ -219,7 +219,7 @@ LAB_006f4c30:
   else if (param_3 != (CNavLadder *)0x0) {
     piVar8 = (int *)(**(code **)(**(int **)(param_1 + 4) + 0xd0))(*(int **)(param_1 + 4));
     cVar4 = (**(code **)(*piVar8 + 0x174))(piVar8);
-    local_30 = *(float *)(unaff_EBX + 0x1c42c5);
+    local_30 = *(float *)(unaff_EBX + 0x1c42c5 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */);
     if (cVar4 == '\0') goto LAB_006f48f0;
     fVar11 = (float10)CNavArea::ComputeAdjacentConnectionHeightChange(this_01,(CNavArea *)param_3);
     fVar12 = (float)fVar11;
@@ -227,18 +227,18 @@ LAB_006f4c30:
       piVar8 = (int *)(**(code **)(**(int **)(param_1 + 4) + 0xd0))(*(int **)(param_1 + 4));
       cVar4 = (**(code **)(*piVar8 + 0x144))(piVar8);
       if ((cVar4 == '\0') || (*(float *)(param_1 + 0x20) <= fVar12)) goto LAB_006f4c30;
-      local_34 = *(float *)(unaff_EBX + 0x1c42c9);
-      local_30 = *(float *)(unaff_EBX + 0x22ff15);
+      local_34 = *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
+      local_30 = *(float *)(unaff_EBX + 0x22ff15 /* typeinfo name for CBaseGameSystem+0x26 */);
     }
-    else if ((float)((uint)*(float *)(param_1 + 0x1c) ^ *(uint *)(unaff_EBX + 0x2303b5)) < fVar12) {
-      local_30 = *(float *)(unaff_EBX + 0x1c42c9);
+    else if ((float)((uint)*(float *)(param_1 + 0x1c) ^ *(uint *)(unaff_EBX + 0x2303b5 /* typeinfo name for CBroadcastRecipientFilter+0x44 */)) < fVar12) {
+      local_30 = *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
       local_34 = local_30;
     }
     else {
-      if (fVar12 <= (float)(*(uint *)(param_1 + 0x24) ^ *(uint *)(unaff_EBX + 0x2303b5)))
+      if (fVar12 <= (float)(*(uint *)(param_1 + 0x24) ^ *(uint *)(unaff_EBX + 0x2303b5 /* typeinfo name for CBroadcastRecipientFilter+0x44 */)))
       goto LAB_006f4c30;
-      local_30 = *(float *)(unaff_EBX + 0x22ff15);
-      local_34 = *(float *)(unaff_EBX + 0x1c42c9);
+      local_30 = *(float *)(unaff_EBX + 0x22ff15 /* typeinfo name for CBaseGameSystem+0x26 */);
+      local_34 = *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
     }
     uVar9 = iVar7 - 2;
     if (1 < uVar9) {
@@ -264,15 +264,15 @@ LAB_006f4c30:
       iVar7 = iVar7 + 1;
     } while (iVar7 != 4);
     if ((*(uint *)(param_2 + 0x68) & 0x80) != 0) {
-      local_30 = local_30 + *(float *)(unaff_EBX + 0x22ff21);
+      local_30 = local_30 + *(float *)(unaff_EBX + 0x22ff21 /* typeinfo name for CBaseGameSystem+0x32 */);
     }
     if (*(int *)(**(int **)(&LAB_004b2055 + unaff_EBX) + 0x18) <= *(int *)(param_2 + 0x48)) {
-      local_30 = local_30 + *(float *)(unaff_EBX + 0x22ff21);
+      local_30 = local_30 + *(float *)(unaff_EBX + 0x22ff21 /* typeinfo name for CBaseGameSystem+0x32 */);
     }
     if (*(int *)(**(int **)(&LAB_004b2055 + unaff_EBX) + 0x18) <= *(int *)(param_2 + 0x22c)) {
-      local_30 = local_30 + *(float *)(unaff_EBX + 0x22ff21);
+      local_30 = local_30 + *(float *)(unaff_EBX + 0x22ff21 /* typeinfo name for CBaseGameSystem+0x32 */);
     }
-    iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4b28b1) + 0x40))(*(int **)(unaff_EBX + 0x4b28b1));
+    iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4b28b1 /* &ins_nav_enable_distancetocp_pathing */) + 0x40))(*(int **)(unaff_EBX + 0x4b28b1 /* &ins_nav_enable_distancetocp_pathing */));
     if (iVar7 == 0) {
       fVar12 = *(float *)(param_2 + 0x2c);
       fVar13 = *(float *)(param_2 + 0x30);
@@ -290,37 +290,37 @@ LAB_006f4c30:
                       + (fVar12 - *(float *)(param_1 + 0xc)) * (fVar12 - *(float *)(param_1 + 0xc))
                       + (*(float *)(param_2 + 0x34) - *(float *)(param_1 + 0x14)) *
                         (*(float *)(param_2 + 0x34) - *(float *)(param_1 + 0x14)));
-        if (*(float *)(unaff_EBX + 0x2307c5) <= fVar14 && fVar14 != *(float *)(unaff_EBX + 0x2307c5)
+        if (*(float *)(unaff_EBX + 0x2307c5 /* typeinfo name for ITraceFilter+0x20 */) <= fVar14 && fVar14 != *(float *)(unaff_EBX + 0x2307c5 /* typeinfo name for ITraceFilter+0x20 */)
            ) {
           fVar12 = *(float *)(param_3 + iVar7 * 4 + 0x1ac) - *(float *)(param_2 + iVar7 * 4 + 0x1ac)
           ;
           if (fVar12 < 0.0) {
             local_30 = (float)((double)local_30 +
                               (double)((ulonglong)(double)fVar12 &
-                                      *(ulonglong *)(unaff_EBX + 0x1c42e5)));
+                                      *(ulonglong *)(unaff_EBX + 0x1c42e5 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x50 */)));
           }
           else {
-            fVar12 = (fVar12 + *(float *)(unaff_EBX + 0x1c42c5)) * *(float *)(unaff_EBX + 0x28b1dd);
+            fVar12 = (fVar12 + *(float *)(unaff_EBX + 0x1c42c5 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */)) * *(float *)(unaff_EBX + 0x28b1dd /* typeinfo name for NextBotTraversableTraceFilter+0x28 */);
             if (local_34 <= fVar12) {
               fVar12 = local_34;
             }
             if (fVar12 <= 0.0) {
               fVar12 = 0.0;
             }
-            local_30 = fVar12 * *(float *)(unaff_EBX + 0x230395) + *(float *)(unaff_EBX + 0x22ff21)
+            local_30 = fVar12 * *(float *)(unaff_EBX + 0x230395 /* typeinfo name for CBroadcastRecipientFilter+0x24 */) + *(float *)(unaff_EBX + 0x22ff21 /* typeinfo name for CBaseGameSystem+0x32 */)
                        + local_30;
           }
           goto LAB_006f48f0;
         }
       }
     }
-    local_30 = ((float)((uint)(fVar12 - *(float *)(param_1 + 0xc)) & *(uint *)(unaff_EBX + 0x230805)
+    local_30 = ((float)((uint)(fVar12 - *(float *)(param_1 + 0xc)) & *(uint *)(unaff_EBX + 0x230805 /* typeinfo name for ITraceFilter+0x60 */)
                        ) +
-               (float)((uint)(fVar13 - *(float *)(param_1 + 0x10)) & *(uint *)(unaff_EBX + 0x230805)
+               (float)((uint)(fVar13 - *(float *)(param_1 + 0x10)) & *(uint *)(unaff_EBX + 0x230805 /* typeinfo name for ITraceFilter+0x60 */)
                       )) * local_30;
     goto LAB_006f48f0;
   }
-  local_30 = *(float *)(unaff_EBX + 0x1c42c9);
+  local_30 = *(float *)(unaff_EBX + 0x1c42c9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
 LAB_006f48f0:
   if ((bVar10) && ((*(char *)(iVar2 + 0x1010) == '\0' || (*(int *)(iVar2 + 0x100c) != 0)))) {
     iVar7 = *(int *)(iVar2 + 0x19b8);

@@ -21,9 +21,9 @@ CINSBotSpecialAction::CINSBotSpecialAction
   
   __i686_get_pc_thunk_bx();
   param_2[8] = 0;
-  *param_2 = unaff_EBX + 0x4671ad;
-  param_2[1] = unaff_EBX + 0x46733d;
-  param_2[0xf] = unaff_EBX + 0x3f6e3d;
+  *param_2 = unaff_EBX + 0x4671ad /* vtable for CINSBotSpecialAction+0x8 */;
+  param_2[1] = unaff_EBX + 0x46733d /* vtable for CINSBotSpecialAction+0x198 */;
+  param_2[0xf] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */;
   param_2[9] = 0;
   param_2[10] = 0;
   param_2[3] = 0;
@@ -37,12 +37,12 @@ CINSBotSpecialAction::CINSBotSpecialAction
   param_2[0xb] = 0;
   param_2[0xd] = 0;
   param_2[0x10] = 0;
-  (*(code *)(unaff_EBX + -0x500c0b))(param_2 + 0xf,param_2 + 0x10);
+  (*(code *)(unaff_EBX + -0x500c0b /* CountdownTimer::NetworkStateChanged */))(param_2 + 0xf,param_2 + 0x10);
   param_2[0x11] = -0x40800000;
   (**(code **)(param_2[0xf] + 4))(param_2 + 0xf,param_2 + 0x11);
   param_2[0x13] = 0;
-  param_2[0x12] = unaff_EBX + 0x3f6e3d;
-  (*(code *)(unaff_EBX + -0x500c0b))(param_2 + 0x12,param_2 + 0x13);
+  param_2[0x12] = unaff_EBX + 0x3f6e3d /* vtable for CountdownTimer+0x8 */;
+  (*(code *)(unaff_EBX + -0x500c0b /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x12,param_2 + 0x13);
   param_2[0x14] = -0x40800000;
   (**(code **)(param_2[0x12] + 4))(param_2 + 0x12,param_2 + 0x14);
   param_2[0xe] = param_3;
@@ -69,7 +69,7 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
   __i686_get_pc_thunk_bx();
   if (*(int *)(param_2 + 0x38) == 1) {
     fVar1 = (float10)CountdownTimer::Now();
-    fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x1f3691);
+    fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x1f3691 /* typeinfo name for CBaseGameSystem+0x32 */);
     if (*(float *)(param_2 + 0x44) != fVar2) {
       (**(code **)(*(int *)(param_2 + 0x3c) + 4))(param_2 + 0x3c,param_2 + 0x44);
       *(float *)(param_2 + 0x44) = fVar2;
@@ -79,7 +79,7 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
       *(undefined4 *)(param_2 + 0x40) = 0x40a00000;
     }
     fVar1 = (float10)CountdownTimer::Now();
-    fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187ea1);
+    fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187ea1 /* typeinfo name for IServerBenchmark+0x13 */);
     if (*(float *)(param_2 + 0x50) != fVar2) {
       (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50);
       *(float *)(param_2 + 0x50) = fVar2;
@@ -103,7 +103,7 @@ CINSNextBot * CINSBotSpecialAction::OnStart(CINSNextBot *param_1,Action *param_2
       *(float *)(param_2 + 0x40) = fVar2;
     }
     fVar1 = (float10)CountdownTimer::Now();
-    fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187a39);
+    fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x187a39 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
     if (*(float *)(param_2 + 0x50) != fVar2) {
       (**(code **)(*(int *)(param_2 + 0x48) + 4))(param_2 + 0x48,param_2 + 0x50);
       *(float *)(param_2 + 0x50) = fVar2;
@@ -236,7 +236,7 @@ int CINSBotSpecialAction::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x2508ca;
+  return extraout_ECX + 0x2508ca /* "Special Action" */;
 }
 
 
@@ -297,8 +297,8 @@ void __thiscall CINSBotSpecialAction::~CINSBotSpecialAction(CINSBotSpecialAction
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x467053;
-  in_stack_00000004[1] = extraout_ECX + 0x4671e3;
+  *in_stack_00000004 = extraout_ECX + 0x467053 /* vtable for CINSBotSpecialAction+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x4671e3 /* vtable for CINSBotSpecialAction+0x198 */;
   Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(&UNK_00475ca3 + extraout_ECX));
   return;
 }
@@ -337,7 +337,7 @@ void __thiscall CINSBotSpecialAction::~CINSBotSpecialAction(CINSBotSpecialAction
   
   __i686_get_pc_thunk_bx();
   *in_stack_00000004 = &UNK_0046700a + unaff_EBX;
-  in_stack_00000004[1] = unaff_EBX + 0x46719a;
+  in_stack_00000004[1] = unaff_EBX + 0x46719a /* vtable for CINSBotSpecialAction+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

@@ -57,12 +57,13 @@ CINSNextBot * __thiscall CINSBotDead::Update(CINSBotDead *this,CINSNextBot *para
   if (cVar4 == '\0') {
     fVar7 = (float10)IntervalTimer::Now();
     fVar8 = (float)fVar7 - *(float *)((int)param_2 + 0x3c);
-    if ((*(float *)(unaff_EBX + 0x20cb98) <= fVar8 && fVar8 != *(float *)(unaff_EBX + 0x20cb98)) &&
+    if ((*(float *)(unaff_EBX + 0x20cb98 /* typeinfo name for CBaseGameSystem+0x32 */) <= fVar8 && fVar8 != *(float *)(unaff_EBX + 0x20cb98 /* typeinfo name for CBaseGameSystem+0x32 */)) &&
        ((*(byte *)(in_stack_0000000c + 0x8a5) & 0x20) != 0)) {
-      puVar1 = *(undefined4 **)(unaff_EBX + 0x48ea54);
+      puVar1 = *(undefined4 **)(unaff_EBX + 0x48ea54 /* &engine */);
       pcVar2 = *(code **)(*(int *)*puVar1 + 0x94);
       uVar5 = (**(code **)(*(int *)*puVar1 + 0x40))(*puVar1,in_stack_0000000c[8]);
-      uVar5 = UTIL_VarArgs((char *)(unaff_EBX + 0x261eb7),uVar5);
+      uVar5 = UTIL_VarArgs((char *)(unaff_EBX + 0x261eb7 /* "kickid %d
+" */),uVar5);
       (*pcVar2)(*puVar1,uVar5);
     }
     *(undefined4 *)param_1 = 0;
@@ -71,7 +72,7 @@ CINSNextBot * __thiscall CINSBotDead::Update(CINSBotDead *this,CINSNextBot *para
   }
   else {
     piVar6 = (int *)::operator_new(0x40);
-    iVar3 = *(int *)(unaff_EBX + 0x48f26c);
+    iVar3 = *(int *)(unaff_EBX + 0x48f26c /* &vtable for CINSBotMainAction */);
     *(undefined4 *)param_1 = 1;
     piVar6[8] = 0;
     piVar6[9] = 0;
@@ -89,7 +90,7 @@ CINSNextBot * __thiscall CINSBotDead::Update(CINSBotDead *this,CINSNextBot *para
     piVar6[0xd] = 0;
     *piVar6 = iVar3 + 8;
     piVar6[1] = iVar3 + 0x1a4;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x269067;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x269067 /* "We're alive" */;
   }
   return param_1;
 }
@@ -109,7 +110,7 @@ int CINSBotDead::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x211484;
+  return extraout_ECX + 0x211484 /* "Dead" */;
 }
 
 
@@ -144,9 +145,9 @@ void __thiscall CINSBotDead::~CINSBotDead(CINSBotDead *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x47e803;
-  in_stack_00000004[1] = extraout_ECX + 0x47e993;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x48f393));
+  *in_stack_00000004 = extraout_ECX + 0x47e803 /* vtable for CINSBotDead+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x47e993 /* vtable for CINSBotDead+0x198 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x48f393 /* &_DYNAMIC */));
   return;
 }
 
@@ -183,8 +184,8 @@ void __thiscall CINSBotDead::~CINSBotDead(CINSBotDead *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47e7ba;
-  in_stack_00000004[1] = unaff_EBX + 0x47e94a;
+  *in_stack_00000004 = unaff_EBX + 0x47e7ba /* vtable for CINSBotDead+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x47e94a /* vtable for CINSBotDead+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

@@ -29,8 +29,8 @@ CINSBotCaptureFlag::CINSBotCaptureFlag(CINSBotCaptureFlag *this,CINSPlayer *para
   __i686_get_pc_thunk_bx();
   *(undefined4 *)(param_1 + 0x20) = 0;
   *(undefined4 *)(param_1 + 0x24) = 0;
-  *(int *)param_1 = unaff_EBX + 0x481c3d;
-  *(int *)(param_1 + 4) = unaff_EBX + 0x481dd1;
+  *(int *)param_1 = unaff_EBX + 0x481c3d /* vtable for CINSBotCaptureFlag+0x8 */;
+  *(int *)(param_1 + 4) = unaff_EBX + 0x481dd1 /* vtable for CINSBotCaptureFlag+0x19c */;
   *(undefined4 *)(param_1 + 0x28) = 0;
   *(undefined4 *)(param_1 + 0xc) = 0;
   *(undefined4 *)(param_1 + 0x10) = 0;
@@ -43,14 +43,14 @@ CINSBotCaptureFlag::CINSBotCaptureFlag(CINSBotCaptureFlag *this,CINSPlayer *para
   *(undefined4 *)(param_1 + 0x2c) = 0;
   *(undefined4 *)(param_1 + 0x34) = 0;
   CINSPathFollower::CINSPathFollower(this_00);
-  pcVar1 = (code *)(unaff_EBX + -0x4e3e5b);
+  pcVar1 = (code *)(unaff_EBX + -0x4e3e5b /* CountdownTimer::NetworkStateChanged */);
   *(undefined4 *)(param_1 + 0x48b0) = 0;
-  iVar2 = unaff_EBX + 0x413bed;
+  iVar2 = unaff_EBX + 0x413bed /* vtable for CountdownTimer+0x8 */;
   *(int *)(param_1 + 0x48ac) = iVar2;
   (*pcVar1)(param_1 + 0x48ac,param_1 + 0x48b0);
   *(undefined4 *)(param_1 + 0x48b4) = 0xbf800000;
   (**(code **)(*(int *)(param_1 + 0x48ac) + 4))(param_1 + 0x48ac,param_1 + 0x48b4);
-  iVar4 = *(int *)(unaff_EBX + 0x492685);
+  iVar4 = *(int *)(unaff_EBX + 0x492685 /* &vtable for IntervalTimer */);
   *(undefined4 *)(param_1 + 0x48cc) = 0xbf800000;
   *(int *)(param_1 + 0x48c8) = iVar4 + 8;
   (**(code **)(iVar4 + 0x10))(param_1 + 0x48c8,param_1 + 0x48cc);
@@ -77,7 +77,7 @@ CINSBotCaptureFlag::CINSBotCaptureFlag(CINSBotCaptureFlag *this,CINSPlayer *para
   CINSPathFollower::Invalidate(this_01);
   param_1[0x48c4] = (CINSPlayer)0x0;
   *(int *)(param_1 + 0x38) = in_stack_0000000c;
-  puVar3 = (undefined4 *)(unaff_EBX + 0x5d7d55 + in_stack_0000000c * 4);
+  puVar3 = (undefined4 *)(unaff_EBX + 0x5d7d55 /* CINSBotCaptureFlag::m_pCapturer */ + in_stack_0000000c * 4);
   if (param_2 != 0) {
     puVar5 = (undefined4 *)(**(code **)(*(int *)param_2 + 0xc))(param_2);
     *puVar3 = *puVar5;
@@ -174,7 +174,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   if (1 < iVar5 - 2U) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x26bc62;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x26bc62 /* "Bot is not on a playteam" */;
     return param_1;
   }
   pCVar6 = (CINSBotCaptureFlag *)
@@ -184,7 +184,7 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
   if ((in_stack_0000000c != pCVar6) && (bVar8)) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x26be04;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x26be04 /* "Flag carrier that wasn't us? Bailing." */;
     return param_1;
   }
   cVar4 = *(char *)((int)param_2 + 0x48c4);
@@ -198,11 +198,11 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
     pCVar6 = in_stack_0000000c + 0x2060;
   }
   GetDesiredPosition(in_stack_0000000c,(INextBot *)&local_58);
-  fVar10 = *(float *)(unaff_EBX + 0x214858);
+  fVar10 = *(float *)(unaff_EBX + 0x214858 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
   *(float *)((int)param_2 + 0x48b8) = local_58;
   *(float *)((int)param_2 + 0x48bc) = local_54;
   *(float *)((int)param_2 + 0x48c0) = local_50;
-  if (((((fVar10 < local_58) && (fVar1 = *(float *)(unaff_EBX + 0x2106bc), local_58 < fVar1)) &&
+  if (((((fVar10 < local_58) && (fVar1 = *(float *)(unaff_EBX + 0x2106bc /* typeinfo name for ITraceFilter+0x40 */), local_58 < fVar1)) &&
        (fVar10 < local_54)) && ((local_54 < fVar1 && (fVar10 < local_50)))) && (local_50 < fVar1)) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
@@ -249,9 +249,9 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
        local_48 = local_48 - *(float *)((int)param_2 + 0x48bc),
        local_44 = local_44 - *(float *)((int)param_2 + 0x48c0),
        SQRT(local_48 * local_48 + local_4c * local_4c + local_44 * local_44) <
-       *(float *)(unaff_EBX + 0x238570))) {
+       *(float *)(unaff_EBX + 0x238570 /* typeinfo name for CEntityFactory<CFuncWall>+0x20 */))) {
       piVar7 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
-      (**(code **)(*piVar7 + 0xd4))(piVar7,local_60,5,0x3f800000,0,unaff_EBX + 0x26bdec);
+      (**(code **)(*piVar7 + 0xd4))(piVar7,local_60,5,0x3f800000,0,unaff_EBX + 0x26bdec /* "Look at object to use" */);
       (**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_34,in_stack_0000000c);
       local_40 = *(float *)((int)param_2 + 0x48b8) - local_34;
       local_3c = *(float *)((int)param_2 + 0x48bc) - local_30;
@@ -262,11 +262,11 @@ CINSBotCaptureFlag::Update(CINSBotCaptureFlag *this,CINSNextBot *param_1,float p
            (float)fVar9 != *(float *)((int)param_2 + 0x48fc)) &&
          ((**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_28,in_stack_0000000c),
          fVar10 = local_24 * local_3c + local_28 * local_40 + local_20 * local_38,
-         *(float *)(unaff_EBX + 0x210694) <= fVar10 && fVar10 != *(float *)(unaff_EBX + 0x210694)))
+         *(float *)(unaff_EBX + 0x210694 /* typeinfo name for ITraceFilter+0x18 */) <= fVar10 && fVar10 != *(float *)(unaff_EBX + 0x210694 /* typeinfo name for ITraceFilter+0x18 */)))
       {
         (**(code **)(*(int *)in_stack_0000000c + 0x8d8))(in_stack_0000000c,0x3f000000);
         fVar9 = (float10)CountdownTimer::Now();
-        fVar10 = (float)fVar9 + *(float *)(unaff_EBX + 0x1a41a0);
+        fVar10 = (float)fVar9 + *(float *)(unaff_EBX + 0x1a41a0 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
         if (*(float *)((int)param_2 + 0x48fc) != fVar10) {
           (**(code **)(*(int *)((int)param_2 + 0x48f4) + 4))
                     ((int)param_2 + 0x48f4,(int)param_2 + 0x48fc);
@@ -310,8 +310,8 @@ void __cdecl CINSBotCaptureFlag::OnEnd(CINSNextBot *param_1,Action *param_2)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  *(undefined4 *)(extraout_ECX + 0x5d7e0b + *(int *)(param_1 + 0x38) * 4) = 0xffffffff;
-  *(undefined4 *)(extraout_ECX + 0x5d7e0b + *(int *)(param_1 + 0x38) * 4) = 0xffffffff;
+  *(undefined4 *)(extraout_ECX + 0x5d7e0b /* CINSBotCaptureFlag::m_pCapturer */ + *(int *)(param_1 + 0x38) * 4) = 0xffffffff;
+  *(undefined4 *)(extraout_ECX + 0x5d7e0b /* CINSBotCaptureFlag::m_pCapturer */ + *(int *)(param_1 + 0x38) * 4) = 0xffffffff;
   return;
 }
 
@@ -330,7 +330,7 @@ int CINSBotCaptureFlag::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x26b82b;
+  return extraout_ECX + 0x26b82b /* "Capturing Flag" */;
 }
 
 
@@ -413,14 +413,14 @@ CINSBotCaptureFlag::GetDesiredPosition(CINSBotCaptureFlag *this,INextBot *param_
   
   __i686_get_pc_thunk_bx();
   if (*(char *)(in_stack_00000008 + 0x48c4) != '\0') {
-    iVar2 = (uint)(*(int *)(in_stack_00000008 + 0x38) == 0) * 0xc + **(int **)(unaff_EBX + 0x492492)
+    iVar2 = (uint)(*(int *)(in_stack_00000008 + 0x38) == 0) * 0xc + **(int **)(unaff_EBX + 0x492492 /* &g_pObjectiveResource */)
     ;
     *(undefined4 *)param_1 = *(undefined4 *)(iVar2 + 0x5d0);
     *(undefined4 *)(param_1 + 4) = *(undefined4 *)(iVar2 + 0x5d4);
     *(undefined4 *)(param_1 + 8) = *(undefined4 *)(iVar2 + 0x5d8);
     return param_1;
   }
-  uVar1 = *(uint *)(**(int **)(unaff_EBX + 0x492492) + 0x7cc +
+  uVar1 = *(uint *)(**(int **)(unaff_EBX + 0x492492 /* &g_pObjectiveResource */) + 0x7cc +
                    *(int *)(in_stack_00000008 + 0x38) * 4);
   if (uVar1 != 0xffffffff) {
     iVar2 = (uVar1 & 0xffff) * 0x18 + *(int *)*(CPoint_ControlPoint **)(&DAT_00491f4e + unaff_EBX);
@@ -433,7 +433,7 @@ CINSBotCaptureFlag::GetDesiredPosition(CINSBotCaptureFlag *this,INextBot *param_
       }
     }
   }
-  puVar4 = *(undefined4 **)(unaff_EBX + 0x491d42);
+  puVar4 = *(undefined4 **)(unaff_EBX + 0x491d42 /* &vec3_origin */);
 LAB_00714936:
   *(undefined4 *)param_1 = *puVar4;
   *(undefined4 *)(param_1 + 4) = puVar4[1];
@@ -475,8 +475,8 @@ void __thiscall CINSBotCaptureFlag::~CINSBotCaptureFlag(CINSBotCaptureFlag *this
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x4812ba;
-  in_stack_00000004[1] = unaff_EBX + 0x48144e;
+  *in_stack_00000004 = unaff_EBX + 0x4812ba /* vtable for CINSBotCaptureFlag+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x48144e /* vtable for CINSBotCaptureFlag+0x19c */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -516,8 +516,8 @@ void __thiscall CINSBotCaptureFlag::~CINSBotCaptureFlag(CINSBotCaptureFlag *this
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x48124a;
-  in_stack_00000004[1] = unaff_EBX + 0x4813de;
+  *in_stack_00000004 = unaff_EBX + 0x48124a /* vtable for CINSBotCaptureFlag+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x4813de /* vtable for CINSBotCaptureFlag+0x19c */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

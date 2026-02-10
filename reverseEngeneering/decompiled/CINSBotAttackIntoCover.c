@@ -23,10 +23,10 @@ CINSBotAttackIntoCover::CINSBotAttackIntoCover
   
   __i686_get_pc_thunk_bx();
   param_2[8] = 0;
-  *param_2 = unaff_EBX + 0x4884bd;
+  *param_2 = unaff_EBX + 0x4884bd /* vtable for CINSBotAttackIntoCover+0x8 */;
   piVar1 = param_2 + 0xe;
-  param_2[1] = unaff_EBX + 0x488669;
-  param_2[0xe] = unaff_EBX + 0x41b24d;
+  param_2[1] = unaff_EBX + 0x488669 /* vtable for CINSBotAttackIntoCover+0x1b4 */;
+  param_2[0xe] = unaff_EBX + 0x41b24d /* vtable for CountdownTimer+0x8 */;
   param_2[9] = 0;
   param_2[10] = 0;
   param_2[3] = 0;
@@ -125,7 +125,7 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
   undefined4 uVar15;
   
   __i686_get_pc_thunk_bx();
-  piVar4 = (int *)(**(code **)(*extraout_EDX + 0x974))(extraout_EDX);
+  piVar4 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSBotAttackIntoCover::OnMoveToSuccess */))(extraout_EDX);
   piVar4 = (int *)(**(code **)(*piVar4 + 0xd0))(piVar4,0);
   if (((piVar4 == (int *)0x0) || (iVar5 = (**(code **)(*piVar4 + 0x10))(piVar4), iVar5 == 0)) ||
      (cVar2 = (**(code **)(*piVar4 + 0x54))(piVar4), cVar2 != '\0')) {
@@ -140,14 +140,14 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
   if (iVar5 == 0) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x273b6e;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x273b6e /* "Should Not Attack This Threat" */;
     return param_1;
   }
   piVar6 = (int *)(**(code **)(*piVar4 + 0x10))(piVar4);
   if ((piVar6 == (int *)0x0) || (cVar2 = (**(code **)(*piVar6 + 0x158))(piVar6), cVar2 == '\0')) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x273f40;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x273f40 /* "Non INS Player Enemy?" */;
     return param_1;
   }
   fVar11 = (float10)CountdownTimer::Now();
@@ -158,7 +158,7 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
   if ((float)fVar11 < *(float *)(CGameStringPool::~CGameStringPool + unaff_EBX + 7)) {
     if (*(char *)((int)param_2 + 0x50) != '\0') {
       piVar4 = (int *)::operator_new(0x5c);
-      pcVar1 = (code *)(unaff_EBX + -0x4dbca1);
+      pcVar1 = (code *)(unaff_EBX + -0x4dbca1 /* CountdownTimer::NetworkStateChanged */);
       piVar4[8] = 0;
       piVar4[9] = 0;
       piVar4[10] = 0;
@@ -172,11 +172,11 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
       *(undefined1 *)((int)piVar4 + 0x31) = 0;
       piVar4[0xb] = 0;
       piVar4[0xd] = 0;
-      iVar5 = *(int *)(unaff_EBX + 0x49a5e7);
+      iVar5 = *(int *)(unaff_EBX + 0x49a5e7 /* &vtable for CINSBotReload */);
       piVar4[0xf] = 0;
       piVar4[1] = iVar5 + 0x198;
       *piVar4 = iVar5 + 8;
-      iVar5 = unaff_EBX + 0x41bda7;
+      iVar5 = unaff_EBX + 0x41bda7 /* vtable for CountdownTimer+0x8 */;
       piVar4[0xe] = iVar5;
       (*pcVar1)(piVar4 + 0xe,piVar4 + 0xf);
       piVar4[0x10] = -0x40800000;
@@ -193,14 +193,14 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
       (**(code **)(piVar4[0x14] + 4))(piVar4 + 0x14,piVar4 + 0x16);
       *(undefined4 *)param_1 = 1;
       *(int **)(param_1 + 4) = piVar4;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x273f56;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x273f56 /* "Made it, now reloading!" */;
       return param_1;
     }
     pvVar7 = ::operator_new(0x68);
     CINSBotAttackFromCover::CINSBotAttackFromCover(this_00);
     *(undefined4 *)param_1 = 1;
     *(void **)(param_1 + 4) = pvVar7;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x273f6e;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x273f6e /* "Made It!" */;
     return param_1;
   }
   fVar12 = *(float *)(in_stack_0000000c + 0xb340);
@@ -227,7 +227,7 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
           (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
           uVar15 = 0x3e99999a;
           uVar14 = 8;
-          iVar5 = unaff_EBX + 0x273fa4;
+          iVar5 = unaff_EBX + 0x273fa4 /* "Sprinting to Cover" */;
           uVar13 = 0xc;
           CINSBotBody::SetPosture();
           pCVar9 = extraout_ECX_02;
@@ -237,7 +237,7 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
       (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
       uVar15 = 0x3e99999a;
       uVar14 = 8;
-      iVar5 = unaff_EBX + 0x273fa4;
+      iVar5 = unaff_EBX + 0x273fa4 /* "Sprinting to Cover" */;
       uVar13 = 0xd;
       CINSBotBody::SetPosture();
       pCVar9 = extraout_ECX_01;
@@ -246,11 +246,11 @@ CINSBotAttackIntoCover::Update(CINSBotAttackIntoCover *this,CINSNextBot *param_1
       piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
       pcVar1 = *(code **)(*piVar6 + 0xd8);
       uVar13 = (**(code **)(*piVar4 + 0x10))(piVar4);
-      (*pcVar1)(piVar6,uVar13,3,0x3e99999a,0,unaff_EBX + 0x273e64);
+      (*pcVar1)(piVar6,uVar13,3,0x3e99999a,0,unaff_EBX + 0x273e64 /* "Aiming at a visible threat" */);
       (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
       uVar15 = 0x3e99999a;
       uVar14 = 8;
-      iVar5 = unaff_EBX + 0x273f93;
+      iVar5 = unaff_EBX + 0x273f93 /* "Walking to Cover" */;
       uVar13 = 0xb;
       CINSBotBody::SetPosture();
       pcVar1 = *(code **)(*(int *)in_stack_0000000c + 0x434);
@@ -271,7 +271,7 @@ LAB_0070c910:
       (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
       uVar15 = 0x3e99999a;
       uVar14 = 8;
-      iVar5 = unaff_EBX + 0x273fb7;
+      iVar5 = unaff_EBX + 0x273fb7 /* "Getting up from prone" */;
       uVar13 = 0xc;
       CINSBotBody::SetPosture();
       pCVar9 = extraout_ECX_00;
@@ -280,7 +280,7 @@ LAB_0070c910:
       (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
       uVar15 = 0x3e99999a;
       uVar14 = 8;
-      iVar5 = unaff_EBX + 0x273fcf;
+      iVar5 = unaff_EBX + 0x273fcf /* "staying prone while attacking our enemy" */;
       uVar13 = 1;
       CINSBotBody::SetPosture();
       pCVar9 = extraout_ECX_03;
@@ -291,11 +291,11 @@ LAB_0070c910:
       (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c,uVar13,uVar14,uVar15,iVar5)
       ;
       fVar11 = (float10)CINSBotLocomotion::GetStillDuration(this_04);
-      if (*(float *)(unaff_EBX + 0x21a99f) <= (float)fVar11 &&
-          (float)fVar11 != *(float *)(unaff_EBX + 0x21a99f)) {
+      if (*(float *)(unaff_EBX + 0x21a99f /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) <= (float)fVar11 &&
+          (float)fVar11 != *(float *)(unaff_EBX + 0x21a99f /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */)) {
         *(undefined4 *)param_1 = 3;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x273ff7;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x273ff7 /* "Rethink, i've been still here for more than 2 seconds" */;
         return param_1;
       }
     }
@@ -303,13 +303,13 @@ LAB_0070c910:
   }
   else {
     (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
-    iVar5 = unaff_EBX + 0x273f77;
+    iVar5 = unaff_EBX + 0x273f77 /* "sprinting to cover position" */;
     uVar15 = 0x3e99999a;
     uVar14 = 8;
     CINSBotBody::SetPosture();
   }
   fVar11 = (float10)CountdownTimer::Now();
-  fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x21767b);
+  fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x21767b /* typeinfo name for ISaveRestoreOps+0x67 */);
   if (*(float *)((int)param_2 + 0x40) != fVar12) {
     (**(code **)(*(int *)((int)param_2 + 0x38) + 4))
               ((int)param_2 + 0x38,(int)param_2 + 0x40,uVar14,uVar15,iVar5);
@@ -356,7 +356,7 @@ int CINSBotAttackIntoCover::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x2732ac;
+  return extraout_ECX + 0x2732ac /* "AttackIntoCover" */;
 }
 
 
@@ -473,11 +473,11 @@ undefined1 __cdecl CINSBotAttackIntoCover::ShouldRetreat(INextBot *param_1)
   if (piVar1 != (int *)0x0) {
     cVar2 = (**(code **)(*piVar1 + 0x4ac))(piVar1,0xffffffff);
     if (cVar2 == '\0') {
-      local_14 = *(float *)(unaff_EBX + 0x2178e2);
+      local_14 = *(float *)(unaff_EBX + 0x2178e2 /* typeinfo name for ISaveRestoreOps+0x67 */);
       local_10 = 0.0;
     }
     else {
-      local_14 = *(float *)(unaff_EBX + 0x2178e2);
+      local_14 = *(float *)(unaff_EBX + 0x2178e2 /* typeinfo name for ISaveRestoreOps+0x67 */);
       local_10 = local_14;
     }
     cVar2 = CINSNextBot::IsSuppressed(this);
@@ -485,7 +485,7 @@ undefined1 __cdecl CINSBotAttackIntoCover::ShouldRetreat(INextBot *param_1)
       local_10 = local_10 + local_14;
     }
     fVar4 = (float10)CINSNextBot::GetActiveWeaponAmmoRatio();
-    if ((float)fVar4 < *(float *)(unaff_EBX + 0x1ac972)) {
+    if ((float)fVar4 < *(float *)(unaff_EBX + 0x1ac972 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x3c */)) {
       local_10 = local_10 + local_14;
     }
     (**(code **)(*piVar1 + 0x974))(piVar1);
@@ -587,7 +587,7 @@ CINSNextBot * CINSBotAttackIntoCover::OnMoveToSuccess(CINSNextBot *param_1,Path 
   else if (param_2[0x50] == (Path)0x0) {
     *(undefined4 *)param_1 = 3;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x2736be;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x2736be /* "Made It!" */;
     *(undefined4 *)(param_1 + 0xc) = 1;
   }
   else {
@@ -605,12 +605,12 @@ CINSNextBot * CINSBotAttackIntoCover::OnMoveToSuccess(CINSNextBot *param_1,Path 
     *(undefined1 *)((int)piVar3 + 0x31) = 0;
     piVar3[0xb] = 0;
     piVar3[0xd] = 0;
-    iVar2 = *(int *)(unaff_EBX + 0x499d37);
+    iVar2 = *(int *)(unaff_EBX + 0x499d37 /* &vtable for CINSBotReload */);
     piVar3[0xf] = 0;
     piVar3[1] = iVar2 + 0x198;
     *piVar3 = iVar2 + 8;
-    iVar2 = unaff_EBX + 0x41b4f7;
-    pcVar1 = (code *)(unaff_EBX + -0x4dc551);
+    iVar2 = unaff_EBX + 0x41b4f7 /* vtable for CountdownTimer+0x8 */;
+    pcVar1 = (code *)(unaff_EBX + -0x4dc551 /* CountdownTimer::NetworkStateChanged */);
     piVar3[0xe] = iVar2;
     (*pcVar1)(piVar3 + 0xe,piVar3 + 0xf);
     piVar3[0x10] = -0x40800000;
@@ -627,7 +627,7 @@ CINSNextBot * CINSBotAttackIntoCover::OnMoveToSuccess(CINSNextBot *param_1,Path 
     (**(code **)(piVar3[0x14] + 4))(piVar3 + 0x14,piVar3 + 0x16);
     *(undefined4 *)param_1 = 1;
     *(int **)(param_1 + 4) = piVar3;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x2736a6;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x2736a6 /* "Made it, now reloading!" */;
     *(undefined4 *)(param_1 + 0xc) = 1;
   }
   return param_1;
@@ -1161,9 +1161,9 @@ void __thiscall CINSBotAttackIntoCover::~CINSBotAttackIntoCover(CINSBotAttackInt
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x488363;
-  in_stack_00000004[1] = extraout_ECX + 0x48850f;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x49a0b3));
+  *in_stack_00000004 = extraout_ECX + 0x488363 /* vtable for CINSBotAttackIntoCover+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x48850f /* vtable for CINSBotAttackIntoCover+0x1b4 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x49a0b3 /* &_DYNAMIC */));
   return;
 }
 
@@ -1200,8 +1200,8 @@ void __thiscall CINSBotAttackIntoCover::~CINSBotAttackIntoCover(CINSBotAttackInt
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x48831a;
-  in_stack_00000004[1] = unaff_EBX + 0x4884c6;
+  *in_stack_00000004 = unaff_EBX + 0x48831a /* vtable for CINSBotAttackIntoCover+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x4884c6 /* vtable for CINSBotAttackIntoCover+0x1b4 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

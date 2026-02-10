@@ -41,15 +41,15 @@ CINSNextBotChasePathCost::operator()
   float local_34;
   
   __i686_get_pc_thunk_bx();
-  iVar4 = *(int *)(unaff_EBX + 0x4b1739);
+  iVar4 = *(int *)(unaff_EBX + 0x4b1739 /* &GCSDK::GetPchTempTextBuffer */);
   bVar10 = *(int *)(iVar4 + 0x100c) != 0;
   if ((bVar10) && (iVar8 = *(int *)(iVar4 + 0x19b8), iVar6 = ThreadGetCurrentId(), iVar8 == iVar6))
   {
     piVar7 = *(int **)(iVar4 + 0x1014);
-    if (*piVar7 != unaff_EBX + 0x28a3f5) {
+    if (*piVar7 != unaff_EBX + 0x28a3f5 /* "CINSNextBotChasePathCost::operator()" */) {
       piVar7 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar7,unaff_EBX + 0x28a3f5,(char *)0x0,
-                                 unaff_EBX + 0x28ba2e);
+                                ((char *)piVar7,unaff_EBX + 0x28a3f5 /* "CINSNextBotChasePathCost::operator()" */,(char *)0x0,
+                                 unaff_EBX + 0x28ba2e /* "NextBot" */);
       *(int **)(iVar4 + 0x1014) = piVar7;
     }
     puVar1 = (uint *)(*(int *)(iVar4 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -65,10 +65,10 @@ CINSNextBotChasePathCost::operator()
   cVar5 = (**(code **)(*piVar7 + 0x174))(piVar7,param_2);
   if (cVar5 == '\0') {
 LAB_006f5528:
-    local_34 = *(float *)(unaff_EBX + 0x1c38d5);
+    local_34 = *(float *)(unaff_EBX + 0x1c38d5 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x30 */);
   }
   else {
-    local_34 = *(float *)(unaff_EBX + 0x233f71);
+    local_34 = *(float *)(unaff_EBX + 0x233f71 /* typeinfo name for CTraceFilterIgnoreWeapons+0x21 */);
     fVar13 = *(float *)(param_1 + 0xc);
     fVar2 = *(float *)(param_1 + 0x10);
     fVar3 = *(float *)(param_1 + 0x14);
@@ -128,15 +128,15 @@ LAB_006f5528:
       local_34 = local_34 - fVar13;
     }
     else {
-      fVar13 = (fVar13 - local_34) * *(float *)(unaff_EBX + 0x22fdf1);
-      local_34 = *(float *)(unaff_EBX + 0x1c38d9);
+      fVar13 = (fVar13 - local_34) * *(float *)(unaff_EBX + 0x22fdf1 /* typeinfo name for ITraceFilter+0x3c */);
+      local_34 = *(float *)(unaff_EBX + 0x1c38d9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
       if (local_34 <= fVar13) {
         fVar13 = local_34;
       }
-      if (fVar13 <= *(float *)(unaff_EBX + 0x1c38cd)) {
-        fVar13 = *(float *)(unaff_EBX + 0x1c38cd);
+      if (fVar13 <= *(float *)(unaff_EBX + 0x1c38cd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
+        fVar13 = *(float *)(unaff_EBX + 0x1c38cd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */);
       }
-      local_34 = local_34 + fVar13 * *(float *)(unaff_EBX + 0x28a7f1);
+      local_34 = local_34 + fVar13 * *(float *)(unaff_EBX + 0x28a7f1 /* typeinfo name for NextBotTraversableTraceFilter+0x2c */);
     }
     pCVar16 = param_2;
     fVar11 = (float10)CNavArea::ComputeAdjacentConnectionHeightChange(this,(CNavArea *)param_3);
@@ -145,13 +145,13 @@ LAB_006f5528:
       piVar7 = (int *)(**(code **)(**(int **)(param_1 + 4) + 0xd0))(*(int **)(param_1 + 4),pCVar16);
       cVar5 = (**(code **)(*piVar7 + 0x144))(piVar7);
       if ((cVar5 == '\0') || (*(float *)(param_1 + 0x1c) <= fVar13)) goto LAB_006f5528;
-      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41);
+      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41 /* typeinfo name for IServerBenchmark+0x13 */);
     }
-    else if (fVar13 <= (float)((uint)*(float *)(param_1 + 0x18) ^ *(uint *)(unaff_EBX + 0x22f9c5)))
+    else if (fVar13 <= (float)((uint)*(float *)(param_1 + 0x18) ^ *(uint *)(unaff_EBX + 0x22f9c5 /* typeinfo name for CBroadcastRecipientFilter+0x44 */)))
     {
-      if (fVar13 <= (float)(*(uint *)(param_1 + 0x20) ^ *(uint *)(unaff_EBX + 0x22f9c5)))
+      if (fVar13 <= (float)(*(uint *)(param_1 + 0x20) ^ *(uint *)(unaff_EBX + 0x22f9c5 /* typeinfo name for CBroadcastRecipientFilter+0x44 */)))
       goto LAB_006f5528;
-      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41);
+      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41 /* typeinfo name for IServerBenchmark+0x13 */);
     }
     (**(code **)(**(int **)(param_1 + 4) + 200))(*(int **)(param_1 + 4));
     iVar8 = CBaseEntity::GetTeamNumber(this_00);
@@ -169,7 +169,7 @@ LAB_006f5528:
     }
     local_34 = (float)iVar6 + local_34;
     if (((byte)param_2[0x68] & 0x80) != 0) {
-      local_34 = local_34 * *(float *)(unaff_EBX + 0x22ef75);
+      local_34 = local_34 * *(float *)(unaff_EBX + 0x22ef75 /* typeinfo name for CTraceFilterNoCombatCharacters+0x30 */);
     }
   }
 joined_r0x006f5534:

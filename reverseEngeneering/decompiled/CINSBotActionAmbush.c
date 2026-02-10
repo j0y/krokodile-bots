@@ -20,7 +20,7 @@ void __thiscall CINSBotActionAmbush::CINSBotActionAmbush(CINSBotActionAmbush *th
   
   __i686_get_pc_thunk_cx();
   in_stack_00000004[8] = 0;
-  *in_stack_00000004 = extraout_ECX + 0x462743;
+  *in_stack_00000004 = extraout_ECX + 0x462743 /* vtable for CINSBotActionAmbush+0x8 */;
   in_stack_00000004[9] = 0;
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
@@ -33,7 +33,7 @@ void __thiscall CINSBotActionAmbush::CINSBotActionAmbush(CINSBotActionAmbush *th
   *(undefined1 *)((int)in_stack_00000004 + 0x31) = 0;
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
-  in_stack_00000004[1] = extraout_ECX + 0x4628d7;
+  in_stack_00000004[1] = extraout_ECX + 0x4628d7 /* vtable for CINSBotActionAmbush+0x19c */;
   in_stack_00000004[0xf] = -1;
   *(undefined1 *)(in_stack_00000004 + 0xe) = 0;
   *(undefined1 *)((int)in_stack_00000004 + 0x39) = 0;
@@ -120,9 +120,9 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
   uVar13 = 0;
   fVar9 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                              (this_00,(float)in_stack_0000000c,0x42480000);
-  *(bool *)((int)param_2 + 0x38) = (float)fVar9 < *(float *)(unaff_EBX + 0x1ed761);
+  *(bool *)((int)param_2 + 0x38) = (float)fVar9 < *(float *)(unaff_EBX + 0x1ed761 /* typeinfo name for ISaveRestoreOps+0x67 */);
   uVar3 = CBaseEntity::GetTeamNumber(in_stack_0000000c);
-  cVar2 = CINSRules::IsAttackingTeam(this_01,**(int **)(unaff_EBX + 0x4705cd));
+  cVar2 = CINSRules::IsAttackingTeam(this_01,**(int **)(unaff_EBX + 0x4705cd /* &g_pGameRules */));
   if (cVar2 != '\0') {
     piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c,uVar3,uVar13)
     ;
@@ -140,7 +140,7 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
         *(undefined4 *)((int)param_2 + 0x28) = 0;
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(void **)(param_1 + 4) = pvVar4;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24a292;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24a292 /* "Attacking nearby threats" */;
         *(undefined4 *)param_1 = 2;
         return param_1;
       }
@@ -158,10 +158,10 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
         *(undefined4 *)((int)param_2 + 0x2c) = 0;
         *(CNavArea **)(param_1 + 4) = pCVar6;
         *(undefined4 *)param_1 = 2;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24be23;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24be23 /* "I have an investigation!" */;
         return param_1;
       }
-      iVar8 = CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(unaff_EBX + 0x47038d));
+      iVar8 = CINSNavMesh::GetRandomControlPointSurroundingArea(**(int **)(unaff_EBX + 0x47038d /* &TheNavMesh */));
       if (iVar8 != 0) {
         CNavArea::GetRandomPoint();
         CINSNextBot::AddInvestigation(in_stack_0000000c,local_28,local_24,local_20,0);
@@ -180,7 +180,7 @@ LAB_00736395:
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar4;
     *(undefined4 *)param_1 = 2;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x24be11;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x24be11 /* "Moving to capture" */;
     return param_1;
   }
   iVar8 = (uVar1 & 0xffff) * 0x18 + **(int **)(&DAT_004704ad + unaff_EBX);
@@ -253,7 +253,7 @@ int CINSBotActionAmbush::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f6f62;
+  return extraout_ECX + 0x1f6f62 /* "Ambush" */;
 }
 
 
@@ -336,9 +336,9 @@ void __thiscall CINSBotActionAmbush::~CINSBotActionAmbush(CINSBotActionAmbush *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x462673;
-  in_stack_00000004[1] = extraout_ECX + 0x462807;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x470903));
+  *in_stack_00000004 = extraout_ECX + 0x462673 /* vtable for CINSBotActionAmbush+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x462807 /* vtable for CINSBotActionAmbush+0x19c */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x470903 /* &_DYNAMIC */));
   return;
 }
 
@@ -376,7 +376,7 @@ void __thiscall CINSBotActionAmbush::~CINSBotActionAmbush(CINSBotActionAmbush *t
   
   __i686_get_pc_thunk_bx();
   *in_stack_00000004 = &UNK_0046262a + unaff_EBX;
-  in_stack_00000004[1] = unaff_EBX + 0x4627be;
+  in_stack_00000004[1] = unaff_EBX + 0x4627be /* vtable for CINSBotActionAmbush+0x19c */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;
