@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Ghidra postScript: Decompile bot AI functions from server_srv.so
 # Usage: analyzeHeadless ... -postScript ghidra_decompile_bots.py /output/dir
 #
@@ -312,7 +313,7 @@ def main():
 
         with open(file_path, "w") as f:
             f.write("/*\n")
-            f.write(" * %s — Decompiled bot AI functions\n" % cls)
+            f.write(" * %s -- Decompiled bot AI functions\n" % cls)
             f.write(" * Source: server_srv.so (Insurgency 2014)\n")
             f.write(" * Decompiled by Ghidra %s\n" % str(
                 program.getMetadata().get("Created With", "unknown")))
@@ -333,7 +334,7 @@ def main():
     # Write index
     index_path = os.path.join(output_dir, "_index.md")
     with open(index_path, "w") as f:
-        f.write("# Decompiled Bot AI — Index\n\n")
+        f.write("# Decompiled Bot AI -- Index\n\n")
         f.write("Source: `server_srv.so` (Insurgency 2014, 32-bit x86)\n\n")
         f.write("| Class | Functions | File |\n")
         f.write("|-------|-----------|------|\n")

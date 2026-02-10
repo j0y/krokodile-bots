@@ -54,13 +54,14 @@ if [ -d "$PROJECT_DIR/${PROJECT_NAME}.rep" ]; then
     # Re-run: process existing project, skip analysis
     docker run --rm \
         --memory=8g \
+        --entrypoint /ghidra/support/analyzeHeadless \
         -e MAXMEM="$MAXMEM" \
         -v "$BINARY:/input/server_srv.so:ro" \
         -v "$GHIDRA_SCRIPT:/scripts/ghidra_decompile_bots.py:ro" \
         -v "$OUTPUT_DIR:/output" \
         -v "$PROJECT_DIR:/project" \
         "$GHIDRA_IMAGE" \
-        analyzeHeadless /project "$PROJECT_NAME" \
+        /project "$PROJECT_NAME" \
         -process server_srv.so \
         -noanalysis \
         -scriptPath /scripts \
@@ -73,13 +74,14 @@ else
     # First run: import + full analysis + decompile
     docker run --rm \
         --memory=8g \
+        --entrypoint /ghidra/support/analyzeHeadless \
         -e MAXMEM="$MAXMEM" \
         -v "$BINARY:/input/server_srv.so:ro" \
         -v "$GHIDRA_SCRIPT:/scripts/ghidra_decompile_bots.py:ro" \
         -v "$OUTPUT_DIR:/output" \
         -v "$PROJECT_DIR:/project" \
         "$GHIDRA_IMAGE" \
-        analyzeHeadless /project "$PROJECT_NAME" \
+        /project "$PROJECT_NAME" \
         -import /input/server_srv.so \
         -processor x86:LE:32:default \
         -scriptPath /scripts \
