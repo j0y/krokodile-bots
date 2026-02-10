@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 FLUSH_ROWS = 500
 FLUSH_INTERVAL_SEC = 5.0
 
-_CREATE_TABLE = """\
+_CREATE_NAV_TABLE = """\
 CREATE TABLE IF NOT EXISTS nav_telemetry (
   tick        INTEGER,
   bot_id      INTEGER,
@@ -32,10 +32,28 @@ CREATE TABLE IF NOT EXISTS nav_telemetry (
   area_id     INTEGER
 )"""
 
-_INSERT = (
+_CREATE_ARRIVAL_TABLE = """\
+CREATE TABLE IF NOT EXISTS arrival_telemetry (
+  tick           INTEGER,
+  bot_id         INTEGER,
+  goal_x         REAL, goal_y REAL, goal_z REAL,
+  actual_x       REAL, actual_y REAL, actual_z REAL,
+  error_2d       REAL,
+  error_3d       REAL,
+  leg_start_tick INTEGER,
+  leg_start_x    REAL, leg_start_y REAL, leg_start_z REAL,
+  patrol_idx     INTEGER
+)"""
+
+_INSERT_NAV = (
     "INSERT INTO nav_telemetry VALUES ("
     "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, "
     "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+)
+
+_INSERT_ARRIVAL = (
+    "INSERT INTO arrival_telemetry VALUES ("
+    "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 )
 
 
@@ -65,13 +83,33 @@ class NavTelemetryRow:
     area_id: int
 
 
+@dataclass
+class ArrivalTelemetryRow:
+    tick: int
+    bot_id: int
+    goal_x: float
+    goal_y: float
+    goal_z: float
+    actual_x: float
+    actual_y: float
+    actual_z: float
+    error_2d: float
+    error_3d: float
+    leg_start_tick: int
+    leg_start_x: float
+    leg_start_y: float
+    leg_start_z: float
+    patrol_idx: int
+
+
 class TelemetryClient:
     """Buffered writer that INSERTs telemetry rows into PostgreSQL."""
 
     def __init__(self, host: str = "localhost", port: int = 5432) -> None:
         conninfo = f"host={host} port={port} dbname=telemetry user=smartbots password=smartbots"
         self._conn = psycopg.connect(conninfo, autocommit=False)
-        self._conn.execute(_CREATE_TABLE)
+        self._conn.execute(_CREATE_NAV_TABLE)
+        self._conn.execute(_CREATE_ARRIVAL_TABLE)
         self._conn.commit()
         self._buffer: list[tuple[object, ...]] = []
         self._last_flush = time.monotonic()
@@ -84,12 +122,29 @@ class TelemetryClient:
         if len(self._buffer) >= FLUSH_ROWS or (now - self._last_flush) >= FLUSH_INTERVAL_SEC:
             self._flush()
 
+    def record_arrival(self, row: ArrivalTelemetryRow) -> None:
+        """Write an arrival row immediately (arrivals are infrequent)."""
+        try:
+            with self._conn.cursor() as cur:
+                cur.execute(_INSERT_ARRIVAL, astuple(row))
+            self._conn.commit()
+            log.info(
+                "Arrival: bot=%d err_2d=%.1f err_3d=%.1f patrol_idx=%d",
+                row.bot_id, row.error_2d, row.error_3d, row.patrol_idx,
+            )
+        except Exception:
+            log.exception("Arrival telemetry write failed")
+            try:
+                self._conn.rollback()
+            except Exception:
+                pass
+
     def _flush(self) -> None:
         if not self._buffer:
             return
         try:
             with self._conn.cursor() as cur:
-                cur.executemany(_INSERT, self._buffer)
+                cur.executemany(_INSERT_NAV, self._buffer)
             self._conn.commit()
             self._total_rows += len(self._buffer)
             if self._total_rows % 5000 < len(self._buffer):

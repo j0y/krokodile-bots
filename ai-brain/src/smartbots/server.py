@@ -12,7 +12,7 @@ from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.spatial_recorder import SpatialRecorder
 from smartbots.state import GameState
-from smartbots.strategy import GatheringStrategy
+from smartbots.strategy import ShuttleStrategy
 from smartbots.telemetry import TelemetryClient
 from smartbots.terrain import TerrainAnalyzer
 
@@ -65,8 +65,8 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None, TelemetryClien
     nav_path = os.path.join(maps_dir, f"{nav_map}.nav")
     nav = NavGraph(nav_path)
     terrain = TerrainAnalyzer(nav)
-    strategy = GatheringStrategy()
-    log.info("Strategy: gathering")
+    strategy = ShuttleStrategy()
+    log.info("Strategy: shuttle")
 
     recorder: SpatialRecorder | None = None
     if os.environ.get("RECORD_POSITIONS", "").strip() == "1":

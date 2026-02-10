@@ -68,6 +68,8 @@ class BotBrain:
     state: BotBehaviorState = BotBehaviorState.IDLE
     goal: BotGoal = field(default_factory=BotGoal)
     nav_state: BotNavState | None = None
+    leg_start_tick: int = 0
+    leg_start_pos: tuple[float, float, float] = (0.0, 0.0, 0.0)
 
 
 class BotManager:
@@ -85,13 +87,14 @@ class BotManager:
         self.strategy = strategy
         self.telemetry = telemetry
         self._brains: dict[int, BotBrain] = {}
+        self._last_state: GameState | None = None
 
     def _get_brain(self, bot_id: int) -> BotBrain:
         if bot_id not in self._brains:
             self._brains[bot_id] = BotBrain(bot_id=bot_id)
         return self._brains[bot_id]
 
-    def set_goal(self, bot_id: int, goal: BotGoal) -> None:
+    def set_goal(self, bot_id: int, goal: BotGoal, tick: int = 0) -> None:
         brain = self._get_brain(bot_id)
         brain.goal = goal
         brain.nav_state = None
@@ -99,13 +102,19 @@ class BotManager:
             brain.state = BotBehaviorState.IDLE
         else:
             brain.state = BotBehaviorState.NAVIGATING
+            # Initialize leg tracking for arrival telemetry
+            bot_state = self._last_state.bots.get(bot_id) if self._last_state else None
+            brain.leg_start_tick = tick
+            brain.leg_start_pos = bot_state.pos if bot_state else (0.0, 0.0, 0.0)
         log.info("bot=%d: goal set type=%s state=%s", bot_id, goal.type.name, brain.state.name)
 
     def compute_commands(self, state: GameState) -> list[BotCommand]:
+        self._last_state = state
+
         # Let strategy assign/update goals
         new_goals = self.strategy.assign_goals(state, self._brains, self.nav)
         for bot_id, goal in new_goals.items():
-            self.set_goal(bot_id, goal)
+            self.set_goal(bot_id, goal, tick=state.tick)
 
         # Clean up dead bots
         for bot in state.bots.values():
@@ -143,6 +152,30 @@ class BotManager:
 
         # NAVIGATING
         return self._tick_navigate(brain, bot, state)
+
+    def _record_arrival(
+        self, brain: BotBrain, bot: BotState, tick: int,
+        target_pos: tuple[float, float, float],
+    ) -> None:
+        from smartbots.telemetry import ArrivalTelemetryRow
+
+        dx = bot.pos[0] - target_pos[0]
+        dy = bot.pos[1] - target_pos[1]
+        dz = bot.pos[2] - target_pos[2]
+        error_2d = math.sqrt(dx * dx + dy * dy)
+        error_3d = math.sqrt(dx * dx + dy * dy + dz * dz)
+        assert self.telemetry is not None
+        self.telemetry.record_arrival(ArrivalTelemetryRow(
+            tick=tick, bot_id=bot.id,
+            goal_x=target_pos[0], goal_y=target_pos[1], goal_z=target_pos[2],
+            actual_x=bot.pos[0], actual_y=bot.pos[1], actual_z=bot.pos[2],
+            error_2d=error_2d, error_3d=error_3d,
+            leg_start_tick=brain.leg_start_tick,
+            leg_start_x=brain.leg_start_pos[0],
+            leg_start_y=brain.leg_start_pos[1],
+            leg_start_z=brain.leg_start_pos[2],
+            patrol_idx=brain.goal.patrol_idx,
+        ))
 
     def _compute_path(
         self, brain: BotBrain, pos: tuple[float, float, float],
@@ -198,6 +231,11 @@ class BotManager:
                 # Path complete
                 brain.state = BotBehaviorState.ARRIVED
                 log.info("bot=%d: NAVIGATING -> ARRIVED", brain.bot_id)
+
+                # Record arrival telemetry before patrol cycling updates goal
+                if self.telemetry is not None and target_pos is not None:
+                    self._record_arrival(brain, bot, tick, target_pos)
+
                 if brain.goal.type == BotGoalType.PATROL and brain.goal.patrol_points:
                     brain.goal.patrol_idx = (
                         (brain.goal.patrol_idx + 1) % len(brain.goal.patrol_points)
@@ -205,6 +243,8 @@ class BotManager:
                     brain.goal.position = brain.goal.patrol_points[brain.goal.patrol_idx]
                     brain.nav_state = None
                     brain.state = BotBehaviorState.NAVIGATING
+                    brain.leg_start_tick = tick
+                    brain.leg_start_pos = bot.pos
                     log.info("bot=%d: patrol -> next point %d", brain.bot_id, brain.goal.patrol_idx)
                 return BotCommand(id=bot.id, move_target=bot.pos, look_target=target_pos)
 
