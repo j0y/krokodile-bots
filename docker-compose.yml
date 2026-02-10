@@ -70,6 +70,26 @@ services:
     profiles:
       - ai
 
+  # --- Vanilla debug mode: original bot AI + nb_debug logging ---
+  insurgency-vanilla:
+    build:
+      context: ./insurgency-server
+      dockerfile: Dockerfile
+    container_name: insurgency-vanilla
+    restart: unless-stopped
+    network_mode: host
+    entrypoint: /home/steam/entrypoint-vanilla.sh
+    volumes:
+      - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
+    environment:
+      - START_MAP=${START_MAP:-ministry_coop}
+      - MAX_PLAYERS=32
+      - TICKRATE=64
+    stdin_open: true
+    tty: true
+    profiles:
+      - vanilla
+
   # --- Record mode: observer-only plugin + original AI + position recording ---
   insurgency-record:
     build:

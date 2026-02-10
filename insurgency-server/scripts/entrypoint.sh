@@ -59,6 +59,7 @@ sv_cheats 1
 mp_limitteams 0
 mp_autoteambalance 0
 exec betterbots.cfg
+exec nbdebug.cfg
 
 // ---------------------------------------------------------------
 // Round Timers (low for faster debugging)
@@ -189,7 +190,9 @@ exec ./srcds_linux \
     -console \
     -32bit \
     -port 27025 \
+    -insecure \
     +sv_lan 0 \
+    +sv_cheats 1 \
     +map "${START_MAP}" \
     +maxplayers "${MAX_PLAYERS}" \
     -tickrate "${TICKRATE}" \
