@@ -18,7 +18,6 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from smartbots.clearance import ClearanceMap
     from smartbots.navigation import NavGraph
     from smartbots.terrain import TerrainAnalyzer
 
@@ -58,29 +57,23 @@ MIN_LOOK_AHEAD_RANGE = 30.0
 # Blend move target toward next segment when within this range of a curved goal
 CORNER_BLEND_RANGE = 80.0
 
-# ── Clearance-steered movement ──
-# How far ahead to place the steered move target (caps at dist-to-goal)
-STEER_AHEAD_DIST = 120.0
-# Forward probe distances: check for walls along the chosen steer direction
-_FORWARD_PROBES = (32.0, 64.0, 96.0)
-# Clearance below this at a probe point triggers re-steering
-_FORWARD_PROBE_MIN = 28.0
-
-# ── Path clearance validation ──
-# Hard wall: clearance below this triggers segment skip
-_PATH_CLEARANCE_BLOCKED = 24.0
-# Caution zone: tight enough to aim past even if not fully blocked
-_PATH_CLEARANCE_CAUTION = 48.0
-# How many segments ahead to scan
-_PATH_LOOKAHEAD = 5
-# Sample clearance every this many units along each segment
-_PATH_SAMPLE_STEP = 32.0
-
-# ── Portal clearance optimization ──
-# Number of evenly-spaced samples along the portal to test clearance
-_PORTAL_CLEARANCE_SAMPLES = 8
-# Only shift the portal position if improvement exceeds this (units)
-_PORTAL_CLEARANCE_THRESHOLD = 50.0
+# ── Nav-mesh Avoid() feelers (mirrors PathFollower::Avoid) ──
+# Each entry: (angle_degrees_from_forward, trace_range, weight)
+# Positive angle = left of forward direction; symmetric pairs.
+_AVOID_FEELERS: list[tuple[float, float, float]] = [
+    (10.0, 60.0, 1.0),    # near-forward-left
+    (-10.0, 60.0, 1.0),   # near-forward-right
+    (30.0, 50.0, 0.8),    # diagonal-left
+    (-30.0, 50.0, 0.8),   # diagonal-right
+    (55.0, 40.0, 0.5),    # wide-left
+    (-55.0, 40.0, 0.5),   # wide-right
+]
+# Lateral offset for feeler start (perpendicular to forward, toward feeler's side)
+AVOID_HULL_OFFSET = 12.0
+# Distance to push adjusted goal from bot when avoiding
+AVOID_PUSH = 100.0
+# Emit detailed avoid log every N _avoid() calls per PathFollower instance
+_AVOID_LOG_INTERVAL = 40
 
 
 # ---------------------------------------------------------------------------
@@ -119,6 +112,31 @@ def _dist_2d(a: Pos3, b: Pos3) -> float:
     return math.sqrt(dx * dx + dy * dy)
 
 
+def _dist_3d(a: Pos3, b: Pos3) -> float:
+    dx = a[0] - b[0]
+    dy = a[1] - b[1]
+    dz = a[2] - b[2]
+    return math.sqrt(dx * dx + dy * dy + dz * dz)
+
+
+def _normalize_2d(v: Pos3) -> tuple[Pos3, float]:
+    """Return (unit_vector, magnitude) for 2D (XY) component."""
+    mag = math.sqrt(v[0] * v[0] + v[1] * v[1])
+    if mag < 0.001:
+        return ((0.0, 0.0, 0.0), 0.0)
+    return ((v[0] / mag, v[1] / mag, 0.0), mag)
+
+
+def _normalize_3d(v: Pos3) -> tuple[Pos3, float]:
+    mag = math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])
+    if mag < 0.001:
+        return ((0.0, 0.0, 0.0), 0.0)
+    return ((v[0] / mag, v[1] / mag, v[2] / mag), mag)
+
+
+def _dot_2d(a: Pos3, b: Pos3) -> float:
+    return a[0] * b[0] + a[1] * b[1]
+
 
 # ---------------------------------------------------------------------------
 # Path building — mirrors Path::Compute + ComputePathDetails + PostProcess
@@ -145,15 +163,11 @@ def compute_path_details(
     segments: list[Segment],
     nav: NavGraph,
     terrain: TerrainAnalyzer,
-    clearance: ClearanceMap | None = None,
 ) -> list[Segment]:
     """Set segment positions via closest-portal and detect climb/drop.
 
     Mirrors ``Path::ComputePathDetails``.  Modifies *segments* in-place and
     may insert additional segments for drop-downs and climb-ups.
-
-    When *clearance* is provided, portal crossing points are shifted along
-    the portal to the position with the best clearance in the travel direction.
     """
     if len(segments) < 2:
         return segments
@@ -196,48 +210,6 @@ def compute_path_details(
             else:
                 # Portal narrower than hull — use center
                 closest = (mid_x, mid_y, mid_z)
-
-            # ── Clearance-aware portal optimization ──
-            # Slide the crossing point along the portal to find the position
-            # with the best clearance in the travel direction.
-            if clearance is not None and portal_len > 2 * HULL_HALF_WIDTH:
-                travel_dx = mid_x - from_seg.pos[0]
-                travel_dy = mid_y - from_seg.pos[1]
-                travel_angle = math.atan2(travel_dy, travel_dx)
-
-                t_min_cl = HULL_HALF_WIDTH / portal_len
-                t_max_cl = 1.0 - t_min_cl
-                n_samples = _PORTAL_CLEARANCE_SAMPLES
-                best_clr = -1.0
-                best_t = (closest[0] - portal_a[0]) * (portal_b[0] - portal_a[0]) + \
-                         (closest[1] - portal_a[1]) * (portal_b[1] - portal_a[1])
-                if portal_len > 0.001:
-                    best_t = best_t / (portal_len * portal_len)
-                else:
-                    best_t = 0.5
-                # Query clearance at the current closest-point position
-                current_clr = clearance.get_clearance_at(
-                    from_seg.area_id, closest[0], closest[1], travel_angle, height=1,
-                )
-                best_clr = current_clr
-
-                for si in range(n_samples):
-                    st = t_min_cl + (t_max_cl - t_min_cl) * si / max(n_samples - 1, 1)
-                    sx = portal_a[0] + st * (portal_b[0] - portal_a[0])
-                    sy = portal_a[1] + st * (portal_b[1] - portal_a[1])
-                    clr = clearance.get_clearance_at(
-                        from_seg.area_id, sx, sy, travel_angle, height=1,
-                    )
-                    if clr > best_clr + _PORTAL_CLEARANCE_THRESHOLD:
-                        best_clr = clr
-                        best_t = st
-
-                sz = portal_a[2] + best_t * (portal_b[2] - portal_a[2])
-                closest = (
-                    portal_a[0] + best_t * (portal_b[0] - portal_a[0]),
-                    portal_a[1] + best_t * (portal_b[1] - portal_a[1]),
-                    sz,
-                )
 
             # ── Push into destination area ──
             # Offset crossing point past the portal edge so the bot aims
@@ -378,21 +350,12 @@ def post_process(segments: list[Segment]) -> None:
 class PathFollower:
     """NextBot-style segment-based path follower."""
 
-    def __init__(
-        self,
-        segments: list[Segment],
-        nav: NavGraph,
-        terrain: TerrainAnalyzer,
-        clearance: ClearanceMap | None = None,
-    ) -> None:
+    def __init__(self, segments: list[Segment], nav: NavGraph, terrain: TerrainAnalyzer) -> None:
         self.segments = segments
         self.nav = nav
         self.terrain = terrain
-        self.clearance = clearance
         self.goal_idx = 1  # first goal is the second segment (bot starts at first)
-        # Telemetry: cached results from the last tick
-        self.last_scan: tuple[float, int | None] = (float("inf"), None)
-        self.last_steer: tuple[float, float, float] = (0.0, 0.0, 0.0)
+        self._avoid_calls = 0
 
     @property
     def total_length(self) -> float:
@@ -492,93 +455,135 @@ class PathFollower:
 
             self.goal_idx += 1
 
-    # ── Path clearance validation ──
+    # ── Nav-mesh Avoid (mirrors PathFollower::Avoid) ──
 
-    def scan_path_clearance(self) -> tuple[float, int | None]:
-        """Scan upcoming path and return (min_clearance, tightest_segment_idx).
+    def _avoid(self, bot_pos: Pos3, goal_pos: Pos3) -> Pos3:
+        """Adjust *goal_pos* using multi-feeler nav-mesh traces.
 
-        Traces along the line between consecutive waypoints, sampling
-        clearance every ``_PATH_SAMPLE_STEP`` units.  Returns the minimum
-        clearance found and the segment index where it occurs.
+        Casts 6 feelers (3 symmetric pairs) at varying angles from the
+        forward direction.  Each feeler that intersects a nav-mesh boundary
+        contributes to a weighted lateral avoidance score.
 
-        The caller decides how to react based on the value:
-        - ``< _PATH_CLEARANCE_BLOCKED`` — hard wall, skip past it
-        - ``< _PATH_CLEARANCE_CAUTION`` — tight, aim past it
-        - above caution — clear, normal path following
-
-        Returns ``(inf, None)`` when no clearance data is available.
+        Mirrors ``PathFollower::Avoid()`` from the Valve reference but uses
+        nav area containment instead of engine hull traces.
         """
-        if self.clearance is None:
-            return (float("inf"), None)
+        goal = self.get_goal()
+        if goal is None or goal.type != SegmentType.ON_GROUND:
+            return goal_pos
 
-        worst_clr = float("inf")
-        worst_idx: int | None = None
+        # Forward and left unit vectors (2D)
+        fwd_x = goal_pos[0] - bot_pos[0]
+        fwd_y = goal_pos[1] - bot_pos[1]
+        fwd_mag = math.sqrt(fwd_x * fwd_x + fwd_y * fwd_y)
+        if fwd_mag < 0.001:
+            return goal_pos
+        fwd_x /= fwd_mag
+        fwd_y /= fwd_mag
+        left_x = -fwd_y
+        left_y = fwd_x
 
-        end = min(self.goal_idx + _PATH_LOOKAHEAD, len(self.segments))
-        for i in range(self.goal_idx, end):
-            seg = self.segments[i]
-            if seg.type != SegmentType.ON_GROUND:
-                continue
+        self._avoid_calls += 1
+        should_log = (self._avoid_calls % _AVOID_LOG_INTERVAL == 0)
 
-            prev = self.segments[i - 1] if i > 0 else None
-            if prev is None:
-                continue
+        left_score = 0.0
+        right_score = 0.0
+        any_hit = False
+        feeler_tags: list[str] = []
 
-            dx = seg.pos[0] - prev.pos[0]
-            dy = seg.pos[1] - prev.pos[1]
-            seg_len = math.sqrt(dx * dx + dy * dy)
-            if seg_len < 1.0:
-                continue
-            travel_angle = math.atan2(dy, dx)
+        for angle_deg, feeler_range, weight in _AVOID_FEELERS:
+            # Rotate forward vector by angle to get feeler direction
+            rad = math.radians(angle_deg)
+            cos_a = math.cos(rad)
+            sin_a = math.sin(rad)
+            dir_x = fwd_x * cos_a - fwd_y * sin_a
+            dir_y = fwd_x * sin_a + fwd_y * cos_a
 
-            # Sample along the segment every _PATH_SAMPLE_STEP units
-            n_samples = max(2, int(seg_len / _PATH_SAMPLE_STEP) + 1)
-            for si in range(n_samples):
-                t = si / (n_samples - 1)
-                sx = prev.pos[0] + t * dx
-                sy = prev.pos[1] + t * dy
-                area_id = self.nav.find_area((sx, sy, 0.0))
-                clr = self.clearance.get_clearance_at(
-                    area_id, sx, sy, travel_angle, height=1,
-                )
-                if clr < worst_clr:
-                    worst_clr = clr
-                    worst_idx = i
+            # Start point: offset to feeler's side of the hull
+            if angle_deg > 0:
+                sx = bot_pos[0] + AVOID_HULL_OFFSET * left_x
+                sy = bot_pos[1] + AVOID_HULL_OFFSET * left_y
+            elif angle_deg < 0:
+                sx = bot_pos[0] - AVOID_HULL_OFFSET * left_x
+                sy = bot_pos[1] - AVOID_HULL_OFFSET * left_y
+            else:
+                sx, sy = bot_pos[0], bot_pos[1]
 
-        self.last_scan = (worst_clr, worst_idx)
-        return (worst_clr, worst_idx)
+            ex = sx + feeler_range * dir_x
+            ey = sy + feeler_range * dir_y
+
+            frac = self.nav.trace_nav((sx, sy), (ex, ey))
+
+            if frac < 1.0:
+                any_hit = True
+                blocked = weight * (1.0 - frac)
+                if angle_deg > 0:
+                    left_score += blocked
+                else:
+                    right_score += blocked
+
+            if should_log:
+                tag = f"{frac:.2f}" if frac < 1.0 else "ok"
+                feeler_tags.append(f"{angle_deg:+.0f}\u00b0:{tag}")
+
+        if should_log and feeler_tags:
+            log.debug(
+                "  avoid feelers [%s] L=%.2f R=%.2f",
+                " ".join(feeler_tags), left_score, right_score,
+            )
+
+        if not any_hit:
+            return goal_pos
+
+        # Determine avoidance direction
+        if left_score < 0.01:
+            avoid_result = -right_score  # right blocked -> steer left
+        elif right_score < 0.01:
+            avoid_result = left_score    # left blocked -> steer right
+        else:
+            # Both sides blocked — steer toward the less-blocked side
+            if abs(right_score - left_score) < 0.01:
+                return goal_pos  # equally blocked, go straight
+            elif right_score > left_score:
+                avoid_result = -right_score
+            else:
+                avoid_result = left_score
+
+        # Adjusted direction: 0.5*forward - left*avoidResult (matches Valve)
+        adj_x = 0.5 * fwd_x - left_x * avoid_result
+        adj_y = 0.5 * fwd_y - left_y * avoid_result
+        adj_mag = math.sqrt(adj_x * adj_x + adj_y * adj_y)
+        if adj_mag < 0.001:
+            return goal_pos
+        adj_x /= adj_mag
+        adj_y /= adj_mag
+
+        result = (
+            bot_pos[0] + AVOID_PUSH * adj_x,
+            bot_pos[1] + AVOID_PUSH * adj_y,
+            goal_pos[2],
+        )
+
+        if should_log:
+            log.info(
+                "  avoid: L=%.2f R=%.2f result=%.2f goal(%.0f,%.0f)->(%.0f,%.0f)",
+                left_score, right_score, avoid_result,
+                goal_pos[0], goal_pos[1], result[0], result[1],
+            )
+
+        return result
 
     # ── Movement targets ──
 
     def get_move_target(self, bot_pos: Pos3) -> Pos3:
         """Return the position the bot should move toward.
 
-        Pipeline: path tightness check → corner blending → clearance steering.
-        When the path ahead is tight, the aim point is shifted further along
-        the path (past the obstacle) so clearance steering naturally routes
-        around it.  The tighter the path, the more we aim past.
+        Applies corner blending at curves, then nav-mesh feeler avoidance.
         """
         goal = self.get_goal()
         if goal is None:
             return self.segments[-1].pos if self.segments else bot_pos
 
         goal_pos = goal.pos
-
-        # ── Gradient aim-past: shift aim further ahead when path is tight ──
-        if self.clearance is not None and goal.type == SegmentType.ON_GROUND:
-            min_clr, tight_idx = self.scan_path_clearance()
-            if tight_idx is not None and min_clr < _PATH_CLEARANCE_CAUTION:
-                # Blend factor: 0.0 at caution threshold, 1.0 at blocked
-                blend = 1.0 - min_clr / _PATH_CLEARANCE_CAUTION
-                # Aim past the tight segment: pick 1-2 segments further
-                aim_idx = min(tight_idx + 1, len(self.segments) - 1)
-                aim_seg = self.segments[aim_idx]
-                if aim_seg.type == SegmentType.ON_GROUND:
-                    goal_pos = (
-                        goal_pos[0] + blend * (aim_seg.pos[0] - goal_pos[0]),
-                        goal_pos[1] + blend * (aim_seg.pos[1] - goal_pos[1]),
-                        goal_pos[2] + blend * (aim_seg.pos[2] - goal_pos[2]),
-                    )
 
         # Corner blending: when approaching a curve, aim past the corner
         nxt_idx = self.goal_idx + 1
@@ -593,57 +598,16 @@ class PathFollower:
             dist = math.sqrt(dx * dx + dy * dy)
             if dist < CORNER_BLEND_RANGE:
                 nxt = self.segments[nxt_idx]
+                # t ramps from 0 (at CORNER_BLEND_RANGE) to 0.5 (at goal)
                 t = 0.5 * (1.0 - dist / CORNER_BLEND_RANGE)
                 goal_pos = (
-                    goal_pos[0] + t * (nxt.pos[0] - goal_pos[0]),
-                    goal_pos[1] + t * (nxt.pos[1] - goal_pos[1]),
-                    goal_pos[2] + t * (nxt.pos[2] - goal_pos[2]),
+                    goal.pos[0] + t * (nxt.pos[0] - goal.pos[0]),
+                    goal.pos[1] + t * (nxt.pos[1] - goal.pos[1]),
+                    goal.pos[2] + t * (nxt.pos[2] - goal.pos[2]),
                 )
 
-        # Clearance-steered movement: path gives direction, spatial data
-        # picks the actual heading.  Falls back to direct goal if no
-        # clearance data or no passable direction found.
-        if self.clearance is not None and goal.type == SegmentType.ON_GROUND:
-            area_id = self.nav.find_area(bot_pos)
-            sdx, sdy, best_clr = self.clearance.get_steering_direction(
-                area_id, bot_pos[0], bot_pos[1], goal_pos[0], goal_pos[1],
-            )
-            self.last_steer = (sdx, sdy, best_clr)
-            if abs(sdx) > 0.001 or abs(sdy) > 0.001:
-                dx = goal_pos[0] - bot_pos[0]
-                dy = goal_pos[1] - bot_pos[1]
-                dist = math.sqrt(dx * dx + dy * dy)
-                step = min(dist, STEER_AHEAD_DIST)
-
-                # Forward probe: check clearance along the chosen direction.
-                # If it hits a wall ahead, re-steer from that probe point.
-                steer_angle = math.atan2(sdy, sdx)
-                for probe in _FORWARD_PROBES:
-                    if probe > step:
-                        break
-                    px = bot_pos[0] + sdx * probe
-                    py = bot_pos[1] + sdy * probe
-                    probe_area = self.nav.find_area((px, py, 0.0))
-                    clr = self.clearance.get_clearance_at(
-                        probe_area, px, py, steer_angle, height=1,
-                    )
-                    if clr < _FORWARD_PROBE_MIN:
-                        # Re-steer from the probe point — aims around obstacle
-                        sdx2, sdy2, _ = self.clearance.get_steering_direction(
-                            probe_area, px, py, goal_pos[0], goal_pos[1],
-                        )
-                        if abs(sdx2) > 0.001 or abs(sdy2) > 0.001:
-                            sdx, sdy = sdx2, sdy2
-                            step = min(dist, probe)  # shorter step
-                        break
-
-                return (
-                    bot_pos[0] + sdx * step,
-                    bot_pos[1] + sdy * step,
-                    goal_pos[2],
-                )
-
-        return goal_pos
+        # Nav-mesh feeler avoidance (replaces Valve's trace-based Avoid)
+        return self._avoid(bot_pos, goal_pos)
 
     def get_look_target(self, bot_pos: Pos3) -> Pos3:
         """Return a point further ahead on the path for look direction."""
@@ -750,9 +714,8 @@ def compute_path(
     goal_pos: Pos3,
     nav: NavGraph,
     terrain: TerrainAnalyzer,
-    clearance: ClearanceMap | None = None,
 ) -> PathFollower | None:
-    """Full pipeline: A* → segment chain → path details → post-process.
+    """Full pipeline: A* -> segment chain -> path details -> post-process.
 
     Returns a ready-to-follow ``PathFollower``, or ``None`` if no path exists.
     """
@@ -766,7 +729,7 @@ def compute_path(
             Segment(area_id=goal_area, pos=goal_pos),
         ]
         post_process(segs)
-        return PathFollower(segs, nav, terrain, clearance)
+        return PathFollower(segs, nav, terrain)
 
     area_path = nav.find_path(start_area, goal_area)
     if area_path is None:
@@ -785,7 +748,7 @@ def compute_path(
     segments[-1].pos = goal_pos
 
     # Set crossing positions, detect climbs/drops
-    segments = compute_path_details(segments, nav, terrain, clearance)
+    segments = compute_path_details(segments, nav, terrain)
 
     # Compute forward/length/curvature
     post_process(segments)
@@ -794,4 +757,4 @@ def compute_path(
         "Path: %d areas -> %d segments, length=%.0f",
         len(area_path), len(segments), segments[-1].distance_from_start if segments else 0,
     )
-    return PathFollower(segments, nav, terrain, clearance)
+    return PathFollower(segments, nav, terrain)

@@ -7,12 +7,7 @@ import logging
 import math
 from collections import deque
 from pathlib import Path
-from typing import TYPE_CHECKING
-
 from smartbots.nav_parser import NavArea, NavMesh, Vector3, parse_nav
-
-if TYPE_CHECKING:
-    from smartbots.clearance import ClearanceMap
 
 log = logging.getLogger(__name__)
 
@@ -160,7 +155,6 @@ class NavGraph:
         self,
         start_id: int,
         goal_id: int,
-        clearance: ClearanceMap | None = None,
     ) -> list[int] | None:
         if start_id not in self.areas or goal_id not in self.areas:
             return None
@@ -198,14 +192,6 @@ class NavGraph:
 
                 neighbor_center = self._centers[neighbor_id]
                 edge_cost = _dist(current_center, neighbor_center)
-
-                # Penalize edges into tight areas so A* prefers wider corridors.
-                # Penalty: 1.0 (none) when min_clr >= 80u, up to 1.25x when 0u.
-                if clearance is not None:
-                    min_clr = clearance.get_min_clearance(neighbor_id)
-                    penalty = 1.0 + max(0.0, 1.0 - min_clr / _CLEARANCE_PENALTY_RADIUS) * 0.25
-                    edge_cost *= penalty
-
                 tentative_g = g_score[current] + edge_cost
 
                 if tentative_g < g_score.get(neighbor_id, float("inf")):
@@ -382,7 +368,3 @@ class NavGraph:
             best_id, sz, c.x, c.y, c.z, cx, cy, n,
         )
         return best_id
-
-
-# Areas with minimum clearance below this get an A* cost penalty (up to 3x)
-_CLEARANCE_PENALTY_RADIUS = 80.0

@@ -6,10 +6,8 @@ import asyncio
 import logging
 import os
 import signal
-from pathlib import Path
 
 from smartbots.behavior import BotManager
-from smartbots.clearance import ClearanceMap
 from smartbots.navigation import NavGraph
 from smartbots.protocol import BotCommand, decode_state, encode_commands
 from smartbots.spatial_recorder import SpatialRecorder
@@ -17,7 +15,6 @@ from smartbots.state import GameState
 from smartbots.strategy import GatheringStrategy
 from smartbots.telemetry import TelemetryClient
 from smartbots.terrain import TerrainAnalyzer
-from smartbots.visibility import VisibilityMap
 
 log = logging.getLogger(__name__)
 
@@ -71,28 +68,6 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None, TelemetryClien
     strategy = GatheringStrategy()
     log.info("Strategy: gathering")
 
-    # Try loading precomputed visibility map
-    vis: VisibilityMap | None = None
-    vis_path = Path(data_dir) / f"{nav_map}_visibility.npz"
-    if vis_path.exists():
-        try:
-            vis = VisibilityMap(vis_path)
-        except Exception:
-            log.exception("Failed to load visibility map from %s", vis_path)
-    else:
-        log.info("No visibility map at %s", vis_path)
-
-    # Try loading precomputed clearance map
-    clr: ClearanceMap | None = None
-    clr_path = Path(data_dir) / f"{nav_map}_clearance.npz"
-    if clr_path.exists():
-        try:
-            clr = ClearanceMap(clr_path)
-        except Exception:
-            log.exception("Failed to load clearance map from %s", clr_path)
-    else:
-        log.info("No clearance map at %s", clr_path)
-
     recorder: SpatialRecorder | None = None
     if os.environ.get("RECORD_POSITIONS", "").strip() == "1":
         recorder = SpatialRecorder(nav_map, data_dir)
@@ -107,7 +82,7 @@ def _build_manager() -> tuple[BotManager, SpatialRecorder | None, TelemetryClien
         except Exception:
             log.exception("Failed to connect to telemetry DB at %s:%d", tel_host, tel_port)
 
-    return BotManager(nav, terrain, strategy, vis, clr, telemetry), recorder, telemetry
+    return BotManager(nav, terrain, strategy, telemetry), recorder, telemetry
 
 
 async def run_server(host: str, port: int) -> None:

@@ -15,10 +15,8 @@ from smartbots.state import BotState, GameState
 from smartbots.terrain import TerrainAnalyzer
 
 if TYPE_CHECKING:
-    from smartbots.clearance import ClearanceMap
     from smartbots.strategy import Strategy
     from smartbots.telemetry import TelemetryClient
-    from smartbots.visibility import VisibilityMap
 
 log = logging.getLogger(__name__)
 
@@ -27,10 +25,6 @@ REPATH_DEVIATION = 200.0
 REPATH_INTERVAL = 40
 STUCK_MOVE_DIST = 20.0
 STUCK_TICKS = 40
-# Clearance-guided steering activates on first stuck detection
-STUCK_STEER_THRESHOLD = 1
-STEER_STEP_DIST = 100.0  # far enough to arc around planter-sized obstacles
-STUCK_GIVE_UP = 10  # go IDLE after this many stuck cycles
 
 
 class BotGoalType(Enum):
@@ -84,15 +78,11 @@ class BotManager:
         nav: NavGraph,
         terrain: TerrainAnalyzer,
         strategy: Strategy,
-        visibility: VisibilityMap | None = None,
-        clearance: ClearanceMap | None = None,
         telemetry: TelemetryClient | None = None,
     ) -> None:
         self.nav = nav
         self.terrain = terrain
         self.strategy = strategy
-        self.visibility = visibility
-        self.clearance = clearance
         self.telemetry = telemetry
         self._brains: dict[int, BotBrain] = {}
 
@@ -158,14 +148,14 @@ class BotManager:
         self, brain: BotBrain, pos: tuple[float, float, float],
         target: tuple[float, float, float], tick: int,
     ) -> BotNavState | None:
-        follower = compute_path(pos, target, self.nav, self.terrain, self.clearance)
+        follower = compute_path(pos, target, self.nav, self.terrain)
 
         if follower is None:
             # Fallback: try navigating to nearest large area
             current_area = self.nav.find_area(pos)
             local_target = self.nav.find_gathering_point(current_area)
             local_pos = self.nav.area_center(local_target)
-            follower = compute_path(pos, local_pos, self.nav, self.terrain, self.clearance)
+            follower = compute_path(pos, local_pos, self.nav, self.terrain)
 
         if follower is None:
             return None
@@ -222,29 +212,6 @@ class BotManager:
         # (mirrors Valve PathFollower::CheckProgress m_minLookAheadRange)
         pf.skip_close_goals(bot.pos)
 
-        # Proactive path clearance scan: skip the blocked segment (max 1).
-        # Only runs after the path has been active for a while to avoid
-        # skip→repath→skip loops on freshly computed paths.
-        from smartbots.pathfollower import _PATH_CLEARANCE_BLOCKED
-
-        if (tick - nav.last_repath_tick) >= REPATH_INTERVAL:
-            min_clr, tight_idx = pf.scan_path_clearance()
-            if tight_idx is not None and min_clr < _PATH_CLEARANCE_BLOCKED:
-                if pf.goal_idx <= tight_idx:
-                    # Skip to the blocked segment (advance to it), not past it —
-                    # clearance steering will guide the bot around.
-                    pf.goal_idx = tight_idx
-                    if pf.advance():
-                        pf.skip_close_goals(bot.pos)
-                    # Suppress deviation repath — let the bot navigate to the
-                    # new goal with clearance steering before re-evaluating.
-                    nav.last_repath_tick = tick
-                    log.info(
-                        "bot=%d: path blocked (clr=%.0f) at seg %d, now %d/%d",
-                        brain.bot_id, min_clr, tight_idx,
-                        pf.goal_idx, len(pf.segments),
-                    )
-
         # Stuck detection
         if (tick - nav.last_progress_tick) >= STUCK_TICKS:
             pdx = bot.pos[0] - nav.last_progress_pos[0]
@@ -252,19 +219,19 @@ class BotManager:
             moved = math.sqrt(pdx * pdx + pdy * pdy)
             if moved < STUCK_MOVE_DIST:
                 nav.stuck_repaths += 1
-                # Reset timer so next check waits another STUCK_TICKS
-                nav.last_progress_tick = tick
-                nav.last_progress_pos = bot.pos
                 log.warning(
-                    "bot=%d: stuck (moved=%.0f), attempt=%d",
+                    "bot=%d: stuck (moved=%.0f), repath attempt=%d",
                     brain.bot_id, moved, nav.stuck_repaths,
                 )
-                if nav.stuck_repaths >= STUCK_GIVE_UP:
-                    log.warning("bot=%d: giving up after %d stuck cycles", brain.bot_id, nav.stuck_repaths)
-                    brain.state = BotBehaviorState.IDLE
+                new_nav = self._compute_path(brain, bot.pos, target_pos, tick)
+                if new_nav is not None:
+                    new_nav.stuck_repaths = nav.stuck_repaths
+                    brain.nav_state = new_nav
+                    nav = new_nav
+                else:
                     brain.nav_state = None
+                    brain.state = BotBehaviorState.IDLE
                     return None
-                # Steering will be applied below
             else:
                 nav.last_progress_tick = tick
                 nav.last_progress_pos = bot.pos
@@ -286,55 +253,6 @@ class BotManager:
         look_target = pf.get_look_target(bot.pos)
         flags, nav.last_jump_tick = pf.compute_flags(bot.pos, tick, nav.last_jump_tick)
 
-        # Clearance-guided stuck recovery: back away then steer around
-        if nav.stuck_repaths >= STUCK_STEER_THRESHOLD and self.clearance is not None:
-            from smartbots.protocol import FLAG_JUMP
-
-            area_id = self.nav.find_area(bot.pos)
-
-            # Phase 1 (attempts 1-2): back away from obstacle using repulsion
-            # to dislodge the bot from the wedged position.
-            rx, ry, rep_str = self.clearance.get_repulsion(
-                area_id, bot.pos[0], bot.pos[1],
-            )
-            if nav.stuck_repaths <= 2 and rep_str > 0.0:
-                move_target = (
-                    bot.pos[0] + rx * STEER_STEP_DIST,
-                    bot.pos[1] + ry * STEER_STEP_DIST,
-                    bot.pos[2],
-                )
-                # Jump to help dislodge from wedged corners
-                flags |= FLAG_JUMP
-            else:
-                # Phase 2 (attempts 3+): steer toward goal weighted by clearance
-                goal = pf.get_goal()
-                gpos = goal.pos if goal else target_pos
-                sdx, sdy, best_clr = self.clearance.get_steering_direction(
-                    area_id, bot.pos[0], bot.pos[1], gpos[0], gpos[1],
-                )
-                if abs(sdx) > 0.001 or abs(sdy) > 0.001:
-                    move_target = (
-                        bot.pos[0] + sdx * STEER_STEP_DIST,
-                        bot.pos[1] + sdy * STEER_STEP_DIST,
-                        bot.pos[2],
-                    )
-                    # Jump if foot-level blocked but knee-level clear
-                    steer_angle = math.atan2(sdy, sdx)
-                    foot_clr = self.clearance.get_clearance_at(
-                        area_id, bot.pos[0], bot.pos[1], steer_angle, height=0,
-                    )
-                    if foot_clr < 40.0 and best_clr > 60.0:
-                        flags |= FLAG_JUMP
-                    # Wide open but still stuck = physical obstacle not in
-                    # clearance data; skip the current waypoint.
-                    if best_clr > 200.0 and nav.stuck_repaths >= STUCK_STEER_THRESHOLD + 4:
-                        if pf.advance():
-                            pf.skip_close_goals(bot.pos)
-                            log.info(
-                                "bot=%d: skipping blocked waypoint -> seg %d/%d",
-                                brain.bot_id, pf.goal_idx, len(pf.segments),
-                            )
-
         # Telemetry recording
         if self.telemetry is not None:
             from smartbots.telemetry import NavTelemetryRow
@@ -342,19 +260,32 @@ class BotManager:
             goal = pf.get_goal()
             goal_pos = goal.pos if goal else move_target
             area_id = self.nav.find_area(bot.pos)
-            scan_clr, scan_seg = pf.last_scan
-            sdx, sdy, sclr = pf.last_steer
             self.telemetry.record_tick(NavTelemetryRow(
                 tick=tick, bot_id=bot.id,
                 x=bot.pos[0], y=bot.pos[1], z=bot.pos[2],
                 goal_x=goal_pos[0], goal_y=goal_pos[1], goal_z=goal_pos[2],
                 seg_idx=pf.goal_idx, seg_total=len(pf.segments),
                 move_x=move_target[0], move_y=move_target[1], move_z=move_target[2],
-                steer_dx=sdx, steer_dy=sdy, steer_clr=sclr,
-                path_min_clr=scan_clr, path_tight_seg=scan_seg,
+                steer_dx=0.0, steer_dy=0.0, steer_clr=0.0,
+                path_min_clr=float("inf"), path_tight_seg=None,
                 deviation=deviation, stuck_count=nav.stuck_repaths,
                 flags=flags, area_id=area_id,
             ))
+
+        if tick % 40 == 0:
+            goal = pf.get_goal()
+            goal_pos = goal.pos if goal else move_target
+            dx = bot.pos[0] - goal_pos[0]
+            dy = bot.pos[1] - goal_pos[1]
+            dist = math.sqrt(dx * dx + dy * dy)
+            log.info(
+                "  bot=%d state=%s seg=%d/%d pos=(%.0f,%.0f) -> goal=(%.0f,%.0f)"
+                " dist=%.0f flags=%d",
+                brain.bot_id, brain.state.name,
+                pf.goal_idx, len(pf.segments),
+                bot.pos[0], bot.pos[1], goal_pos[0], goal_pos[1], dist,
+                flags,
+            )
 
         return BotCommand(
             id=bot.id, move_target=move_target,
