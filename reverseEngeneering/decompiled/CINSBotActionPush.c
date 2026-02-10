@@ -77,12 +77,12 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
     *(int *)(param_1 + 8) = unaff_EBX + 0x247357 /* "Escorting " */;
     return param_1;
   }
-  piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-  iVar5 = (**(code **)(*piVar4 + 0xd0))(piVar4,0);
+  piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  iVar5 = (**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
   pCVar7 = extraout_ECX;
   if (iVar5 != 0) {
-    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar5 = (**(code **)(*piVar4 + 0xd4))(piVar4,in_stack_0000000c + 0x2060,iVar5);
+    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar5 = (**(code **)(*piVar4 + 0xd4 /* IIntention::ShouldAttack */))(piVar4,in_stack_0000000c + 0x2060,iVar5);
     pCVar7 = extraout_ECX_00;
     if (iVar5 == 1) {
       pvVar3 = ::operator_new(0x88);

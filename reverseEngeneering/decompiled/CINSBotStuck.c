@@ -27,7 +27,7 @@ CINSBotStuck::OnStart(CINSBotStuck *this,CINSNextBot *param_1,Action *param_2)
   undefined4 uVar3;
   
   __i686_get_pc_thunk_bx();
-  (**(code **)(*in_stack_0000000c + 0x96c))(in_stack_0000000c);
+  (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
   uVar3 = 0xd;
   CINSBotLocomotion::ClearMovementRequests();
   if ((*(byte *)((int)in_stack_0000000c + 0xd1) & 8) != 0) {
@@ -36,7 +36,7 @@ CINSBotStuck::OnStart(CINSBotStuck *this,CINSNextBot *param_1,Action *param_2)
   *(int *)(param_2 + 0x4c) = in_stack_0000000c[0x82];
   *(int *)(param_2 + 0x50) = in_stack_0000000c[0x83];
   *(int *)(param_2 + 0x54) = in_stack_0000000c[0x84];
-  iVar2 = (**(code **)(*in_stack_0000000c + 0x548))(in_stack_0000000c,uVar3);
+  iVar2 = (**(code **)(*in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c,uVar3);
   if (iVar2 == 0) {
     Warning(unaff_EBX + 0x24fd09 /* "Bot stuck on non-existant nav mesh" */);
     *(undefined4 *)param_1 = 3;
@@ -166,8 +166,8 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
                                (in_stack_0000000c + 0x2060,(int)param_2 + 0x4c);
     if (*(float *)(unaff_EBX + 0x2067ad /* typeinfo name for CUseTraceFilter+0x19 */) <= (float)fVar4 &&
         (float)fVar4 != *(float *)(unaff_EBX + 0x2067ad /* typeinfo name for CUseTraceFilter+0x19 */)) {
-      piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
-      (**(code **)(*piVar3 + 0x194))(piVar3,&UNK_00228410 + unaff_EBX);
+      piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
+      (**(code **)(*piVar3 + 0x194 /* ILocomotion::ClearStuckStatus */))(piVar3,&UNK_00228410 + unaff_EBX);
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
       *(int *)(param_1 + 8) = unaff_EBX + 0x250789 /* " moved from our stuck position" */;
@@ -180,21 +180,21 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
     fVar5 = *(float *)(unaff_EBX + 0x187911 /* typeinfo name for IServerBenchmark+0x13 */);
     fVar6 = *(float *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */) + 0xc);
     if (fVar5 < fVar6 - *(float *)((int)param_2 + 0x44)) {
-      (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c,pVVar7,pVVar8,uVar10);
+      (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c,pVVar7,pVVar8,uVar10);
       fVar4 = (float10)CINSBotLocomotion::GetStillDuration(this_01);
       fVar6 = *(float *)(unaff_EBX + 0x1874a9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
       if (fVar6 < (float)fVar4) {
         *(undefined4 *)((int)param_2 + 0x44) =
              *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */) + 0xc);
-        (**(code **)(*(int *)in_stack_0000000c + 0x8e8))(in_stack_0000000c,fVar6);
-        piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
-        (**(code **)(*piVar3 + 0xd8))(piVar3);
+        (**(code **)(*(int *)in_stack_0000000c + 0x8e8 /* NextBotPlayer::PressForwardButton */))(in_stack_0000000c,fVar6);
+        piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
+        (**(code **)(*piVar3 + 0xd8 /* PlayerLocomotion::Jump */))(piVar3);
         goto LAB_00731699;
       }
       fVar6 = *(float *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */) + 0xc);
     }
     if (fVar5 < fVar6 - *(float *)((int)param_2 + 0x48)) {
-      (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
+      (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
       fVar4 = (float10)CINSBotLocomotion::GetStillDuration(this_02);
       if (*(float *)(unaff_EBX + 0x1f5745 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */) <= (float)fVar4 &&
           (float)fVar4 != *(float *)(unaff_EBX + 0x1f5745 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x30 */)) {
@@ -215,8 +215,8 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         local_70 = 0;
         local_6c = 0;
         local_68 = uVar10;
-        (**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_40,in_stack_0000000c,uVar9,uVar11);
-        (**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_4c,in_stack_0000000c);
+        (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_40,in_stack_0000000c,uVar9,uVar11);
+        (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_4c,in_stack_0000000c);
         local_98 = 1;
         local_dc = local_4c;
         local_9c = 0;
@@ -246,8 +246,8 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
           DebugDrawLine(local_13c,local_130,0xff,0,0,true,fVar5);
         }
         if ((local_110 < *(float *)(unaff_EBX + 0x1874a9 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */)) || (local_105 != '\0')) {
-          (**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_28,in_stack_0000000c);
-          (**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_34,in_stack_0000000c);
+          (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_28,in_stack_0000000c);
+          (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_34,in_stack_0000000c);
           fVar5 = *(float *)(unaff_EBX + 0x22ea9d /* CSWTCH.200+0xb4 */);
           local_9c = 0;
           local_98 = 1;
@@ -294,10 +294,10 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
                       ((int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */),local_7c);
             return param_1;
           }
-          (**(code **)(*(int *)in_stack_0000000c + 0x8f8))(in_stack_0000000c,0x40000000);
+          (**(code **)(*(int *)in_stack_0000000c + 0x8f8 /* NextBotPlayer::PressLeftButton */))(in_stack_0000000c,0x40000000);
         }
         else {
-          (**(code **)(*(int *)in_stack_0000000c + 0x900))(in_stack_0000000c,0x40000000);
+          (**(code **)(*(int *)in_stack_0000000c + 0x900 /* NextBotPlayer::PressRightButton */))(in_stack_0000000c,0x40000000);
         }
         local_70 = 0;
         *(undefined4 *)((int)param_2 + 0x48) =
@@ -317,7 +317,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         }
       }
     }
-    (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
+    (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
     fVar4 = (float10)CINSBotLocomotion::GetStillDuration(this_00);
     if ((*(float *)(unaff_EBX + 0x1f3101 /* typeinfo name for CBaseGameSystem+0x32 */) <= (float)fVar4 &&
          (float)fVar4 != *(float *)(unaff_EBX + 0x1f3101 /* typeinfo name for CBaseGameSystem+0x32 */)) && (0 < *(int *)((int)param_2 + 100))) {
@@ -325,7 +325,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
       local_8c = *piVar3;
       local_88 = piVar3[1];
       local_84 = piVar3[2];
-      uVar10 = (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
+      uVar10 = (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
       CINSBotLocomotion::AddMovementRequest(uVar10,local_8c,local_88,local_84,0,9,0x40400000);
       iVar2 = *(int *)((int)param_2 + 100) + -1;
       if (0 < iVar2) {
@@ -334,8 +334,8 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         iVar2 = *(int *)((int)param_2 + 100) + -1;
       }
       *(int *)((int)param_2 + 100) = iVar2;
-      piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
-      (**(code **)(*piVar3 + 0x194))(piVar3,&UNK_00228410 + unaff_EBX);
+      piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
+      (**(code **)(*piVar3 + 0x194 /* ILocomotion::ClearStuckStatus */))(piVar3,&UNK_00228410 + unaff_EBX);
     }
   }
 LAB_00731699:

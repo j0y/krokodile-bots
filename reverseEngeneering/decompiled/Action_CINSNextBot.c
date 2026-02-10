@@ -192,7 +192,7 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -224,7 +224,7 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -327,7 +327,7 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
     } while (*(CBaseEntity **)pCVar10 != (CBaseEntity *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x18))(piVar6,param_2,in_stack_0000000c);
+      (**(code **)(*piVar6 + 0x18 /* CBaseEntity::GetBaseEntity */))(piVar6,param_2,in_stack_0000000c);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -419,7 +419,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
       piVar8 = *(int **)(param_1 + 0x1c);
       puVar9 = (undefined1 *)0x0;
       if (piVar8 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar8 + 0x980))(piVar8,0x80);
+        cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -450,7 +450,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
         piVar8 = *(int **)(param_1 + 0x1c);
         if (piVar8 != (int *)0x0) {
           pPVar12 = (Path *)0x1;
-          cVar1 = (**(code **)(*piVar8 + 0x980))(piVar8,1);
+          cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,1);
           if (((cVar1 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */)), iVar7 != 0)) &&
@@ -547,7 +547,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
     } while (*(Path **)pPVar12 != (Path *)0x0);
     piVar8 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar8 != (int *)0x0) {
-      (**(code **)(*piVar8 + 0x1c))(piVar8);
+      (**(code **)(*piVar8 + 0x1c /* CBaseEntity::GetModelIndex */))(piVar8);
       piVar8 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -641,7 +641,7 @@ Action<CINSNextBot>::OnMoveToFailure
       piVar11 = (int *)param_1[7];
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -673,7 +673,7 @@ Action<CINSNextBot>::OnMoveToFailure
         piVar1 = (int *)param_1[7];
         if (piVar1 != (int *)0x0) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */)), iVar7 != 0)) &&
@@ -864,7 +864,7 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
       piVar10 = (int *)in_stack_00000004[7];
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -894,7 +894,7 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -1078,7 +1078,7 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
       piVar10 = (int *)in_stack_00000004[7];
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -1108,7 +1108,7 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -1292,7 +1292,7 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -1323,7 +1323,7 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CTakeDamageInfo *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -1420,7 +1420,7 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
     } while (*(CTakeDamageInfo **)pCVar11 != (CTakeDamageInfo *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x40))(piVar7);
+      (**(code **)(*piVar7 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -1511,7 +1511,7 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -1542,7 +1542,7 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CTakeDamageInfo *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -1640,7 +1640,7 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
     } while (*(CTakeDamageInfo **)pCVar11 != (CTakeDamageInfo *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x44))(piVar7);
+      (**(code **)(*piVar7 + 0x44 /* CINSPlayer::ShouldCollide */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -1737,7 +1737,7 @@ Action<CINSNextBot>::OnOtherKilled
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -1770,7 +1770,7 @@ Action<CINSNextBot>::OnOtherKilled
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseCombatCharacter *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -1873,7 +1873,7 @@ Action<CINSNextBot>::OnOtherKilled
     } while (*(CBaseCombatCharacter **)pCVar10 != (CBaseCombatCharacter *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x48))(piVar6,param_2,in_stack_0000000c);
+      (**(code **)(*piVar6 + 0x48 /* CBaseEntity::SetOwnerEntity */))(piVar6,param_2,in_stack_0000000c);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -1964,7 +1964,7 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -1994,7 +1994,7 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -2093,7 +2093,7 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
     } while (*(CBaseEntity **)pCVar10 != (CBaseEntity *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x4c))(piVar6);
+      (**(code **)(*piVar6 + 0x4c /* CBasePlayer::ShouldTransmit */))(piVar6);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -2185,7 +2185,7 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
       piVar8 = *(int **)(param_1 + 0x1c);
       puVar9 = (undefined1 *)0x0;
       if (piVar8 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar8 + 0x980))(piVar8,0x80);
+        cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -2216,7 +2216,7 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
         piVar8 = *(int **)(param_1 + 0x1c);
         if (piVar8 != (int *)0x0) {
           pCVar12 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar8 + 0x980))(piVar8,1);
+          cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,1);
           if (((cVar1 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */)), iVar7 != 0)) &&
@@ -2314,7 +2314,7 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
     } while (*(CBaseEntity **)pCVar12 != (CBaseEntity *)0x0);
     piVar8 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar8 != (int *)0x0) {
-      (**(code **)(*piVar8 + 0x50))(piVar8);
+      (**(code **)(*piVar8 + 0x50 /* CBasePlayer::UpdateTransmitState */))(piVar8);
       piVar8 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -2408,7 +2408,7 @@ Action<CINSNextBot>::OnSound
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -2441,7 +2441,7 @@ Action<CINSNextBot>::OnSound
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -2544,7 +2544,7 @@ Action<CINSNextBot>::OnSound
     } while (*(CBaseEntity **)pCVar10 != (CBaseEntity *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x54))(piVar6,param_2,param_3,in_stack_00000010);
+      (**(code **)(*piVar6 + 0x54 /* CBaseCombatCharacter::SetTransmit */))(piVar6,param_2,param_3,in_stack_00000010);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -2641,7 +2641,7 @@ Action<CINSNextBot>::OnWeaponFired
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(&DAT_004a82a5 + unaff_EBX) + 0x40))
                               (*(int **)(&DAT_004a82a5 + unaff_EBX)), iVar4 == 0)) {
@@ -2674,7 +2674,7 @@ Action<CINSNextBot>::OnWeaponFired
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseCombatCharacter *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(&DAT_004a82a5 + unaff_EBX) + 0x40))
                                  (*(int **)(&DAT_004a82a5 + unaff_EBX)), iVar4 != 0)) &&
@@ -2777,7 +2777,7 @@ Action<CINSNextBot>::OnWeaponFired
     } while (*(CBaseCombatCharacter **)pCVar11 != (CBaseCombatCharacter *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x5c))(piVar7,param_2,in_stack_0000000c);
+      (**(code **)(*piVar7 + 0x5c /* CINSNextBot::Spawn */))(piVar7,param_2,in_stack_0000000c);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -2873,7 +2873,7 @@ Action<CINSNextBot>::OnPickUp
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -2906,7 +2906,7 @@ Action<CINSNextBot>::OnPickUp
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -3008,7 +3008,7 @@ Action<CINSNextBot>::OnPickUp
     } while (*(CBaseEntity **)pCVar10 != (CBaseEntity *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x68))(piVar6,param_2,in_stack_0000000c);
+      (**(code **)(*piVar6 + 0x68 /* CBaseAnimating::OnNewModel */))(piVar6,param_2,in_stack_0000000c);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -3099,7 +3099,7 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -3130,7 +3130,7 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -3228,7 +3228,7 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
     } while (*(CBaseEntity **)pCVar11 != (CBaseEntity *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x6c))(piVar7);
+      (**(code **)(*piVar7 + 0x6c /* CBaseEntity::InitSharedVars */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -3339,7 +3339,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -3370,7 +3370,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -3469,7 +3469,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
     } while (*(CBaseEntity **)pCVar10 != (CBaseEntity *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x7c))(piVar6);
+      (**(code **)(*piVar6 + 0x7c /* CBaseEntity::KeyValue */))(piVar6);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -3544,7 +3544,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -3578,7 +3578,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pVVar10 = (Vector *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -3681,7 +3681,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
     } while (*(Vector **)pVVar10 != (Vector *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x78))(piVar6,param_2,in_stack_0000000c);
+      (**(code **)(*piVar6 + 0x78 /* CBaseEntity::OnParseMapDataFinished */))(piVar6,param_2,in_stack_0000000c);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -3772,7 +3772,7 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
       piVar10 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -3803,7 +3803,7 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
         piVar1 = *(int **)(param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */)), iVar5 != 0)) &&
@@ -4044,7 +4044,7 @@ Action<CINSNextBot>::ApplyResult
       pCVar6 = (CINSNextBot *)pAVar4;
       pAVar4 = (Action<CINSNextBot> *)*(CINSNextBot **)(pCVar6 + 0x18);
     } while (*(CINSNextBot **)(pCVar6 + 0x18) != (CINSNextBot *)0x0);
-    cVar2 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1);
+    cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
     if ((cVar2 != '\0') ||
        (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */) + 0x40))
                           (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -4112,7 +4112,7 @@ Action<CINSNextBot>::ApplyResult
     pBVar11 = param_2;
     pAVar4 = param_3;
     InvokeOnStart((CINSNextBot *)&local_88,param_5,(Action *)param_2,(Action *)param_3);
-    cVar2 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1,pBVar11,pAVar4,uVar13);
+    cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1,pBVar11,pAVar4,uVar13);
     if (cVar2 != '\0') {
       PrintStateToConsole();
     }
@@ -4124,7 +4124,7 @@ Action<CINSNextBot>::ApplyResult
     pAVar4 = param_3;
     pBVar9 = pBVar11;
     InvokeOnEnd(param_1,(CINSNextBot *)param_1,param_2,(Action *)param_3);
-    cVar2 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1,pAVar4,pBVar9);
+    cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1,pAVar4,pBVar9);
     if ((cVar2 != '\0') ||
        (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */) + 0x40))
                           (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -4188,7 +4188,7 @@ Action<CINSNextBot>::ApplyResult
       pBVar9 = param_2;
       pAVar4 = param_3;
       InvokeOnResume((CINSNextBot *)&local_88,pBVar11,(Action *)param_2);
-      cVar2 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1,pBVar9,pAVar4,uVar13);
+      cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1,pBVar9,pAVar4,uVar13);
       if (cVar2 != '\0') {
         PrintStateToConsole();
       }
@@ -4208,7 +4208,7 @@ Action<CINSNextBot>::ApplyResult
   }
   else if (param_4 == 1) {
     if (param_5 != (Behavior *)0x0) {
-      cVar2 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1);
+      cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
       if ((cVar2 != '\0') ||
          (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */) + 0x40))
                             (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -4286,7 +4286,7 @@ Action<CINSNextBot>::ApplyResult
                   ((CUtlVector<Action<CINSNextBot>*,CUtlMemory<Action<CINSNextBot>*,int>> *)param_1,
                    (int)(param_3 + 0x3c),*(Action ***)(param_3 + 0x48));
       }
-      cVar2 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1,pBVar11);
+      cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1,pBVar11);
       if (cVar2 != '\0') {
         PrintStateToConsole();
       }
@@ -4468,7 +4468,7 @@ Action<CINSNextBot>::InvokeOnEnd
   uStack_14 = 0x7509bb;
   __i686_get_pc_thunk_bx();
   if (param_1[0x30] != (CINSNextBot)0x0) {
-    cVar3 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1);
+    cVar3 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
     if ((cVar3 != '\0') ||
        (iVar6 = (**(code **)(**(int **)(&DAT_00456645 + unaff_EBX) + 0x40))
                           (*(int **)(&DAT_00456645 + unaff_EBX)), this_00 = extraout_ECX_01,
@@ -4562,7 +4562,7 @@ Action<CINSNextBot>::InvokeOnResume(CINSNextBot *param_1,Behavior *param_2,Actio
   
   uStack_14 = 0x7534ab;
   __i686_get_pc_thunk_bx();
-  cVar2 = (**(code **)(*(int *)param_3 + 0x980))(param_3,1);
+  cVar2 = (**(code **)(*(int *)param_3 + 0x980 /* CINSNextBot::IsDebugging */))(param_3,1);
   if ((cVar2 != '\0') ||
      (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x453b55 /* &NextBotDebugHistory */) + 0x40))
                         (*(int **)(unaff_EBX + 0x453b55 /* &NextBotDebugHistory */)), iVar4 != 0)) {
@@ -4661,7 +4661,7 @@ Action<CINSNextBot>::InvokeOnStart
   
   uStack_14 = 0x75325b;
   __i686_get_pc_thunk_bx();
-  cVar1 = (**(code **)(*(int *)param_3 + 0x980))(param_3,1);
+  cVar1 = (**(code **)(*(int *)param_3 + 0x980 /* CINSNextBot::IsDebugging */))(param_3,1);
   if (cVar1 == '\0') {
     iVar3 = (**(code **)(**(int **)(unaff_EBX + 0x453da5 /* &NextBotDebugHistory */) + 0x40))(*(int **)(unaff_EBX + 0x453da5 /* &NextBotDebugHistory */));
     piVar4 = *(int **)(&DAT_00453645 + unaff_EBX);
@@ -4775,7 +4775,7 @@ Action<CINSNextBot>::InvokeOnSuspend
   
   uStack_14 = 0x75215b;
   __i686_get_pc_thunk_bx();
-  cVar3 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1);
+  cVar3 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
   if ((cVar3 != '\0') ||
      (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454ea5 /* &NextBotDebugHistory */) + 0x40))
                         (*(int **)(unaff_EBX + 0x454ea5 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -5103,7 +5103,7 @@ Action<CINSNextBot>::OnActorEmoted
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -5135,7 +5135,7 @@ Action<CINSNextBot>::OnActorEmoted
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseCombatCharacter *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -5238,7 +5238,7 @@ Action<CINSNextBot>::OnActorEmoted
     } while (*(CBaseCombatCharacter **)pCVar11 != (CBaseCombatCharacter *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x70))(piVar7,param_2,in_stack_0000000c);
+      (**(code **)(*piVar7 + 0x70 /* CBaseMultiplayerPlayer::PostConstructor */))(piVar7,param_2,in_stack_0000000c);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -5330,7 +5330,7 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
       piVar11 = *(int **)(param_1 + 0x1c);
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -5361,7 +5361,7 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
         piVar1 = *(int **)(param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */)), iVar7 != 0)) &&
@@ -5550,7 +5550,7 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
       piVar11 = *(int **)(param_1 + 0x1c);
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(&DAT_004a53e5 + unaff_EBX) + 0x40))
                               (*(int **)(&DAT_004a53e5 + unaff_EBX)), iVar5 == 0)) {
@@ -5581,7 +5581,7 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
         piVar1 = *(int **)(param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(&DAT_004a53e5 + unaff_EBX) + 0x40))
                                  (*(int **)(&DAT_004a53e5 + unaff_EBX)), iVar7 != 0)) &&
@@ -5770,7 +5770,7 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -5801,7 +5801,7 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           paVar11 = (animevent_t *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -5899,7 +5899,7 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
     } while (*(animevent_t **)paVar11 != (animevent_t *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x38))(piVar7);
+      (**(code **)(*piVar7 + 0x38 /* CBaseAnimating::TestCollision */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -5990,7 +5990,7 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -6021,7 +6021,7 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -6119,7 +6119,7 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
     } while (*(CBaseEntity **)pCVar11 != (CBaseEntity *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x94))(piVar7);
+      (**(code **)(*piVar7 + 0x94 /* CBaseEntity::SetParent */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -6211,7 +6211,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(CEntityFactory<CLogicCompareInteger>::Destroy +
                                            unaff_EBX + 5) + 0x40))
@@ -6244,7 +6244,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(CEntityFactory<CLogicCompareInteger>::Destroy +
                                               unaff_EBX + 5) + 0x40))
@@ -6344,7 +6344,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
     } while (*(CBaseEntity **)pCVar11 != (CBaseEntity *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x74))(piVar7);
+      (**(code **)(*piVar7 + 0x74 /* CBaseEntity::PostClientActive */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -6435,7 +6435,7 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
       piVar10 = *(int **)((int)param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(CLogicCase::~CLogicCase + unaff_EBX + 5) + 0x40))
                               (*(int **)(CLogicCase::~CLogicCase + unaff_EBX + 5)), iVar5 == 0)) {
@@ -6466,7 +6466,7 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
         piVar1 = *(int **)((int)param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar5 = (**(code **)(**(int **)(CLogicCase::~CLogicCase + unaff_EBX + 5) + 0x40))
                                  (*(int **)(CLogicCase::~CLogicCase + unaff_EBX + 5)), iVar5 != 0))
@@ -6653,7 +6653,7 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
       piVar10 = (int *)in_stack_00000004[7];
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(&DAT_004ab5d5 + unaff_EBX) + 0x40))
                               (*(int **)(&DAT_004ab5d5 + unaff_EBX)), iVar5 == 0)) {
@@ -6683,7 +6683,7 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(&DAT_004ab5d5 + unaff_EBX) + 0x40))
                                 (*(int **)(&DAT_004ab5d5 + unaff_EBX)), iVar5 != 0)) {
@@ -6872,7 +6872,7 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -6905,7 +6905,7 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -7008,7 +7008,7 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
     } while (*(CBaseEntity **)pCVar10 != (CBaseEntity *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x80))(piVar6,param_2,in_stack_0000000c);
+      (**(code **)(*piVar6 + 0x80 /* CBaseEntity::KeyValue */))(piVar6,param_2,in_stack_0000000c);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -7105,7 +7105,7 @@ Action<CINSNextBot>::OnHeardFootsteps
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -7138,7 +7138,7 @@ Action<CINSNextBot>::OnHeardFootsteps
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar11 = (CBaseCombatCharacter *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -7251,7 +7251,7 @@ LAB_006f9480:
     }
     else {
 LAB_006f9457:
-      fVar9 = (float10)(**(code **)(*piVar6 + 0x3c))(piVar6);
+      fVar9 = (float10)(**(code **)(*piVar6 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar6);
       if (*(float *)(unaff_EBX + 0x1bfacd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */) <= (float)fVar9 &&
           (float)fVar9 != *(float *)(unaff_EBX + 0x1bfacd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
         return;
@@ -7260,7 +7260,7 @@ LAB_006f9457:
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     if (piVar6 != (int *)0x0) {
       do {
-        (**(code **)(*piVar6 + 0xac))(piVar6,param_2,in_stack_0000000c);
+        (**(code **)(*piVar6 + 0xac /* CBasePlayer::DrawDebugGeometryOverlays */))(piVar6,param_2,in_stack_0000000c);
         piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
       } while (piVar6 != (int *)0x0);
       return;
@@ -7352,7 +7352,7 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
       piVar10 = (int *)in_stack_00000004[7];
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -7382,7 +7382,7 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -7566,7 +7566,7 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(&DAT_004a2ef5 + unaff_EBX) + 0x40))
                               (*(int **)(&DAT_004a2ef5 + unaff_EBX)), iVar4 == 0)) {
@@ -7597,7 +7597,7 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(&DAT_004a2ef5 + unaff_EBX) + 0x40))
                                  (*(int **)(&DAT_004a2ef5 + unaff_EBX)), iVar6 != 0)) &&
@@ -7696,7 +7696,7 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
     } while (*(CBaseEntity **)pCVar11 != (CBaseEntity *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x14))(piVar7);
+      (**(code **)(*piVar7 + 0x14 /* CBaseEntity::GetNetworkable */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -7788,7 +7788,7 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -7819,7 +7819,7 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -7917,7 +7917,7 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
     } while (*(CBaseEntity **)pCVar11 != (CBaseEntity *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x10))(piVar7);
+      (**(code **)(*piVar7 + 0x10 /* CBaseEntity::GetCollideable */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -8008,7 +8008,7 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
       piVar11 = (int *)in_stack_00000004[7];
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -8038,7 +8038,7 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -8222,7 +8222,7 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
       piVar11 = (int *)in_stack_00000004[7];
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -8252,7 +8252,7 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -8439,7 +8439,7 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
       piVar6 = *(int **)(param_1 + 0x1c);
       puVar7 = (undefined1 *)0x0;
       if (piVar6 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,0x80);
+        cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -8472,7 +8472,7 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
         piVar6 = *(int **)(param_1 + 0x1c);
         if (piVar6 != (int *)0x0) {
           pCVar10 = (CNavArea *)0x1;
-          cVar1 = (**(code **)(*piVar6 + 0x980))(piVar6,1);
+          cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -8574,7 +8574,7 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
     } while (*(CNavArea **)pCVar11 != (CNavArea *)0x0);
     piVar6 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar6 != (int *)0x0) {
-      (**(code **)(*piVar6 + 0x60))(piVar6,param_2,in_stack_0000000c);
+      (**(code **)(*piVar6 + 0x60 /* CINSPlayer::Precache */))(piVar6,param_2,in_stack_0000000c);
       piVar6 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -8666,7 +8666,7 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
       piVar12 = (int *)in_stack_00000004[7];
       puVar9 = (undefined1 *)0x0;
       if (piVar12 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar12 + 0x980))(piVar12,0x80);
+        cVar2 = (**(code **)(*piVar12 + 0x980 /* CINSNextBot::IsDebugging */))(piVar12,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -8696,7 +8696,7 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar12 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */)), iVar5 != 0)) {
@@ -8901,7 +8901,7 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
       piVar10 = (int *)in_stack_00000004[7];
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(&DAT_004a4aa5 + unaff_EBX) + 0x40))
                               (*(int **)(&DAT_004a4aa5 + unaff_EBX)), iVar5 == 0)) {
@@ -8931,7 +8931,7 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(&DAT_004a4aa5 + unaff_EBX) + 0x40))
                                 (*(int **)(&DAT_004a4aa5 + unaff_EBX)), iVar5 != 0)) {
@@ -9123,7 +9123,7 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -9155,7 +9155,7 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar12 = (CBaseCombatCharacter *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */)), iVar4 != 0)) &&
@@ -9268,7 +9268,7 @@ LAB_006f8f70:
     }
     else {
 LAB_006f8f47:
-      fVar10 = (float10)(**(code **)(*piVar7 + 0x3c))(piVar7);
+      fVar10 = (float10)(**(code **)(*piVar7 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar7);
       if (*(float *)(unaff_EBX + 0x1bffdd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */) <= (float)fVar10 &&
           (float)fVar10 != *(float *)(unaff_EBX + 0x1bffdd /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x28 */)) {
         return;
@@ -9277,7 +9277,7 @@ LAB_006f8f47:
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     if (piVar7 != (int *)0x0) {
       do {
-        (**(code **)(*piVar7 + 0xb0))(piVar7,param_2,in_stack_0000000c);
+        (**(code **)(*piVar7 + 0xb0 /* CBaseAnimating::DrawDebugTextOverlays */))(piVar7,param_2,in_stack_0000000c);
         piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
       } while (piVar7 != (int *)0x0);
       return;
@@ -9370,7 +9370,7 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
       piVar7 = *(int **)(param_1 + 0x1c);
       puVar8 = (undefined1 *)0x0;
       if (piVar7 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,0x80);
+        cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
            (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */)), iVar4 == 0)) {
@@ -9401,7 +9401,7 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
         piVar7 = *(int **)(param_1 + 0x1c);
         if (piVar7 != (int *)0x0) {
           pCVar11 = (CBaseEntity *)0x1;
-          cVar1 = (**(code **)(*piVar7 + 0x980))(piVar7,1);
+          cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
               (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */)), iVar6 != 0)) &&
@@ -9499,7 +9499,7 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
     } while (*(CBaseEntity **)pCVar11 != (CBaseEntity *)0x0);
     piVar7 = (int *)(**(code **)(*(int *)param_1 + 8))(param_1);
     while (piVar7 != (int *)0x0) {
-      (**(code **)(*piVar7 + 0x90))(piVar7);
+      (**(code **)(*piVar7 + 0x90 /* CBasePlayer::Activate */))(piVar7);
       piVar7 = (int *)(**(code **)(*(int *)param_1 + 0xc))(param_1);
     }
   }
@@ -9598,7 +9598,7 @@ Action<CINSNextBot>::OnSpokeConcept
       piVar12 = (int *)param_1[7];
       puVar5 = (undefined1 *)0x0;
       if (piVar12 != (int *)0x0) {
-        cVar3 = (**(code **)(*piVar12 + 0x980))(piVar12,0x80);
+        cVar3 = (**(code **)(*piVar12 + 0x980 /* CINSNextBot::IsDebugging */))(piVar12,0x80);
         if ((cVar3 == '\0') &&
            (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */)), iVar6 == 0)) {
@@ -9632,7 +9632,7 @@ Action<CINSNextBot>::OnSpokeConcept
         piVar2 = (int *)param_1[7];
         if (piVar2 != (int *)0x0) {
           piVar12 = (int *)0x1;
-          cVar3 = (**(code **)(*piVar2 + 0x980))(piVar2,1);
+          cVar3 = (**(code **)(*piVar2 + 0x980 /* CINSNextBot::IsDebugging */))(piVar2,1);
           if (((cVar3 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */)), iVar7 != 0)) &&
@@ -9829,7 +9829,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
       piVar11 = *(int **)(param_1 + 0x1c);
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -9860,7 +9860,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
         piVar1 = *(int **)(param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */) + 0x40))
                                  (*(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */)), iVar5 != 0)) &&
@@ -10048,7 +10048,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
       piVar11 = *(int **)(param_1 + 0x1c);
       puVar9 = (undefined1 *)0x0;
       if (piVar11 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar11 + 0x980))(piVar11,0x80);
+        cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(CEntityFactory<CLogicRelay>::GetEntitySize +
                                            unaff_EBX + 5) + 0x40))
@@ -10081,7 +10081,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
         piVar1 = *(int **)(param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar11 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar7 = (**(code **)(**(int **)(CEntityFactory<CLogicRelay>::GetEntitySize +
                                               unaff_EBX + 5) + 0x40))
@@ -10272,7 +10272,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
       piVar12 = *(int **)(param_1 + 0x1c);
       puVar10 = (undefined1 *)0x0;
       if (piVar12 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar12 + 0x980))(piVar12,0x80);
+        cVar2 = (**(code **)(*piVar12 + 0x980 /* CINSNextBot::IsDebugging */))(piVar12,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(&LAB_004ad195 + unaff_EBX) + 0x40))
                               (*(int **)(&LAB_004ad195 + unaff_EBX)), iVar5 == 0)) {
@@ -10304,7 +10304,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
         piVar1 = *(int **)(param_1 + 0x1c);
         if (piVar1 != (int *)0x0) {
           piVar12 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
               (iVar8 = (**(code **)(**(int **)(&LAB_004ad195 + unaff_EBX) + 0x40))
                                  (*(int **)(&LAB_004ad195 + unaff_EBX)), iVar8 != 0)) &&
@@ -10493,7 +10493,7 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
       piVar10 = (int *)in_stack_00000004[7];
       puVar8 = (undefined1 *)0x0;
       if (piVar10 != (int *)0x0) {
-        cVar2 = (**(code **)(*piVar10 + 0x980))(piVar10,0x80);
+        cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
            (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */) + 0x40))
                               (*(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */)), iVar5 == 0)) {
@@ -10523,7 +10523,7 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
         piVar1 = (int *)in_stack_00000004[7];
         if ((piVar1 != (int *)0x0) && (local_44 - 1U < 3)) {
           piVar10 = (int *)0x1;
-          cVar2 = (**(code **)(*piVar1 + 0x980))(piVar1,1);
+          cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */) + 0x40))
                                 (*(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */)), iVar5 != 0)) {

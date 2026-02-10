@@ -66,7 +66,9 @@ THUNK_ADDRS = {
 
 # Regex to match PIC offset patterns in decompiled C
 # Matches: unaff_EBX + 0x1234, extraout_ECX + -0x5678, etc.
+# Excludes vtable dispatches where the register is dereferenced (*reg + offset)
 PIC_OFFSET_RE = re.compile(
+    r'(?<!\*)'  # NOT preceded by * (would be a vtable dispatch dereference)
     r'\b(unaff_EBX|unaff_EBP|extraout_ECX|extraout_EDX|extraout_EBX)'
     r' \+ (-?0x[0-9a-fA-F]+)'
 )

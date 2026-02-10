@@ -103,7 +103,7 @@ CINSBotSweepArea::Update(CINSBotSweepArea *this,CINSNextBot *param_1,float param
     fVar11 = (float10)CountdownTimer::Now();
     if (*(float *)((int)param_2 + 0x48e0) <= (float)fVar11 &&
         (float)fVar11 != *(float *)((int)param_2 + 0x48e0)) {
-      iVar6 = (**(code **)(*(int *)in_stack_0000000c + 0x548))(in_stack_0000000c);
+      iVar6 = (**(code **)(*(int *)in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c);
       if (iVar6 == 0) {
         *(undefined4 *)param_1 = 3;
         *(undefined4 *)(param_1 + 4) = 0;
@@ -146,7 +146,7 @@ CINSBotSweepArea::Update(CINSBotSweepArea *this,CINSNextBot *param_1,float param
               local_44 = *(float *)(unaff_EBX + 0x22a675 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xb0 */) + local_2c;
               local_4c = local_34;
               local_48 = local_30;
-              cVar5 = (**(code **)(*(int *)local_58 + 0x444))(local_58,&local_4c,1,local_58);
+              cVar5 = (**(code **)(*(int *)local_58 + 0x444 /* CINSPlayer::IsLineOfSightClear */))(local_58,&local_4c,1,local_58);
               if (cVar5 != '\0') {
                 CUtlVector<Vector,CUtlMemory<Vector,int>>::InsertBefore((int)local_6c,local_60);
               }
@@ -174,7 +174,7 @@ LAB_00733cca:
               local_44 = *(float *)(unaff_EBX + 0x22a675 /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xb0 */) + local_20;
               local_4c = local_28;
               local_48 = local_24;
-              cVar5 = (**(code **)(*(int *)local_58 + 0x444))(local_58,&local_4c,1,local_58);
+              cVar5 = (**(code **)(*(int *)local_58 + 0x444 /* CINSPlayer::IsLineOfSightClear */))(local_58,&local_4c,1,local_58);
               if (cVar5 != '\0') {
                 CUtlVector<Vector,CUtlMemory<Vector,int>>::InsertBefore((int)local_6c,local_60);
               }
@@ -191,7 +191,7 @@ LAB_00733de0:
         local_4c = *puVar1;
         local_48 = puVar1[1];
         local_44 = (float)puVar1[2];
-        piVar7 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+        piVar7 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
         pcVar3 = *(code **)(*piVar7 + 0xd4);
         CINSNextBot::GetViewPosition(local_40);
         (*pcVar3)(piVar7,local_40,3,fVar12,0,unaff_EBX + 0x24e59d /* "Looking at random visible areas" */);
@@ -238,7 +238,7 @@ LAB_00733de0:
       else {
         *(int *)((int)param_2 + 0x48e4) = *(int *)((int)param_2 + 0x48e4) + 1;
       }
-      (**(code **)(*(int *)in_stack_0000000c + 0x20c))(&local_4c,in_stack_0000000c);
+      (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_4c,in_stack_0000000c);
       pCVar9 = extraout_ECX_01;
       if (((*(uint *)((int)param_2 + 0x48bc) < 0x10) &&
           (piVar7 = (int *)(**(int **)(unaff_EBX + 0x472cdd /* &TheNavMesh */) + 0x974 +
@@ -250,8 +250,8 @@ LAB_00733de0:
           if ((piVar4 != (int *)0x0) &&
              (cVar5 = (**(code **)(*piVar4 + 0x94))(piVar4,*(undefined4 *)((int)param_2 + 0x48b8)),
              pCVar9 = extraout_ECX_02, cVar5 != '\0')) {
-            piVar8 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-            cVar5 = (**(code **)(*piVar8 + 0x114))(piVar8,piVar4 + 0xb);
+            piVar8 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+            cVar5 = (**(code **)(*piVar8 + 0x114 /* IVision::IsInFieldOfView */))(piVar8,piVar4 + 0xb);
             pCVar9 = extraout_ECX_03;
             if (cVar5 != '\0') {
               iVar10 = *(int *)((int)param_2 + 0x48b8) * 3;

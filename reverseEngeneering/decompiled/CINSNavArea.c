@@ -160,7 +160,7 @@ CINSNavArea::AddPotentiallyVisibleActor(CINSNavArea *this,CBaseCombatCharacter *
         if (cVar6 != '\0') {
           piVar9 = in_stack_00000008;
         }
-        cVar6 = (**(code **)(*piVar9 + 0x7b4))(piVar9,0x539);
+        cVar6 = (**(code **)(*piVar9 + 0x7b4 /* CBasePlayer::IsBotOfType */))(piVar9,0x539);
         if ((cVar6 != '\0') && ((*(byte *)(in_stack_00000008 + 0x8a5) & 1) != 0)) goto LAB_006e632d;
       }
       puVar10 = (uint *)(**(code **)(*in_stack_00000008 + 0xc))(in_stack_00000008);
@@ -1346,7 +1346,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
     fVar8 = (float)((uint)piVar3 ^ piVar3[0xb]);
   }
   else {
-    fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+    fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
     fVar8 = (float)fVar5;
   }
   if (fVar6 < fVar7 + fVar8) {
@@ -1358,7 +1358,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
     local_24 = (float)((uint)piVar3 ^ piVar3[0xb]);
   }
   else {
-    fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+    fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
     local_24 = (float)fVar5;
   }
   iVar2 = GetAssociatedSpawnZone();
@@ -1380,7 +1380,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
         local_20 = (float)((uint)piVar3 ^ piVar3[0xb]);
       }
       else {
-        fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+        fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
         local_20 = (float)fVar5;
       }
       piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c2fed /* &nav_spawn_score_friendly_spawn_bonus_max_distance */))[7];
@@ -1388,7 +1388,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
         local_28 = (float)((uint)piVar3 ^ piVar3[0xb]);
       }
       else {
-        fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+        fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
         local_28 = (float)fVar5;
       }
       iVar2 = GetAssociatedSpawnZone();
@@ -1422,7 +1422,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
       fVar6 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
-      fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+      fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
       fVar6 = (float)fVar5;
       uVar4 = *(uint *)(param_1 + 0x160);
     }
@@ -1434,7 +1434,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
   goto LAB_006e395a;
   this_00 = *(CINSRules **)(&DAT_004c31bd + unaff_EBX);
   piVar3 = *(int **)this_00;
-  iVar2 = (**(code **)(*piVar3 + 0x404))(piVar3,in_stack_00000008);
+  iVar2 = (**(code **)(*piVar3 + 0x404 /* CBaseCombatCharacter::HeadDirection2D */))(piVar3,in_stack_00000008);
   if (iVar2 == 3) goto LAB_006e395a;
   cVar1 = CINSRules::IsOutpost(this_00);
   if (cVar1 != '\0') goto LAB_006e395a;
@@ -1442,7 +1442,7 @@ float10 __thiscall CINSNavArea::GetSpawnScore(CINSNavArea *this,int param_1)
     piVar3 = (int *)(*(int **)(unaff_EBX + 0x4c365d /* &nav_spawn_score_cachepoint_bonus */))[7];
     if (piVar3 == *(int **)(unaff_EBX + 0x4c365d /* &nav_spawn_score_cachepoint_bonus */)) goto LAB_006e3ae5;
 LAB_006e3ab6:
-    fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+    fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
     fVar6 = (float)fVar5;
   }
   else {
@@ -1461,7 +1461,7 @@ LAB_006e395a:
       fVar6 = (float)((uint)piVar3 ^ piVar3[0xb]);
     }
     else {
-      fVar5 = (float10)(**(code **)(*piVar3 + 0x3c))(piVar3);
+      fVar5 = (float10)(**(code **)(*piVar3 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar3);
       fVar6 = (float)fVar5;
     }
     local_20 = fVar6 * local_20;
@@ -2426,7 +2426,7 @@ void __thiscall CINSNavArea::ScoreHidingSpot(CINSNavArea *this,HidingSpot *param
       iVar6 = iVar7;
     }
     else {
-      fVar10 = (float10)(**(code **)(*piVar2 + 0x3c))(piVar2);
+      fVar10 = (float10)(**(code **)(*piVar2 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar2);
       local_2c = (float)fVar10;
       iVar6 = *(int *)(param_1 + 0x25c);
     }
@@ -2528,8 +2528,8 @@ LAB_006e3de0:
             if (((uVar4 != 0xffffffff) &&
                 (iVar9 = *piVar8 + (uVar4 & 0xffff) * 0x18, *(uint *)(iVar9 + 8) == uVar4 >> 0x10))
                && ((piVar2 = *(int **)(iVar9 + 4), piVar2 != (int *)0x0 &&
-                   ((cVar5 = (**(code **)(*piVar2 + 0x118))(piVar2), cVar5 != '\0' &&
-                    (cVar5 = (**(code **)(*piVar2 + 0x434))(piVar2,in_stack_00000008 + 4,0x3f666666)
+                   ((cVar5 = (**(code **)(*piVar2 + 0x118 /* CBaseEntity::IsAlive */))(piVar2), cVar5 != '\0' &&
+                    (cVar5 = (**(code **)(*piVar2 + 0x434 /* CBaseCombatCharacter::IsLookingTowards */))(piVar2,in_stack_00000008 + 4,0x3f666666)
                     , cVar5 != '\0')))))) {
               local_2c = -1.0;
               break;
@@ -2549,8 +2549,8 @@ LAB_006e3de0:
           if ((((uVar4 != 0xffffffff) &&
                (iVar9 = *piVar8 + (uVar4 & 0xffff) * 0x18, *(uint *)(iVar9 + 8) == uVar4 >> 0x10))
               && (piVar2 = *(int **)(iVar9 + 4), piVar2 != (int *)0x0)) &&
-             (cVar5 = (**(code **)(*piVar2 + 0x118))(piVar2), cVar5 != '\0')) {
-            cVar5 = (**(code **)(*piVar2 + 0x434))(piVar2,in_stack_00000008 + 4,0x3f666666);
+             (cVar5 = (**(code **)(*piVar2 + 0x118 /* CBaseEntity::IsAlive */))(piVar2), cVar5 != '\0')) {
+            cVar5 = (**(code **)(*piVar2 + 0x434 /* CBaseCombatCharacter::IsLookingTowards */))(piVar2,in_stack_00000008 + 4,0x3f666666);
             if (cVar5 != '\0') {
               local_24 = local_24 - *(float *)(unaff_EBX + 0x1d4f49 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */);
             }

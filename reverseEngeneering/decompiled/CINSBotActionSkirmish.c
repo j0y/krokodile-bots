@@ -108,12 +108,12 @@ CINSBotActionSkirmish::Update(CINSBotActionSkirmish *this,CINSNextBot *param_1,f
   __i686_get_pc_thunk_bx();
   cVar1 = CINSBotEscort::HasEscortTarget((CINSNextBot *)in_stack_0000000c);
   if (cVar1 == '\0') {
-    piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    iVar4 = (**(code **)(*piVar3 + 0xd0))(piVar3,0);
+    piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    iVar4 = (**(code **)(*piVar3 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar3,0);
     this_02 = extraout_ECX;
     if (iVar4 != 0) {
-      piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-      iVar4 = (**(code **)(*piVar3 + 0xd4))(piVar3,in_stack_0000000c + 0x2060,iVar4);
+      piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+      iVar4 = (**(code **)(*piVar3 + 0xd4 /* IIntention::ShouldAttack */))(piVar3,in_stack_0000000c + 0x2060,iVar4);
       this_02 = extraout_ECX_00;
       if (iVar4 == 1) {
         pvVar2 = ::operator_new(0x88);

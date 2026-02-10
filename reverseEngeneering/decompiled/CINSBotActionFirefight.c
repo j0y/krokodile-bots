@@ -65,12 +65,12 @@ CINSBotActionFirefight::Update(CINSBotActionFirefight *this,CINSNextBot *param_1
   __i686_get_pc_thunk_bx();
   cVar2 = CINSBotEscort::HasEscortTarget(extraout_EDX);
   if (cVar2 == '\0') {
-    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    iVar5 = (**(code **)(*piVar4 + 0xd0))(piVar4,0);
+    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    iVar5 = (**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
     this_02 = extraout_ECX;
     if (iVar5 != 0) {
-      piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-      iVar5 = (**(code **)(*piVar4 + 0xd4))(piVar4,in_stack_0000000c + 0x2060,iVar5);
+      piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+      iVar5 = (**(code **)(*piVar4 + 0xd4 /* IIntention::ShouldAttack */))(piVar4,in_stack_0000000c + 0x2060,iVar5);
       this_02 = extraout_ECX_00;
       if (iVar5 == 1) {
         pvVar3 = ::operator_new(0x88);

@@ -277,13 +277,13 @@ CINSBotRetreat::OnStart(CINSBotRetreat *this,CINSNextBot *param_1,Action *param_
     (**(code **)(*(int *)(param_2 + 0x48d8) + 4))(param_2 + 0x48d8);
     *(float *)(param_2 + 0x48dc) = fVar12;
   }
-  (**(code **)(*in_stack_0000000c + 0x96c))(in_stack_0000000c);
+  (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
   CINSBotLocomotion::ClearMovementRequests();
   *(undefined4 *)(param_2 + 0x4814) = 0x428a0000;
   if ((in_stack_0000000c[0x2cce] == -1) ||
      (local_30 = (int *)UTIL_EntityByIndex(in_stack_0000000c[0x2cce]), local_30 == (int *)0x0)) {
-    piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0))(piVar6);
+    piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar6);
     if ((piVar6 == (int *)0x0) ||
        (local_30 = (int *)(**(code **)(*piVar6 + 0x10))(piVar6), local_30 == (int *)0x0)) {
       fVar11 = (float10)CountdownTimer::Now();
@@ -379,7 +379,7 @@ CINSBotRetreat::OnStart(CINSBotRetreat *this,CINSNextBot *param_1,Action *param_
     fVar13 = (float)in_stack_0000000c[0x84] - *(float *)(iVar5 + 0x210);
     fVar11 = (float10)CBaseDetonator::GetDetonateDamageRadius();
     if (SQRT(fVar12 * fVar12 + fVar14 * fVar14 + fVar13 * fVar13) < (float)fVar11) {
-      (**(code **)(*in_stack_0000000c + 0x800))(in_stack_0000000c,0x68,0,0,0,0);
+      (**(code **)(*in_stack_0000000c + 0x800 /* CINSPlayer::SpeakConceptIfAllowed */))(in_stack_0000000c,0x68,0,0,0,0);
     }
   }
   *(undefined4 *)param_1 = 0;
@@ -494,8 +494,8 @@ CINSBotRetreat::Update(CINSBotRetreat *this,CINSNextBot *param_1,float param_2)
     if ((in_stack_0000000c[0x2cce] == -1) ||
        (iVar4 = UTIL_EntityByIndex(in_stack_0000000c[0x2cce]), this_02 = extraout_ECX_01, iVar4 == 0
        )) {
-      piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-      piVar3 = (int *)(**(code **)(*piVar3 + 0xd0))(piVar3,0);
+      piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+      piVar3 = (int *)(**(code **)(*piVar3 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar3,0);
       if ((piVar3 == (int *)0x0) ||
          (iVar4 = (**(code **)(*piVar3 + 0x10))(piVar3), this_02 = extraout_ECX_02, iVar4 == 0)) {
         *(undefined1 *)((int)param_2 + 0x48f0) = 1;

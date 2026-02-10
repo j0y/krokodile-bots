@@ -163,8 +163,8 @@ CINSBotRetreatToHidingSpot::Update
   float local_24;
   
   __i686_get_pc_thunk_bx();
-  piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-  iVar5 = (**(code **)(*piVar4 + 0xd0))(piVar4,1);
+  piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  iVar5 = (**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,1);
   pCVar8 = in_stack_0000000c + 0x2060;
   iVar6 = (**(code **)(*(int *)((int)param_2 + 4) + 0x10))((int)param_2 + 4,pCVar8);
   if (iVar6 == 0) {

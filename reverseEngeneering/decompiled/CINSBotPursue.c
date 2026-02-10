@@ -68,8 +68,8 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
   int *in_stack_0000000c;
   
   __i686_get_pc_thunk_bx();
-  piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-  piVar2 = (int *)(**(code **)(*piVar2 + 0xd0))(piVar2,0);
+  piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  piVar2 = (int *)(**(code **)(*piVar2 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar2,0);
   if (piVar2 == (int *)0x0) {
     *(undefined4 *)param_1 = 3;
     *(int *)(param_1 + 8) = unaff_EBX + 0x2575af /* "No Known Threats" */;
@@ -77,7 +77,7 @@ CINSBotPursue::OnStart(CINSBotPursue *this,CINSNextBot *param_1,Action *param_2)
     return param_1;
   }
   puVar3 = (undefined4 *)(**(code **)(*piVar2 + 0x14))(piVar2);
-  uVar4 = (**(code **)(*in_stack_0000000c + 0x96c))(in_stack_0000000c);
+  uVar4 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
   CINSBotLocomotion::AddMovementRequest(uVar4,*puVar3,puVar3[1],puVar3[2],9,3,0x40a00000);
   CINSNextBot::ResetIdleStatus(this_00);
   *(int *)(param_2 + 0x50) = in_stack_0000000c[0x2cce];
@@ -134,8 +134,8 @@ CINSBotPursue::Update(CINSBotPursue *this,CINSNextBot *param_1,float param_2)
       (float)fVar10 == *(float *)((int)param_2 + 0x40)) goto LAB_0072a550;
   if ((in_stack_0000000c[0x2cce] == -1) ||
      (iVar3 = UTIL_EntityByIndex(in_stack_0000000c[0x2cce]), iVar3 == 0)) {
-    piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-    piVar5 = (int *)(**(code **)(*piVar5 + 0xd0))(piVar5,0);
+    piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    piVar5 = (int *)(**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
     if ((piVar5 == (int *)0x0) || (iVar3 = (**(code **)(*piVar5 + 0x10))(piVar5), iVar3 == 0))
     goto LAB_0072a5b0;
   }
@@ -149,8 +149,8 @@ CINSBotPursue::Update(CINSBotPursue *this,CINSNextBot *param_1,float param_2)
     *(undefined **)(param_1 + 8) = &UNK_0025736d + unaff_EBX;
     return param_1;
   }
-  piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-  piVar5 = (int *)(**(code **)(*piVar5 + 0xe4))(piVar5,iVar3);
+  piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  piVar5 = (int *)(**(code **)(*piVar5 + 0xe4 /* IVision::GetKnown */))(piVar5,iVar3);
   if (piVar5 == (int *)0x0) {
 LAB_0072a5b0:
     *(undefined4 *)param_1 = 3;
@@ -161,8 +161,8 @@ LAB_0072a5b0:
   cVar2 = (**(code **)(*piVar5 + 0x38))(piVar5);
   this_00 = extraout_ECX;
   if (cVar2 != '\0') {
-    piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar3 = (**(code **)(*piVar7 + 0xd4))(piVar7,in_stack_0000000c + 0x818,piVar5);
+    piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar3 = (**(code **)(*piVar7 + 0xd4 /* IIntention::ShouldAttack */))(piVar7,in_stack_0000000c + 0x818,piVar5);
     this_00 = extraout_ECX_00;
     if (iVar3 != 0) {
       *(undefined4 *)param_1 = 3;
@@ -192,14 +192,14 @@ LAB_0072a5b0:
     bVar1 = *(float *)(unaff_EBX + 0x20daba /* typeinfo name for CUseTraceFilter+0x19 */) <= fVar11 && fVar11 != *(float *)(unaff_EBX + 0x20daba /* typeinfo name for CUseTraceFilter+0x19 */)
     ;
   }
-  piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x970))(in_stack_0000000c);
-  cVar2 = (**(code **)(*piVar7 + 0x128))(piVar7);
+  piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
+  cVar2 = (**(code **)(*piVar7 + 0x128 /* CINSBotBody::IsPostureMobile */))(piVar7);
   if (cVar2 == '\0') {
-    piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x970))(in_stack_0000000c);
-    (**(code **)(*piVar7 + 0x110))(piVar7,0xc);
+    piVar7 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
+    (**(code **)(*piVar7 + 0x110 /* CINSBotBody::SetDesiredPosture */))(piVar7,0xc);
 LAB_0072a67c:
     puVar8 = (undefined4 *)(**(code **)(*piVar5 + 0x14))(piVar5);
-    uVar9 = (**(code **)(*in_stack_0000000c + 0x96c))(in_stack_0000000c);
+    uVar9 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
     CINSBotLocomotion::AddMovementRequest(uVar9,*puVar8,puVar8[1],puVar8[2],9,3,0x40a00000);
     puVar8 = (undefined4 *)(**(code **)(*piVar5 + 0x14))(piVar5);
     *(undefined4 *)((int)param_2 + 0x44) = *puVar8;

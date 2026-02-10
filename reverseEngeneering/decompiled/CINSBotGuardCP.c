@@ -173,11 +173,11 @@ CINSBotGuardCP::Update(CINSBotGuardCP *this,CINSNextBot *param_1,float param_2)
   
   uStack_14 = 0x720f8b;
   __i686_get_pc_thunk_bx();
-  piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-  iVar6 = (**(code **)(*piVar5 + 0xd0))(piVar5,0);
+  piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  iVar6 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
   if (iVar6 != 0) {
-    piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar6 = (**(code **)(*piVar5 + 0xd4))(piVar5,in_stack_0000000c + 0x818,iVar6);
+    piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar6 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x818,iVar6);
     if (iVar6 == 1) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
@@ -240,8 +240,8 @@ LAB_00721127:
       local_28 = fVar1 * local_34 + *(float *)((int)param_2 + 0x3c);
       local_20 = local_2c * fVar1 + *(float *)((int)param_2 + 0x44) +
                  *(float *)(unaff_EBX + 0x197b81 /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x2c */);
-      piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x970))(in_stack_0000000c);
-      (**(code **)(*piVar5 + 0xd4))(piVar5,&local_28,0,0x3dcccccd,0,unaff_EBX + 0x260320 /* "Guard Aiming" */);
+      piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
+      (**(code **)(*piVar5 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar5,&local_28,0,0x3dcccccd,0,unaff_EBX + 0x260320 /* "Guard Aiming" */);
       fVar7 = (float10)RandomFloat(0x3f800000,0x40a00000);
       fVar1 = (float)fVar7;
       fVar7 = (float10)CountdownTimer::Now();
@@ -263,7 +263,7 @@ LAB_00721127:
     fVar7 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                                (this_00,(float)in_stack_0000000c,0x41000000);
     if ((double)(float)fVar7 < *(double *)(unaff_EBX + 0x260395 /* typeinfo name for CINSBotGuardCP+0x11 */)) {
-      (**(code **)(*in_stack_0000000c + 0x95c))(in_stack_0000000c,0x3e800000,uVar8);
+      (**(code **)(*in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,0x3e800000,uVar8);
     }
     goto LAB_007210f5;
   }

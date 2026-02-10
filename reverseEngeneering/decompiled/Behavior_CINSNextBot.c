@@ -42,7 +42,7 @@ void __cdecl Behavior<CINSNextBot>::Update(CINSNextBot *param_1,float param_2)
                       (*(undefined4 *)(param_1 + 8),param_2,param_1,local_28,local_24,local_20);
     *(int *)(param_1 + 8) = iVar4;
     if (iVar4 != 0) {
-      cVar3 = (**(code **)(*(int *)param_2 + 0x980))(param_2,1);
+      cVar3 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
       if (cVar3 != '\0') {
         local_134 = unaff_EBX + 0x3d036d /* vtable for CFmtStrN<256, false>+0x8 */;
         local_130 = 0;

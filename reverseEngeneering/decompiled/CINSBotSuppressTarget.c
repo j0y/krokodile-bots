@@ -158,14 +158,14 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
   float local_20;
   
   __i686_get_pc_thunk_bx();
-  piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974))();
-  piVar6 = (int *)(**(code **)(*piVar6 + 0xd0))();
-  if (((piVar6 != (int *)0x0) && (cVar5 = (**(code **)(*piVar6 + 0x38))(), cVar5 != '\0')) &&
-     (fVar9 = (float10)(**(code **)(*piVar6 + 0x40))(),
+  piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))();
+  piVar6 = (int *)(**(code **)(*piVar6 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))();
+  if (((piVar6 != (int *)0x0) && (cVar5 = (**(code **)(*piVar6 + 0x38 /* CBaseAnimating::TestCollision */))(), cVar5 != '\0')) &&
+     (fVar9 = (float10)(**(code **)(*piVar6 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(),
      *(float *)(unaff_EBX + 0x18603d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */) <= (float)fVar9 &&
      (float)fVar9 != *(float *)(unaff_EBX + 0x18603d /* typeinfo name for CEntityFactory<CInfoElevatorFloor>+0x34 */))) {
-    piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x97c))();
-    iVar8 = (**(code **)(*piVar6 + 0xd4))();
+    piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))();
+    iVar8 = (**(code **)(*piVar6 + 0xd4 /* IIntention::ShouldAttack */))();
     if (iVar8 != 0) {
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
@@ -188,16 +188,16 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
         *(int *)(param_1 + 8) = unaff_EBX + 0x24f3aa /* "Failed to init weapon entity" */;
       }
       else {
-        cVar5 = (**(code **)(*piVar6 + 0x740))();
+        cVar5 = (**(code **)(*piVar6 + 0x740 /* CINSPlayer::CanSpeak */))();
         if (cVar5 == '\0') {
           uVar1 = *(uint *)((int)param_2 + 0x38);
           if (((uVar1 != 0xffffffff) &&
               (iVar8 = (uVar1 & 0xffff) * 0x18 + **(int **)(unaff_EBX + 0x473d01 /* &g_pEntityList */),
               *(uint *)(iVar8 + 8) == uVar1 >> 0x10)) && (*(int *)(iVar8 + 4) != 0)) {
-            piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974))();
-            (**(code **)(*piVar6 + 0xe4))();
+            piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))();
+            (**(code **)(*piVar6 + 0xe4 /* IVision::GetKnown */))();
           }
-          (**(code **)(*in_stack_0000000c + 0x20c))();
+          (**(code **)(*in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))();
           local_70 = *(float *)((int)param_2 + 0x3c) - local_64;
           local_6c = *(float *)((int)param_2 + 0x40) - local_60;
           local_68 = *(float *)((int)param_2 + 0x44) - local_5c;
@@ -227,17 +227,17 @@ CINSBotSuppressTarget::Update(CINSBotSuppressTarget *this,CINSNextBot *param_1,f
           local_3c = local_48 * fVar13 + local_3c;
           local_38 = local_44 * fVar13 + local_38;
           local_40 = fVar13 * local_4c + local_40;
-          piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x970))();
-          (**(code **)(*piVar6 + 0xd4))(piVar6,&local_40,3,0x3dcccccd,0,unaff_EBX + 0x24f3e2 /* "Aiming at suppression area" */);
-          (**(code **)(*in_stack_0000000c + 0x20c))(&local_28);
+          piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
+          (**(code **)(*piVar6 + 0xd4 /* PlayerBody::AimHeadTowards */))(piVar6,&local_40,3,0x3dcccccd,0,unaff_EBX + 0x24f3e2 /* "Aiming at suppression area" */);
+          (**(code **)(*in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_28);
           local_34 = local_40 - local_28;
           local_30 = local_3c - local_24;
           local_2c = local_38 - local_20;
           fVar9 = (float10)VectorNormalize((Vector *)&local_34);
           dVar14 = atan((double)(*(float *)(&DAT_001f0fbd + unaff_EBX) / (float)fVar9));
           dVar14 = cos(dVar14);
-          piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x970))();
-          pfVar7 = (float *)(**(code **)(*piVar6 + 0xd0))(piVar6);
+          piVar6 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
+          pfVar7 = (float *)(**(code **)(*piVar6 + 0xd0 /* CINSBotBody::GetViewVector */))(piVar6);
           if ((float)dVar14 <= pfVar7[1] * local_30 + *pfVar7 * local_34 + pfVar7[2] * local_2c) {
             pcVar2 = *(code **)(*in_stack_0000000c + 0x8c0);
             RandomFloat(0x3dcccccd,0x3eb33333);
@@ -421,7 +421,7 @@ CINSBotSuppressTarget::ShouldIronsight(CINSBotSuppressTarget *this,INextBot *par
     iVar1 = (**(code **)(*in_stack_00000008 + 200))();
     if (iVar1 != 0) {
       piVar2 = (int *)(**(code **)(*in_stack_00000008 + 200))();
-      (**(code **)(*piVar2 + 0x20c))(&local_28,piVar2);
+      (**(code **)(*piVar2 + 0x20c /* CINSNextBot::EyePosition */))(&local_28,piVar2);
       fVar4 = SQRT((*(float *)(param_1 + 0x40) - local_24) * (*(float *)(param_1 + 0x40) - local_24)
                    + (*(float *)(param_1 + 0x3c) - local_28) *
                      (*(float *)(param_1 + 0x3c) - local_28) +

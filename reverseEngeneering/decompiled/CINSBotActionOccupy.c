@@ -82,12 +82,12 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
     *(int *)(param_1 + 8) = unaff_EBX + 0x248587 /* "Escorting " */;
     return param_1;
   }
-  piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-  iVar6 = (**(code **)(*piVar5 + 0xd0))(piVar5,0);
+  piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  iVar6 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
   this_01 = extraout_ECX;
   if (iVar6 != 0) {
-    piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar6 = (**(code **)(*piVar5 + 0xd4))(piVar5,in_stack_0000000c + 0x2060,iVar6);
+    piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar6 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x2060,iVar6);
     this_01 = extraout_ECX_00;
     if (iVar6 == 1) {
       pvVar4 = ::operator_new(0x88);
@@ -148,10 +148,10 @@ CINSBotActionOccupy::Update(CINSBotActionOccupy *this,CINSNextBot *param_1,float
               (piVar5 = (int *)UTIL_INSGetClosestPlayer
                                          ((Vector *)(iVar1 + 0x2c),iVar10,(float *)0x0),
               piVar5 != (int *)0x0)) &&
-             (iVar10 = (**(code **)(*piVar5 + 0x548))(piVar5), iVar10 != 0)) {
-            uVar9 = (**(code **)(*piVar5 + 0x548))(piVar5);
+             (iVar10 = (**(code **)(*piVar5 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar5), iVar10 != 0)) {
+            uVar9 = (**(code **)(*piVar5 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar5);
             CINSNextBot::AddInvestigation(in_stack_0000000c,in_stack_0000000c,uVar9,0);
-            (**(code **)(*piVar5 + 0x548))(piVar5);
+            (**(code **)(*piVar5 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar5);
             pCVar7 = (CNavArea *)::operator_new(0x4900);
             CINSBotInvestigate::CINSBotInvestigate(this_08,pCVar7);
             *(undefined4 *)((int)param_2 + 0x20) = 0;

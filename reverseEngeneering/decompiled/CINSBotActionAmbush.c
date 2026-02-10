@@ -124,13 +124,13 @@ CINSBotActionAmbush::Update(CINSBotActionAmbush *this,CINSNextBot *param_1,float
   uVar3 = CBaseEntity::GetTeamNumber(in_stack_0000000c);
   cVar2 = CINSRules::IsAttackingTeam(this_01,**(int **)(unaff_EBX + 0x4705cd /* &g_pGameRules */));
   if (cVar2 != '\0') {
-    piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c,uVar3,uVar13)
+    piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c,uVar3,uVar13)
     ;
-    iVar8 = (**(code **)(*piVar5 + 0xd0))(piVar5,0);
+    iVar8 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
     pCVar7 = extraout_ECX;
     if (iVar8 != 0) {
-      piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-      iVar8 = (**(code **)(*piVar5 + 0xd4))(piVar5,in_stack_0000000c + 0x2060,iVar8);
+      piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+      iVar8 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x2060,iVar8);
       pCVar7 = extraout_ECX_00;
       if (iVar8 == 1) {
         pvVar4 = ::operator_new(0x88);

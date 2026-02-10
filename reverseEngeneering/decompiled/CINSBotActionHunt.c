@@ -124,12 +124,12 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
   }
   cVar3 = CINSBotEscort::HasEscortTarget(in_stack_0000000c);
   if (cVar3 == '\0') {
-    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
+    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
     uVar11 = 0;
-    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0))(piVar4,0);
+    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
     if (piVar4 != (int *)0x0) {
-      piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-      iVar6 = (**(code **)(*piVar5 + 0xd4))(piVar5,in_stack_0000000c + 0x2060,piVar4);
+      piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+      iVar6 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x2060,piVar4);
       if (iVar6 == 1) {
         pvVar8 = ::operator_new(0x88);
         CINSBotCombat::CINSBotCombat(this_03);
@@ -153,7 +153,7 @@ CINSBotActionHunt::Update(CINSBotActionHunt *this,CINSNextBot *param_1,float par
         fVar10 = *pfVar7;
         fVar1 = pfVar7[1];
         fVar2 = pfVar7[2];
-        pfVar7 = (float *)(**(code **)(*(int *)in_stack_0000000c + 0x260))(in_stack_0000000c,uVar11)
+        pfVar7 = (float *)(**(code **)(*(int *)in_stack_0000000c + 0x260 /* CBaseEntity::WorldSpaceCenter */))(in_stack_0000000c,uVar11)
         ;
         fVar10 = SQRT((pfVar7[1] - fVar1) * (pfVar7[1] - fVar1) +
                       (*pfVar7 - fVar10) * (*pfVar7 - fVar10) +

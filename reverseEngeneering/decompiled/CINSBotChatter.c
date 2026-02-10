@@ -275,8 +275,8 @@ LAB_00759110:
     do {
       piVar2 = (int *)UTIL_PlayerByIndex(iVar4);
       if (piVar2 != (int *)0x0) {
-        cVar1 = (**(code **)(*piVar2 + 0x7b0))(piVar2);
-        if ((cVar1 == '\0') && (cVar1 = (**(code **)(*piVar2 + 0x118))(piVar2), cVar1 == '\0')) {
+        cVar1 = (**(code **)(*piVar2 + 0x7b0 /* NextBotPlayer::IsBot */))(piVar2);
+        if ((cVar1 == '\0') && (cVar1 = (**(code **)(*piVar2 + 0x118 /* CBaseEntity::IsAlive */))(piVar2), cVar1 == '\0')) {
           iVar4 = iVar4 + 1;
           iVar3 = **(int **)(unaff_EBX + 0x44d7c5 /* &gpGlobals */);
           if (*(int *)(iVar3 + 0x14) < iVar4) break;
@@ -287,7 +287,7 @@ LAB_00759110:
            (piVar2 = (int *)__dynamic_cast(piVar2,*(undefined4 *)(unaff_EBX + 0x44d6a9 /* &typeinfo for CBasePlayer */),
                                            *(undefined4 *)(unaff_EBX + 0x44d94d /* &typeinfo for CINSNextBot */),0),
            piVar2 != (int *)0x0)) {
-          iVar3 = (**(code **)(*piVar2 + 0x978))(piVar2);
+          iVar3 = (**(code **)(*piVar2 + 0x978 /* CINSNextBot::GetChatter */))(piVar2);
           iVar3 = *(int *)(iVar3 + 4);
           if (iVar3 != 0) {
             cVar1 = *(char *)(iVar3 + 0x28);
@@ -531,11 +531,11 @@ void __thiscall CINSBotChatter::ReportEnemies(CINSBotChatter *this)
         do {
           piVar6 = (int *)UTIL_PlayerByIndex(iVar12);
           if ((piVar6 != (int *)0x0) && (piVar7 = *(int **)in_stack_00000004, piVar6 != piVar7)) {
-            piVar7 = (int *)(**(code **)(*piVar7 + 0x974))(piVar7);
-            piVar7 = (int *)(**(code **)(*piVar7 + 0xe4))(piVar7,piVar6);
+            piVar7 = (int *)(**(code **)(*piVar7 + 0x974 /* CINSNextBot::GetVisionInterface */))(piVar7);
+            piVar7 = (int *)(**(code **)(*piVar7 + 0xe4 /* IVision::GetKnown */))(piVar7,piVar6);
             if ((piVar7 != (int *)0x0) &&
-               (cVar4 = (**(code **)(*piVar7 + 0x4c))(piVar7), cVar4 != '\0')) {
-              fVar14 = (float10)(**(code **)(*piVar7 + 0x48))(piVar7);
+               (cVar4 = (**(code **)(*piVar7 + 0x4c /* CBasePlayer::ShouldTransmit */))(piVar7), cVar4 != '\0')) {
+              fVar14 = (float10)(**(code **)(*piVar7 + 0x48 /* CBaseEntity::SetOwnerEntity */))(piVar7);
               iVar5 = CBaseEntity::GetTeamNumber(this_00);
               iVar8 = CBaseEntity::GetTeamNumber(this_01);
               if ((iVar5 != iVar8) && ((float)fVar14 <= *(float *)(unaff_EBX + 0x1cb521 /* typeinfo name for CBaseGameSystem+0x32 */))) {

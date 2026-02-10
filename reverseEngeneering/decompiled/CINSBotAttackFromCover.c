@@ -82,12 +82,12 @@ CINSBotAttackFromCover::OnStart(CINSBotAttackFromCover *this,CINSNextBot *param_
   int *in_stack_0000000c;
   
   __i686_get_pc_thunk_bx();
-  piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-  piVar3 = (int *)(**(code **)(*piVar3 + 0xd0))(piVar3,0);
+  piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  piVar3 = (int *)(**(code **)(*piVar3 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar3,0);
   if (piVar3 != (int *)0x0) {
-    pCVar4 = (CINSBotBody *)(**(code **)(*in_stack_0000000c + 0x970))(in_stack_0000000c);
+    pCVar4 = (CINSBotBody *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
     CINSBotBody::SetPosture(pCVar4,pCVar4,3,8,0x3f800000,unaff_EBX + 0x277999 /* "Crouching in fire from cover start" */);
-    piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x970))(in_stack_0000000c);
+    piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
     pcVar2 = *(code **)(*piVar5 + 0xd8);
     uVar6 = (**(code **)(*piVar3 + 0x10))(piVar3);
     (*pcVar2)(piVar5,uVar6,3,0x3f800000,0,unaff_EBX + 0x2779bd /* "Aiming towards enemy in fire from cover start" */);
@@ -178,18 +178,18 @@ CINSBotAttackFromCover::Update(CINSBotAttackFromCover *this,CINSNextBot *param_1
   fVar19 = (float10)CountdownTimer::Now();
   if (*(float *)((int)param_2 + 0x50) <= (float)fVar19 &&
       (float)fVar19 != *(float *)((int)param_2 + 0x50)) {
-    piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0))(piVar6,0);
+    piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar6,0);
     if (((piVar6 == (int *)0x0) || (iVar7 = (**(code **)(*piVar6 + 0x10))(piVar6), iVar7 == 0)) ||
        (cVar5 = (**(code **)(*piVar6 + 0x54))(piVar6), cVar5 != '\0')) goto LAB_00709b98;
-    piVar8 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
+    piVar8 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
     piVar21 = piVar6;
-    iVar7 = (**(code **)(*piVar8 + 0xd4))(piVar8,in_stack_0000000c + 0x2060,piVar6);
+    iVar7 = (**(code **)(*piVar8 + 0xd4 /* IIntention::ShouldAttack */))(piVar8,in_stack_0000000c + 0x2060,piVar6);
     if (iVar7 == 0) goto LAB_00709806;
     fVar19 = (float10)RandomFloat(0x40a00000,0x41200000);
     cVar5 = CINSPlayer::IsCrouched(this_00);
     if (cVar5 == '\0') {
-      (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+      (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
       piVar21 = (int *)0x8;
       CINSBotBody::SetPosture();
     }
@@ -274,7 +274,7 @@ CINSBotAttackFromCover::Update(CINSBotAttackFromCover *this,CINSNextBot *param_1
         return param_1;
       }
       if (*(char *)((int)param_2 + 0x54) != '\0') {
-        piVar8 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+        piVar8 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
         pcVar4 = *(code **)(*piVar8 + 0xd8);
         uVar10 = (**(code **)(*piVar6 + 0x10))(piVar6);
         piVar21 = (int *)0x3;
@@ -282,19 +282,19 @@ CINSBotAttackFromCover::Update(CINSBotAttackFromCover *this,CINSNextBot *param_1
         if (*(char *)((int)param_2 + 0x61) == '\0') {
           if (*(char *)((int)param_2 + 99) == '\0') {
             if (*(char *)((int)param_2 + 100) != '\0') {
-              (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+              (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
               piVar21 = (int *)0x8;
               CINSBotBody::SetPosture();
             }
           }
           else {
-            (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+            (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
             piVar21 = (int *)0x8;
             CINSBotBody::SetPosture();
           }
         }
         else {
-          (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+          (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
           piVar21 = (int *)0x8;
           CINSBotBody::SetPosture();
         }
@@ -315,8 +315,8 @@ CINSBotAttackFromCover::Update(CINSBotAttackFromCover *this,CINSNextBot *param_1
   fVar19 = (float10)CountdownTimer::Now();
   if (*(float *)((int)param_2 + 0x40) <= (float)fVar19 &&
       (float)fVar19 != *(float *)((int)param_2 + 0x40)) {
-    piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0))(piVar6,0);
+    piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar6,0);
     if (((piVar6 == (int *)0x0) || (iVar7 = (**(code **)(*piVar6 + 0x10))(piVar6), iVar7 == 0)) ||
        (cVar5 = (**(code **)(*piVar6 + 0x54))(piVar6), cVar5 != '\0')) {
 LAB_00709b98:
@@ -325,8 +325,8 @@ LAB_00709b98:
       *(undefined4 *)(param_1 + 8) = 0;
       return param_1;
     }
-    piVar21 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar7 = (**(code **)(*piVar21 + 0xd4))(piVar21,in_stack_0000000c + 0x2060,piVar6);
+    piVar21 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar7 = (**(code **)(*piVar21 + 0xd4 /* IIntention::ShouldAttack */))(piVar21,in_stack_0000000c + 0x2060,piVar6);
     if (iVar7 == 0) {
 LAB_00709806:
       *(undefined4 *)param_1 = 3;
@@ -400,7 +400,7 @@ LAB_00709806:
       *(undefined4 *)((int)param_2 + 0x3c) = 0x3f000000;
     }
   }
-  iVar7 = (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+  iVar7 = (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
   iVar7 = *(int *)(iVar7 + 0x100);
   CFmtStrN<256,false>::CFmtStrN(this_02,local_13c,unaff_EBX + 0x276a52 /* "AFC:" */);
   if (iVar7 == 9) {
@@ -1231,16 +1231,16 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
   __i686_get_pc_thunk_bx();
   pVVar2 = *(Vector **)(in_stack_00000004 + 0x1c);
   if (pVVar2 != (Vector *)0x0) {
-    piVar4 = (int *)(**(code **)(*(int *)pVVar2 + 0x974))(pVVar2);
-    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0))(piVar4,0);
+    piVar4 = (int *)(**(code **)(*(int *)pVVar2 + 0x974 /* CINSNextBot::GetVisionInterface */))(pVVar2);
+    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
     if (((byte)pVVar2[0xd1] & 8) != 0) {
       CBaseEntity::CalcAbsolutePosition(this_00);
     }
     fVar12 = *(float *)(unaff_EBX + 0x25552d /* typeinfo name for CMemberFunctor0<CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>*, void (CParallelProcessor<CNavArea*, CFuncJobItemProcessor<CNavArea*>, 1>::*)(), CRefCounted1<CFunctor, CRefCountServiceBase<true, CRefMT> >, CFuncMemPolicyNone>+0xd8 */) + *(float *)(pVVar2 + 0x210);
     fVar8 = *(float *)(pVVar2 + 0x208);
     fVar1 = *(float *)(pVVar2 + 0x20c);
-    piVar4 = (int *)(**(code **)(*piVar4 + 0x10))(piVar4);
-    (**(code **)(*piVar4 + 0x20c))(&local_40,piVar4);
+    piVar4 = (int *)(**(code **)(*piVar4 + 0x10 /* CBaseEntity::GetCollideable */))(piVar4);
+    (**(code **)(*piVar4 + 0x20c /* CINSNextBot::EyePosition */))(&local_40,piVar4);
     local_d0 = 0;
     CTraceFilterSimple::CTraceFilterSimple
               (this_01,(IHandleEntity *)local_6c,(int)pVVar2,(_func_bool_IHandleEntity_ptr_int *)0x0
@@ -1270,10 +1270,10 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
               ((int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */),&local_bc,0x2006241,local_6c,local_11c
               );
     piVar4 = *(int **)(&DAT_0049def5 + unaff_EBX);
-    iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+    iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
     pCVar7 = extraout_ECX;
     if (iVar5 != 0) {
-      iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+      iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
       fVar8 = 0.5;
       if (iVar5 != 0) {
         fVar8 = -1.0;
@@ -1307,10 +1307,10 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
     (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */) + 0x14))
               ((int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */),&local_bc,0x2006241,local_6c,local_11c
               );
-    iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+    iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
     pCVar7 = extraout_ECX_00;
     if (iVar5 != 0) {
-      iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+      iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
       fVar8 = 0.5;
       if (iVar5 != 0) {
         fVar8 = -1.0;
@@ -1344,9 +1344,9 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
     (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */) + 0x14))
               ((int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */),&local_bc,0x2006241,local_6c,local_11c
               );
-    iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+    iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
     if (iVar5 != 0) {
-      iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+      iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
       fVar8 = 0.5;
       if (iVar5 != 0) {
         fVar8 = -1.0;
@@ -1360,8 +1360,8 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
     *(char *)(in_stack_00000004 + 0x60) = cVar3;
     if (((*(char *)(in_stack_00000004 + 0x61) == '\0') ||
         (*(char *)(in_stack_00000004 + 0x62) == '\0')) || (cVar3 == '\0')) {
-      piVar6 = (int *)(**(code **)(*(int *)pVVar2 + 0x970))(pVVar2);
-      cVar3 = (**(code **)(*piVar6 + 0xdc))(piVar6);
+      piVar6 = (int *)(**(code **)(*(int *)pVVar2 + 0x970 /* CINSNextBot::GetBodyInterface */))(pVVar2);
+      cVar3 = (**(code **)(*piVar6 + 0xdc /* PlayerBody::IsHeadAimingOnTarget */))(piVar6);
       if (cVar3 == '\0') {
         *(undefined1 *)(in_stack_00000004 + 99) = 0;
         *(undefined1 *)(in_stack_00000004 + 100) = 0;
@@ -1401,9 +1401,9 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
         (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */) + 0x14))
                   ((int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */),&local_bc,0x2006241,local_6c,
                    local_11c);
-        iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+        iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
         if (iVar5 != 0) {
-          iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+          iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
           fVar9 = 0.5;
           if (iVar5 != 0) {
             fVar9 = -1.0;
@@ -1434,9 +1434,9 @@ void __thiscall CINSBotAttackFromCover::UpdateLOS(CINSBotAttackFromCover *this)
         (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */) + 0x14))
                   ((int *)**(undefined4 **)(unaff_EBX + 0x49dc2d /* &enginetrace */),&local_bc,0x2006241,local_6c,
                    local_11c);
-        iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+        iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
         if (iVar5 != 0) {
-          iVar5 = (**(code **)(*piVar4 + 0x40))(piVar4);
+          iVar5 = (**(code **)(*piVar4 + 0x40 /* CBaseEntity::ComputeWorldSpaceSurroundingBox */))(piVar4);
           fVar8 = 0.5;
           if (iVar5 != 0) {
             fVar8 = -1.0;

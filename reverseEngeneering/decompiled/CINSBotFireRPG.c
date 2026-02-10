@@ -141,15 +141,15 @@ void __thiscall CINSBotFireRPG::CINSBotFireRPG(CINSBotFireRPG *this)
   (**(code **)(in_stack_00000004[0x17] + 4))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x19);
   pCVar2 = (CINSNextBot *)in_stack_00000004[7];
   if (pCVar2 != (CINSNextBot *)0x0) {
-    piVar4 = (int *)(**(code **)(*(int *)pCVar2 + 0x974))(pCVar2);
-    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0))(piVar4,1);
+    piVar4 = (int *)(**(code **)(*(int *)pCVar2 + 0x974 /* CINSNextBot::GetVisionInterface */))(pCVar2);
+    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,1);
     if (piVar4 != (int *)0x0) {
       cVar3 = HasRPGTarget(pCVar2,(Vector *)&local_64);
       if (cVar3 != '\0') {
         in_stack_00000004[0x11] = (int)local_64;
         in_stack_00000004[0x12] = (int)local_60;
         in_stack_00000004[0x13] = (int)local_5c;
-        (**(code **)(*(int *)pCVar2 + 0x20c))(&local_34,pCVar2);
+        (**(code **)(*(int *)pCVar2 + 0x20c /* CINSNextBot::EyePosition */))(&local_34,pCVar2);
         pfVar5 = (float *)(**(code **)(*piVar4 + 0x18))(piVar4);
         local_40 = *pfVar5 - local_34;
         local_3c = pfVar5[1] - local_30;
@@ -165,7 +165,7 @@ void __thiscall CINSBotFireRPG::CINSBotFireRPG(CINSBotFireRPG *this)
         local_60 = local_48 * fVar1 + local_60;
         local_5c = local_44 * fVar1 + local_5c;
         local_64 = fVar1 * local_4c + local_64;
-        (**(code **)(*(int *)pCVar2 + 0x20c))(&local_28,pCVar2);
+        (**(code **)(*(int *)pCVar2 + 0x20c /* CINSNextBot::EyePosition */))(&local_28,pCVar2);
         *(undefined1 *)(in_stack_00000004 + 0x1b) = 0;
         in_stack_00000004[0x14] = local_28;
         in_stack_00000004[0x15] = local_24;
@@ -216,12 +216,12 @@ CINSBotFireRPG::OnStart(CINSBotFireRPG *this,CINSNextBot *param_1,Action *param_
   uVar4 = 3;
   fVar1 = (float)CINSPlayer::GetWeaponInSlot(this_00,(int)in_stack_0000000c,true);
   if (fVar1 != 0.0) {
-    (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c,uVar4,uVar5);
+    (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c,uVar4,uVar5);
     CINSBotLocomotion::ClearMovementRequests();
     uVar4 = 0x40a00000;
     CINSNextBot::ChooseBestWeapon(this_01,in_stack_0000000c,fVar1);
-    piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c,fVar1,uVar4);
-    (**(code **)(*piVar2 + 0xd4))
+    piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c,fVar1,uVar4);
+    (**(code **)(*piVar2 + 0xd4 /* PlayerBody::AimHeadTowards */))
               (piVar2,param_2 + 0x38,5,0x40c00000,unaff_EBX + 0x4ef7e1 /* rpgFireReply */,unaff_EBX + 0x2635cc /* "Aiming at RPG target" */);
     *(undefined4 *)(in_stack_0000000c + 0x2284) = 1;
     fVar3 = (float10)CountdownTimer::Now();
@@ -363,10 +363,10 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
        (fVar9 = *(float *)(**(int **)(&DAT_0048710f + unaff_EBX) + 0xc) -
                 *(float *)((int)param_2 + 0x68),
        *(float *)(unaff_EBX + 0x204fc7 /* typeinfo name for CBaseGameSystem+0x1e */) <= fVar9 && fVar9 != *(float *)(unaff_EBX + 0x204fc7 /* typeinfo name for CBaseGameSystem+0x1e */))) {
-      piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
+      piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
       this_09 = (CUtlVector<CINSPlayer*,CUtlMemory<CINSPlayer*,int>> *)0x0;
       pCVar7 = (CINSWeapon *)((int)param_2 + 0x44);
-      cVar1 = (**(code **)(*piVar2 + 0x108))(piVar2,pCVar7,0);
+      cVar1 = (**(code **)(*piVar2 + 0x108 /* CINSBotVision::IsAbleToSee */))(piVar2,pCVar7,0);
       if (cVar1 == '\0') {
         DevMsg((char *)(unaff_EBX + 0x26196b /* "CINSBotFireRPG - Bailing, LoS not clear to our target (%.2f)
 " */));
@@ -377,7 +377,7 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
       }
       cVar1 = CINSWeapon::IsDeploying(this_04);
       if (cVar1 == '\0') {
-        cVar1 = (**(code **)(*piVar3 + 0x668))(piVar3);
+        cVar1 = (**(code **)(*piVar3 + 0x668 /* CINSPlayer::StartObserverMode */))(piVar3);
         if (cVar1 != '\0') {
           if ((*(char *)((int)param_2 + 0x6c) == '\0') &&
              (cVar1 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x487167 /* &g_pGameRules */) + 0x29c))
@@ -397,12 +397,12 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
               do {
                 piVar2 = (int *)UTIL_PlayerByIndex((int)local_54);
                 if ((piVar2 == (int *)0x0) ||
-                   (cVar1 = (**(code **)(*piVar2 + 0x158))(piVar2,pCVar7,this_09), cVar1 == '\0')) {
+                   (cVar1 = (**(code **)(*piVar2 + 0x158 /* CBasePlayer::IsPlayer */))(piVar2,pCVar7,this_09), cVar1 == '\0')) {
                   local_2c[0] = (int *)0x0;
                 }
                 else {
                   local_2c[0] = piVar2;
-                  cVar1 = (**(code **)(*piVar2 + 0x118))(piVar2);
+                  cVar1 = (**(code **)(*piVar2 + 0x118 /* CBaseEntity::IsAlive */))(piVar2);
                   if (cVar1 != '\0') {
                     iVar4 = CBaseEntity::GetTeamNumber(this_05);
                     iVar5 = CINSRules::GetHumanTeam(this_06);
@@ -424,7 +424,7 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
               piVar2 = *(int **)(local_4c[0] + iVar4 * 4);
               local_54 = extraout_ECX;
               if (piVar2 != (int *)0x0) {
-                (**(code **)(*piVar2 + 0x800))(piVar2,0x4c,0,0,0,0);
+                (**(code **)(*piVar2 + 0x800 /* CINSPlayer::SpeakConceptIfAllowed */))(piVar2,0x4c,0,0,0,0);
                 local_54 = extraout_ECX_00;
               }
             }
@@ -434,7 +434,7 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
                            *(float *)((int)param_2 + 0x68));
           DevMsg((char *)(unaff_EBX + 0x261a03 /* "CINSBotFireRPG - Pressing fire button for %.2f (%.2f)
 " */));
-          (**(code **)(*(int *)in_stack_0000000c + 0x8c0))(in_stack_0000000c,0x3f000000,dVar10);
+          (**(code **)(*(int *)in_stack_0000000c + 0x8c0 /* NextBotPlayer::PressFireButton */))(in_stack_0000000c,0x3f000000,dVar10);
           CountdownTimer::Start(this_07,(float)((int)param_2 + 0x5c));
           CountdownTimer::Start(this_08,(float)(in_stack_0000000c + 0xb388));
           *(undefined4 *)(in_stack_0000000c + 0xb344) = 0x41200000;
@@ -454,8 +454,8 @@ CINSBotFireRPG::Update(CINSBotFireRPG *this,CINSNextBot *param_1,float param_2)
     fVar8 = (float10)CountdownTimer::Now();
     if (*(float *)((int)param_2 + 100) <= (float)fVar8 &&
         (float)fVar8 != *(float *)((int)param_2 + 100)) {
-      piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
-      (**(code **)(*piVar2 + 0x160))(piVar2);
+      piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
+      (**(code **)(*piVar2 + 0x160 /* PlayerBody::ForceLookAtExpire */))(piVar2);
       DevMsg((char *)(CINSRules_Ambush::IsEliminationRules + unaff_EBX + 7));
       *(undefined4 *)param_1 = 3;
       *(undefined4 *)(param_1 + 4) = 0;
@@ -731,14 +731,14 @@ undefined4 __cdecl CINSBotFireRPG::HasRPGTarget(CINSNextBot *param_1,Vector *par
       uVar14 = 0;
       if (cVar3 != '\0') goto LAB_0071e08c;
     }
-    piVar6 = (int *)(**(code **)(*(int *)param_1 + 0x974))(param_1);
-    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0))(piVar6,0);
+    piVar6 = (int *)(**(code **)(*(int *)param_1 + 0x974 /* CINSNextBot::GetVisionInterface */))(param_1);
+    piVar6 = (int *)(**(code **)(*piVar6 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar6,0);
     if ((piVar6 != (int *)0x0) && (cVar3 = (**(code **)(*piVar6 + 0x3c))(piVar6), cVar3 != '\0')) {
       pfVar9 = &local_b0;
       pVVar26 = (Vector *)&local_bc;
       pVVar24 = (Vector *)&local_c8;
       CBasePlayer::EyePositionAndVectors(this_00,(Vector *)param_1,local_d4,pVVar24,pVVar26);
-      (**(code **)(*(int *)param_1 + 0x20c))(&local_98,param_1,pVVar24,pVVar26,pfVar9);
+      (**(code **)(*(int *)param_1 + 0x20c /* CINSNextBot::EyePosition */))(&local_98,param_1,pVVar24,pVVar26,pfVar9);
       fVar20 = *(float *)(unaff_EBX + 0x19af51 /* typeinfo name for IServerBenchmark+0x13 */);
       fVar17 = *(float *)(unaff_EBX + 0x206735 /* typeinfo name for CBaseGameSystem+0x26 */);
       ppiVar25 = (int **)0x0;
@@ -748,19 +748,19 @@ undefined4 __cdecl CINSBotFireRPG::HasRPGTarget(CINSNextBot *param_1,Vector *par
       local_9c = (fVar20 * local_b4 - local_a8) + local_90 + fVar17 * local_c0;
       piVar7 = (int *)CINSPlayer::GetWeaponInSlot(this_01,(int)param_1,true);
       if ((piVar7 != (int *)0x0) &&
-         (cVar3 = (**(code **)(*piVar7 + 0x410))(piVar7,uVar14,ppiVar25), cVar3 != '\0')) {
-        iVar8 = (**(code **)(*piVar7 + 0x5f0))(piVar7);
+         (cVar3 = (**(code **)(*piVar7 + 0x410 /* CBaseCombatCharacter::EyeDirection3D */))(piVar7,uVar14,ppiVar25), cVar3 != '\0')) {
+        iVar8 = (**(code **)(*piVar7 + 0x5f0 /* CINSPlayer::RemoveAllItems */))(piVar7);
         uVar14 = 0;
         if (iVar8 != 7) goto LAB_0071e08c;
         piVar7 = (int *)(**(code **)(*piVar6 + 0x10))(piVar6);
         if ((piVar7 == (int *)0x0) ||
-           (cVar3 = (**(code **)(*piVar7 + 0x158))(piVar7), cVar3 == '\0')) goto LAB_0071e6a0;
-        pfVar9 = (float *)(**(code **)(*piVar7 + 0x260))(piVar7);
+           (cVar3 = (**(code **)(*piVar7 + 0x158 /* CBasePlayer::IsPlayer */))(piVar7), cVar3 == '\0')) goto LAB_0071e6a0;
+        pfVar9 = (float *)(**(code **)(*piVar7 + 0x260 /* CBaseEntity::WorldSpaceCenter */))(piVar7);
         fVar20 = *pfVar9;
         fVar17 = pfVar9[1];
         fVar22 = pfVar9[2];
         pCVar23 = param_1;
-        (**(code **)(*(int *)param_1 + 0x20c))(&local_11c,param_1);
+        (**(code **)(*(int *)param_1 + 0x20c /* CINSNextBot::EyePosition */))(&local_11c,param_1);
         piVar7 = *(int **)(unaff_EBX + 0x48896d /* &ins_bot_rpg_minimum_firing_distance */);
         fVar16 = fVar20 - local_11c;
         fVar19 = fVar17 - local_118;

@@ -124,15 +124,15 @@ CINSBotActionSurvival::Update(CINSBotActionSurvival *this,CINSNextBot *param_1,f
   
   __i686_get_pc_thunk_bx();
   if (**(int **)(unaff_EBX + 0x46a2cd /* &g_pGameRules */) != 0) {
-    piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    piVar2 = (int *)(**(code **)(*piVar2 + 0xd0))(piVar2,0);
+    piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    piVar2 = (int *)(**(code **)(*piVar2 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar2,0);
     iVar3 = CBaseEntity::GetTeamNumber(this_00);
     iVar4 = CINSRules::GetBotTeam(this_01);
     if (iVar3 == iVar4) {
       this_03 = extraout_ECX;
       if (piVar2 != (int *)0x0) {
-        piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-        iVar3 = (**(code **)(*piVar5 + 0xd4))(piVar5,in_stack_0000000c + 0x2060,piVar2);
+        piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+        iVar3 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x2060,piVar2);
         if (iVar3 == 1) {
           pvVar6 = ::operator_new(0x88);
           CINSBotCombat::CINSBotCombat(this_10);
@@ -190,8 +190,8 @@ CINSBotActionSurvival::Update(CINSBotActionSurvival *this,CINSNextBot *param_1,f
         return param_1;
       }
       if (piVar2 != (int *)0x0) {
-        piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-        iVar3 = (**(code **)(*piVar5 + 0xd4))(piVar5,in_stack_0000000c + 0x2060,piVar2);
+        piVar5 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+        iVar3 = (**(code **)(*piVar5 + 0xd4 /* IIntention::ShouldAttack */))(piVar5,in_stack_0000000c + 0x2060,piVar2);
         if (iVar3 == 1) {
           pvVar6 = ::operator_new(0x88);
           CINSBotCombat::CINSBotCombat(this_02);

@@ -85,12 +85,12 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
   
   uStack_14 = 0x736a5b;
   __i686_get_pc_thunk_bx();
-  piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-  iVar4 = (**(code **)(*piVar3 + 0xd0))(piVar3,0);
+  piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  iVar4 = (**(code **)(*piVar3 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar3,0);
   this_00 = extraout_ECX;
   if (iVar4 != 0) {
-    piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar4 = (**(code **)(*piVar3 + 0xd4))(piVar3,in_stack_0000000c + 0x818,iVar4);
+    piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar4 = (**(code **)(*piVar3 + 0xd4 /* IIntention::ShouldAttack */))(piVar3,in_stack_0000000c + 0x818,iVar4);
     this_00 = extraout_ECX_00;
     if (iVar4 == 1) {
       pvVar6 = ::operator_new(0x88);
@@ -144,12 +144,12 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
       piVar3 = (int *)UTIL_INSGetClosestPlayer
                                 ((Vector *)(in_stack_0000000c + 0x82),(iVar4 == 2) + 2,(float *)0x0)
       ;
-      if (((piVar3 != (int *)0x0) && (cVar2 = (**(code **)(*piVar3 + 0x158))(piVar3), cVar2 != '\0')
-          ) && (iVar4 = (**(code **)(*piVar3 + 0x548))(piVar3), iVar4 != 0)) {
-        uVar7 = (**(code **)(*piVar3 + 0x548))(piVar3);
+      if (((piVar3 != (int *)0x0) && (cVar2 = (**(code **)(*piVar3 + 0x158 /* CBasePlayer::IsPlayer */))(piVar3), cVar2 != '\0')
+          ) && (iVar4 = (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3), iVar4 != 0)) {
+        uVar7 = (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3);
         uVar14 = 7;
         CINSNextBot::AddInvestigation();
-        (**(code **)(*piVar3 + 0x548))(piVar3,uVar7,uVar14);
+        (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3,uVar7,uVar14);
         pCVar8 = (CNavArea *)::operator_new(0x4900);
         CINSBotInvestigate::CINSBotInvestigate(this_09,pCVar8);
         *(undefined4 *)param_1 = 2;
@@ -204,12 +204,12 @@ CINSBotActionCheckpoint::Update(CINSBotActionCheckpoint *this,CINSNextBot *param
         local_24 = *(undefined4 *)(iVar4 + 0x5d4);
         local_20 = *(undefined4 *)(iVar4 + 0x5d8);
         piVar3 = (int *)UTIL_INSGetClosestPlayer((Vector *)&local_28,2,(float *)0x0);
-        if ((piVar3 != (int *)0x0) && (iVar4 = (**(code **)(*piVar3 + 0x548))(piVar3), iVar4 != 0))
+        if ((piVar3 != (int *)0x0) && (iVar4 = (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3), iVar4 != 0))
         {
-          uVar7 = (**(code **)(*piVar3 + 0x548))(piVar3);
+          uVar7 = (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3);
           uVar14 = 7;
           CINSNextBot::AddInvestigation();
-          (**(code **)(*piVar3 + 0x548))(piVar3,uVar7,uVar14);
+          (**(code **)(*piVar3 + 0x548 /* CINSNextBot::GetLastKnownArea */))(piVar3,uVar7,uVar14);
           pCVar8 = (CNavArea *)::operator_new(0x4900);
           CINSBotInvestigate::CINSBotInvestigate(this_14,pCVar8);
           *(undefined4 *)param_1 = 2;

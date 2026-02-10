@@ -333,8 +333,8 @@ CINSBotInvestigate::OnStart(CINSBotInvestigate *this,CINSNextBot *param_1,Action
   this_01 = extraout_ECX;
   if (*(float *)(unaff_EBX + 0x201205 /* typeinfo name for CBaseGameSystem+0x16 */) <= (float)fVar6 &&
       (float)fVar6 != *(float *)(unaff_EBX + 0x201205 /* typeinfo name for CBaseGameSystem+0x16 */)) {
-    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0))(piVar4,0);
+    piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    piVar4 = (int *)(**(code **)(*piVar4 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar4,0);
     if (piVar4 != (int *)0x0) {
       cVar2 = (**(code **)(*piVar4 + 0x3c))(piVar4);
       if (cVar2 != '\0') {
@@ -443,11 +443,11 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
          (fVar9 = (float10)CINSNextBot::GetIdleDuration(in_stack_0000000c),
          (float)fVar9 < *(float *)(unaff_EBX + 0x200df8 /* typeinfo name for CBaseGameSystem+0x32 */) ||
          (float)fVar9 == *(float *)(unaff_EBX + 0x200df8 /* typeinfo name for CBaseGameSystem+0x32 */))) {
-        piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-        iVar7 = (**(code **)(*piVar6 + 0xd0))(piVar6,1);
+        piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+        iVar7 = (**(code **)(*piVar6 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar6,1);
         if (iVar7 != 0) {
-          piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-          iVar7 = (**(code **)(*piVar6 + 0xd4))(piVar6,in_stack_0000000c + 0x2060,iVar7);
+          piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+          iVar7 = (**(code **)(*piVar6 + 0xd4 /* IIntention::ShouldAttack */))(piVar6,in_stack_0000000c + 0x2060,iVar7);
           if (iVar7 == 1) {
             *(undefined4 *)param_1 = 3;
             *(undefined4 *)(param_1 + 4) = 0;
@@ -465,8 +465,8 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
           fVar9 = (float10)CountdownTimer::Now();
           if (*(float *)((int)param_2 + 0x48c0) <= (float)fVar9 &&
               (float)fVar9 != *(float *)((int)param_2 + 0x48c0)) {
-            piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
-            pfVar8 = (float *)(**(code **)(*piVar6 + 0x148))(piVar6);
+            piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
+            pfVar8 = (float *)(**(code **)(*piVar6 + 0x148 /* PlayerLocomotion::GetFeet */))(piVar6);
             fVar11 = pfVar8[1];
             fVar13 = *(float *)((int)param_2 + 0x48dc) - *pfVar8;
             fVar1 = pfVar8[2];
@@ -498,13 +498,13 @@ CINSBotInvestigate::Update(CINSBotInvestigate *this,CINSNextBot *param_1,float p
           fVar9 = (float10)CountdownTimer::Now();
           if (*(float *)((int)param_2 + 0x48cc) <= (float)fVar9 &&
               (float)fVar9 != *(float *)((int)param_2 + 0x48cc)) {
-            uVar5 = (**(code **)(*(int *)in_stack_0000000c + 0x96c))(in_stack_0000000c);
+            uVar5 = (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
             CINSBotLocomotion::AddMovementRequest
                       (uVar5,*(undefined4 *)((int)param_2 + 0x3c),
                        *(undefined4 *)((int)param_2 + 0x40),*(undefined4 *)((int)param_2 + 0x44),2,5
                        ,0x3f19999a);
-            piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-            uVar3 = (**(code **)(*piVar6 + 0x108))(piVar6,(int)param_2 + 0x3c,0);
+            piVar6 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+            uVar3 = (**(code **)(*piVar6 + 0x108 /* CINSBotVision::IsAbleToSee */))(piVar6,(int)param_2 + 0x3c,0);
             *(undefined1 *)((int)param_2 + 0x48f8) = uVar3;
             piVar6 = (int *)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x114))
                                       (in_stack_0000000c + 0x2060);

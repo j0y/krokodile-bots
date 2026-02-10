@@ -144,11 +144,11 @@ LAB_0073aa20:
   }
   cVar8 = CINSBotEscort::HasEscortTarget(in_stack_0000000c);
   if (cVar8 == '\0') {
-    piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    iVar12 = (**(code **)(*piVar11 + 0xd0))(piVar11,0);
+    piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    iVar12 = (**(code **)(*piVar11 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar11,0);
     if (iVar12 != 0) {
-      piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c))(in_stack_0000000c);
-      iVar12 = (**(code **)(*piVar11 + 0xd4))(piVar11,in_stack_0000000c + 0x2060,iVar12);
+      piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+      iVar12 = (**(code **)(*piVar11 + 0xd4 /* IIntention::ShouldAttack */))(piVar11,in_stack_0000000c + 0x2060,iVar12);
       if (iVar12 == 1) {
         pvVar10 = ::operator_new(0x88);
         CINSBotCombat::CINSBotCombat(this_03);
@@ -162,8 +162,8 @@ LAB_0073aa20:
         return param_1;
       }
     }
-    piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974))(in_stack_0000000c);
-    uVar9 = (**(code **)(*piVar11 + 0x108))(piVar11,(int)param_2 + 0x4c,0);
+    piVar11 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+    uVar9 = (**(code **)(*piVar11 + 0x108 /* CINSBotVision::IsAbleToSee */))(piVar11,(int)param_2 + 0x4c,0);
     *(undefined1 *)((int)param_2 + 0x58) = uVar9;
     cVar8 = CINSNextBot::IsInvestigating(in_stack_0000000c);
     if (cVar8 != '\0') goto LAB_0073aa20;
@@ -192,7 +192,7 @@ LAB_0073aa20:
         return param_1;
       }
     }
-    pfVar14 = (float *)(**(code **)(*(int *)in_stack_0000000c + 0x260))(in_stack_0000000c);
+    pfVar14 = (float *)(**(code **)(*(int *)in_stack_0000000c + 0x260 /* CBaseEntity::WorldSpaceCenter */))(in_stack_0000000c);
     pfVar1 = (float *)(**(int **)(unaff_EBX + 0x46c431 /* &g_pObjectiveResource */) + 0x5d0 + (int)this_00 * 0xc);
     fVar2 = *pfVar1;
     fVar3 = pfVar1[1];

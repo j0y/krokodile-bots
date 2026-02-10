@@ -91,12 +91,12 @@ CINSBotActionStrike::Update(CINSBotActionStrike *this,CINSNextBot *param_1,float
   int *in_stack_0000000c;
   
   __i686_get_pc_thunk_bx();
-  piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x974))(in_stack_0000000c);
-  iVar3 = (**(code **)(*piVar2 + 0xd0))(piVar2,0);
+  piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
+  iVar3 = (**(code **)(*piVar2 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar2,0);
   this_00 = extraout_ECX;
   if (iVar3 != 0) {
-    piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x97c))(in_stack_0000000c);
-    iVar3 = (**(code **)(*piVar2 + 0xd4))(piVar2,in_stack_0000000c + 0x818,iVar3);
+    piVar2 = (int *)(**(code **)(*in_stack_0000000c + 0x97c /* CINSNextBot::GetIntentionInterface */))(in_stack_0000000c);
+    iVar3 = (**(code **)(*piVar2 + 0xd4 /* IIntention::ShouldAttack */))(piVar2,in_stack_0000000c + 0x818,iVar3);
     this_00 = extraout_ECX_00;
     if (iVar3 == 1) {
       pvVar7 = ::operator_new(0x88);

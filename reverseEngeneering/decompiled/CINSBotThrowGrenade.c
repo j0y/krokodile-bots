@@ -110,12 +110,12 @@ void __thiscall CINSBotThrowGrenade::CINSBotThrowGrenade(CINSBotThrowGrenade *th
   (**(code **)(in_stack_00000004[0x17] + 4))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x19);
   pCVar1 = (CINSNextBot *)in_stack_00000004[7];
   if (pCVar1 != (CINSNextBot *)0x0) {
-    piVar3 = (int *)(**(code **)(*(int *)pCVar1 + 0x974))(pCVar1);
-    iVar4 = (**(code **)(*piVar3 + 0xd0))(piVar3,1);
+    piVar3 = (int *)(**(code **)(*(int *)pCVar1 + 0x974 /* CINSNextBot::GetVisionInterface */))(pCVar1);
+    iVar4 = (**(code **)(*piVar3 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar3,1);
     if (iVar4 != 0) {
       cVar2 = CanIThrowGrenade(pCVar1,(Vector *)&local_3c);
       if (cVar2 != '\0') {
-        (**(code **)(*(int *)pCVar1 + 0x20c))(&local_2c,pCVar1);
+        (**(code **)(*(int *)pCVar1 + 0x20c /* CINSNextBot::EyePosition */))(&local_2c,pCVar1);
         in_stack_00000004[0x11] = local_2c;
         in_stack_00000004[0x12] = local_28;
         in_stack_00000004[0x13] = local_24;
@@ -201,12 +201,12 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
     }
     uVar5 = 0x40a00000;
     CINSNextBot::ChooseBestWeapon(this_01,in_stack_0000000c,fVar1);
-    piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c,fVar1,uVar5);
+    piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c,fVar1,uVar5);
     fVar1 = *(float *)(unaff_EBX + 0x1f2889 /* typeinfo name for CTraceFilterSkipTwoEntitiesAndCheckTeamMask+0x54 */);
     local_24 = *(float *)(param_2 + 0x3c) * fVar1 + *(float *)(param_2 + 0x48);
     local_20 = *(float *)(param_2 + 0x40) * fVar1 + *(float *)(param_2 + 0x4c);
     local_28 = fVar1 * *(float *)(param_2 + 0x38) + *(float *)(param_2 + 0x44);
-    (**(code **)(*piVar2 + 0xd4))
+    (**(code **)(*piVar2 + 0xd4 /* PlayerBody::AimHeadTowards */))
               (piVar2,&local_28,5,0x40a00000,unaff_EBX + 0x4d8d1d /* grenadeThrowReply */,&UNK_0024dae5 + unaff_EBX);
     fVar3 = (float10)CountdownTimer::Now();
     fVar1 = (float)fVar3 + *(float *)(unaff_EBX + 0x1f0221 /* typeinfo name for CBaseGameSystem+0x32 */);
@@ -317,7 +317,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
               piVar9 = piVar2;
             }
             this_00 = (CINSWeapon *)
-                      (**(code **)(*(int *)in_stack_0000000c + 0x96c))
+                      (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))
                                 (in_stack_0000000c,piVar9,uVar10);
             if ((this_00 != (CINSWeapon *)0x0) &&
                (pfVar4 = (float *)(**(code **)(*(int *)this_00 + 0x148))(this_00),
@@ -331,8 +331,8 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
             }
             if (((*(int *)(in_stack_0000000c + 0x2280) == 2) &&
                 (cVar1 = CINSWeapon::IsDeploying(this_00), cVar1 == '\0')) &&
-               (cVar1 = (**(code **)(*piVar3 + 0x668))(piVar3), cVar1 != '\0')) {
-              (**(code **)(*(int *)in_stack_0000000c + 0x8c0))(in_stack_0000000c,0x3f59999a);
+               (cVar1 = (**(code **)(*piVar3 + 0x668 /* CINSPlayer::StartObserverMode */))(piVar3), cVar1 != '\0')) {
+              (**(code **)(*(int *)in_stack_0000000c + 0x8c0 /* NextBotPlayer::PressFireButton */))(in_stack_0000000c,0x3f59999a);
               CountdownTimer::Start(this_05,(float)((int)param_2 + 0x5c));
               CountdownTimer::Start(this_06,(float)(in_stack_0000000c + 0xb388));
               *(undefined4 *)param_1 = 0;
@@ -343,7 +343,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
             }
           }
           else {
-            piVar9 = (int *)(**(code **)(*piVar3 + 0x5dc))(piVar3);
+            piVar9 = (int *)(**(code **)(*piVar3 + 0x5dc /* CBasePlayer::NoClipStateChanged */))(piVar3);
             if (piVar9 == (int *)0x0) {
               *(undefined4 *)param_1 = 3;
               *(undefined4 *)(param_1 + 4) = 0;
@@ -354,9 +354,9 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
                ((fVar5 = (float10)CountdownTimer::Now(),
                 *(float *)((int)param_2 + 100) <= (float)fVar5 &&
                 (float)fVar5 != *(float *)((int)param_2 + 100) &&
-                (cVar1 = (**(code **)(*piVar9 + 0x770))(piVar9), cVar1 == '\0')))) {
-              piVar9 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
-              (**(code **)(*piVar9 + 0x160))(piVar9);
+                (cVar1 = (**(code **)(*piVar9 + 0x770 /* CBasePlayer::Hints */))(piVar9), cVar1 == '\0')))) {
+              piVar9 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
+              (**(code **)(*piVar9 + 0x160 /* PlayerBody::ForceLookAtExpire */))(piVar9);
               *(undefined4 *)param_1 = 3;
               *(undefined4 *)(param_1 + 4) = 0;
               *(int *)(param_1 + 8) = unaff_EBX + 0x24c770 /* "Finished throw." */;
@@ -398,8 +398,8 @@ void __cdecl CINSBotThrowGrenade::OnEnd(CINSNextBot *param_1,Action *param_2)
   int *piVar1;
   
   if (param_2 != (Action *)0x0) {
-    piVar1 = (int *)(**(code **)(*(int *)param_2 + 0x970))(param_2);
-    (**(code **)(*piVar1 + 0x160))(piVar1);
+    piVar1 = (int *)(**(code **)(*(int *)param_2 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_2);
+    (**(code **)(*piVar1 + 0x160 /* PlayerBody::ForceLookAtExpire */))(piVar1);
   }
   return;
 }
@@ -528,7 +528,7 @@ LAB_007356b0:
   }
   else {
     CBasePlayer::EyeVectors(this,param_1,local_38,(Vector *)0x0);
-    (**(code **)(*(int *)param_1 + 0x20c))(&local_5c,param_1);
+    (**(code **)(*(int *)param_1 + 0x20c /* CINSNextBot::EyePosition */))(&local_5c,param_1);
     param_2 = param_2 - local_5c;
     param_3 = param_3 - local_58;
     piVar7 = (int *)(*(int **)(unaff_EBX + 0x471c5d /* &sv_gravity */))[7];
@@ -712,8 +712,8 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
     uVar12 = 3;
     piVar9 = (int *)CINSPlayer::GetWeaponInSlot(this,(int)param_1,true);
     if (((piVar9 != (int *)0x0) &&
-        (cVar7 = (**(code **)(*piVar9 + 0x410))(piVar9,uVar12,uVar18), cVar7 != '\0')) &&
-       ((iVar10 = (**(code **)(*piVar9 + 0x5f0))(piVar9), iVar10 == 2 ||
+        (cVar7 = (**(code **)(*piVar9 + 0x410 /* CBaseCombatCharacter::EyeDirection3D */))(piVar9,uVar12,uVar18), cVar7 != '\0')) &&
+       ((iVar10 = (**(code **)(*piVar9 + 0x5f0 /* CINSPlayer::RemoveAllItems */))(piVar9), iVar10 == 2 ||
         (((iVar10 == 5 || (iVar10 == 4)) || (iVar10 == 3)))))) {
       this_01 = this_00;
       if (**(int **)(unaff_EBX + 0x4710bd /* &g_pGameRules */) != 0) {
@@ -726,7 +726,7 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
       iVar8 = TheINSNextBots();
       piVar9 = (int *)CINSNextBotManager::GetGrenadeTargets(this_02,iVar8);
       if ((piVar9 != (int *)0x0) && (0 < piVar9[3])) {
-        (**(code **)(*(int *)param_1 + 0x20c))(&local_38,param_1);
+        (**(code **)(*(int *)param_1 + 0x20c /* CINSNextBot::EyePosition */))(&local_38,param_1);
         local_13c = 1;
         if (iVar10 - 3U < 3) {
           local_13c = *(uint *)(unaff_EBX + 0x24c8f1 /* CSWTCH.864 */ + (iVar10 - 3U) * 4);

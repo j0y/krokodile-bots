@@ -131,7 +131,7 @@ CINSBotMainAction::Update(CINSBotMainAction *this,CINSNextBot *param_1,float par
   
   __i686_get_pc_thunk_bx();
   if (**(int **)(unaff_EBX + 0x452e4a /* &g_pGameRules */) != 0) {
-    cVar3 = (**(code **)(*in_stack_0000000c + 0x118))(in_stack_0000000c);
+    cVar3 = (**(code **)(*in_stack_0000000c + 0x118 /* CBaseEntity::IsAlive */))(in_stack_0000000c);
     if (cVar3 == '\0') {
       piVar4 = (int *)::operator_new(0x40);
       piVar4[8] = 0;
@@ -195,8 +195,8 @@ CINSBotMainAction::Update(CINSBotMainAction *this,CINSNextBot *param_1,float par
         (fVar6 = (float10)CINSNextBot::GetIdleDuration(this_01),
         *(float *)(&DAT_001d331a + unaff_EBX) <= (float)fVar6 &&
         (float)fVar6 != *(float *)(&DAT_001d331a + unaff_EBX))) &&
-       (iVar5 = (**(code **)(*in_stack_0000000c + 0x548))(in_stack_0000000c), iVar5 != 0)) {
-      piVar4 = (int *)(**(code **)(*in_stack_0000000c + 0x548))(in_stack_0000000c);
+       (iVar5 = (**(code **)(*in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c), iVar5 != 0)) {
+      piVar4 = (int *)(**(code **)(*in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c);
       pcVar1 = *(code **)(*piVar4 + 0x88);
       iVar5 = CBaseEntity::GetTeamNumber(this_02);
       cVar3 = (*pcVar1)(piVar4,(iVar5 == 2) + '\x02');
@@ -256,7 +256,7 @@ CINSBotMainAction::OnContact(CINSNextBot *param_1,CBaseEntity *param_2,CGameTrac
       cVar1 = CBaseEntity::ClassMatchesComplex(this,pcVar2);
       if (cVar1 == '\0') goto LAB_00754092;
     }
-    (**(code **)(*(int *)param_3 + 0x8d8))(param_3,0x3dcccccd);
+    (**(code **)(*(int *)param_3 + 0x8d8 /* NextBotPlayer::PressUseButton */))(param_3,0x3dcccccd);
   }
 LAB_00754092:
   *(undefined4 *)param_1 = 0;
@@ -303,7 +303,7 @@ CINSNextBot * CINSBotMainAction::OnStuck(CINSNextBot *param_1)
   double local_34;
   
   __i686_get_pc_thunk_bx();
-  piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x96c))(in_stack_0000000c);
+  piVar3 = (int *)(**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
   fVar9 = (float10)(**(code **)(*piVar3 + 400))(piVar3);
   dVar10 = (double)(float)fVar9;
   if ((*(byte *)((int)in_stack_0000000c + 0xd1) & 8) == 0) {
@@ -330,7 +330,7 @@ LAB_00753e73:
   uVar5 = CBasePlayer::GetNetworkIDString(this_01);
   uVar6 = (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x45280d /* &engine */) + 0x40))
                     ((int *)**(undefined4 **)(unaff_EBX + 0x45280d /* &engine */),in_stack_0000000c[8]);
-  uVar7 = (**(code **)(*in_stack_0000000c + 0xa8))(in_stack_0000000c);
+  uVar7 = (**(code **)(*in_stack_0000000c + 0xa8 /* CBasePlayer::GetPlayerName */))(in_stack_0000000c);
   uVar12 = CONCAT44(uVar6,uVar7);
   uVar13 = CONCAT44(uVar4,uVar5);
   UTIL_LogPrintf((char *)(unaff_EBX + 0x22f7cd /* "\"%s<%i><%s><%i>\" stuck (position \"%3.2f %3.2f %3.2f\") (duration \"%3.2f\") " */),uVar7,uVar6,uVar5,uVar4,dVar11,local_3c,local_34,
@@ -403,8 +403,8 @@ CINSNextBot * CINSBotMainAction::OnInjured(CINSNextBot *param_1,CTakeDamageInfo 
   if (((uVar2 != 0xffffffff) &&
       (iVar1 = **(int **)(unaff_EBX + 0x4526e7 /* &g_pEntityList */) + (uVar2 & 0xffff) * 0x18,
       *(uint *)(iVar1 + 8) == uVar2 >> 0x10)) && (iVar1 = *(int *)(iVar1 + 4), iVar1 != 0)) {
-    piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSBotBody::IsActualPosture */))(extraout_EDX);
-    (**(code **)(*piVar3 + 0xe8))(piVar3,iVar1);
+    piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSNextBot::GetVisionInterface */))(extraout_EDX);
+    (**(code **)(*piVar3 + 0xe8 /* IVision::AddKnownEntity */))(piVar3,iVar1);
   }
   *(undefined4 *)param_1 = 0;
   *(undefined4 *)(param_1 + 4) = 0;
@@ -600,7 +600,7 @@ LAB_007544cd:
   if (local_24 != (int *)0x0) {
     piVar4 = (int *)CINSPlayer::GetActiveINSWeapon();
     if (piVar4 != (int *)0x0) {
-      cVar2 = (**(code **)(*piVar4 + 0x620))(piVar4);
+      cVar2 = (**(code **)(*piVar4 + 0x620 /* CINSPlayer::FlashlightIsOn */))(piVar4);
       if (cVar2 != '\0') {
         fVar6 = (float10)CINSWeapon::GetFOVWeaponScope(this_00);
         if (*(float *)(unaff_EBX + 0x1d03a3 /* typeinfo name for CBaseGameSystem+0x2a */) <= (float)fVar6) {
@@ -618,7 +618,7 @@ LAB_007544cd:
   if (local_28 != (int *)0x0) {
     piVar4 = (int *)CINSPlayer::GetActiveINSWeapon();
     if (piVar4 != (int *)0x0) {
-      cVar2 = (**(code **)(*piVar4 + 0x620))(piVar4);
+      cVar2 = (**(code **)(*piVar4 + 0x620 /* CINSPlayer::FlashlightIsOn */))(piVar4);
       if (cVar2 != '\0') {
         fVar6 = (float10)CINSWeapon::GetFOVWeaponScope(this_01);
         if (*(float *)(unaff_EBX + 0x1d03a3 /* typeinfo name for CBaseGameSystem+0x2a */) <= (float)fVar6) {

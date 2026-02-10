@@ -142,8 +142,8 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
   float local_24;
   
   __i686_get_pc_thunk_bx();
-  piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSBotAttackPistol::ShouldHurry */))(extraout_EDX);
-  piVar3 = (int *)(**(code **)(*piVar3 + 0xd0))(piVar3,0);
+  piVar3 = (int *)(**(code **)(*extraout_EDX + 0x974 /* CINSNextBot::GetVisionInterface */))(extraout_EDX);
+  piVar3 = (int *)(**(code **)(*piVar3 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar3,0);
   if (((piVar3 != (int *)0x0) && (iVar4 = (**(code **)(*piVar3 + 0x10))(piVar3), iVar4 != 0)) &&
      (cVar2 = (**(code **)(*piVar3 + 0x54))(piVar3), cVar2 == '\0')) {
     piVar5 = (int *)(**(code **)(*piVar3 + 0x10))(piVar3);
@@ -181,7 +181,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
                 (*(float *)(in_stack_0000000c + 0x208) - local_2c) +
                 (*(float *)(in_stack_0000000c + 0x210) - local_24) *
                 (*(float *)(in_stack_0000000c + 0x210) - local_24) <= fVar10 * fVar10) {
-              (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+              (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
               uVar13 = 0x3f19999a;
               uVar12 = 7;
               iVar4 = unaff_EBX + 0x2719ae /* "Jog at Target" */;
@@ -189,7 +189,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
               CINSBotBody::SetPosture();
             }
             else {
-              (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+              (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
               uVar13 = 0x3f19999a;
               uVar12 = 7;
               iVar4 = unaff_EBX + 0x27199d /* "Sprint at Target" */;
@@ -202,7 +202,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
             if ((iVar8 != 0) &&
                (cVar2 = CINSPlayer::IsSprinting((CINSPlayer *)this_00), cVar2 != '\0')) {
               uVar12 = 0x3f666666;
-              cVar2 = (**(code **)(*(int *)in_stack_0000000c + 0x434))
+              cVar2 = (**(code **)(*(int *)in_stack_0000000c + 0x434 /* CBaseCombatCharacter::IsLookingTowards */))
                                 (in_stack_0000000c,&local_2c,0x3f666666);
               if (cVar2 != '\0') {
                 fVar9 = (float10)ConVar::GetFloat((ConVar *)this_00);
@@ -219,7 +219,7 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
                   fVar9 = (float10)RandomFloat(0,0x3f800000);
                   local_38 = *(float *)(&DAT_00215c17 + unaff_EBX);
                   if ((float)fVar9 < local_38) {
-                    (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+                    (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
                     uVar13 = 0x40400000;
                     uVar12 = 8;
                     iVar4 = unaff_EBX + 0x2719bc /* "Slide like a G" */;
@@ -243,14 +243,14 @@ CINSBotAttackMelee::Update(CINSBotAttackMelee *this,CINSNextBot *param_1,float p
                 (*(float *)(in_stack_0000000c + 0x210) - local_24) < (float)fVar9 * (float)fVar9) {
               fVar9 = (float10)RandomFloat(0,0x3f800000,uVar12,uVar13,iVar4);
               if ((float)fVar9 <= local_38) {
-                (**(code **)(*(int *)in_stack_0000000c + 0x970))(in_stack_0000000c);
+                (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
                 uVar13 = 0x40a00000;
                 uVar12 = 7;
                 iVar4 = unaff_EBX + 0x24af3a /* typeinfo name for CGlobalState+0x5c */;
                 CINSBotBody::SetPosture();
               }
               else {
-                (**(code **)(*(int *)in_stack_0000000c + 0x970))();
+                (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))();
                 uVar13 = 0x40a00000;
                 uVar12 = 7;
                 iVar4 = unaff_EBX + 0x24af3a /* typeinfo name for CGlobalState+0x5c */;

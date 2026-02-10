@@ -171,8 +171,8 @@ CINSBotInvestigateGunshot::Update
       return param_1;
     }
   }
-  piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974))();
-  iVar6 = (**(code **)(*piVar5 + 0xd0))(piVar5,0);
+  piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))();
+  iVar6 = (**(code **)(*piVar5 + 0xd0 /* CINSBotVision::GetPrimaryKnownThreat */))(piVar5,0);
   if (iVar6 == 0) {
     fVar10 = *(float *)(unaff_EBX + 0x204175 /* typeinfo name for CTraceFilterIgnoreWeapons+0x41 */);
     if ((((*(float *)(extraout_EDX + 0x38 /* CINSBotInvestigateGunshot::Update */) <= fVar10) ||
@@ -184,8 +184,8 @@ CINSBotInvestigateGunshot::Update
       fVar9 = (float10)CountdownTimer::Now();
       if (*(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */) <= (float)fVar9 &&
           (float)fVar9 != *(float *)(extraout_EDX + 0x48bc /* CollectIdealPatrolAreas::operator */)) {
-        piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x96c))();
-        pfVar8 = (float *)(**(code **)(*piVar5 + 0x148))(piVar5);
+        piVar5 = (int *)(**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))();
+        pfVar8 = (float *)(**(code **)(*piVar5 + 0x148 /* PlayerLocomotion::GetFeet */))(piVar5);
         fVar10 = pfVar8[1];
         fVar1 = pfVar8[2];
         fVar13 = *(float *)(extraout_EDX + 0x48d8 /* CollectIdealPatrolAreas::operator */) - *pfVar8;
@@ -286,7 +286,7 @@ CINSBotInvestigateGunshot::Update
         fVar10 = fVar10 + *(float *)(iVar6 + 0x28);
       }
       *(float *)(extraout_EDX + 0x48e4 /* CollectIdealPatrolAreas::operator */) = fVar10;
-      uVar3 = (**(code **)(*in_stack_0000000c + 0x444))(in_stack_0000000c,local_2c,1,0);
+      uVar3 = (**(code **)(*in_stack_0000000c + 0x444 /* CINSPlayer::IsLineOfSightClear */))(in_stack_0000000c,local_2c,1,0);
       *(undefined4 *)param_1 = 0;
       *(undefined4 *)(param_1 + 4) = 0;
       *(undefined4 *)(param_1 + 8) = 0;
