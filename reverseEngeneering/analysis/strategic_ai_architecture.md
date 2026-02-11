@@ -570,6 +570,196 @@ Python Tactical Planner
 
 ---
 
+## Tactic Evaluation — Positional Success, Not Kills
+
+### The Problem
+
+If the LLM evaluates tactics by kill count or K/D ratio, it will misinterpret
+difficulty-tuned misses as bad strategy. A suppressor who misses every shot but
+keeps enemies pinned while the flankers take the point executed a GOOD tactic.
+
+### Evaluation Criteria
+
+The LLM only sees **positional and objective outcomes**, never kill/damage stats:
+
+| Feed to LLM (good metrics) | Hide from LLM (execution details) |
+|---|---|
+| Did the squad reach the overwatch position? | How many kills did they get? |
+| Did suppressive fire pin enemies in cover? | Did the suppressor hit anyone? |
+| Did the flanking squad reach the objective? | What was the K/D ratio? |
+| Was the objective captured/held? | How much damage was dealt? |
+| Did the squad survive the advance? | Individual aim accuracy |
+
+### Tactic Outcome Recording
+
+```sql
+CREATE TABLE tactic_outcomes (
+    map              TEXT,
+    round            INT,
+    tactic_type      TEXT,      -- suppress_advance, bounding_overwatch, etc.
+    target_zone      TEXT,      -- what we were trying to hold/take
+    squad_weapons    TEXT,      -- "LMG,rifle,rifle"
+    approach_zones   TEXT,      -- route taken (JSON array)
+
+    -- Positional outcomes (fed to LLM)
+    objective_held   BOOL,      -- did we hold/take the goal?
+    position_reached BOOL,      -- did squads get where they needed to be?
+    enemy_pinned     BOOL,      -- did suppression keep enemies in cover?
+    squad_survived   BOOL,      -- did the squad make it through?
+    duration_sec     FLOAT,     -- how long the tactic ran
+
+    -- Execution details (NOT fed to LLM, used for ConVar tuning only)
+    friendly_killed  INT,
+    enemy_killed     INT,
+    shots_fired      INT,
+    shots_hit        INT,
+
+    timestamp        TIMESTAMP
+);
+```
+
+### Engagement Recording (For Zone Learning)
+
+```sql
+CREATE TABLE engagements (
+    map         TEXT,
+    round       INT,
+    killer_zone TEXT,
+    victim_zone TEXT,
+    weapon      TEXT,
+    headshot    BOOL,
+    timestamp   TIMESTAMP
+);
+```
+
+Aggregated into zone ratings: "attackers pushing through main_hallway die 70% of
+the time" tells the LLM the zone is dangerous to push through, without revealing
+per-engagement accuracy details.
+
+### Persistent Storage
+
+| Data | Storage | Lifetime |
+|------|---------|----------|
+| Per-tick telemetry | tmpfs PostgreSQL (current) | Disposable per session |
+| Engagement records | Persistent SQLite/DuckDB per map | Accumulates forever |
+| Tactic outcomes | Same persistent DB | Accumulates forever |
+| Zone ratings | Baked into `{map}_tactical.json` | Re-exported periodically |
+
+### What the LLM Sees After Learning
+
+```
+ZONES (ministry):
+- courtyard: open, exposed
+  EXPERIENCE: dangerous for attackers (30% survive pushing through)
+  strong for defenders holding east_balcony overwatch
+- main_hallway: corridor, choke point
+  EXPERIENCE: squad pushes succeed only 15% — flanking routes preferred
+- back_alley: narrow, moderate cover
+  EXPERIENCE: 72% success rate as flanking approach to courtyard
+
+TACTIC HISTORY:
+- suppress_advance via main_hallway: 2/13 success (AVOID)
+- suppress_advance via back_alley:   8/11 success (PREFERRED)
+- crossfire from balcony+rooftop:    9/10 success (STRONG)
+```
+
+### Difficulty Separation
+
+Difficulty is controlled entirely by existing ConVars, invisible to the LLM:
+
+```
+bot_targeting_noise_*          ← how much bots miss
+bot_attackdelay_*              ← reaction time before firing
+bot_aim_aimtracking_*          ← how well they track moving targets
+bot_vis_recognizetime_*        ← how fast they spot you
+ins_bot_arousal_*              ← stress-based performance degradation
+```
+
+The LLM plans smart tactics. ConVars make bots miss. The LLM never knows they
+missed — it only sees whether the tactic worked positionally.
+
+```
+LLM:     "crossfire on courtyard from balcony + rooftop"    ← smart
+Python:  assigns positions + roles                           ← correct positions
+C++:     bots take positions, start firing                   ← native actions
+ConVars: bots miss 60% of shots                              ← fun for players
+LLM:     sees "enemy pinned, objective held"                 ← tactic worked
+```
+
+---
+
+## Game Design — Fun Over Winning
+
+### No Adaptive Difficulty
+
+Insurgency coop already has built-in catch-up mechanics:
+- Players get 6 rounds per objective
+- More reinforcement waves on failed attempts
+- Supply points accumulate
+
+Adjusting bot strategy based on win rate would fight against this existing design.
+Skilled players joining and breezing through is fine — that's the game working
+as intended.
+
+### LLM Objective: Be Varied, Not Optimal
+
+The LLM is a **game director**, not an optimizer. Its goal is interesting rounds,
+not maximum win rate.
+
+```
+SYSTEM PROMPT:
+You command bot squads defending against human attackers in Insurgency coop.
+
+Rules:
+- NEVER stack all squads on the capture point
+- Always keep at least one squad on a forward position or flank
+- Vary defensive positions between rounds — don't repeat the same setup
+- If you lose a round, don't just add more bots to the point —
+  try a different approach (ambush, counter-attack, forward defense)
+- Use the map: choke points, flanking routes, elevated positions
+```
+
+No win-rate tracking, no scaling. Just "be varied and use the whole map."
+
+### What Makes Bot Tactics Fun
+
+**Telegraphing** — give players time to react:
+- Suppressive fire starts 1-2s before the advance begins
+- Bots call out before breaching (CINSBotChatter system exists)
+- Grenade warning delay gives time to move
+
+**Commitment** — bots commit to plans, creating counter-play windows:
+- Once a squad starts advancing, they don't instantly retreat when spotted
+- A flanking squad follows the route even if the player relocates
+- Players who read the tactic can outplay it
+
+**Imperfect information** — bots aren't omniscient:
+- Squads only know what their own members see (native IVision behavior)
+- Intel has delay before reaching other squads
+- Lost contact means genuinely lost
+
+**Exploitable patterns** — players learn and adapt:
+- If bots flank from back_alley twice, players start watching it
+- LLM naturally varies because it's told to, creating an evolving meta
+- Experienced players feel rewarded for reading the bots
+
+### The Variation Problem
+
+The real enemy of fun is predictability. With 3-4 viable defensive setups per
+objective and an LLM that's told to vary, each round plays differently:
+
+```
+Round 1: Forward defense at main_hallway choke + ambush in back_alley
+Round 2: Crossfire from balcony + rooftop, light presence at point
+Round 3: Counter-attack squad hidden behind point, springs after capture starts
+Round 4: Spread defense, one squad per approach route
+```
+
+Players can't memorize a single strategy. Each attempt at an objective is a
+fresh tactical puzzle.
+
+---
+
 ## Changes vs Current Architecture
 
 | Component | Current | New |
