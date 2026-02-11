@@ -7,16 +7,23 @@ The LLM handles strategy, Python handles squad tactics, C++ handles tick-rate ex
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  LLM Strategist            (event-driven, ~2-5/min) │  "Squad A flank left, Squad B suppress"
+│  LLM Strategist            (event-driven, ~2-5/min) │
+│  outputs: posture per squad (weight profile)         │
 ├─────────────────────────────────────────────────────┤
-│  Python Tactical Planner   (every 1-2s / on events) │  translates strategy → roles + positions
+│  Python Influence Map      (every 1-2s / on events) │
+│  scores grid points, assigns best positions          │
 ├─────────────────────────────────────────────────────┤
-│  C++ Metamod Extension     (every tick, 66Hz)        │  executes roles via native action classes
+│  C++ Metamod Extension     (every tick, 66Hz)        │
+│  executes native actions at assigned positions       │
 └─────────────────────────────────────────────────────┘
 ```
 
-Key principle: each layer only communicates with its neighbors. LLM never sees
-coordinates, C++ never makes strategic choices.
+Key principles:
+- Each layer only communicates with its neighbors
+- LLM never sees coordinates — it sets weight profiles (postures)
+- Python scores ALL grid points via influence map, picks top N
+- C++ never makes strategic choices — it executes native actions
+- A single precomputed **visibility matrix** drives all influence layers
 
 ---
 
@@ -59,16 +66,17 @@ Structured JSON, not prose:
 
 ```json
 {
-  "squad_alpha": {
-    "objective": "suppress_obj_B_from_warehouse",
-    "tactic": "crossfire_setup",
-    "priority": "high"
-  },
-  "squad_bravo": {
-    "objective": "flank_east_to_obj_B",
-    "tactic": "bounding_overwatch",
-    "priority": "high"
-  }
+  "squad_alpha": {"posture": "sniper", "objective": "B"},
+  "squad_bravo": {"posture": "push", "objective": "B"}
+}
+```
+
+Or with qualitative adjustments based on experience:
+
+```json
+{
+  "squad_alpha": {"posture": "defend", "adjust": "more_cover"},
+  "squad_bravo": {"posture": "push", "adjust": "more_spread"}
 }
 ```
 
@@ -141,110 +149,150 @@ def plan_tactic(squad, strategy_order, world_state):
 - Active tactic per squad + current phase
 - Enemy cluster positions (aggregated from bot vision reports)
 
-### Position Resolution — Zone Names to Coordinates
+### Position Resolution — Influence Map
 
-This is where "the warehouse" becomes exact coordinates. It's lookups on
-precomputed data, not runtime computation.
+Instead of hardcoded position resolvers per query type (overwatch, crossfire,
+cover, approach), a single **influence map** scores every grid point. The LLM
+controls behavior by setting **weight profiles** — the same scoring system
+produces defensive positions, sniper nests, or assault routes depending on the
+weights.
 
-#### Resolution Chain
+#### The Visibility Matrix (Foundation)
 
-```
-LLM:     "Squad A → warehouse, suppress courtyard"
-              │
-              ▼
-Python:  zone "warehouse" → area_ids [234, 235, 236, 237]
-         zone "courtyard" → area_ids [301, 302, 303]
-              │
-              ▼
-         visibility NPZ → which warehouse areas see courtyard?
-         (234,301)✓  (234,302)✓  (235,301)✓  (236,*)✗  (237,*)✗
-              │
-              ▼
-         areas 234, 235 have LOS to courtyard
-         area 234 hiding_spots: [(450,200,64), (455,195,64)]
-         area 235 hiding_spots: [(460,210,64), (468,205,64)]
-              │
-              ▼
-         assign bot_3 → (450,200,64), aim toward area 301 center
-         assign bot_5 → (460,210,64), aim toward area 302 center
-              │
-              ▼
-C++:     SuppressTarget(area_301_center, NULL) for bot_3
-         SuppressTarget(area_302_center, NULL) for bot_5
-```
+Point-to-point visibility precomputed on a 64-unit grid across nav areas.
+For ~20K grid points with a 2000-unit combat distance cutoff:
 
-#### Position Resolver
+| Step | Count | Cost |
+|------|-------|------|
+| Candidate pairs (within range) | ~10M | - |
+| Embree raycasts (~100ns each) | 10M | ~1 second |
+| Visible pairs stored (5-10% density) | 500K-1M | ~4-8 MB sparse |
+
+Stored as adjacency list in NPZ:
 
 ```python
-def resolve_positions(zone_id, target_zone_id, num_bots):
-    """Turn 'go to warehouse, watch courtyard' into exact positions."""
+# point_positions: float32[N, 3]  — grid point coordinates
+# adj_index: int32[N, 2]          — (start, count) per point
+# adj_list: int32[M]              — concatenated visible point IDs
 
-    zone_areas = tactical_data["zones"][zone_id]["area_ids"]
-    target_areas = tactical_data["zones"][target_zone_id]["area_ids"]
-
-    # Step 1: which areas in our zone can see the target zone?
-    overwatch_areas = [
-        a for a in zone_areas
-        if any((a, t) in visible_pairs or (t, a) in visible_pairs
-               for t in target_areas)
-    ]
-
-    # Step 2: grab hiding spots in those areas (already in nav JSON)
-    candidate_spots = []
-    for area_id in overwatch_areas:
-        spots = nav_data["areas"][area_id]["hiding_spots"]
-        visible_targets = [t for t in target_areas
-                          if (area_id, t) in visible_pairs]
-        for spot in spots:
-            candidate_spots.append((spot, visible_targets))
-
-    # Step 3: pick spots that are spread out (avoid clustering)
-    selected = pick_spread_positions(candidate_spots, num_bots)
-
-    return selected  # [(pos, aim_toward), ...]
+# Query: which points can see point 47?
+start, count = adj_index[47]
+visible_from_47 = adj_list[start:start+count]
 ```
 
-#### Crossfire Resolution
+One precomputed matrix drives ALL the influence layers.
 
-For crossfire tactics, find two positions that both see the target but from
-different angles (so the enemy can't hide from both behind the same cover):
+#### Influence Layers
+
+**Precomputed offline (from visibility matrix):**
+
+| Layer | Derivation | High = |
+|-------|-----------|--------|
+| **Cover quality** | Inverse of visibility count per point | Well protected |
+| **Sightline value** | Count of visible objective-area points | Good firing position |
 
 ```python
-def find_crossfire_positions(target_zone, available_zones, min_angle=60):
-    target_center = zone_center(target_zone)
+# Cover: how few other points can see this one?
+cover[i] = 1.0 - (len(visibility[i]) / max_visible)
 
-    for zone_a, zone_b in combinations(available_zones, 2):
-        pos_a = best_overwatch_spot(zone_a, target_zone)
-        pos_b = best_overwatch_spot(zone_b, target_zone)
-
-        if pos_a and pos_b:
-            angle = angle_between(
-                pos_a - target_center,
-                pos_b - target_center
-            )
-            if angle > min_angle:
-                return (zone_a, pos_a), (zone_b, pos_b)
+# Sightline: how much of the objective area is visible from here?
+for obj_point in objective_area_points:
+    sightline[i] += 1 if obj_point in visibility[i] else 0
+sightline /= sightline.max()  # normalize 0-1
 ```
 
-#### Data Sources for Position Resolution
+**Updated at runtime (cheap):**
 
-| Question | Answered by | Precomputed? |
-|----------|-------------|:---:|
-| Which areas can see the target zone? | Visibility NPZ | Yes |
-| Where to stand with cover? | Nav mesh hiding spots | Yes |
-| Is the position too exposed? | Clearance NPZ (min clearance) | Yes |
-| How spread out are the positions? | Hiding spot coordinates | Yes |
-| What angle is the crossfire? | Vector math on positions | Trivial |
-| Can bot physically path there? | Nav mesh connectivity | Yes |
+| Layer | Trigger | Derivation |
+|-------|---------|-----------|
+| **Threat** | Enemy positions change | Points visible from enemy → +threat with distance decay |
+| **Team presence** | Bots move | Distance falloff from each friendly |
+| **Objective relevance** | Objective changes | Distance falloff from active point |
 
-#### Runtime-Only Decisions (NOT Precomputed)
+```python
+# Threat: enemy at X, everything visible from X is threatened
+threat = np.zeros(num_points)
+for enemy_pos in known_enemies:
+    enemy_point = nearest_grid_point(enemy_pos)
+    for vis in visibility[enemy_point]:
+        threat[vis] += decay_by_distance(enemy_point, vis)
 
-- Which spots are already occupied (Python tracks squad assignments)
-- Which spots are near known enemies (from bot vision state updates)
-- Spacing between assigned bots (filter spots > N units apart)
-- Priority when spots are limited (LMG gets best overwatch, rifles get the rest)
+# Team presence: spread penalty around each friendly
+team = np.zeros(num_points)
+for bot_pos in friendly_positions:
+    distances = np.linalg.norm(points - bot_pos, axis=1)
+    team += np.exp(-distances / spread_radius)
 
-These are simple filters on the candidate list, not heavy computation.
+# Objective: distance falloff from active point
+obj_distances = np.linalg.norm(points - objective_pos, axis=1)
+objective = np.exp(-obj_distances / relevance_radius)
+```
+
+#### Scoring — One Line
+
+```python
+score = cover*W1 + sightline*W2 + objective*W3 - threat*W4 - team*W5
+best_positions = np.argsort(score)[-num_bots:]  # top N
+```
+
+Vectorized numpy on ~20K points. Sub-millisecond.
+
+#### Weight Profiles — LLM Controls Behavior
+
+The LLM picks a **posture** per squad. Each posture is a weight profile:
+
+```python
+WEIGHT_PROFILES = {
+    "defend":  {"cover": 0.8, "sightline": 0.6, "objective": 0.9, "threat": 0.7, "spread": 0.5},
+    "push":    {"cover": 0.3, "sightline": 0.8, "objective": 1.0, "threat": 0.3, "spread": 0.3},
+    "ambush":  {"cover": 0.9, "sightline": 0.4, "objective": 0.2, "threat": 0.5, "spread": 0.8},
+    "sniper":  {"cover": 0.7, "sightline": 1.0, "objective": 0.3, "threat": 0.6, "spread": 0.9},
+    "overrun": {"cover": 0.1, "sightline": 0.5, "objective": 1.0, "threat": 0.1, "spread": 0.2},
+}
+```
+
+Qualitative adjustments shift weights:
+
+```python
+def apply_adjustment(weights, adjust):
+    if adjust == "more_cover":
+        weights["cover"] *= 1.3
+        weights["threat"] *= 1.2
+    elif adjust == "more_spread":
+        weights["spread"] *= 1.5
+    elif adjust == "more_aggressive":
+        weights["cover"] *= 0.7
+        weights["sightline"] *= 1.3
+    # renormalize
+```
+
+#### Emergent Behaviors From Weights
+
+Tactical behaviors are not coded — they **emerge** from the scoring:
+
+| Desired behavior | How weights produce it |
+|-----------------|----------------------|
+| **Crossfire** | High sightline + high spread → two bots pick spots that both see the objective but are far apart |
+| **Overwatch** | High sightline + high cover → elevated spots with concealment |
+| **Cover positions** | High cover + low sightline weight → hidden spots behind geometry |
+| **Aggressive push** | High objective + low cover + low threat → rush toward the point |
+| **Spread defense** | High spread + high objective → distributed positions around the point |
+
+No special-case algorithms for crossfire, overwatch, or flanking. The influence
+map produces them naturally.
+
+#### Runtime Cost
+
+| Operation | When | Cost |
+|-----------|------|------|
+| Cover + sightline layers | Map load (precomputed) | 0 |
+| Threat layer update | Enemy positions change (INTEL) | ~5K additions |
+| Team presence update | Each scoring cycle (1-2s) | ~20K distance calcs |
+| Objective update | Objective changes | ~20K distance calcs |
+| Score all points | Each scoring cycle | ~20K multiply-add |
+| Pick top N | Per squad | argpartition |
+
+Total: sub-millisecond per scoring cycle with numpy.
 
 ---
 
@@ -287,32 +335,42 @@ or Python sends a new assignment.
 
 ## Precomputed Map Data Pipeline
 
-### Available Data (Already Produced)
+### Available Data
 
-| Data | Format | File Pattern | Content |
-|------|--------|-------------|---------|
-| 3D mesh | GLB | `ai-brain/data/{map}.glb` | World geometry (Blender/Three.js compatible) |
-| Nav mesh | JSON | `navMeshParser --json` | Areas, connections, hiding spots, flags |
-| Visibility | NPZ | `ai-brain/data/{map}_visibility.npz` | Pairwise area visibility (317K pairs for ministry) |
-| Clearance | NPZ | `ai-brain/data/{map}_clearance.npz` | 72-azimuth radial clearance per sample |
+| Data | Format | File Pattern | Content | Status |
+|------|--------|-------------|---------|--------|
+| 3D mesh | GLB | `ai-brain/data/{map}.glb` | World geometry (Blender/Three.js compatible) | Exists |
+| Nav mesh | JSON | `navMeshParser --json` | Areas, connections, hiding spots, flags | Exists |
+| Area visibility | NPZ | `ai-brain/data/{map}_visibility.npz` | Pairwise area visibility (317K pairs for ministry) | Exists |
+| Clearance | NPZ | `ai-brain/data/{map}_clearance.npz` | 72-azimuth radial clearance per sample | Exists |
+| **Visibility matrix** | NPZ | `ai-brain/data/{map}_vismatrix.npz` | **Point-to-point visibility on 64u grid** | **New** |
+| **Influence layers** | NPZ | `ai-brain/data/{map}_influence.npz` | **Precomputed cover + sightline layers** | **New** |
 
-### Zone Builder Pipeline
+### Precompute Pipeline
 
 ```
-BSP + NAV ──→ bspMeshExporter (GLB + clearance + visibility)
-                    │
-                    ▼
-              zone_builder.py (auto-cluster + tactical scoring)
-                    │
-                    ▼
-              {map}_tactical.json (draft)
-                    │
-                    ▼
-              web editor (Three.js + nav mesh overlay)
-                    │
-                    ▼
-              {map}_tactical.json (reviewed, final)
+BSP + NAV ──→ bspMeshExporter
+                ├─→ {map}.glb              (3D mesh, exists)
+                ├─→ {map}_clearance.npz    (radial clearance, exists — for C++ nav)
+                ├─→ {map}_vismatrix.npz    (point-to-point visibility, NEW)
+                └─→ {map}_influence.npz    (cover + sightline layers, NEW)
+                          │
+                          ▼
+                    zone_builder.py (auto-cluster + tactical scoring)
+                          │
+                          ▼
+                    {map}_tactical.json (draft)
+                          │
+                          ▼
+                    web editor (Three.js + nav mesh overlay)
+                          │
+                          ▼
+                    {map}_tactical.json (reviewed, final)
 ```
+
+**Visibility matrix** is the new foundation — ~1 second Embree computation per map,
+~4-8 MB output. Cover and sightline layers derive from it automatically.
+Clearance NPZ is retained for the C++ navigation steering layer.
 
 30 maps, review each once, done forever.
 
