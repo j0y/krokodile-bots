@@ -760,6 +760,150 @@ fresh tactical puzzle.
 
 ---
 
+## Voice Callouts — Tactical Telegraphing
+
+Bots use Insurgency's concept-based voice system to call out tactical actions.
+This serves as **telegraphing** — players hear coordination happening and get
+time to react, which is key to making smart tactics feel fair.
+
+### How the Voice System Works
+
+```
+Concept ID (integer)
+    → CINSPlayer::SpeakConceptIfAllowed()    [vtable + 0x800]
+    → Response Rules Engine
+    → botchatter.db lookup
+    → Select wav file + play to clients
+    → Fire OnSpokeConcept event to all bots
+```
+
+The engine handles everything: file selection, playback, replication to clients.
+The C++ extension just calls one function with a concept ID.
+
+### Triggering Voice From the Metamod Extension
+
+Direct virtual call, no hooks:
+
+```cpp
+void TeamCoordinator::AssignTactic(Squad& squad, Tactic& tactic) {
+    for (auto& assignment : tactic.roles) {
+        INextBot *bot = GetBot(assignment.bot_id);
+
+        switch (assignment.role) {
+        case ROLE_SUPPRESS:
+            bot->BotSpeakConceptIfAllowed(CONCEPT_COVERING, NULL, 0, NULL);
+            break;
+        case ROLE_ADVANCE:
+            bot->BotSpeakConceptIfAllowed(CONCEPT_ON_MY_WAY, NULL, 0, NULL);
+            break;
+        case ROLE_RETREAT:
+            bot->BotSpeakConceptIfAllowed(CONCEPT_PINNED_DOWN, NULL, 0, NULL);
+            break;
+        case ROLE_BREACH:
+            bot->BotSpeakConceptIfAllowed(CONCEPT_FRAG_OUT, NULL, 0, NULL);
+            break;
+        }
+    }
+}
+```
+
+### Existing Callouts in botchatter.db
+
+The game already has 50+ voice concepts. Many map directly to tactical roles:
+
+| Tactic Role | Existing Concept | What the player hears |
+|-------------|-----------------|----------------------|
+| Suppress | `CoveringFriend` / `CoverMe` | "Covering!" / "Cover me!" |
+| Advance | `OnMyWay` | "Moving up!" |
+| Hold position | `WaitingHere` | "Holding here!" |
+| Retreat | `PinnedDown` / `Help` | "Pinned down!" / "Taking fire!" |
+| Enemy spotted | `EnemySpotted` | "Contact!" |
+| Area clear | `ClearedArea` / `Clear` | "Clear!" |
+| Man down | `KilledFriend` (event-driven) | "Man down!" |
+| Reinforcing | `FollowingSir` | "On my way!" |
+| Sniper call | `SniperWarning` | "Sniper!" |
+
+**Place names** are also in botchatter.db: Bridge, Market, Courtyard, Kitchen,
+Tower, Tunnel, etc. These can be appended to callouts for location context.
+
+### Custom Voice Lines
+
+For callouts that don't exist yet (e.g., "flank him", "sweep the area"):
+
+**Option A: Remap existing wav files (easiest, no client downloads)**
+
+Insurgency has hundreds of recorded voice lines in the VPK archives — "Go go go!",
+"Fall back!", "Push up!", "Move move move!" — many are underused. Remap them
+to new concept entries in `botchatter.db`:
+
+```
+Chatter FlankOrder
+    Radio RADIO_AFFIRMATIVE
+    go_around.wav
+    push_up.wav
+    move_move.wav
+End
+
+Chatter SweepOrder
+    clear_the_room.wav
+    move_in.wav
+End
+```
+
+`botchatter.db` is **server-side only** — editing it works immediately for all
+clients. Clients already have the wav files from the base game.
+
+**Option B: Custom wav files**
+
+Record or source new lines. Clients need the files via `sv_downloadurl` or a
+custom VPK. More work, but allows purpose-built callouts.
+
+**Option C: Hybrid**
+
+Use existing wav files for most callouts, add a few custom files for
+tactic-specific lines that have no good existing match.
+
+### Voice Integration in the Tactic Flow
+
+```
+LLM:     "Squad A suppress courtyard, Squad B flank via back_alley"
+              │
+Python:  assigns roles, sends TACTIC message to C++
+              │
+C++ TeamCoordinator:
+  ├─ Bot_3 (LMG):   BotSpeak("Covering!")     → takes balcony position
+  ├─ Bot_5 (Rifle):  BotSpeak("Moving up!")    → starts flanking
+  └─ Bot_7 (Rifle):  BotSpeak("Moving up!")    → follows Bot_5
+              │
+Players hear: coordinated callouts → know something's coming
+              │
+  Bot_5 reaches flank:  BotSpeak("Contact!")   → engages
+  Bot_3 on balcony:     [suppressive fire]     → pins players
+              │
+  Bot_5 killed:
+  Bot_7:                BotSpeak("Man down!")
+  C++ sends INTEL → Python reassigns Bot_9
+  Bot_9:                BotSpeak("On my way!") → reinforces
+```
+
+Players experience a squad that **sounds** coordinated. The callouts give
+tactical information the player can act on — hear "Moving up!" from the
+flank, turn to face it, counter the maneuver. This is the telegraphing
+that makes smart tactics fun instead of oppressive.
+
+### Voice Spam Prevention
+
+The native `SpeakConceptIfAllowed()` already has built-in cooldowns — it
+won't play the same concept twice in rapid succession. The TeamCoordinator
+should also throttle:
+
+- Max 1 callout per bot per tactic assignment
+- Stagger callouts by 0.5-1s between squad members
+- Don't call out routine movements, only tactic-relevant actions
+- Event callouts (contact, man down) use the native chatter system
+
+---
+
 ## Changes vs Current Architecture
 
 | Component | Current | New |
