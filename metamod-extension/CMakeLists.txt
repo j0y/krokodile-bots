@@ -27,6 +27,9 @@ endif()
 # --- Extension shared library ---
 add_library(smartbots SHARED
     src/extension.cpp
+    src/sig_resolve.cpp
+    src/detour.cpp
+    src/bot_action_hook.cpp
 )
 
 set_target_properties(smartbots PROPERTIES
@@ -104,6 +107,21 @@ target_compile_options(smartbots PRIVATE
     -fvisibility=hidden
     -fvisibility-inlines-hidden
     -pipe
+)
+
+# --- HL2SDK libraries ---
+set(HL2SDK_LIB "${HL2SDK}/lib/linux")
+
+# Static libraries from SDK (tier1 provides ConVar/ConCommandBase, interfaces for Insurgency SDK)
+target_link_libraries(smartbots PRIVATE
+    ${HL2SDK_LIB}/tier1_i486.a
+    ${HL2SDK_LIB}/interfaces_i486.a
+)
+
+# Dynamic libraries resolved at runtime from the game server
+target_link_libraries(smartbots PRIVATE
+    ${HL2SDK_LIB}/libtier0_srv.so
+    ${HL2SDK_LIB}/libvstdlib_srv.so
 )
 
 # --- Linker ---

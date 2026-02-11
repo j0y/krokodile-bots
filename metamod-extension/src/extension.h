@@ -17,6 +17,9 @@ public:
     bool Unload(char *error, size_t maxlen);
     void AllPluginsLoaded();
 
+public: // SourceHook hooks
+    void Hook_GameFrame(bool simulating);
+
 public:
     const char *GetAuthor()      { return "SmartBots"; }
     const char *GetName()        { return "SmartBots Coordinator"; }
@@ -36,8 +39,22 @@ extern IVEngineServer *g_pEngineServer;
 extern IServerGameClients *g_pServerGameClients;
 extern IPlayerInfoManager *g_pPlayerInfoManager;
 extern ICvar *g_pCVar;
+extern CGlobalVars *gpGlobals;
 
 // Server module handle for symbol resolution (dlsym)
 extern void *g_pServerHandle;
+
+// Edict helpers (SOURCE_ENGINE >= SE_LEFT4DEAD: removed from IVEngineServer)
+inline int IndexOfEdict(const edict_t *pEdict)
+{
+    return (int)(pEdict - gpGlobals->pEdicts);
+}
+
+inline edict_t *PEntityOfEntIndex(int iEntIndex)
+{
+    if (iEntIndex >= 0 && iEntIndex < gpGlobals->maxEntities)
+        return (edict_t *)(gpGlobals->pEdicts + iEntIndex);
+    return nullptr;
+}
 
 #endif // _SMARTBOTS_EXTENSION_H_
