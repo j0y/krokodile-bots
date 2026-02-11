@@ -1,17 +1,14 @@
 services:
-  # --- AI mode: SmartBots bridge plugin + Python AI brain ---
+  # --- AI mode: Metamod extension + Python tactical planner ---
   insurgency:
     build:
-      context: ./insurgency-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: insurgency-server/Dockerfile
     container_name: insurgency-server
     restart: unless-stopped
     network_mode: host
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
-      - ./insurgency-server/plugins:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom:ro
-      - ./insurgency-server/gamedata/smartbots_bridge.txt:/home/steam/insurgency-server/insurgency/addons/sourcemod/gamedata/smartbots_bridge.txt:ro
-      - ./ai-brain/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Dev Server
       - SERVER_PASSWORD=
@@ -73,8 +70,8 @@ services:
   # --- Vanilla debug mode: original bot AI + nb_debug logging ---
   insurgency-vanilla:
     build:
-      context: ./insurgency-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: insurgency-server/Dockerfile
     container_name: insurgency-vanilla
     restart: unless-stopped
     network_mode: host
@@ -93,8 +90,8 @@ services:
   # --- Record mode: observer-only plugin + original AI + position recording ---
   insurgency-record:
     build:
-      context: ./insurgency-server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: insurgency-server/Dockerfile
     container_name: insurgency-record
     restart: unless-stopped
     network_mode: host

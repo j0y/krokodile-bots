@@ -1,0 +1,5 @@
+"Metamod Plugin"
+{
+	"alias"		"smartbots"
+	"file"		"addons/smartbots/bin/linux/smartbots"
+}

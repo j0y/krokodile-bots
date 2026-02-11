@@ -1,0 +1,8 @@
+[submodule "metamod-extension/vendor/hl2sdk-insurgency"]
+	path = metamod-extension/vendor/hl2sdk-insurgency
+	url = https://github.com/alliedmodders/hl2sdk.git
+	branch = insurgency
+[submodule "metamod-extension/vendor/metamod-source"]
+	path = metamod-extension/vendor/metamod-source
+	url = https://github.com/alliedmodders/metamod-source.git
+	branch = 1.12-dev
