@@ -43,7 +43,7 @@ services:
       - TELEMETRY_HOST=localhost
       - TELEMETRY_PORT=5432
     profiles:
-      - ai
+      - planner
 
   telemetry-db:
     image: postgres:17-alpine
@@ -65,7 +65,7 @@ services:
       -c synchronous_commit=off
       -c full_page_writes=off
     profiles:
-      - ai
+      - planner
 
   # --- Vanilla debug mode: original bot AI + nb_debug logging ---
   insurgency-vanilla:
@@ -97,7 +97,7 @@ services:
     network_mode: host
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
-      - ./insurgency-server/plugins/smartbots_observer.smx:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom/smartbots_observer.smx:ro
+      - ./ai-brain/reference/smartbots_observer.smx:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom/smartbots_observer.smx:ro
       - ./ai-brain/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Recorder
