@@ -160,9 +160,10 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
         return false;
     }
 
-    // Get module base address for offset resolution
-    s_serverBase = GetServerModuleBase();
-    META_CONPRINTF("[SmartBots] server_srv.so base: 0x%08x\n", (unsigned int)s_serverBase);
+    // Get module base address via dlinfo (link_map) — most reliable
+    // Note: dl_iterate_phdr matches MetaMod's stub server_srv.so, not the real game binary.
+    // dlinfo on our RTLD_NOLOAD handle resolves to the actual server_i486.so.
+    s_serverBase = GetServerModuleBaseFromHandle(g_pServerHandle);
 
     if (s_serverBase == 0)
     {

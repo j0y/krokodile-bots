@@ -16,6 +16,9 @@ static CINSBotCombat_Update_t  s_CombatUpdateOriginal = nullptr;
 // Detour instance
 static InlineDetour s_CombatUpdateDetour;
 
+// Cached server base (set during Init)
+static uintptr_t s_serverBase = 0;
+
 // Goto target state
 static bool  s_hasGotoTarget = false;
 static float s_gotoX = 0.0f;
@@ -86,17 +89,17 @@ bool BotActionHook_Init(uintptr_t serverBase)
     }
 
     s_ApproachCtor = reinterpret_cast<CINSBotApproach_Ctor_t>(approachCtor);
+    s_serverBase = serverBase;
 
     return true;
 }
 
 bool BotActionHook_InstallDetour()
 {
-    uintptr_t serverBase = GetServerModuleBase();
-    if (serverBase == 0)
+    if (s_serverBase == 0)
         return false;
 
-    void *combatUpdate = ResolveOffset(serverBase, ServerOffsets::CINSBotCombat_Update);
+    void *combatUpdate = ResolveOffset(s_serverBase, ServerOffsets::CINSBotCombat_Update);
 
     if (!s_CombatUpdateDetour.Install(combatUpdate, (void *)Hook_CINSBotCombat_Update))
     {

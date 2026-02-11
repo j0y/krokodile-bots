@@ -4,8 +4,10 @@
 #include <cstddef>
 #include <cstdint>
 
-// Resolve server_srv.so base address via dl_iterate_phdr
-uintptr_t GetServerModuleBase();
+// Resolve server module base address from dlopen handle via dlinfo/link_map.
+// dl_iterate_phdr is NOT usable here — it matches MetaMod's stub server_srv.so
+// instead of the real game binary (server_i486.so -> server_srv.so symlink).
+uintptr_t GetServerModuleBaseFromHandle(void *handle);
 
 // Offsets from `nm server_srv.so` (binary is frozen — Insurgency 2014)
 struct ServerOffsets
