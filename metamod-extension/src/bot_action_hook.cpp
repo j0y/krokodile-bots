@@ -31,6 +31,9 @@ static float s_gotoZ = 0.0f;
 static const int MAX_ENTITY_MAP = 33;
 static void *s_entityPtrs[MAX_ENTITY_MAP];     // entityPtrs[edictIndex] = entityPtr
 
+// Per-edict flag: bot can see at least one enemy (set from GameFrame after vision scan)
+static bool s_hasVisibleEnemy[MAX_ENTITY_MAP];
+
 // Diagnostic state
 static int  s_hookCallCount = 0;
 static int  s_moveRequestCount = 0;
@@ -64,6 +67,18 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
 {
     s_hookCallCount++;
 
+    // If the bot can see enemies, let native combat AI handle it (shoot, take cover, etc.)
+    if (actor)
+    {
+        int edictIndex = LookupEdictIndex(actor);
+        if (edictIndex > 0 && s_hasVisibleEnemy[edictIndex])
+        {
+            s_CombatUpdateOriginal(sret, thisptr, actor, interval);
+            return;
+        }
+    }
+
+    // No visible enemies — suppress combat if we have a movement override
     bool shouldSuppress = false;
 
     if (s_hasGotoTarget && actor)
@@ -72,7 +87,6 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
     }
     else if (actor)
     {
-        // Check for Python command for this specific bot
         int edictIndex = LookupEdictIndex(actor);
         if (edictIndex > 0)
         {
@@ -94,7 +108,7 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
         return;
     }
 
-    // Call original CINSBotCombat::Update via trampoline
+    // No override active — run original combat logic
     s_CombatUpdateOriginal(sret, thisptr, actor, interval);
 }
 
@@ -235,4 +249,22 @@ void BotActionHook_RegisterEntity(void *entityPtr, int edictIndex)
 void BotActionHook_ClearEntityMap()
 {
     memset(s_entityPtrs, 0, sizeof(s_entityPtrs));
+}
+
+void BotActionHook_SetVisibleEnemy(int edictIndex, bool hasEnemy)
+{
+    if (edictIndex >= 1 && edictIndex < MAX_ENTITY_MAP)
+        s_hasVisibleEnemy[edictIndex] = hasEnemy;
+}
+
+bool BotActionHook_HasVisibleEnemy(int edictIndex)
+{
+    if (edictIndex >= 1 && edictIndex < MAX_ENTITY_MAP)
+        return s_hasVisibleEnemy[edictIndex];
+    return false;
+}
+
+void BotActionHook_ClearVisibleEnemies()
+{
+    memset(s_hasVisibleEnemy, 0, sizeof(s_hasVisibleEnemy));
 }

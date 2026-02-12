@@ -38,4 +38,13 @@ void BotActionHook_RegisterEntity(void *entityPtr, int edictIndex);
 // Clear all entity → edict mappings. Called at the start of each GameFrame.
 void BotActionHook_ClearEntityMap();
 
+// Set whether a bot currently sees enemies (called from GameFrame after vision scan).
+void BotActionHook_SetVisibleEnemy(int edictIndex, bool hasEnemy);
+
+// Check if a bot currently sees enemies (used in combat hook).
+bool BotActionHook_HasVisibleEnemy(int edictIndex);
+
+// Clear all visibility flags (called at start of each vision scan).
+void BotActionHook_ClearVisibleEnemies();
+
 #endif // _SMARTBOTS_BOT_ACTION_HOOK_H_

@@ -318,6 +318,38 @@ static void ComputeVision()
     }
 }
 
+// ---- Enemy visibility flags (cheap post-processing of ComputeVision results) ----
+
+static void ComputeEnemyVisibility()
+{
+    BotActionHook_ClearVisibleEnemies();
+
+    for (int i = 0; i < s_stateCount; i++)
+    {
+        BotStateEntry &entry = s_stateArray[i];
+        if (!entry.is_bot || !entry.alive)
+            continue;
+
+        bool hasEnemy = false;
+        for (int s = 0; s < entry.sees_count && !hasEnemy; s++)
+        {
+            int seenId = entry.sees[s];
+            for (int j = 0; j < s_stateCount; j++)
+            {
+                if (s_stateArray[j].id == seenId
+                    && s_stateArray[j].team != entry.team
+                    && s_stateArray[j].team > 1
+                    && s_stateArray[j].alive)
+                {
+                    hasEnemy = true;
+                    break;
+                }
+            }
+        }
+        BotActionHook_SetVisibleEnemy(entry.id, hasEnemy);
+    }
+}
+
 // ---- GameFrame hook ----
 
 void SmartBotsExtension::Hook_GameFrame(bool simulating)
@@ -337,6 +369,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
     {
         ResolveBots();
         ComputeVision();
+        ComputeEnemyVisibility();
         freshScan = true;
     }
 
@@ -374,6 +407,12 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                 int idx = s_resolvedBots[i].edictIndex;
                 if (!ValidateBot(idx, s_resolvedBots[i].entity))
                     continue;
+                // Bot in combat — let native AI control movement
+                if (BotActionHook_HasVisibleEnemy(idx))
+                {
+                    s_lastTargetValid[idx] = false;
+                    continue;
+                }
                 if (!TargetChanged(idx, gotoX, gotoY, gotoZ))
                     continue;
 
@@ -423,6 +462,13 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                 BotCommandEntry cmd;
                 if (!BotCommand_Get(idx, cmd))
                     continue;
+
+                // Bot in combat — let native AI control movement
+                if (BotActionHook_HasVisibleEnemy(idx))
+                {
+                    s_lastTargetValid[idx] = false;
+                    continue;
+                }
 
                 if (!TargetChanged(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
                     continue;
