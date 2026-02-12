@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import signal
+import socket
 
 from tactical.planner import Planner
 from tactical.protocol import BotCommand, decode_state, encode_commands
@@ -60,9 +61,14 @@ async def run_server(host: str, port: int, planner: Planner) -> None:
 
     loop = asyncio.get_running_loop()
 
+    # Create socket with SO_REUSEADDR to allow quick restarts
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind((host, port))
+
     transport, _protocol = await loop.create_datagram_endpoint(
         lambda: TacticalProtocol(planner),
-        local_addr=(host, port),
+        sock=sock,
     )
 
     stop = loop.create_future()
