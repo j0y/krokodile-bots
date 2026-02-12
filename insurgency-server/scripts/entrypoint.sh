@@ -59,7 +59,7 @@ sv_cheats 1
 mp_limitteams 0
 mp_autoteambalance 0
 exec betterbots.cfg
-exec nbdebug.cfg
+$([ "${NB_DEBUG:-0}" = "1" ] && echo "exec nbdebug.cfg" || echo "// nbdebug.cfg disabled (NB_DEBUG!=1)")
 
 // ---------------------------------------------------------------
 // Round Timers (low for faster debugging)

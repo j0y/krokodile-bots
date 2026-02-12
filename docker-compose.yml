@@ -17,6 +17,7 @@ services:
       - START_MAP=${START_MAP:-ministry_coop}
       - GAME_MODE=coop
       - TICKRATE=64
+      - NB_DEBUG=${NB_DEBUG:-0}
     stdin_open: true
     tty: true
     profiles:
