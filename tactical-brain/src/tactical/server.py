@@ -58,6 +58,10 @@ class TacticalProtocol(asyncio.DatagramProtocol):
 async def run_server(host: str, port: int, planner: Planner) -> None:
     log.info("Starting tactical brain on %s:%d", host, port)
     log.info("Rally point: (%.1f, %.1f, %.1f)", *planner.rally)
+    if planner.influence_map:
+        log.info("Influence map active: %d grid points", planner.influence_map.n)
+    else:
+        log.info("No influence map — using rally point fallback")
 
     loop = asyncio.get_running_loop()
 

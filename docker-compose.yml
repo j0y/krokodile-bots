@@ -29,12 +29,16 @@ services:
     container_name: tactical-brain
     restart: unless-stopped
     network_mode: host
+    volumes:
+      - ./ai-brain-old/data:/app/data:ro
     environment:
       - LISTEN_HOST=0.0.0.0
       - LISTEN_PORT=9000
       - RALLY_X=3500
       - RALLY_Y=-1500
       - RALLY_Z=32
+      - MAP_NAME=${START_MAP:-ministry_coop}
+      - DATA_DIR=/app/data
     profiles:
       - ai
 
