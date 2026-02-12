@@ -369,6 +369,10 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
     s_tickCount++;
 
+    // Deferred event registration — events may not exist during Load()
+    if (s_tickCount == 1)
+        GameEvents_RegisterListeners();
+
     // Refresh bot list + state at 8Hz (every 8 ticks).
     // IPlayerInfo calls are expensive (trigger UTIL_GetListenServerHost),
     // so we avoid doing this every tick.

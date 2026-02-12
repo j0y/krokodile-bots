@@ -11,22 +11,43 @@ public:
         m_pEventMgr = mgr;
         m_controlledTeam = controlledTeam;
         m_objectivesCaptured = 0;
-        m_phase = "over";
+        // Default to "active" so strategist works even if events never fire
+        m_phase = "active";
         m_cappingCP = -1;
+        m_registered = false;
 
-        mgr->AddListener(this, "round_start", true);
-        mgr->AddListener(this, "teamplay_round_active", true);
-        mgr->AddListener(this, "teamplay_round_win", true);
-        mgr->AddListener(this, "teamplay_point_captured", true);
-        mgr->AddListener(this, "teamplay_point_startcapture", true);
-
-        META_CONPRINTF("[SmartBots] Game event listener registered (controlled team: %d)\n",
+        META_CONPRINTF("[SmartBots] Game events: init (controlled team: %d, registration deferred)\n",
                        controlledTeam);
+    }
+
+    void RegisterListeners()
+    {
+        if (m_registered || !m_pEventMgr)
+            return;
+
+        m_registered = true;
+
+        const char *events[] = {
+            "round_start", "round_begin", "round_end",
+            "round_freeze_end",
+            "controlpoint_captured", "controlpoint_starttouch",
+            "controlpoint_endtouch",
+        };
+
+        for (const char *ev : events)
+        {
+            if (!m_pEventMgr->AddListener(this, ev, true))
+            {
+                META_CONPRINTF("[SmartBots] Game events: '%s' failed to register\n", ev);
+            }
+        }
+
+        META_CONPRINTF("[SmartBots] Game events: listeners registered (deferred)\n");
     }
 
     void Shutdown()
     {
-        if (m_pEventMgr)
+        if (m_pEventMgr && m_registered)
         {
             m_pEventMgr->RemoveListener(this);
             m_pEventMgr = nullptr;
@@ -49,19 +70,19 @@ public:
             m_cappingCP = -1;
             META_CONPRINTF("[SmartBots] Round start — preround (objectives reset)\n");
         }
-        else if (strcmp(name, "teamplay_round_active") == 0)
+        else if (strcmp(name, "round_begin") == 0 || strcmp(name, "round_freeze_end") == 0)
         {
             m_phase = "active";
             META_CONPRINTF("[SmartBots] Round active\n");
         }
-        else if (strcmp(name, "teamplay_round_win") == 0)
+        else if (strcmp(name, "round_end") == 0)
         {
-            int winner = event->GetInt("team");
+            int winner = event->GetInt("winner");
             m_phase = "over";
             m_cappingCP = -1;
             META_CONPRINTF("[SmartBots] Round over (winner: team %d)\n", winner);
         }
-        else if (strcmp(name, "teamplay_point_captured") == 0)
+        else if (strcmp(name, "controlpoint_captured") == 0)
         {
             int cp = event->GetInt("cp");
             int team = event->GetInt("team");
@@ -75,16 +96,27 @@ public:
                                cp, team, m_objectivesCaptured);
             }
         }
-        else if (strcmp(name, "teamplay_point_startcapture") == 0)
+        else if (strcmp(name, "controlpoint_starttouch") == 0)
         {
-            int cp = event->GetInt("cp");
-            int capteam = event->GetInt("capteam");
+            int area = event->GetInt("area");
+            int team = event->GetInt("team");
 
-            // Only track if enemy is capping (not our team recapping)
-            if (capteam != m_controlledTeam)
+            // Enemy stepping on capture point
+            if (team != m_controlledTeam)
             {
-                m_cappingCP = cp;
-                META_CONPRINTF("[SmartBots] Capture started (cp=%d, by team %d)\n", cp, capteam);
+                m_cappingCP = area;
+                META_CONPRINTF("[SmartBots] Capture started (cp=%d, by team %d)\n", area, team);
+            }
+        }
+        else if (strcmp(name, "controlpoint_endtouch") == 0)
+        {
+            int team = event->GetInt("team");
+
+            // Enemy left the capture point — clear capping flag
+            if (team != m_controlledTeam && m_cappingCP >= 0)
+            {
+                META_CONPRINTF("[SmartBots] Capture ended (cp=%d, team %d left)\n", m_cappingCP, team);
+                m_cappingCP = -1;
             }
         }
     }
@@ -95,8 +127,9 @@ private:
     IGameEventManager2 *m_pEventMgr = nullptr;
     int m_controlledTeam = 2;
     int m_objectivesCaptured = 0;
-    const char *m_phase = "over";
+    const char *m_phase = "active";
     int m_cappingCP = -1;
+    bool m_registered = false;
 };
 
 static SmartBotsEventListener s_listener;
@@ -108,6 +141,11 @@ bool GameEvents_Init(IGameEventManager2 *eventMgr, int controlledTeam)
 
     s_listener.Init(eventMgr, controlledTeam);
     return true;
+}
+
+void GameEvents_RegisterListeners()
+{
+    s_listener.RegisterListeners();
 }
 
 void GameEvents_Shutdown()

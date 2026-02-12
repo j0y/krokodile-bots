@@ -3,10 +3,12 @@
 
 #include <igameevents.h>
 
-// Initialize: get IGameEventManager2, register listener.
-// controlledTeam: team index we're defending (2 = Security).
-// When the *other* team captures a point, we increment the counter.
+// Store references for deferred event registration.
+// Events must be registered after map load, not during plugin Load().
 bool GameEvents_Init(IGameEventManager2 *eventMgr, int controlledTeam);
+
+// Actually register event listeners. Call from GameFrame on first tick.
+void GameEvents_RegisterListeners();
 
 // Unregister listener. Call on plugin unload.
 void GameEvents_Shutdown();
@@ -18,7 +20,6 @@ int GameEvents_GetObjectivesCaptured();
 const char *GameEvents_GetPhase();
 
 // Control point currently being captured by enemy (-1 if none).
-// Clears on round_start and teamplay_point_captured.
 int GameEvents_GetCappingCP();
 
 #endif // _SMARTBOTS_GAME_EVENTS_H_
