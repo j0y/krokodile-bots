@@ -11,6 +11,7 @@ import httpx
 from tactical.areas import AreaMap
 from tactical.planner import Order, Planner
 from tactical.strategist import VALID_PROFILES, BaseStrategist, TacticalEvent, _Snapshot
+from tactical.telemetry import TelemetryClient
 
 log = logging.getLogger(__name__)
 
@@ -74,8 +75,9 @@ class LLMStrategist(BaseStrategist):
         model: str = "anthropic/claude-3.5-haiku",
         base_url: str = "https://openrouter.ai/api/v1",
         min_interval: float = 12.0,
+        telemetry: TelemetryClient | None = None,
     ) -> None:
-        super().__init__(planner, area_map, min_interval=min_interval)
+        super().__init__(planner, area_map, min_interval=min_interval, telemetry=telemetry)
         self._api_key = api_key
         self._model = model
         self._base_url = base_url.rstrip("/")
@@ -325,3 +327,13 @@ class LLMStrategist(BaseStrategist):
             return None, None
 
         return reasoning, orders
+
+    # ------------------------------------------------------------------
+    # Telemetry hooks
+    # ------------------------------------------------------------------
+
+    def _get_state_name(self) -> str:
+        return "LLM"
+
+    def _get_prev_state_name(self) -> str | None:
+        return "LLM"

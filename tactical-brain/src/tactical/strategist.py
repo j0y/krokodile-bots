@@ -7,6 +7,7 @@ Subclasses implement _decide() to choose *how* orders are generated
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import time
 from abc import ABC, abstractmethod
@@ -16,6 +17,7 @@ from tactical.areas import AreaMap
 from tactical.influence_map import WEIGHT_PROFILES
 from tactical.planner import Order, Planner
 from tactical.state import GameState
+from tactical.telemetry import GameEventRow, StrategyDecisionRow, TelemetryClient
 
 log = logging.getLogger(__name__)
 
@@ -58,10 +60,12 @@ class BaseStrategist(ABC):
         planner: Planner,
         area_map: AreaMap,
         min_interval: float = 12.0,
+        telemetry: TelemetryClient | None = None,
     ) -> None:
         self._planner = planner
         self._area_map = area_map
         self._min_interval = min_interval
+        self._telemetry = telemetry
 
         self._pending_state: GameState | None = None
         self._prev_snapshot: _Snapshot | None = None
@@ -70,6 +74,16 @@ class BaseStrategist(ABC):
 
         self._task: asyncio.Task[None] | None = None
         self._heavy_losses_triggered = False
+
+        # Round/objective tracking
+        self._round_num: int = 0
+        self._objective_num: int = 0
+        self._prev_objectives_captured: int = 0
+        self._round_casualties: int = 0
+        self._round_contacts: int = 0
+        self._round_enemies_down: int = 0
+        self._round_decisions: int = 0
+        self._round_start_tick: int = 0
 
     def update_state(self, state: GameState) -> None:
         """Called from datagram_received -- just stash the latest state."""
@@ -144,6 +158,13 @@ class BaseStrategist(ABC):
         if events:
             self._last_event_time = now
 
+        # Round/objective tracking
+        self._update_round_tracking(events, curr, state)
+
+        # Record game events to telemetry
+        if events and self._telemetry is not None:
+            self._record_events(events, curr, state)
+
         self._prev_snapshot = curr
 
         if not events:
@@ -173,6 +194,11 @@ class BaseStrategist(ABC):
                 f"{o.posture}@{'+'.join(o.areas)}({o.bots})" for o in orders
             )
             log.info("Strategist: area orders: %s (%s)", summary, reasoning)
+
+            # Record decision to telemetry
+            self._round_decisions += 1
+            if self._telemetry is not None:
+                self._record_decision(curr, events, reasoning, orders)
 
     # ------------------------------------------------------------------
     # Abstract decision method
@@ -345,3 +371,144 @@ class BaseStrategist(ABC):
             ))
 
         return events
+
+    # ------------------------------------------------------------------
+    # Round / objective tracking
+    # ------------------------------------------------------------------
+
+    def _update_round_tracking(
+        self, events: list[TacticalEvent], curr: _Snapshot, state: GameState,
+    ) -> None:
+        """Update round_num, objective_num based on events. Manage round lifecycle."""
+        for ev in events:
+            if ev.kind == "ROUND_START":
+                obj = curr.objectives_captured
+                if obj == 0 and self._prev_objectives_captured > 0:
+                    # Full reset → new round attempt
+                    self._end_current_round(curr, state)
+                    self._round_num += 1
+                elif self._round_num == 0:
+                    # First round of session
+                    self._round_num = 1
+                else:
+                    # Respawn within same round (e.g. wave respawn)
+                    pass
+                self._objective_num = obj
+                self._start_new_round(curr, state)
+            elif ev.kind == "OBJECTIVE_LOST":
+                self._objective_num = curr.objectives_captured
+            elif ev.kind == "CASUALTY":
+                self._round_casualties += ev.count
+            elif ev.kind == "CONTACT":
+                self._round_contacts += ev.count
+            elif ev.kind == "ENEMY_DOWN":
+                self._round_enemies_down += ev.count
+
+        self._prev_objectives_captured = curr.objectives_captured
+
+    def _start_new_round(self, curr: _Snapshot, state: GameState) -> None:
+        """Reset round counters and record round start."""
+        self._round_casualties = 0
+        self._round_contacts = 0
+        self._round_enemies_down = 0
+        self._round_decisions = 0
+        self._round_start_tick = state.tick
+        if self._telemetry is not None:
+            self._telemetry.start_round(self._round_num, state.tick)
+
+    def _end_current_round(self, curr: _Snapshot, state: GameState) -> None:
+        """Finalize the previous round summary."""
+        if self._round_num == 0 or self._telemetry is None:
+            return
+        obj_areas = [
+            a for a in self._area_map.areas.values() if a.role == "objective"
+        ]
+        total_objectives = len(obj_areas) if obj_areas else 1
+        round_won = self._prev_objectives_captured >= total_objectives
+        self._telemetry.end_round(
+            round_num=self._round_num,
+            tick=state.tick,
+            objectives_completed=self._prev_objectives_captured,
+            round_won=round_won,
+            total_casualties=self._round_casualties,
+            total_contacts=self._round_contacts,
+            total_enemies_down=self._round_enemies_down,
+            total_decisions=self._round_decisions,
+        )
+
+    # ------------------------------------------------------------------
+    # Telemetry recording helpers
+    # ------------------------------------------------------------------
+
+    def _record_events(
+        self, events: list[TacticalEvent], curr: _Snapshot, state: GameState,
+    ) -> None:
+        rows = [
+            GameEventRow(
+                tick=state.tick,
+                round_num=self._round_num if self._round_num > 0 else None,
+                objective_num=self._objective_num,
+                kind=ev.kind,
+                message=ev.message,
+                count=ev.count,
+                remaining=ev.remaining,
+                total=ev.total,
+                areas_json=json.dumps(ev.areas) if ev.areas else None,
+                friendly_alive=curr.friendly_alive,
+                enemy_alive=curr.enemy_alive,
+                objectives_captured=curr.objectives_captured,
+            )
+            for ev in events
+        ]
+        self._telemetry.record_game_events(rows)  # type: ignore[union-attr]
+
+    def _record_decision(
+        self,
+        curr: _Snapshot,
+        events: list[TacticalEvent],
+        reasoning: str | None,
+        orders: list[Order],
+    ) -> None:
+        state = self._pending_state
+        tick = state.tick if state else 0
+        orders_data = [
+            {"areas": o.areas, "posture": o.posture, "bots": o.bots}
+            for o in orders
+        ]
+        trigger_data = [
+            {"kind": ev.kind, "areas": ev.areas}
+            for ev in events
+        ]
+        row = StrategyDecisionRow(
+            tick=tick,
+            round_num=self._round_num if self._round_num > 0 else None,
+            objective_num=self._objective_num,
+            state=self._get_state_name(),
+            prev_state=self._get_prev_state_name(),
+            friendly_alive=curr.friendly_alive,
+            friendly_total=curr.friendly_total,
+            enemy_alive=curr.enemy_alive,
+            spotted_count=len(curr.spotted_enemy_ids),
+            objectives_captured=curr.objectives_captured,
+            reasoning=reasoning,
+            orders_json=json.dumps(orders_data),
+            trigger_events=json.dumps(trigger_data),
+            threat_map_json=self._get_threat_map_json(),
+        )
+        self._telemetry.record_decision(row)  # type: ignore[union-attr]
+
+    # ------------------------------------------------------------------
+    # Overridable hooks for subclass state info
+    # ------------------------------------------------------------------
+
+    def _get_state_name(self) -> str:
+        """Current strategist state name. Override in subclasses."""
+        return "UNKNOWN"
+
+    def _get_prev_state_name(self) -> str | None:
+        """Previous strategist state name. Override in subclasses."""
+        return None
+
+    def _get_threat_map_json(self) -> str | None:
+        """JSON representation of threat map. Override in subclasses."""
+        return None

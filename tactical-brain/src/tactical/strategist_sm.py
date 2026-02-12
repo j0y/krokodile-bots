@@ -10,11 +10,14 @@ NextBot-style state machine for defensive team coordination.
 from __future__ import annotations
 
 import enum
+import json
 import logging
+import time
 
 from tactical.areas import AreaMap
 from tactical.planner import Order, Planner
 from tactical.strategist import BaseStrategist, TacticalEvent, _Snapshot
+from tactical.telemetry import TelemetryClient
 
 log = logging.getLogger(__name__)
 
@@ -35,9 +38,11 @@ class SMStrategist(BaseStrategist):
         planner: Planner,
         area_map: AreaMap,
         min_interval: float = 5.0,
+        telemetry: TelemetryClient | None = None,
     ) -> None:
-        super().__init__(planner, area_map, min_interval=min_interval)
+        super().__init__(planner, area_map, min_interval=min_interval, telemetry=telemetry)
         self._state = _State.SETUP
+        self._prev_state: _State = _State.SETUP
         self._state_enter_time: float = 0.0
         self._threat_map: dict[str, float] = {}  # area_name → last_threat_time
 
@@ -131,6 +136,7 @@ class SMStrategist(BaseStrategist):
 
     def _transition(self, new_state: _State, now: float) -> None:
         old = self._state
+        self._prev_state = old
         self._state = new_state
         self._state_enter_time = now
         if old != new_state:
@@ -301,3 +307,20 @@ class SMStrategist(BaseStrategist):
                 orders[0] = Order(areas=[obj_name], posture="defend", bots=n)
 
         return "fallback: tight defense", orders
+
+    # ------------------------------------------------------------------
+    # Telemetry hooks
+    # ------------------------------------------------------------------
+
+    def _get_state_name(self) -> str:
+        return self._state.value
+
+    def _get_prev_state_name(self) -> str | None:
+        return self._prev_state.value
+
+    def _get_threat_map_json(self) -> str | None:
+        now = time.monotonic()
+        active = self._active_threats(now)
+        if not active:
+            return None
+        return json.dumps({area: round(age, 1) for area, age in active.items()})

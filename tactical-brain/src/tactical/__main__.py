@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import uuid
 from pathlib import Path
 
 from tactical.planner import Planner
@@ -44,12 +45,23 @@ def main() -> None:
                 map_name, data_dir,
             )
 
+    controlled_team = int(os.environ.get("CONTROLLED_TEAM", "2"))
+
     telemetry = None
+    session_id = str(uuid.uuid4())
     if os.environ.get("TELEMETRY") == "1":
         from tactical.telemetry import TelemetryClient
         tele_host = os.environ.get("TELEMETRY_HOST", "localhost")
         tele_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
-        telemetry = TelemetryClient(host=tele_host, port=tele_port)
+        # strategist_type determined below, placeholder for now
+        telemetry = TelemetryClient(
+            session_id=session_id,
+            map_name=map_name or "unknown",
+            controlled_team=controlled_team,
+            strategist_type="none",  # updated after strategist selection
+            host=tele_host,
+            port=tele_port,
+        )
 
     # Load area definitions (if available)
     area_map = None
@@ -67,7 +79,6 @@ def main() -> None:
         else:
             log.info("No area definitions for %s", map_name)
 
-    controlled_team = int(os.environ.get("CONTROLLED_TEAM", "2"))
     planner = Planner(
         rally=(rally_x, rally_y, rally_z),
         controlled_team=controlled_team,
@@ -76,6 +87,7 @@ def main() -> None:
     )
 
     strategist = None
+    strategist_type = "none"
     openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
     if openrouter_key and area_map is not None:
         from tactical.strategist_llm import LLMStrategist
@@ -86,14 +98,28 @@ def main() -> None:
             model=os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-haiku"),
             base_url=os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1"),
             min_interval=float(os.environ.get("STRATEGIST_MIN_INTERVAL", "12")),
+            telemetry=telemetry,
         )
+        strategist_type = "llm"
         log.info("LLM strategist enabled (model=%s)", strategist._model)
     elif area_map is not None:
         from tactical.strategist_sm import SMStrategist
-        strategist = SMStrategist(planner=planner, area_map=area_map)
+        strategist = SMStrategist(planner=planner, area_map=area_map, telemetry=telemetry)
+        strategist_type = "sm"
         log.info("State machine strategist enabled")
     else:
         log.info("Strategist disabled (no area definitions)")
+
+    # Update the session row with the actual strategist type
+    if telemetry is not None and strategist_type != "none":
+        try:
+            telemetry._conn.execute(
+                "UPDATE sessions SET strategist_type = %s WHERE session_id = %s",
+                (strategist_type, session_id),
+            )
+            telemetry._conn.commit()
+        except Exception:
+            log.warning("Failed to update session strategist_type")
 
     asyncio.run(run_server(host, port, planner, telemetry=telemetry, strategist=strategist))
 
