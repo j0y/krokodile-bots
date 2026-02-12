@@ -1,6 +1,9 @@
 #include "extension.h"
 #include "sig_resolve.h"
 #include "bot_action_hook.h"
+#include "udp_bridge.h"
+#include "bot_state.h"
+#include "bot_command.h"
 
 #include <dlfcn.h>
 #include <cstdlib>
@@ -31,6 +34,25 @@ static int s_tickCount = 0;
 // GameFrame movement request counters
 static int s_gfMoveReqCount = 0;
 static int s_gfMoveReqLogThrottle = 0;
+
+// UDP bridge send/recv buffers
+static char s_sendBuf[8192];
+static char s_recvBuf[4096];
+static BotStateEntry s_stateArray[32];
+
+// Bridge logging throttle
+static int s_bridgeSendCount = 0;
+static int s_bridgeRecvCount = 0;
+static int s_bridgeCmdExecCount = 0;
+
+// ---- ConVars ----
+
+static ConVar s_cvarAiHost("smartbots_ai_host", "127.0.0.1", 0,
+    "Python AI brain address");
+static ConVar s_cvarAiPort("smartbots_ai_port", "9000", 0,
+    "Python AI brain port");
+static ConVar s_cvarAiEnabled("smartbots_ai_enabled", "1", 0,
+    "Enable/disable UDP bridge to Python AI brain");
 
 // ---- ConCommand registration (required by Source engine) ----
 
@@ -108,7 +130,11 @@ static void CC_SmartBotsStatus(const CCommand &args)
     META_CONPRINTF("[SmartBots] Total bots: %d\n", botCount);
 
     if (BotActionHook_HasGotoTarget())
-        META_CONPRINTF("[SmartBots] Goto target: PENDING\n");
+        META_CONPRINTF("[SmartBots] Goto target: ACTIVE\n");
+
+    META_CONPRINTF("[SmartBots] Bridge: %s (sent=%d recv=%d exec=%d)\n",
+                   s_cvarAiEnabled.GetBool() ? "enabled" : "disabled",
+                   s_bridgeSendCount, s_bridgeRecvCount, s_bridgeCmdExecCount);
 }
 
 static ConCommand s_cmdStatus("smartbots_status", CC_SmartBotsStatus,
@@ -125,9 +151,37 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
     s_tickCount++;
 
-    // If a goto target is active, issue movement requests to ALL bots every tick
+    // Build entity pointer → edict index map for the combat detour
+    BotActionHook_ClearEntityMap();
+    {
+        int maxClients = gpGlobals->maxClients;
+        for (int i = 1; i <= maxClients; i++)
+        {
+            edict_t *edict = PEntityOfEntIndex(i);
+            if (!edict || edict->IsFree())
+                continue;
+
+            IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
+            if (!info || !info->IsConnected() || !info->IsFakeClient())
+                continue;
+
+            IServerUnknown *pUnknown = edict->GetUnknown();
+            if (!pUnknown)
+                continue;
+
+            CBaseEntity *pEntity = pUnknown->GetBaseEntity();
+            if (!pEntity)
+                continue;
+
+            BotActionHook_RegisterEntity((void *)pEntity, i);
+        }
+    }
+
+    // --- Manual goto target (takes priority over Python commands) ---
     float gotoX, gotoY, gotoZ;
-    if (BotActionHook_GetGotoTarget(gotoX, gotoY, gotoZ))
+    bool hasGoto = BotActionHook_GetGotoTarget(gotoX, gotoY, gotoZ);
+
+    if (hasGoto)
     {
         int maxClients = gpGlobals->maxClients;
 
@@ -141,7 +195,6 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             if (!info || !info->IsConnected() || !info->IsFakeClient())
                 continue;
 
-            // Get entity pointer (CINSNextBot*) from edict
             IServerUnknown *pUnknown = edict->GetUnknown();
             if (!pUnknown)
                 continue;
@@ -150,7 +203,6 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             if (!pEntity)
                 continue;
 
-            // Issue movement request via vtable dispatch
             if (BotActionHook_IssueMovementRequest(
                     (void *)pEntity, gotoX, gotoY, gotoZ))
             {
@@ -166,7 +218,87 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         }
     }
 
-    // Log bot count periodically
+    // --- UDP bridge to Python brain ---
+    if (s_cvarAiEnabled.GetBool())
+    {
+        // Send state at ~8Hz (every 8 ticks at 66 tick/s)
+        if (s_tickCount % 8 == 0)
+        {
+            int count = BotState_Collect(s_stateArray, 32);
+            if (count > 0)
+            {
+                int len = BotState_Serialize(s_stateArray, count, s_tickCount,
+                                             s_sendBuf, sizeof(s_sendBuf));
+                if (UdpBridge_Send(s_sendBuf, len))
+                {
+                    s_bridgeSendCount++;
+
+                    // Log first send and then every ~30 seconds
+                    if (s_bridgeSendCount == 1 || s_bridgeSendCount % 240 == 0)
+                    {
+                        META_CONPRINTF("[SmartBots] Bridge: sent state #%d (%d bots, %d bytes)\n",
+                                       s_bridgeSendCount, count, len);
+                    }
+                }
+            }
+        }
+
+        // Receive commands every tick (non-blocking)
+        int bytesRead = UdpBridge_Recv(s_recvBuf, sizeof(s_recvBuf) - 1);
+        if (bytesRead > 0)
+        {
+            s_recvBuf[bytesRead] = '\0';
+            BotCommand_Parse(s_recvBuf, bytesRead, s_tickCount);
+            s_bridgeRecvCount++;
+
+            // Log first recv and then every ~30 seconds
+            if (s_bridgeRecvCount == 1 || s_bridgeRecvCount % 240 == 0)
+            {
+                META_CONPRINTF("[SmartBots] Bridge: recv commands #%d (%d bytes)\n",
+                               s_bridgeRecvCount, bytesRead);
+            }
+        }
+
+        // Clear stale commands (older than ~1 second = 66 ticks)
+        BotCommand_ClearStale(s_tickCount, 66);
+
+        // Execute Python commands for bots (skip if manual goto is active)
+        if (!hasGoto)
+        {
+            int maxClients = gpGlobals->maxClients;
+
+            for (int i = 1; i <= maxClients; i++)
+            {
+                BotCommandEntry cmd;
+                if (!BotCommand_Get(i, cmd))
+                    continue;
+
+                edict_t *edict = PEntityOfEntIndex(i);
+                if (!edict || edict->IsFree())
+                    continue;
+
+                IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
+                if (!info || !info->IsConnected() || !info->IsFakeClient())
+                    continue;
+
+                IServerUnknown *pUnknown = edict->GetUnknown();
+                if (!pUnknown)
+                    continue;
+
+                CBaseEntity *pEntity = pUnknown->GetBaseEntity();
+                if (!pEntity)
+                    continue;
+
+                if (BotActionHook_IssueMovementRequest(
+                        (void *)pEntity, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
+                {
+                    s_bridgeCmdExecCount++;
+                }
+            }
+        }
+    }
+
+    // Log bot count periodically (~50 seconds)
     if (s_tickCount % 3300 == 0)
     {
         int botCount = 0;
@@ -217,9 +349,7 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
         return false;
     }
 
-    // Get module base address via dlinfo (link_map) — most reliable
-    // Note: dl_iterate_phdr matches MetaMod's stub server_srv.so, not the real game binary.
-    // dlinfo on our RTLD_NOLOAD handle resolves to the actual server_i486.so.
+    // Get module base address via dlinfo (link_map)
     s_serverBase = GetServerModuleBaseFromHandle(g_pServerHandle);
 
     if (s_serverBase == 0)
@@ -246,10 +376,24 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
     SH_ADD_HOOK_MEMFUNC(IServerGameDLL, GameFrame, g_pServerGameDLL, this,
                         &SmartBotsExtension::Hook_GameFrame, true);
 
-    // Register console commands
+    // Register console commands and ConVars
     ConVar_Register(0, &s_BaseAccessor);
 
-    META_CONPRINTF("[SmartBots] Extension loaded (v0.1.0) — Phase 1 active\n");
+    // Initialize bot command buffer
+    BotCommand_Init();
+
+    // Initialize UDP bridge to Python brain
+    if (s_cvarAiEnabled.GetBool())
+    {
+        const char *host = s_cvarAiHost.GetString();
+        int port = s_cvarAiPort.GetInt();
+        if (!UdpBridge_Init(host, port))
+        {
+            META_CONPRINTF("[SmartBots] WARNING: UDP bridge init failed — AI brain will not be connected\n");
+        }
+    }
+
+    META_CONPRINTF("[SmartBots] Extension loaded (v0.2.0) — Phase 2 active\n");
 
     if (late)
     {
@@ -266,6 +410,9 @@ void SmartBotsExtension::AllPluginsLoaded()
 
 bool SmartBotsExtension::Unload(char *error, size_t maxlen)
 {
+    // Close UDP bridge
+    UdpBridge_Close();
+
     // Remove detour first (restore original code)
     BotActionHook_RemoveDetour();
 

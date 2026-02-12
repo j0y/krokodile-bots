@@ -30,6 +30,9 @@ add_library(smartbots SHARED
     src/sig_resolve.cpp
     src/detour.cpp
     src/bot_action_hook.cpp
+    src/udp_bridge.cpp
+    src/bot_state.cpp
+    src/bot_command.cpp
 )
 
 set_target_properties(smartbots PROPERTIES

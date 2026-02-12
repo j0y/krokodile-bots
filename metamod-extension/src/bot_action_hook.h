@@ -31,4 +31,11 @@ bool BotActionHook_GetGotoTarget(float &x, float &y, float &z);
 // Returns true if the request was successfully issued.
 bool BotActionHook_IssueMovementRequest(void *entityPtr, float x, float y, float z);
 
+// Register an entity pointer → edict index mapping for the detour to use.
+// Called from GameFrame after resolving bot edicts.
+void BotActionHook_RegisterEntity(void *entityPtr, int edictIndex);
+
+// Clear all entity → edict mappings. Called at the start of each GameFrame.
+void BotActionHook_ClearEntityMap();
+
 #endif // _SMARTBOTS_BOT_ACTION_HOOK_H_

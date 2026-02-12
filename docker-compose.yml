@@ -22,50 +22,21 @@ services:
     profiles:
       - ai
 
-  ai-brain:
+  tactical-brain:
     build:
-      context: ./ai-brain
+      context: ./tactical-brain
       dockerfile: Dockerfile
-    container_name: insurgency-ai
+    container_name: tactical-brain
     restart: unless-stopped
     network_mode: host
-    volumes:
-      - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
-      - ./ai-brain/data:/app/data
-      - ./ai-brain/src:/app/src:ro
     environment:
-      - AI_LISTEN_HOST=0.0.0.0
-      - AI_LISTEN_PORT=9000
-      - NAV_MAP=${NAV_MAP:-ministry_coop}
-      - RECORD_POSITIONS=${RECORD_POSITIONS:-0}
-      - SPATIAL_DATA_DIR=/app/data
-      - TELEMETRY=${TELEMETRY:-0}
-      - TELEMETRY_HOST=localhost
-      - TELEMETRY_PORT=5432
+      - LISTEN_HOST=0.0.0.0
+      - LISTEN_PORT=9000
+      - RALLY_X=3500
+      - RALLY_Y=-1500
+      - RALLY_Z=32
     profiles:
-      - planner
-
-  telemetry-db:
-    image: postgres:17-alpine
-    container_name: telemetry-db
-    restart: unless-stopped
-    network_mode: host
-    tmpfs:
-      - /var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=telemetry
-      - POSTGRES_USER=smartbots
-      - POSTGRES_PASSWORD=smartbots
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    command: >
-      postgres
-      -c shared_buffers=32MB
-      -c work_mem=4MB
-      -c fsync=off
-      -c synchronous_commit=off
-      -c full_page_writes=off
-    profiles:
-      - planner
+      - ai
 
   # --- Vanilla debug mode: original bot AI + nb_debug logging ---
   insurgency-vanilla:
@@ -97,8 +68,8 @@ services:
     network_mode: host
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
-      - ./ai-brain/reference/smartbots_observer.smx:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom/smartbots_observer.smx:ro
-      - ./ai-brain/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
+      - ./ai-brain-old/reference/smartbots_observer.smx:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom/smartbots_observer.smx:ro
+      - ./ai-brain-old/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Recorder
       - SERVER_PASSWORD=
@@ -114,15 +85,15 @@ services:
 
   ai-record:
     build:
-      context: ./ai-brain
+      context: ./ai-brain-old
       dockerfile: Dockerfile
     container_name: insurgency-ai-record
     restart: unless-stopped
     network_mode: host
     volumes:
       - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
-      - ./ai-brain/data:/app/data
-      - ./ai-brain/src:/app/src:ro
+      - ./ai-brain-old/data:/app/data
+      - ./ai-brain-old/src:/app/src:ro
     environment:
       - AI_LISTEN_HOST=0.0.0.0
       - AI_LISTEN_PORT=9000

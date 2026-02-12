@@ -1,5 +1,6 @@
 #include "bot_action_hook.h"
 #include "bot_action_types.h"
+#include "bot_command.h"
 #include "sig_resolve.h"
 #include "detour.h"
 
@@ -26,6 +27,11 @@ static float s_gotoX = 0.0f;
 static float s_gotoY = 0.0f;
 static float s_gotoZ = 0.0f;
 
+// Entity pointer → edict index lookup table (built each GameFrame)
+static const int MAX_ENTITY_MAP = 33;
+static void *s_entityPtrs[MAX_ENTITY_MAP];     // entityPtrs[edictIndex] = entityPtr
+static int   s_entityMapCount = 0;
+
 // Diagnostic state
 static int  s_hookCallCount = 0;
 static int  s_moveRequestCount = 0;
@@ -38,13 +44,52 @@ static const unsigned char kApproachCtorPrologue[] = { 0x55, 0x89, 0xE5, 0x57, 0
 // AddMovementRequest: push ebp; mov ebp,esp (minimum 3-byte check)
 static const unsigned char kAddMovementRequestPrologue[] = { 0x55, 0x89, 0xE5 };
 
+// Resolve actor pointer → edict index using the entity map.
+static int LookupEdictIndex(void *actor)
+{
+    for (int i = 1; i < MAX_ENTITY_MAP; i++)
+    {
+        if (s_entityPtrs[i] == actor)
+            return i;
+    }
+    return -1;
+}
+
 // The hook function — called instead of CINSBotCombat::Update.
 // x86-32 sret ABI: void Hook(ActionResult *sret, void *this, void *actor, float interval)
 static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *actor, float interval)
 {
     s_hookCallCount++;
 
-    if (s_hasGotoTarget && s_AddMovementRequest && actor)
+    // Check for manual goto target first (highest priority)
+    bool shouldOverride = false;
+    float targetX = 0, targetY = 0, targetZ = 0;
+
+    if (s_hasGotoTarget && actor)
+    {
+        shouldOverride = true;
+        targetX = s_gotoX;
+        targetY = s_gotoY;
+        targetZ = s_gotoZ;
+    }
+    else if (actor)
+    {
+        // Check for Python command for this specific bot
+        int edictIndex = LookupEdictIndex(actor);
+        if (edictIndex > 0)
+        {
+            BotCommandEntry cmd;
+            if (BotCommand_Get(edictIndex, cmd))
+            {
+                shouldOverride = true;
+                targetX = cmd.moveTarget[0];
+                targetY = cmd.moveTarget[1];
+                targetZ = cmd.moveTarget[2];
+            }
+        }
+    }
+
+    if (shouldOverride && s_AddMovementRequest)
     {
         // Get locomotion interface via vtable dispatch:
         // actor->vtable[0x96c / 4](actor)
@@ -60,8 +105,7 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
                 void *loco = getLocoFn(actor);
                 if (loco)
                 {
-                    // Issue movement request directly on the locomotion interface
-                    s_AddMovementRequest(loco, s_gotoX, s_gotoY, s_gotoZ,
+                    s_AddMovementRequest(loco, targetX, targetY, targetZ,
                                          MOVE_TYPE_APPROACH, MOVE_PRIORITY_NORMAL,
                                          MOVE_SPEED_DEFAULT);
                     s_moveRequestCount++;
@@ -72,7 +116,7 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
                         META_CONPRINTF("[SmartBots] MovReq #%d: bot %p -> (%.1f, %.1f, %.1f) "
                                        "[loco=%p, hookCalls=%d]\n",
                                        s_moveRequestCount, actor,
-                                       s_gotoX, s_gotoY, s_gotoZ,
+                                       targetX, targetY, targetZ,
                                        loco, s_hookCallCount);
                     }
                 }
@@ -214,4 +258,17 @@ bool BotActionHook_IssueMovementRequest(void *entityPtr, float x, float y, float
                          MOVE_TYPE_APPROACH, MOVE_PRIORITY_NORMAL,
                          MOVE_SPEED_DEFAULT);
     return true;
+}
+
+void BotActionHook_RegisterEntity(void *entityPtr, int edictIndex)
+{
+    if (edictIndex >= 1 && edictIndex < MAX_ENTITY_MAP)
+    {
+        s_entityPtrs[edictIndex] = entityPtr;
+    }
+}
+
+void BotActionHook_ClearEntityMap()
+{
+    memset(s_entityPtrs, 0, sizeof(s_entityPtrs));
 }
