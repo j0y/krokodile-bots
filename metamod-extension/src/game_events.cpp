@@ -33,6 +33,8 @@ public:
             "controlpoint_captured", "controlpoint_starttouch",
             "controlpoint_endtouch",
             "object_destroyed",
+            "round_level_advanced",
+            "game_end",
         };
 
         for (const char *ev : events)
@@ -59,6 +61,19 @@ public:
     const char *GetPhase() const { return m_phase; }
     int GetCappingCP() const { return m_cappingCP; }
 
+    void RecordObjectiveLost(const char *source)
+    {
+        if (m_objectiveLostThisRound)
+        {
+            META_CONPRINTF("[SmartBots] Objective lost [%s] (duplicate, ignoring)\n", source);
+            return;
+        }
+        m_objectiveLostThisRound = true;
+        m_objectivesCaptured++;
+        META_CONPRINTF("[SmartBots] Objective lost [%s] (total lost: %d)\n",
+                       source, m_objectivesCaptured);
+    }
+
     // IGameEventListener2
     void FireGameEvent(IGameEvent *event) override
     {
@@ -66,10 +81,19 @@ public:
 
         if (strcmp(name, "round_start") == 0)
         {
-            m_objectivesCaptured = 0;
+            // Don't reset m_objectivesCaptured — in coop checkpoint each cache
+            // is its own round, so the counter must persist across rounds.
             m_phase = "preround";
             m_cappingCP = -1;
-            META_CONPRINTF("[SmartBots] Round start — preround (objectives reset)\n");
+            m_objectiveLostThisRound = false;
+            META_CONPRINTF("[SmartBots] Round start — preround (objectives lost so far: %d)\n",
+                           m_objectivesCaptured);
+        }
+        else if (strcmp(name, "game_end") == 0)
+        {
+            META_CONPRINTF("[SmartBots] Game ended — resetting objectives (was %d)\n",
+                           m_objectivesCaptured);
+            m_objectivesCaptured = 0;
         }
         else if (strcmp(name, "round_begin") == 0 || strcmp(name, "round_freeze_end") == 0)
         {
@@ -81,7 +105,12 @@ public:
             int winner = event->GetInt("winner");
             m_phase = "over";
             m_cappingCP = -1;
-            META_CONPRINTF("[SmartBots] Round over (winner: team %d)\n", winner);
+
+            if (winner != 0 && winner != m_controlledTeam)
+                RecordObjectiveLost("round_end");
+
+            META_CONPRINTF("[SmartBots] Round over (winner: team %d, objectives lost: %d)\n",
+                           winner, m_objectivesCaptured);
         }
         else if (strcmp(name, "controlpoint_captured") == 0)
         {
@@ -89,26 +118,24 @@ public:
             int team = event->GetInt("team");
             m_cappingCP = -1;
 
-            // If the capturing team is NOT our controlled team, we lost an objective
             if (team != m_controlledTeam)
             {
-                m_objectivesCaptured++;
-                META_CONPRINTF("[SmartBots] Objective captured (cp=%d, by team %d, total lost: %d)\n",
-                               cp, team, m_objectivesCaptured);
+                char src[64];
+                snprintf(src, sizeof(src), "controlpoint_captured cp=%d team=%d", cp, team);
+                RecordObjectiveLost(src);
             }
         }
         else if (strcmp(name, "object_destroyed") == 0)
         {
-            int cp = event->GetInt("cp");
-            int attackerteam = event->GetInt("attackerteam");
-
-            // Cache destroyed by enemy team — count as objective lost
-            if (attackerteam != m_controlledTeam)
-            {
-                m_objectivesCaptured++;
-                META_CONPRINTF("[SmartBots] Cache destroyed (cp=%d, by team %d, total lost: %d)\n",
-                               cp, attackerteam, m_objectivesCaptured);
-            }
+            RecordObjectiveLost("object_destroyed");
+        }
+        else if (strcmp(name, "round_level_advanced") == 0)
+        {
+            int level = event->GetInt("level");
+            m_cappingCP = -1;
+            char src[64];
+            snprintf(src, sizeof(src), "round_level_advanced level=%d", level);
+            RecordObjectiveLost(src);
         }
         else if (strcmp(name, "controlpoint_starttouch") == 0)
         {
@@ -143,6 +170,7 @@ private:
     int m_objectivesCaptured = 0;
     const char *m_phase = "active";
     int m_cappingCP = -1;
+    bool m_objectiveLostThisRound = false;
     bool m_registered = false;
 };
 

@@ -115,20 +115,28 @@ From: [jaredballou/insurgency-data](https://github.com/jaredballou/insurgency-da
 ## Events We Currently Hook (game_events.cpp)
 
 ```
-round_start          → phase = "preround", reset objectives
-round_freeze_end     → phase = "active"
-round_begin          → phase = "active" (backup, may not fire)
-round_end            → phase = "over"
-controlpoint_captured    → objectives++, clear cap flag
+round_start              → phase = "preround" (objectives NOT reset — each cache is its own round)
+round_freeze_end         → phase = "active"
+round_begin              → phase = "active" (backup, may not fire)
+round_end                → phase = "over", objectives++ if enemy won (primary signal for cache destruction)
+game_end                 → reset objectives counter to 0
+controlpoint_captured    → objectives++ (deduplicated per round)
 controlpoint_starttouch  → set capping CP (if enemy team)
 controlpoint_endtouch    → clear capping CP (if enemy team)
-object_destroyed         → objectives++ (cache destroyed in coop)
+object_destroyed         → objectives++ (fires when player destroys cache with explosives)
+round_level_advanced     → objectives++ (push mode progression)
 ```
+
+### Coop checkpoint notes
+- Each cache is its own round. `round_end (winner=enemy)` is the reliable signal.
+- `object_destroyed` only fires for player-initiated cache destruction (e.g., C4), NOT for bot captures.
+- `obj_destroyed` (from server logs) is NOT an IGameEvent — it's a server log trigger only.
+- All objective-loss events are deduplicated per round to prevent double-counting.
+- `game_end` resets the counter for the next full game.
 
 ## Potentially Useful Events (not yet hooked)
 
 - `player_death` — death position (x,y,z) for area-enriched kill tracking
-- `round_level_advanced` — push mode progression
 - `artillery_called` — incoming fire support with target coords (bots could take cover)
 - `grenade_detonate` — explosion position + affected enemies
 - `nav_blocked` — dynamic pathfinding changes
