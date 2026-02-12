@@ -84,6 +84,22 @@ static void RecordTarget(int edictIndex, float x, float y, float z)
     }
 }
 
+// Cheap validation: check that a cached entity pointer is still valid.
+// Only reads edict struct fields — no IPlayerInfo calls, no UTIL_GetListenServerHost.
+static bool ValidateBot(int edictIndex, CBaseEntity *cachedEntity)
+{
+    edict_t *edict = PEntityOfEntIndex(edictIndex);
+    if (!edict || edict->IsFree())
+        return false;
+
+    IServerUnknown *pUnknown = edict->GetUnknown();
+    if (!pUnknown)
+        return false;
+
+    // Entity pointer must still match what we cached
+    return pUnknown->GetBaseEntity() == cachedEntity;
+}
+
 // ---- ConVars ----
 
 static ConVar s_cvarAiHost("smartbots_ai_host", "127.0.0.1", 0,
@@ -271,6 +287,8 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             for (int i = 0; i < s_resolvedBotCount; i++)
             {
                 int idx = s_resolvedBots[i].edictIndex;
+                if (!ValidateBot(idx, s_resolvedBots[i].entity))
+                    continue;
                 if (!TargetChanged(idx, gotoX, gotoY, gotoZ))
                     continue;
 
@@ -314,6 +332,9 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             for (int i = 0; i < s_resolvedBotCount; i++)
             {
                 int idx = s_resolvedBots[i].edictIndex;
+                if (!ValidateBot(idx, s_resolvedBots[i].entity))
+                    continue;
+
                 BotCommandEntry cmd;
                 if (!BotCommand_Get(idx, cmd))
                     continue;
