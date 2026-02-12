@@ -1,12 +1,15 @@
 """Runtime influence scorer: loads precomputed vismatrix + influence data
 and scores grid positions based on weight profiles.
 
-All directional queries (cover from enemies, sightline to objectives)
+All directional queries (threat from enemies, sightline to objectives)
 are driven by the adjacency list in the vismatrix — no raycasting at runtime.
 
-Key insight: static cover (low visibility_count) is useful for ambush scoring.
-A good ambush spot is hidden (few points can see it) BUT has sightline to a
-kill zone. This is captured as a multiplicative term: cover × sightline.
+Weight dimensions:
+    concealment — static geometric hiddenness (few points can see you)
+    sightline   — can see objective/kill zone (vismatrix lookup)
+    objective   — proximity to active objective
+    threat      — visible to known enemies (directional, penalty)
+    spread      — proximity to friendlies (penalty)
 """
 
 from __future__ import annotations
@@ -20,11 +23,11 @@ from scipy.spatial import KDTree
 log = logging.getLogger(__name__)
 
 WEIGHT_PROFILES: dict[str, dict[str, float]] = {
-    "defend":  {"ambush": 0.0, "sightline": 0.6, "objective": 0.9, "threat": 0.7, "spread": 0.5},
-    "push":    {"ambush": 0.0, "sightline": 0.8, "objective": 1.0, "threat": 0.3, "spread": 0.3},
-    "ambush":  {"ambush": 1.0, "sightline": 0.0, "objective": 0.2, "threat": 0.5, "spread": 0.8},
-    "sniper":  {"ambush": 0.6, "sightline": 0.5, "objective": 0.3, "threat": 0.6, "spread": 0.9},
-    "overrun": {"ambush": 0.0, "sightline": 0.5, "objective": 1.0, "threat": 0.1, "spread": 0.2},
+    "defend":  {"concealment": 0.0, "sightline": 0.6, "objective": 0.9, "threat": 0.7, "spread": 0.5},
+    "push":    {"concealment": 0.0, "sightline": 0.8, "objective": 1.0, "threat": 0.3, "spread": 0.3},
+    "ambush":  {"concealment": 0.9, "sightline": 0.4, "objective": 0.2, "threat": 0.5, "spread": 0.8},
+    "sniper":  {"concealment": 0.7, "sightline": 1.0, "objective": 0.3, "threat": 0.6, "spread": 0.9},
+    "overrun": {"concealment": 0.0, "sightline": 0.5, "objective": 1.0, "threat": 0.1, "spread": 0.2},
 }
 
 
@@ -39,7 +42,7 @@ class InfluenceMap:
         self.max_distance: float = float(vm["max_distance"])
 
         inf = np.load(influence_path)
-        self.cover: np.ndarray = inf["cover"].astype(np.float32)  # [N] static geometric cover
+        self.concealment: np.ndarray = inf["cover"].astype(np.float32)  # [N] static geometric hiddenness
 
         self.n = len(self.points)
         self.tree = KDTree(self.points)
@@ -109,18 +112,6 @@ class InfluenceMap:
             sightline /= max_val
         return sightline
 
-    def compute_ambush(
-        self, objective_positions: list[tuple[float, float, float]],
-    ) -> np.ndarray:
-        """Per-point ambush quality: hidden spots with sightline to kill zone.
-
-        ambush = cover × sightline
-        - High cover (few points can see you) AND can see the objective = great ambush.
-        - Exposed spot or no sightline = score near zero.
-        """
-        sightline = self.compute_sightline(objective_positions)
-        return self.cover * sightline
-
     def compute_team_presence(
         self, friendly_positions: list[tuple[float, float, float]],
     ) -> np.ndarray:
@@ -165,21 +156,18 @@ class InfluenceMap:
     ) -> np.ndarray:
         """Weighted score across all N grid points.
 
-        score = ambush*W1 + sightline*W2 + objective*W3 - threat*W4 - spread*W5
-
-        ambush = cover × sightline (multiplicative — both must be nonzero)
-        sightline = additive (can see objective, regardless of own exposure)
+        score = concealment*W1 + sightline*W2 + objective*W3 - threat*W4 - spread*W5
         """
         s = np.zeros(self.n, dtype=np.float32)
 
-        w_ambush = weights.get("ambush", 0.0)
+        w_concealment = weights.get("concealment", 0.0)
         w_sightline = weights.get("sightline", 0.0)
         w_objective = weights.get("objective", 0.0)
         w_threat = weights.get("threat", 0.0)
         w_spread = weights.get("spread", 0.0)
 
-        if w_ambush != 0.0 and objective_positions:
-            s += self.compute_ambush(objective_positions) * w_ambush
+        if w_concealment != 0.0:
+            s += self.concealment * w_concealment
 
         if w_sightline != 0.0 and objective_positions:
             s += self.compute_sightline(objective_positions) * w_sightline
