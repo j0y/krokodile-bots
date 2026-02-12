@@ -1,5 +1,6 @@
 #include "game_events.h"
 #include "extension.h"
+#include <convar.h>
 
 extern ISmmAPI *g_SMAPI;   // from PLUGIN_EXPOSE macro
 
@@ -208,4 +209,39 @@ const char *GameEvents_GetPhase()
 int GameEvents_GetCappingCP()
 {
     return s_listener.GetCappingCP();
+}
+
+// --- Counter-attack ConVar accessors (lazy-cached) ---
+
+static ConVar *s_cvCADisable = nullptr;
+static ConVar *s_cvCADuration = nullptr;
+static ConVar *s_cvCADurationFinale = nullptr;
+static bool s_cvCACached = false;
+
+static void CacheCounterAttackCVars()
+{
+    if (s_cvCACached)
+        return;
+    s_cvCACached = true;
+    s_cvCADisable = g_pCVar->FindVar("mp_checkpoint_counterattack_disable");
+    s_cvCADuration = g_pCVar->FindVar("mp_checkpoint_counterattack_duration");
+    s_cvCADurationFinale = g_pCVar->FindVar("mp_checkpoint_counterattack_duration_finale");
+}
+
+bool GameEvents_CounterAttackDisabled()
+{
+    CacheCounterAttackCVars();
+    return s_cvCADisable ? s_cvCADisable->GetBool() : false;
+}
+
+int GameEvents_CounterAttackDuration()
+{
+    CacheCounterAttackCVars();
+    return s_cvCADuration ? s_cvCADuration->GetInt() : 65;
+}
+
+int GameEvents_CounterAttackDurationFinale()
+{
+    CacheCounterAttackCVars();
+    return s_cvCADurationFinale ? s_cvCADurationFinale->GetInt() : 120;
 }

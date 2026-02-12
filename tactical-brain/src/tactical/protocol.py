@@ -50,6 +50,9 @@ def decode_state(data: bytes) -> GameState:
         objectives_captured=int(raw.get("obj", 0)),
         phase=raw.get("phase", "active"),
         capping_cp=int(raw.get("cap", -1)),
+        ca_disabled=bool(raw.get("ca_off", 0)),
+        ca_duration=int(raw.get("ca_dur", 65)),
+        ca_duration_finale=int(raw.get("ca_dur_f", 120)),
     )
 
 

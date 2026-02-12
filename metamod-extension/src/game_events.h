@@ -22,4 +22,12 @@ const char *GameEvents_GetPhase();
 // Control point currently being captured by enemy (-1 if none).
 int GameEvents_GetCappingCP();
 
+// Counter-attack ConVar accessors (cached on first call).
+// mp_checkpoint_counterattack_disable (0 = enabled, 1 = disabled)
+bool GameEvents_CounterAttackDisabled();
+// mp_checkpoint_counterattack_duration (default 65)
+int GameEvents_CounterAttackDuration();
+// mp_checkpoint_counterattack_duration_finale (default 120)
+int GameEvents_CounterAttackDurationFinale();
+
 #endif // _SMARTBOTS_GAME_EVENTS_H_
