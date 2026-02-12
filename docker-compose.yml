@@ -39,7 +39,7 @@ services:
       - RALLY_Z=32
       - MAP_NAME=${START_MAP:-ministry_coop}
       - DATA_DIR=/app/data
-      - CONTROLLED_TEAM=2
+      - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
       - TELEMETRY=1
       - TELEMETRY_HOST=localhost
       - TELEMETRY_PORT=5432
