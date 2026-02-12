@@ -7,7 +7,11 @@ from __future__ import annotations
 
 import logging
 import time
+from dataclasses import dataclass
 
+import numpy as np
+
+from tactical.areas import AreaMap
 from tactical.influence_map import InfluenceMap, WEIGHT_PROFILES
 from tactical.protocol import BotCommand
 from tactical.state import GameState
@@ -19,17 +23,27 @@ log = logging.getLogger(__name__)
 SPOTTED_COOLDOWN = 5.0  # seconds to remember enemy after losing sight
 
 
+@dataclass(frozen=True, slots=True)
+class Order:
+    areas: list[str]   # e.g. ["lobby", "courtyard"] or ["lobby", "-balcony"]
+    posture: str       # weight profile name
+    bots: int          # number of bots to assign
+
+
 class Planner:
     def __init__(
         self,
         rally: tuple[float, float, float],
         controlled_team: int = 2,
         influence_map: InfluenceMap | None = None,
+        area_map: AreaMap | None = None,
     ) -> None:
         self.rally = rally
         self.controlled_team = controlled_team
         self.influence_map = influence_map
+        self.area_map = area_map
         self.profile_name = "defend"
+        self.orders: list[Order] | None = None
         self._spotted_memory: dict[int, tuple[float, tuple[float, float, float]]] = {}
 
     def compute_commands(
@@ -80,8 +94,15 @@ class Planner:
             else:
                 enemy_positions.append(pos)  # last known position
 
+        # Build per-bot profile map for telemetry
+        bot_profiles: dict[int, str] = {}
+
         if self.influence_map is None:
             commands = self._rally_commands(our_bots)
+        elif self.orders is not None and self.area_map is not None:
+            commands = self._area_commands(
+                our_bots, friendly_positions, enemy_positions, bot_profiles,
+            )
         else:
             commands = self._influence_commands(
                 our_bots, friendly_positions, enemy_positions,
@@ -94,7 +115,7 @@ class Planner:
                 target_x=cmd.move_target[0],
                 target_y=cmd.move_target[1],
                 target_z=cmd.move_target[2],
-                profile=self.profile_name,
+                profile=bot_profiles.get(cmd.id, self.profile_name),
             )
             for cmd in commands
         ]
@@ -137,4 +158,81 @@ class Planner:
                     flags=0,
                 )
             )
+        return commands
+
+    def _area_commands(
+        self,
+        our_bots: list,
+        friendly_positions: list[tuple[float, float, float]],
+        enemy_positions: list[tuple[float, float, float]],
+        bot_profiles: dict[int, str],
+    ) -> list[BotCommand]:
+        """Assign bots to area-based orders from the strategist."""
+        assert self.influence_map is not None
+        assert self.area_map is not None
+        assert self.orders is not None
+
+        commands: list[BotCommand] = []
+        assigned_ids: set[int] = set()
+        remaining = list(our_bots)
+
+        for order in self.orders:
+            if not remaining:
+                break
+
+            n = min(order.bots, len(remaining))
+            mask = self.area_map.build_mask(order.areas)
+            centroid = self.area_map.area_centroid(order.areas)
+
+            # Sort unassigned bots by distance to area centroid, take closest N
+            centroid_arr = np.array(centroid, dtype=np.float32)
+            remaining.sort(
+                key=lambda b: float(np.linalg.norm(
+                    np.array(b.pos, dtype=np.float32) - centroid_arr,
+                )),
+            )
+            batch = remaining[:n]
+            remaining = remaining[n:]
+
+            weights = WEIGHT_PROFILES.get(order.posture, WEIGHT_PROFILES["defend"])
+            positions = self.influence_map.best_positions(
+                weights,
+                num=len(batch),
+                mask=mask,
+                objective_center=self.rally,
+                objective_positions=[self.rally],
+                friendly_positions=friendly_positions,
+                enemy_positions=enemy_positions,
+            )
+
+            profile_tag = f"area:{order.posture}"
+            for bot, target in zip(batch, positions):
+                commands.append(BotCommand(
+                    id=bot.id,
+                    move_target=target,
+                    look_target=target,
+                    flags=0,
+                ))
+                bot_profiles[bot.id] = profile_tag
+                assigned_ids.add(bot.id)
+
+        # Leftover bots: fallback to global profile without mask
+        if remaining:
+            weights = WEIGHT_PROFILES.get(self.profile_name, WEIGHT_PROFILES["defend"])
+            positions = self.influence_map.best_positions(
+                weights,
+                num=len(remaining),
+                objective_center=self.rally,
+                objective_positions=[self.rally],
+                friendly_positions=friendly_positions,
+                enemy_positions=enemy_positions,
+            )
+            for bot, target in zip(remaining, positions):
+                commands.append(BotCommand(
+                    id=bot.id,
+                    move_target=target,
+                    look_target=target,
+                    flags=0,
+                ))
+
         return commands

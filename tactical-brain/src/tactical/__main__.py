@@ -51,25 +51,45 @@ def main() -> None:
         tele_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
         telemetry = TelemetryClient(host=tele_host, port=tele_port)
 
+    # Load area definitions (if available)
+    area_map = None
+    if influence_map is not None and map_name:
+        areas_path = Path(data_dir) / f"{map_name}_areas.json"
+        if areas_path.exists():
+            from tactical.areas import AreaMap
+            area_map = AreaMap(
+                str(areas_path),
+                influence_map.points,
+                influence_map.concealment,
+                influence_map.tree,
+            )
+            log.info("Loaded area definitions for %s (%d areas)", map_name, len(area_map.areas))
+        else:
+            log.info("No area definitions for %s", map_name)
+
     controlled_team = int(os.environ.get("CONTROLLED_TEAM", "2"))
     planner = Planner(
         rally=(rally_x, rally_y, rally_z),
         controlled_team=controlled_team,
         influence_map=influence_map,
+        area_map=area_map,
     )
 
     strategist = None
     openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
-    if openrouter_key:
+    if openrouter_key and area_map is not None:
         from tactical.strategist import Strategist
         strategist = Strategist(
             planner=planner,
+            area_map=area_map,
             api_key=openrouter_key,
             model=os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-haiku"),
             base_url=os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1"),
             min_interval=float(os.environ.get("STRATEGIST_MIN_INTERVAL", "12")),
         )
         log.info("LLM strategist enabled (model=%s)", strategist._model)
+    elif openrouter_key:
+        log.info("LLM strategist disabled (no area definitions)")
     else:
         log.info("LLM strategist disabled (no OPENROUTER_API_KEY)")
 

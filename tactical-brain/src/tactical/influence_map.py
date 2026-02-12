@@ -188,6 +188,7 @@ class InfluenceMap:
         weights: dict[str, float],
         num: int = 8,
         *,
+        mask: np.ndarray | None = None,
         enemy_positions: list[tuple[float, float, float]] | None = None,
         objective_positions: list[tuple[float, float, float]] | None = None,
         objective_center: tuple[float, float, float] | None = None,
@@ -201,6 +202,8 @@ class InfluenceMap:
             objective_center=objective_center,
             friendly_positions=friendly_positions,
         )
+        if mask is not None:
+            scores *= mask
         top_indices = np.argsort(scores)[-num:][::-1]
         return [(float(self.points[i, 0]), float(self.points[i, 1]), float(self.points[i, 2]))
                 for i in top_indices]
