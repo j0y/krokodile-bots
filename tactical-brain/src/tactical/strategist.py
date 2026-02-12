@@ -33,6 +33,7 @@ class _Snapshot:
     enemy_ids_alive: frozenset[int]
     current_profile: str
     objectives_captured: int
+    capping_cp: int
 
 
 @dataclass
@@ -105,6 +106,18 @@ class BaseStrategist(ABC):
     async def _tick(self) -> None:
         state = self._pending_state
         if state is None:
+            return
+
+        # Don't run during freeze time or between rounds
+        if state.phase != "active":
+            self._prev_snapshot = None  # reset to avoid stale diffs on resume
+            return
+
+        # Don't run if no humans are on playing teams
+        has_humans = any(
+            not b.is_bot for b in state.bots.values() if b.team > 1
+        )
+        if not has_humans:
             return
 
         controlled = self._planner.controlled_team
@@ -205,6 +218,7 @@ class BaseStrategist(ABC):
             enemy_ids_alive=frozenset(enemy_alive_ids),
             current_profile=self._planner.profile_name,
             objectives_captured=state.objectives_captured,
+            capping_cp=state.capping_cp,
         )
 
     # ------------------------------------------------------------------
@@ -305,6 +319,14 @@ class BaseStrategist(ABC):
                 message=f"OBJECTIVE_LOST: objective #{curr.objectives_captured} captured by enemy "
                         f"({curr.objectives_captured} total lost)",
                 count=curr.objectives_captured, total=curr.objectives_captured,
+            ))
+
+        # Capture in progress
+        if curr.capping_cp >= 0 and (prev is None or prev.capping_cp != curr.capping_cp):
+            events.append(TacticalEvent(
+                kind="CAPTURE_START",
+                message=f"CAPTURE_START: enemy capturing point {curr.capping_cp}",
+                count=curr.capping_cp,
             ))
 
         # Heavy losses threshold (trigger once per round)

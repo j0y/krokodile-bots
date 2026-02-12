@@ -96,7 +96,10 @@ int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf
     }
 
     offset += snprintf(buf + offset, bufSize - offset,
-        "],\"obj\":%d}", GameEvents_GetObjectivesCaptured());
+        "],\"obj\":%d,\"phase\":\"%s\",\"cap\":%d}",
+        GameEvents_GetObjectivesCaptured(),
+        GameEvents_GetPhase(),
+        GameEvents_GetCappingCP());
     if (offset >= bufSize) return bufSize - 1;
 
     return offset;

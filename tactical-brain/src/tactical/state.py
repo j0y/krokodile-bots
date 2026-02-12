@@ -21,3 +21,5 @@ class GameState:
     tick: int
     bots: dict[int, BotState] = field(default_factory=dict)
     objectives_captured: int = 0
+    phase: str = "active"    # "preround", "active", "over"
+    capping_cp: int = -1     # CP index being captured by enemy, -1 if none

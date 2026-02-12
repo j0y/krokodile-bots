@@ -137,6 +137,9 @@ class LLMStrategist(BaseStrategist):
             f"- Objectives lost: {curr.objectives_captured}",
         ]
 
+        if curr.capping_cp >= 0:
+            lines.append(f"- ALERT: Enemy capturing point {curr.capping_cp}!")
+
         # Per-area enemy info
         enemies_by_area = self._area_map.enemies_per_area(enemy_positions)
         approach_areas = [

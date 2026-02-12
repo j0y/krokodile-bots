@@ -55,6 +55,7 @@ class SMStrategist(BaseStrategist):
         has_contact = any(e.kind == "CONTACT" for e in events)
         has_heavy_losses = any(e.kind == "HEAVY_LOSSES" for e in events)
         has_objective_lost = any(e.kind == "OBJECTIVE_LOST" for e in events)
+        has_capture_start = any(e.kind == "CAPTURE_START" for e in events)
 
         if has_contact:
             self._last_contact_time = now
@@ -64,6 +65,8 @@ class SMStrategist(BaseStrategist):
             self._transition(_State.SETUP, now)
         elif has_heavy_losses:
             self._transition(_State.FALLBACK, now)
+        elif has_capture_start:
+            self._transition(_State.ENGAGE, now)
         elif has_objective_lost:
             self._transition(_State.HOLD, now)
         elif self._state == _State.SETUP:
