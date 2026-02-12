@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -83,6 +84,16 @@ class AreaMap:
                 w[falloff_mask] = 1.0 - (dists[falloff_mask] - radius) / falloff
             self._weights[name] = w
 
+        # Pre-compute adjacency graph (areas whose masks overlap)
+        self._adjacency: dict[str, list[str]] = {name: [] for name in self.areas}
+        names = list(self.areas)
+        for i, a in enumerate(names):
+            wa = self._weights[a]
+            for b in names[i + 1:]:
+                if np.any((wa > 0) & (self._weights[b] > 0)):
+                    self._adjacency[a].append(b)
+                    self._adjacency[b].append(a)
+
         log.info("AreaMap loaded: %d areas from %s", len(self.areas), areas_path)
 
     def build_mask(self, area_names: list[str]) -> np.ndarray:
@@ -140,9 +151,25 @@ class AreaMap:
         centroid = weighted.sum(axis=0) / total
         return (float(centroid[0]), float(centroid[1]), float(centroid[2]))
 
+    def _bfs_path(self, start: str, end: str) -> list[str] | None:
+        """Shortest path between two areas via adjacency graph."""
+        if start == end:
+            return [start]
+        visited = {start}
+        queue: deque[list[str]] = deque([[start]])
+        while queue:
+            path = queue.popleft()
+            for neighbor in self._adjacency[path[-1]]:
+                if neighbor == end:
+                    return path + [neighbor]
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(path + [neighbor])
+        return None
+
     def describe(self) -> str:
         """Auto-generated map briefing for LLM system prompt."""
-        # Objective sequence first
+        # Objective sequence
         obj_areas = sorted(
             [(a.order, a) for a in self.areas.values() if a.order > 0],
             key=lambda t: t[0],
@@ -156,6 +183,7 @@ class AreaMap:
             lines.append("Threat comes from the direction of previously completed objectives.")
             lines.append("")
 
+        # Area descriptions
         lines.append("MAP AREAS:")
         for name, area in self.areas.items():
             w = self._weights[name]
@@ -164,18 +192,14 @@ class AreaMap:
             if count == 0:
                 continue
 
-            # Average concealment in the area
             avg_cover = float(self._concealment[nonzero].mean())
             cover_label = "Low" if avg_cover < 0.33 else "Moderate" if avg_cover < 0.66 else "High"
 
-            # Average elevation
             avg_z = float(self._points[nonzero, 2].mean())
             elev_label = "low" if avg_z < -100 else "high" if avg_z > 100 else "mid"
 
-            # Size
             size_label = "small" if count < 100 else "large" if count > 500 else "medium"
 
-            # Role prefix
             role_prefix = ""
             if area.role == "enemy_spawn":
                 role_prefix = "[ENEMY SPAWN] "
@@ -185,19 +209,23 @@ class AreaMap:
                 type_tag = area.obj_type.upper() if area.obj_type else "OBJ"
                 role_prefix = f"[{type_tag} #{area.order}] "
 
-            # Adjacency: areas whose masks overlap
-            adjacent = []
-            for other_name, other_w in self._weights.items():
-                if other_name == name:
-                    continue
-                if np.any((w > 0) & (other_w > 0)):
-                    adjacent.append(other_name)
-
-            adj_str = f". Adjacent to: {', '.join(adjacent)}" if adjacent else ""
+            adj = self._adjacency.get(name, [])
+            adj_str = f". Adjacent to: {', '.join(adj)}" if adj else ""
             lines.append(
                 f"- {name}: {role_prefix}{cover_label} cover, "
                 f"{elev_label} elevation, {size_label}{adj_str}"
             )
+
+        # Attack routes from enemy spawn to each objective
+        spawns = [a.name for a in self.areas.values() if a.role == "enemy_spawn"]
+        if spawns and obj_areas:
+            lines.append("")
+            lines.append("ATTACK ROUTES (from enemy spawn to each objective):")
+            for _, obj in obj_areas:
+                for spawn in spawns:
+                    path = self._bfs_path(spawn, obj.name)
+                    if path and len(path) > 1:
+                        lines.append(f"- {obj.name}: {' → '.join(path)}")
 
         return "\n".join(lines)
 
