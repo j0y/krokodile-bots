@@ -27,6 +27,7 @@ static constexpr uintptr_t kVtableOff_GetVisionInterface = 0x974;
 // CINSBotVision (IVision) vtable byte offsets
 static constexpr uintptr_t kVtableOff_IVision_IsAbleToSee_Entity = 260;  // (CBaseEntity*, int checkFOV, Vector*)
 static constexpr uintptr_t kVtableOff_IVision_IsAbleToSee_Pos    = 264;  // (const Vector&, int checkFOV)
+static constexpr uintptr_t kVtableOff_IVision_GetPrimaryKnownThreat = 0xd0;  // (int onlyVisible) → CKnownEntity*
 
 // Verify first N bytes at address match expected prologue
 bool VerifySignature(void *address, const unsigned char *expected, size_t len);

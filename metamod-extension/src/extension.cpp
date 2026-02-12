@@ -318,9 +318,14 @@ static void ComputeVision()
     }
 }
 
-// ---- Enemy visibility flags (cheap post-processing of ComputeVision results) ----
+// ---- Enemy threat detection (uses engine's own threat assessment: vision + hearing + reports) ----
 
-static void ComputeEnemyVisibility()
+// IVision::GetPrimaryKnownThreat(int onlyVisible) → CKnownEntity*
+// onlyVisible=0: all senses (seen + heard + reported)
+// onlyVisible=1: only currently visible
+typedef void *(*GetPrimaryKnownThreatFn)(void *thisVision, int onlyVisible);
+
+static void ComputeEnemyThreats()
 {
     BotActionHook_ClearVisibleEnemies();
 
@@ -330,23 +335,25 @@ static void ComputeEnemyVisibility()
         if (!entry.is_bot || !entry.alive)
             continue;
 
-        bool hasEnemy = false;
-        for (int s = 0; s < entry.sees_count && !hasEnemy; s++)
-        {
-            int seenId = entry.sees[s];
-            for (int j = 0; j < s_stateCount; j++)
-            {
-                if (s_stateArray[j].id == seenId
-                    && s_stateArray[j].team != entry.team
-                    && s_stateArray[j].team > 1
-                    && s_stateArray[j].alive)
-                {
-                    hasEnemy = true;
-                    break;
-                }
-            }
-        }
-        BotActionHook_SetVisibleEnemy(entry.id, hasEnemy);
+        CBaseEntity *botEntity = s_playerEntities[i];
+        if (!botEntity)
+            continue;
+
+        // vtable dispatch: GetVisionInterface
+        void **vtable = *reinterpret_cast<void ***>(botEntity);
+        auto fnGetVision = reinterpret_cast<GetVisionInterfaceFn>(
+            vtable[kVtableOff_GetVisionInterface / 4]);
+        void *vision = fnGetVision(botEntity);
+        if (!vision)
+            continue;
+
+        // GetPrimaryKnownThreat(onlyVisible=0) — covers all senses
+        void **visionVtable = *reinterpret_cast<void ***>(vision);
+        auto fnGetThreat = reinterpret_cast<GetPrimaryKnownThreatFn>(
+            visionVtable[kVtableOff_IVision_GetPrimaryKnownThreat / 4]);
+        void *threat = fnGetThreat(vision, 0);
+
+        BotActionHook_SetVisibleEnemy(entry.id, threat != nullptr);
     }
 }
 
@@ -369,7 +376,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
     {
         ResolveBots();
         ComputeVision();
-        ComputeEnemyVisibility();
+        ComputeEnemyThreats();
         freshScan = true;
     }
 
