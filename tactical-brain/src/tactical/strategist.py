@@ -307,7 +307,7 @@ class Strategist:
                         {"role": "user", "content": sitrep},
                     ],
                     "temperature": 0.7,
-                    "max_tokens": 100,
+                    "max_tokens": 256,
                 },
                 timeout=5.0,
             )
