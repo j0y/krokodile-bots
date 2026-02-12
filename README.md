@@ -1,12 +1,12 @@
 # Insurgency 2014 Smart Bots
 
-Python-driven AI for Insurgency 2014 game bots. A SourceMod plugin bridges the game engine to an external Python AI brain over UDP, using DHooks to control bot locomotion with proper running animations.
+Three-layer AI for Insurgency 2014 bots: C++ Metamod extension controls bots via native action classes, Python tactical planner scores positions using precomputed visibility data, future LLM strategist for high-level decisions.
 
 ```
 ┌────────────────────┐  UDP :9000  ┌────────────────────┐
-│  Insurgency Server │ ──────────► │  Python AI Brain   │
-│  SourceMod plugin  │ ◄────────── │  asyncio UDP       │
-│  (smartbots_bridge)│  commands   │  (smartbots)       │
+│  Insurgency Server │ ──────────► │  Tactical Brain    │
+│  Metamod extension │ ◄────────── │  Python (asyncio)  │
+│  (C++ bot control) │  commands   │  influence scoring  │
 └────────────────────┘             └────────────────────┘
 ```
 
@@ -16,34 +16,42 @@ Python-driven AI for Insurgency 2014 game bots. A SourceMod plugin bridges the g
 # 1. Download server files (one-time, ~10GB)
 cd insurgency-server && ./download-server.sh && cd ..
 
-# 2. Run game server + AI brain
+# 2. Precompute spatial data for a map
+cd bspMeshExporter
+uv run python -m bsp_mesh_exporter extract ministry_coop \
+    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
+    --output-dir ../ai-brain-old/data/
+uv run python -m bsp_mesh_exporter vismatrix ministry_coop \
+    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
+    --mesh-dir ../ai-brain-old/data/ --output-dir ../ai-brain-old/data/
+uv run python -m bsp_mesh_exporter influence ministry_coop \
+    --vismatrix-dir ../ai-brain-old/data/ --output-dir ../ai-brain-old/data/
+cd ..
+
+# 3. Run game server + tactical brain
 docker compose --profile ai up --build
 
-# 3. Connect in-game to port 27025
+# 4. Connect in-game to port 27025
 ```
-
-Game server only (no AI): `docker compose up insurgency --build`
-Observer: `docker compose --profile record up --build`
 
 ## Project Structure
 
 ```
-├── docker-compose.yml        # Orchestrates both services
-├── insurgency-server/        # Game server + SM bridge plugin
-│   ├── plugins/              # smartbots_bridge.sp/.smx
-│   ├── gamedata/             # DHooks gamedata (vtable offsets)
-│   └── server-files/         # Pre-downloaded server (gitignored)
-├── ai-brain/                 # Python AI brain (uv project)
-│   └── src/smartbots/        # UDP server, movement controller
-└── navMeshParser/            # Nav mesh parser (30/30 maps)
+├── docker-compose.yml        # Orchestrates services
+├── insurgency-server/        # Game server + Metamod extension (multi-stage Docker build)
+├── metamod-extension/        # C++ Metamod:Source plugin (bot control via native actions)
+├── tactical-brain/           # Python tactical planner (influence map scoring)
+├── bspMeshExporter/          # Offline spatial data pipeline (BSP mesh, vismatrix, influence)
+├── navMeshParser/            # Nav mesh parser (30/30 maps)
+├── ai-brain-old/             # Legacy Python AI (reference)
+└── reverseEngineering/       # Analysis docs and design specs
 ```
 
 ## How It Works
 
-1. **SM plugin** uses DHooks to detour `CINSBotLocomotion::Approach` — the engine function that converts a goal position into movement button presses
-2. Every ~125ms, plugin sends bot state (position, angles, health) as JSON over UDP
-3. **Python AI** receives state, decides where each bot should go, sends target positions back
-4. When the bot's behavior tree calls `Approach(goal)`, the detour replaces `goal` with the Python-provided target
-5. The bot's locomotion system naturally converts the new goal into button presses, producing proper running/walking animations
+1. **Metamod extension** hooks into bot behavior, sends bot state (position, health, team) over UDP each tick
+2. **Tactical brain** loads precomputed visibility matrix (~21K grid points per map) and scores positions using weight profiles (defend, push, ambush, sniper, overrun)
+3. Best positions are assigned to bots based on concealment, sightline to objective, threat from enemies, objective proximity, and team spread
+4. Extension receives target positions and uses native bot action classes (approach, combat) — engine handles pathfinding, aim, firing
 
-Both services run with `network_mode: host` so UDP over localhost works seamlessly.
+Docker profiles: `ai` (extension + tactical brain), `vanilla` (original AI), `record` (observer + recording).
