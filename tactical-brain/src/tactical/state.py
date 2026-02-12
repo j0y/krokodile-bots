@@ -12,6 +12,7 @@ class BotState:
     alive: bool
     team: int
     is_bot: bool = True
+    sees: list[int] = field(default_factory=list)
     traces: list[float] = field(default_factory=list)
 
 

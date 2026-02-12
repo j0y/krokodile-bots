@@ -6,6 +6,7 @@ Falls back to a fixed rally point if no map data is available.
 from __future__ import annotations
 
 import logging
+import time
 
 from tactical.influence_map import InfluenceMap, WEIGHT_PROFILES
 from tactical.protocol import BotCommand
@@ -13,6 +14,9 @@ from tactical.state import GameState
 from tactical.telemetry import BotCommandRow
 
 log = logging.getLogger(__name__)
+
+
+SPOTTED_COOLDOWN = 5.0  # seconds to remember enemy after losing sight
 
 
 class Planner:
@@ -26,6 +30,7 @@ class Planner:
         self.controlled_team = controlled_team
         self.influence_map = influence_map
         self.profile_name = "defend"
+        self._spotted_memory: dict[int, tuple[float, tuple[float, float, float]]] = {}
 
     def compute_commands(
         self, state: GameState,
@@ -43,11 +48,37 @@ class Planner:
             b.pos for b in state.bots.values()
             if b.alive and b.team == self.controlled_team
         ]
-        # Enemy = all alive players on other teams (skip spectators / unassigned: team <= 1)
-        enemy_positions = [
-            b.pos for b in state.bots.values()
+        # Fog-of-war: collect currently spotted enemy IDs from all friendly bots
+        spotted_ids: set[int] = set()
+        for b in state.bots.values():
+            if b.alive and b.team == self.controlled_team:
+                spotted_ids.update(b.sees)
+
+        # All alive enemies (for position lookup)
+        all_enemies = {
+            b.id: b for b in state.bots.values()
             if b.alive and b.team != self.controlled_team and b.team > 1
-        ]
+        }
+
+        # Update spotted memory: refresh timestamp for currently-seen enemies
+        now = time.monotonic()
+        for eid in spotted_ids:
+            if eid in all_enemies:
+                self._spotted_memory[eid] = (now, all_enemies[eid].pos)
+
+        # Prune expired entries
+        self._spotted_memory = {
+            eid: (t, pos) for eid, (t, pos) in self._spotted_memory.items()
+            if now - t < SPOTTED_COOLDOWN
+        }
+
+        # Enemy positions = currently seen (live pos) + recently seen (last known pos)
+        enemy_positions: list[tuple[float, float, float]] = []
+        for eid, (t, pos) in self._spotted_memory.items():
+            if eid in spotted_ids and eid in all_enemies:
+                enemy_positions.append(all_enemies[eid].pos)  # live position
+            else:
+                enemy_positions.append(pos)  # last known position
 
         if self.influence_map is None:
             commands = self._rally_commands(our_bots)

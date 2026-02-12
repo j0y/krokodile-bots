@@ -13,6 +13,8 @@ struct BotStateEntry {
     int alive;        // 1 if alive, 0 if dead
     int team;
     int is_bot;       // 1 = fake client (bot), 0 = human player
+    int sees[32];     // edict indices of players this bot can see
+    int sees_count;   // number of entries in sees[]
 };
 
 // Iterate edicts and fill bot state array. Returns number of bots found.

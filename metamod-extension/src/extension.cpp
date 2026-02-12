@@ -39,6 +39,7 @@ static int s_gfMoveReqLogThrottle = 0;
 static char s_sendBuf[8192];
 static char s_recvBuf[4096];
 static BotStateEntry s_stateArray[32];
+static CBaseEntity *s_playerEntities[32];  // parallel to s_stateArray — entity ptrs for vision checks
 
 // Bridge logging throttle
 static int s_bridgeSendCount = 0;
@@ -236,11 +237,85 @@ static void ResolveBots()
             entry.alive = info->IsDead() ? 0 : 1;
             entry.team = info->GetTeamIndex();
             entry.is_bot = isBot ? 1 : 0;
+            entry.sees_count = 0;
+
+            // Cache entity pointer for vision checks
+            IServerUnknown *pUnk = edict->GetUnknown();
+            s_playerEntities[s_stateCount] = pUnk ? pUnk->GetBaseEntity() : nullptr;
+
             s_stateCount++;
         }
     }
 
     s_lastResolveTick = s_tickCount;
+}
+
+// ---- Vision: per-bot visibility via IVision::IsAbleToSee ----
+
+// x86-32 Linux/GCC thiscall: this as first stack argument
+typedef void *(*GetVisionInterfaceFn)(void *thisNextBot);
+typedef bool  (*IsAbleToSeeEntityFn)(void *thisVision, void *entity, int checkFOV, void *visibleSpot);
+
+static int s_visionLogThrottle = 0;
+
+static void ComputeVision()
+{
+    // For each bot in s_stateArray, compute which other players it can see.
+    // Uses vtable dispatch: entity → GetVisionInterface() → IsAbleToSee(target).
+    for (int i = 0; i < s_stateCount; i++)
+    {
+        BotStateEntry &entry = s_stateArray[i];
+        entry.sees_count = 0;
+
+        // Only compute vision for alive bots (fake clients)
+        if (!entry.is_bot || !entry.alive)
+            continue;
+
+        CBaseEntity *botEntity = s_playerEntities[i];
+        if (!botEntity)
+            continue;
+
+        // vtable dispatch: GetVisionInterface
+        void **vtable = *reinterpret_cast<void ***>(botEntity);
+        auto fnGetVision = reinterpret_cast<GetVisionInterfaceFn>(
+            vtable[kVtableOff_GetVisionInterface / 4]);
+        void *vision = fnGetVision(botEntity);
+        if (!vision)
+            continue;
+
+        // Get IsAbleToSee(entity) from IVision vtable
+        void **visionVtable = *reinterpret_cast<void ***>(vision);
+        auto fnIsAbleToSee = reinterpret_cast<IsAbleToSeeEntityFn>(
+            visionVtable[kVtableOff_IVision_IsAbleToSee_Entity / 4]);
+
+        for (int j = 0; j < s_stateCount; j++)
+        {
+            if (i == j)
+                continue;
+
+            CBaseEntity *targetEntity = s_playerEntities[j];
+            if (!targetEntity)
+                continue;
+
+            // checkFOV=0 (USE_FOV), visibleSpot=NULL
+            if (fnIsAbleToSee(vision, targetEntity, 0, nullptr))
+            {
+                if (entry.sees_count < 32)
+                {
+                    entry.sees[entry.sees_count++] = s_stateArray[j].id;
+                }
+            }
+        }
+    }
+
+    if (s_visionLogThrottle++ % 240 == 0)
+    {
+        int totalSeen = 0;
+        for (int i = 0; i < s_stateCount; i++)
+            totalSeen += s_stateArray[i].sees_count;
+        META_CONPRINTF("[SmartBots] Vision: %d bots, %d total visibility entries\n",
+                       s_stateCount, totalSeen);
+    }
 }
 
 // ---- GameFrame hook ----
@@ -261,6 +336,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
     if (s_tickCount % 8 == 0)
     {
         ResolveBots();
+        ComputeVision();
         freshScan = true;
     }
 

@@ -40,6 +40,7 @@ def decode_state(data: bytes) -> GameState:
             alive=bool(b["alive"]),
             team=int(b["team"]),
             is_bot=bool(b.get("bot", 1)),
+            sees=b.get("sees", []),
             traces=b.get("traces", []),
         )
         bots[bot.id] = bot

@@ -67,7 +67,8 @@ int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf
             "\"hp\":%d,"
             "\"alive\":%d,"
             "\"team\":%d,"
-            "\"bot\":%d}",
+            "\"bot\":%d,"
+            "\"sees\":[",
             b.id,
             b.pos[0], b.pos[1], b.pos[2],
             b.ang[0], b.ang[1], b.ang[2],
@@ -76,6 +77,20 @@ int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf
             b.team,
             b.is_bot);
 
+        if (offset >= bufSize) return bufSize - 1;
+
+        for (int j = 0; j < b.sees_count; j++)
+        {
+            if (j > 0)
+            {
+                offset += snprintf(buf + offset, bufSize - offset, ",");
+                if (offset >= bufSize) return bufSize - 1;
+            }
+            offset += snprintf(buf + offset, bufSize - offset, "%d", b.sees[j]);
+            if (offset >= bufSize) return bufSize - 1;
+        }
+
+        offset += snprintf(buf + offset, bufSize - offset, "]}");
         if (offset >= bufSize) return bufSize - 1;
     }
 
