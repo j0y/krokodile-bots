@@ -27,6 +27,8 @@ class AreaDef:
     radius: float
     falloff: float
     role: str  # "" | "enemy_spawn" | "enemy_approach" | "objective"
+    order: int  # objective sequence (1-based), 0 for non-objectives
+    obj_type: str  # "destroy" | "capture" | "" for non-objectives
 
 
 class AreaMap:
@@ -62,6 +64,8 @@ class AreaMap:
                 radius=radius,
                 falloff=falloff,
                 role=role,
+                order=int(defn.get("order", 0)),
+                obj_type=defn.get("type", ""),
             )
             self.areas[name] = area
 
@@ -138,8 +142,21 @@ class AreaMap:
 
     def describe(self) -> str:
         """Auto-generated map briefing for LLM system prompt."""
-        lines = ["MAP AREAS:"]
+        # Objective sequence first
+        obj_areas = sorted(
+            [(a.order, a) for a in self.areas.values() if a.order > 0],
+            key=lambda t: t[0],
+        )
+        lines: list[str] = []
+        if obj_areas:
+            seq = " → ".join(
+                f"{a.name} ({a.obj_type})" for _, a in obj_areas
+            )
+            lines.append(f"OBJECTIVE SEQUENCE (attackers complete in order): {seq}")
+            lines.append("Threat comes from the direction of previously completed objectives.")
+            lines.append("")
 
+        lines.append("MAP AREAS:")
         for name, area in self.areas.items():
             w = self._weights[name]
             nonzero = w > 0
@@ -165,7 +182,8 @@ class AreaMap:
             elif area.role == "enemy_approach":
                 role_prefix = "[ENEMY APPROACH] "
             elif area.role == "objective":
-                role_prefix = "[OBJECTIVE] "
+                type_tag = area.obj_type.upper() if area.obj_type else "OBJ"
+                role_prefix = f"[{type_tag} #{area.order}] "
 
             # Adjacency: areas whose masks overlap
             adjacent = []

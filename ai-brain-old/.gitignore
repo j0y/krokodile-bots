@@ -4,3 +4,4 @@ __pycache__/
 .ruff_cache/
 data/*
 !data/.gitkeep
+!data/*_areas.json

@@ -1,0 +1,92 @@
+{
+  "obj_a": {
+    "center": [2461, -1047, 81],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 1,
+    "type": "destroy"
+  },
+  "obj_b": {
+    "center": [-2656, -1311, 91],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 2,
+    "type": "destroy"
+  },
+  "obj_c_basement": {
+    "center": [-102, -374, -246],
+    "radius": 350,
+    "falloff": 200,
+    "role": "objective",
+    "order": 3,
+    "type": "capture"
+  },
+  "obj_d_upper": {
+    "center": [2, -512, 243],
+    "radius": 350,
+    "falloff": 200,
+    "role": "objective",
+    "order": 4,
+    "type": "capture"
+  },
+  "obj_e_basement": {
+    "center": [-135, -3309, -210],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 5,
+    "type": "destroy"
+  },
+  "obj_f": {
+    "center": [-5061, -125, 59],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 6,
+    "type": "capture"
+  },
+  "east_wing": {
+    "center": [3000, -1500, 0],
+    "radius": 1200,
+    "falloff": 400
+  },
+  "center_open": {
+    "center": [0, -2500, 0],
+    "radius": 1200,
+    "falloff": 400
+  },
+  "west_wing": {
+    "center": [-3000, -1000, 0],
+    "radius": 1200,
+    "falloff": 400
+  },
+  "upper_floor": {
+    "center": [-200, -300, 200],
+    "radius": 1200,
+    "falloff": 300
+  },
+  "basement_north": {
+    "center": [-100, -500, -250],
+    "radius": 800,
+    "falloff": 300
+  },
+  "basement_south": {
+    "center": [-100, -3000, -250],
+    "radius": 800,
+    "falloff": 300
+  },
+  "attacker_spawn": {
+    "center": [3996, -2129, 68],
+    "radius": 500,
+    "falloff": 300,
+    "role": "enemy_spawn"
+  },
+  "east_approach": {
+    "center": [2500, -2000, 0],
+    "radius": 700,
+    "falloff": 300,
+    "role": "enemy_approach"
+  }
+}
