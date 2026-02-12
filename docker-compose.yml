@@ -43,6 +43,8 @@ services:
       - TELEMETRY=1
       - TELEMETRY_HOST=localhost
       - TELEMETRY_PORT=5432
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-anthropic/claude-3.5-haiku}
     profiles:
       - ai
 

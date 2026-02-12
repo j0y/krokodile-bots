@@ -10,15 +10,22 @@ import socket
 from tactical.planner import Planner
 from tactical.protocol import decode_state, encode_commands
 from tactical.state import GameState
+from tactical.strategist import Strategist
 from tactical.telemetry import BotStateRow, TelemetryClient
 
 log = logging.getLogger(__name__)
 
 
 class TacticalProtocol(asyncio.DatagramProtocol):
-    def __init__(self, planner: Planner, telemetry: TelemetryClient | None = None) -> None:
+    def __init__(
+        self,
+        planner: Planner,
+        telemetry: TelemetryClient | None = None,
+        strategist: Strategist | None = None,
+    ) -> None:
         self.planner = planner
         self.telemetry = telemetry
+        self.strategist = strategist
         self.transport: asyncio.DatagramTransport | None = None
         self._recv_count = 0
         self._send_count = 0
@@ -46,6 +53,9 @@ class TacticalProtocol(asyncio.DatagramProtocol):
                 len(state.bots),
                 alive,
             )
+
+        if self.strategist is not None:
+            self.strategist.update_state(state)
 
         commands, cmd_rows = self.planner.compute_commands(state)
 
@@ -78,7 +88,11 @@ class TacticalProtocol(asyncio.DatagramProtocol):
 
 
 async def run_server(
-    host: str, port: int, planner: Planner, telemetry: TelemetryClient | None = None,
+    host: str,
+    port: int,
+    planner: Planner,
+    telemetry: TelemetryClient | None = None,
+    strategist: Strategist | None = None,
 ) -> None:
     log.info("Starting tactical brain on %s:%d", host, port)
     log.info("Rally point: (%.1f, %.1f, %.1f)", *planner.rally)
@@ -95,9 +109,12 @@ async def run_server(
     sock.bind((host, port))
 
     transport, _protocol = await loop.create_datagram_endpoint(
-        lambda: TacticalProtocol(planner, telemetry),
+        lambda: TacticalProtocol(planner, telemetry, strategist),
         sock=sock,
     )
+
+    if strategist is not None:
+        strategist.start()
 
     stop = loop.create_future()
 
@@ -114,6 +131,8 @@ async def run_server(
         await stop
     finally:
         transport.close()
+        if strategist is not None:
+            await strategist.close()
         if telemetry is not None:
             telemetry.close()
         log.info("Tactical brain stopped")

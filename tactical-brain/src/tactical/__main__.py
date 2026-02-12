@@ -57,7 +57,23 @@ def main() -> None:
         controlled_team=controlled_team,
         influence_map=influence_map,
     )
-    asyncio.run(run_server(host, port, planner, telemetry=telemetry))
+
+    strategist = None
+    openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
+    if openrouter_key:
+        from tactical.strategist import Strategist
+        strategist = Strategist(
+            planner=planner,
+            api_key=openrouter_key,
+            model=os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-haiku"),
+            base_url=os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1"),
+            min_interval=float(os.environ.get("STRATEGIST_MIN_INTERVAL", "12")),
+        )
+        log.info("LLM strategist enabled (model=%s)", strategist._model)
+    else:
+        log.info("LLM strategist disabled (no OPENROUTER_API_KEY)")
+
+    asyncio.run(run_server(host, port, planner, telemetry=telemetry, strategist=strategist))
 
 
 main()
