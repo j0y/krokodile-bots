@@ -33,7 +33,7 @@ int BotState_Collect(BotStateEntry *out, int maxBots)
         entry.ang[1] = ang.y;
         entry.ang[2] = ang.z;
         entry.health = info->GetHealth();
-        entry.alive = info->IsAlive() ? 1 : 0;
+        entry.alive = info->IsDead() ? 0 : 1;
         entry.team = info->GetTeamIndex();
 
         count++;

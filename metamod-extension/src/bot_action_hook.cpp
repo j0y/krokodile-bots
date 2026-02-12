@@ -30,7 +30,6 @@ static float s_gotoZ = 0.0f;
 // Entity pointer → edict index lookup table (built each GameFrame)
 static const int MAX_ENTITY_MAP = 33;
 static void *s_entityPtrs[MAX_ENTITY_MAP];     // entityPtrs[edictIndex] = entityPtr
-static int   s_entityMapCount = 0;
 
 // Diagnostic state
 static int  s_hookCallCount = 0;
