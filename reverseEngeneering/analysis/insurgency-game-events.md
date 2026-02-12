@@ -122,13 +122,13 @@ round_end            → phase = "over"
 controlpoint_captured    → objectives++, clear cap flag
 controlpoint_starttouch  → set capping CP (if enemy team)
 controlpoint_endtouch    → clear capping CP (if enemy team)
+object_destroyed         → objectives++ (cache destroyed in coop)
 ```
 
 ## Potentially Useful Events (not yet hooked)
 
 - `player_death` — death position (x,y,z) for area-enriched kill tracking
 - `round_level_advanced` — push mode progression
-- `object_destroyed` — cache destruction in coop
 - `artillery_called` — incoming fire support with target coords (bots could take cover)
 - `grenade_detonate` — explosion position + affected enemies
 - `nav_blocked` — dynamic pathfinding changes

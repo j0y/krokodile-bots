@@ -32,6 +32,7 @@ public:
             "round_freeze_end",
             "controlpoint_captured", "controlpoint_starttouch",
             "controlpoint_endtouch",
+            "object_destroyed",
         };
 
         for (const char *ev : events)
@@ -94,6 +95,19 @@ public:
                 m_objectivesCaptured++;
                 META_CONPRINTF("[SmartBots] Objective captured (cp=%d, by team %d, total lost: %d)\n",
                                cp, team, m_objectivesCaptured);
+            }
+        }
+        else if (strcmp(name, "object_destroyed") == 0)
+        {
+            int cp = event->GetInt("cp");
+            int attackerteam = event->GetInt("attackerteam");
+
+            // Cache destroyed by enemy team — count as objective lost
+            if (attackerteam != m_controlledTeam)
+            {
+                m_objectivesCaptured++;
+                META_CONPRINTF("[SmartBots] Cache destroyed (cp=%d, by team %d, total lost: %d)\n",
+                               cp, attackerteam, m_objectivesCaptured);
             }
         }
         else if (strcmp(name, "controlpoint_starttouch") == 0)
