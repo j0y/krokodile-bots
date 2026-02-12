@@ -56,20 +56,19 @@ static int LookupEdictIndex(void *actor)
 
 // The hook function — called instead of CINSBotCombat::Update.
 // x86-32 sret ABI: void Hook(ActionResult *sret, void *this, void *actor, float interval)
+//
+// This detour only SUPPRESSES combat for bots that have a movement override
+// (goto target or Python command). It does NOT issue AddMovementRequest —
+// GameFrame handles all movement requests to avoid double-calling the pathfinder.
 static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *actor, float interval)
 {
     s_hookCallCount++;
 
-    // Check for manual goto target first (highest priority)
-    bool shouldOverride = false;
-    float targetX = 0, targetY = 0, targetZ = 0;
+    bool shouldSuppress = false;
 
     if (s_hasGotoTarget && actor)
     {
-        shouldOverride = true;
-        targetX = s_gotoX;
-        targetY = s_gotoY;
-        targetZ = s_gotoZ;
+        shouldSuppress = true;
     }
     else if (actor)
     {
@@ -80,49 +79,15 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
             BotCommandEntry cmd;
             if (BotCommand_Get(edictIndex, cmd))
             {
-                shouldOverride = true;
-                targetX = cmd.moveTarget[0];
-                targetY = cmd.moveTarget[1];
-                targetZ = cmd.moveTarget[2];
+                shouldSuppress = true;
             }
         }
     }
 
-    if (shouldOverride && s_AddMovementRequest)
+    if (shouldSuppress)
     {
-        // Get locomotion interface via vtable dispatch:
-        // actor->vtable[0x96c / 4](actor)
-        void **actorVtable = *reinterpret_cast<void ***>(actor);
-        if (actorVtable)
-        {
-            typedef void *(*GetLocoFn_t)(void *);
-            GetLocoFn_t getLocoFn = reinterpret_cast<GetLocoFn_t>(
-                actorVtable[kVtableOff_GetLocomotionInterface / 4]);
-
-            if (getLocoFn)
-            {
-                void *loco = getLocoFn(actor);
-                if (loco)
-                {
-                    s_AddMovementRequest(loco, targetX, targetY, targetZ,
-                                         MOVE_TYPE_APPROACH, MOVE_PRIORITY_NORMAL,
-                                         MOVE_SPEED_DEFAULT);
-                    s_moveRequestCount++;
-
-                    // Log first request and then every ~5 seconds (66 ticks/sec * 5 = 330)
-                    if (s_moveRequestCount == 1 || (s_logThrottle++ % 330 == 0))
-                    {
-                        META_CONPRINTF("[SmartBots] MovReq #%d: bot %p -> (%.1f, %.1f, %.1f) "
-                                       "[loco=%p, hookCalls=%d]\n",
-                                       s_moveRequestCount, actor,
-                                       targetX, targetY, targetZ,
-                                       loco, s_hookCallCount);
-                    }
-                }
-            }
-        }
-
-        // Skip original combat Update — bot doesn't fight, just moves
+        // Skip original combat Update — bot doesn't fight, just moves.
+        // Movement is issued from GameFrame via IssueMovementRequest.
         sret->type   = ACTION_RESULT_CONTINUE;
         sret->action = nullptr;
         sret->reason = nullptr;

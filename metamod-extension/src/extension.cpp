@@ -45,6 +45,45 @@ static int s_bridgeSendCount = 0;
 static int s_bridgeRecvCount = 0;
 static int s_bridgeCmdExecCount = 0;
 
+// Per-bot resolved data — refreshed at 8Hz, reused every tick
+struct ResolvedBot {
+    int edictIndex;
+    CBaseEntity *entity;
+};
+static ResolvedBot s_resolvedBots[32];
+static int s_resolvedBotCount = 0;
+static int s_lastResolveTick = 0;
+
+// Last-issued movement target per bot — avoids redundant AddMovementRequest calls.
+// The game engine logs every call, so repeating the same target floods the console.
+static float s_lastTarget[33][3];  // [edictIndex][x/y/z]
+static bool  s_lastTargetValid[33];
+
+static bool TargetChanged(int edictIndex, float x, float y, float z)
+{
+    if (edictIndex < 1 || edictIndex > 32)
+        return true;
+    if (!s_lastTargetValid[edictIndex])
+        return true;
+
+    float dx = s_lastTarget[edictIndex][0] - x;
+    float dy = s_lastTarget[edictIndex][1] - y;
+    float dz = s_lastTarget[edictIndex][2] - z;
+    // Only re-issue if target moved more than 1 unit
+    return (dx * dx + dy * dy + dz * dz) > 1.0f;
+}
+
+static void RecordTarget(int edictIndex, float x, float y, float z)
+{
+    if (edictIndex >= 1 && edictIndex <= 32)
+    {
+        s_lastTarget[edictIndex][0] = x;
+        s_lastTarget[edictIndex][1] = y;
+        s_lastTarget[edictIndex][2] = z;
+        s_lastTargetValid[edictIndex] = true;
+    }
+}
+
 // ---- ConVars ----
 
 static ConVar s_cvarAiHost("smartbots_ai_host", "127.0.0.1", 0,
@@ -93,6 +132,7 @@ static ConCommand s_cmdGoto("smartbots_goto", CC_SmartBotsGoto,
 static void CC_SmartBotsStop(const CCommand &args)
 {
     BotActionHook_ClearGotoTarget();
+    memset(s_lastTargetValid, 0, sizeof(s_lastTargetValid));
 }
 
 static ConCommand s_cmdStop("smartbots_stop", CC_SmartBotsStop,
@@ -108,26 +148,7 @@ static void CC_SmartBotsStatus(const CCommand &args)
         return;
     }
 
-    int botCount = 0;
-    int maxClients = gpGlobals->maxClients;
-
-    for (int i = 1; i <= maxClients; i++)
-    {
-        edict_t *edict = PEntityOfEntIndex(i);
-        if (!edict || edict->IsFree())
-            continue;
-
-        IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
-        if (!info || !info->IsConnected() || !info->IsFakeClient())
-            continue;
-
-        Vector pos = info->GetAbsOrigin();
-        META_CONPRINTF("[SmartBots] Bot #%d \"%s\" @ (%.1f, %.1f, %.1f)\n",
-                       i, info->GetName(), pos.x, pos.y, pos.z);
-        botCount++;
-    }
-
-    META_CONPRINTF("[SmartBots] Total bots: %d\n", botCount);
+    META_CONPRINTF("[SmartBots] Bots: %d active (tick %d)\n", s_resolvedBotCount, s_tickCount);
 
     if (BotActionHook_HasGotoTarget())
         META_CONPRINTF("[SmartBots] Goto target: ACTIVE\n");
@@ -140,6 +161,63 @@ static void CC_SmartBotsStatus(const CCommand &args)
 static ConCommand s_cmdStatus("smartbots_status", CC_SmartBotsStatus,
     "Show all bot positions and extension status");
 
+// ---- Edict scan: resolve all bots + collect state (called at 8Hz) ----
+
+static int s_stateCount = 0;  // how many entries in s_stateArray from last scan
+
+static void ResolveBots()
+{
+    s_resolvedBotCount = 0;
+    s_stateCount = 0;
+    BotActionHook_ClearEntityMap();
+
+    int maxClients = gpGlobals->maxClients;
+    for (int i = 1; i <= maxClients && s_resolvedBotCount < 32; i++)
+    {
+        edict_t *edict = PEntityOfEntIndex(i);
+        if (!edict || edict->IsFree())
+            continue;
+
+        IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
+        if (!info || !info->IsConnected() || !info->IsFakeClient())
+            continue;
+
+        IServerUnknown *pUnknown = edict->GetUnknown();
+        if (!pUnknown)
+            continue;
+
+        CBaseEntity *pEntity = pUnknown->GetBaseEntity();
+        if (!pEntity)
+            continue;
+
+        // Cache resolved bot
+        s_resolvedBots[s_resolvedBotCount].edictIndex = i;
+        s_resolvedBots[s_resolvedBotCount].entity = pEntity;
+        s_resolvedBotCount++;
+
+        BotActionHook_RegisterEntity((void *)pEntity, i);
+
+        // Also collect state for serialization (avoids second IPlayerInfo scan)
+        Vector pos = info->GetAbsOrigin();
+        QAngle ang = info->GetAbsAngles();
+
+        BotStateEntry &entry = s_stateArray[s_stateCount];
+        entry.id = i;
+        entry.pos[0] = pos.x;
+        entry.pos[1] = pos.y;
+        entry.pos[2] = pos.z;
+        entry.ang[0] = ang.x;
+        entry.ang[1] = ang.y;
+        entry.ang[2] = ang.z;
+        entry.health = info->GetHealth();
+        entry.alive = info->IsDead() ? 0 : 1;
+        entry.team = info->GetTeamIndex();
+        s_stateCount++;
+    }
+
+    s_lastResolveTick = s_tickCount;
+}
+
 // ---- GameFrame hook ----
 
 void SmartBotsExtension::Hook_GameFrame(bool simulating)
@@ -151,99 +229,19 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
     s_tickCount++;
 
-    // Build entity pointer → edict index map for the combat detour
-    BotActionHook_ClearEntityMap();
+    // Refresh bot list + state at 8Hz (every 8 ticks).
+    // IPlayerInfo calls are expensive (trigger UTIL_GetListenServerHost),
+    // so we avoid doing this every tick.
+    bool freshScan = false;
+    if (s_tickCount % 8 == 0)
     {
-        int maxClients = gpGlobals->maxClients;
-        for (int i = 1; i <= maxClients; i++)
-        {
-            edict_t *edict = PEntityOfEntIndex(i);
-            if (!edict || edict->IsFree())
-                continue;
-
-            IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
-            if (!info || !info->IsConnected() || !info->IsFakeClient())
-                continue;
-
-            IServerUnknown *pUnknown = edict->GetUnknown();
-            if (!pUnknown)
-                continue;
-
-            CBaseEntity *pEntity = pUnknown->GetBaseEntity();
-            if (!pEntity)
-                continue;
-
-            BotActionHook_RegisterEntity((void *)pEntity, i);
-        }
+        ResolveBots();
+        freshScan = true;
     }
 
-    // --- Manual goto target (takes priority over Python commands) ---
-    float gotoX, gotoY, gotoZ;
-    bool hasGoto = BotActionHook_GetGotoTarget(gotoX, gotoY, gotoZ);
-
-    if (hasGoto)
-    {
-        int maxClients = gpGlobals->maxClients;
-
-        for (int i = 1; i <= maxClients; i++)
-        {
-            edict_t *edict = PEntityOfEntIndex(i);
-            if (!edict || edict->IsFree())
-                continue;
-
-            IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
-            if (!info || !info->IsConnected() || !info->IsFakeClient())
-                continue;
-
-            IServerUnknown *pUnknown = edict->GetUnknown();
-            if (!pUnknown)
-                continue;
-
-            CBaseEntity *pEntity = pUnknown->GetBaseEntity();
-            if (!pEntity)
-                continue;
-
-            if (BotActionHook_IssueMovementRequest(
-                    (void *)pEntity, gotoX, gotoY, gotoZ))
-            {
-                s_gfMoveReqCount++;
-            }
-        }
-
-        // Log every ~5 seconds
-        if (s_gfMoveReqLogThrottle++ % 330 == 0)
-        {
-            META_CONPRINTF("[SmartBots] GameFrame MovReq: %d total requests issued (tick %d)\n",
-                           s_gfMoveReqCount, s_tickCount);
-        }
-    }
-
-    // --- UDP bridge to Python brain ---
+    // --- UDP bridge: receive commands every tick (non-blocking, cheap) ---
     if (s_cvarAiEnabled.GetBool())
     {
-        // Send state at ~8Hz (every 8 ticks at 66 tick/s)
-        if (s_tickCount % 8 == 0)
-        {
-            int count = BotState_Collect(s_stateArray, 32);
-            if (count > 0)
-            {
-                int len = BotState_Serialize(s_stateArray, count, s_tickCount,
-                                             s_sendBuf, sizeof(s_sendBuf));
-                if (UdpBridge_Send(s_sendBuf, len))
-                {
-                    s_bridgeSendCount++;
-
-                    // Log first send and then every ~30 seconds
-                    if (s_bridgeSendCount == 1 || s_bridgeSendCount % 240 == 0)
-                    {
-                        META_CONPRINTF("[SmartBots] Bridge: sent state #%d (%d bots, %d bytes)\n",
-                                       s_bridgeSendCount, count, len);
-                    }
-                }
-            }
-        }
-
-        // Receive commands every tick (non-blocking)
         int bytesRead = UdpBridge_Recv(s_recvBuf, sizeof(s_recvBuf) - 1);
         if (bytesRead > 0)
         {
@@ -251,47 +249,83 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             BotCommand_Parse(s_recvBuf, bytesRead, s_tickCount);
             s_bridgeRecvCount++;
 
-            // Log first recv and then every ~30 seconds
             if (s_bridgeRecvCount == 1 || s_bridgeRecvCount % 240 == 0)
             {
                 META_CONPRINTF("[SmartBots] Bridge: recv commands #%d (%d bytes)\n",
                                s_bridgeRecvCount, bytesRead);
             }
         }
+    }
 
-        // Clear stale commands (older than ~1 second = 66 ticks)
-        BotCommand_ClearStale(s_tickCount, 66);
+    // --- All heavy work gated to 8Hz (every 8 ticks) ---
+    // AddMovementRequest triggers the game's pathfinder internally.
+    // Calling it 66x/sec per bot overloads the server. 8Hz is plenty —
+    // the locomotion system continues executing the last path between updates.
+    if (freshScan)
+    {
+        float gotoX, gotoY, gotoZ;
+        bool hasGoto = BotActionHook_GetGotoTarget(gotoX, gotoY, gotoZ);
 
-        // Execute Python commands for bots (skip if manual goto is active)
-        if (!hasGoto)
+        if (hasGoto)
         {
-            int maxClients = gpGlobals->maxClients;
-
-            for (int i = 1; i <= maxClients; i++)
+            for (int i = 0; i < s_resolvedBotCount; i++)
             {
-                BotCommandEntry cmd;
-                if (!BotCommand_Get(i, cmd))
-                    continue;
-
-                edict_t *edict = PEntityOfEntIndex(i);
-                if (!edict || edict->IsFree())
-                    continue;
-
-                IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
-                if (!info || !info->IsConnected() || !info->IsFakeClient())
-                    continue;
-
-                IServerUnknown *pUnknown = edict->GetUnknown();
-                if (!pUnknown)
-                    continue;
-
-                CBaseEntity *pEntity = pUnknown->GetBaseEntity();
-                if (!pEntity)
+                int idx = s_resolvedBots[i].edictIndex;
+                if (!TargetChanged(idx, gotoX, gotoY, gotoZ))
                     continue;
 
                 if (BotActionHook_IssueMovementRequest(
-                        (void *)pEntity, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
+                        (void *)s_resolvedBots[i].entity, gotoX, gotoY, gotoZ))
                 {
+                    RecordTarget(idx, gotoX, gotoY, gotoZ);
+                    s_gfMoveReqCount++;
+                }
+            }
+
+            if (s_gfMoveReqLogThrottle++ % 40 == 0)
+            {
+                META_CONPRINTF("[SmartBots] GameFrame MovReq: %d total (tick %d)\n",
+                               s_gfMoveReqCount, s_tickCount);
+            }
+        }
+
+        // Send state to Python brain
+        if (s_cvarAiEnabled.GetBool() && s_stateCount > 0)
+        {
+            int len = BotState_Serialize(s_stateArray, s_stateCount, s_tickCount,
+                                         s_sendBuf, sizeof(s_sendBuf));
+            if (UdpBridge_Send(s_sendBuf, len))
+            {
+                s_bridgeSendCount++;
+
+                if (s_bridgeSendCount == 1 || s_bridgeSendCount % 240 == 0)
+                {
+                    META_CONPRINTF("[SmartBots] Bridge: sent state #%d (%d bots, %d bytes)\n",
+                                   s_bridgeSendCount, s_stateCount, len);
+                }
+            }
+        }
+
+        // Execute Python commands (skip if manual goto is active)
+        if (s_cvarAiEnabled.GetBool() && !hasGoto)
+        {
+            BotCommand_ClearStale(s_tickCount, 66);
+
+            for (int i = 0; i < s_resolvedBotCount; i++)
+            {
+                int idx = s_resolvedBots[i].edictIndex;
+                BotCommandEntry cmd;
+                if (!BotCommand_Get(idx, cmd))
+                    continue;
+
+                if (!TargetChanged(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
+                    continue;
+
+                if (BotActionHook_IssueMovementRequest(
+                        (void *)s_resolvedBots[i].entity,
+                        cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
+                {
+                    RecordTarget(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
                     s_bridgeCmdExecCount++;
                 }
             }
@@ -301,26 +335,10 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
     // Log bot count periodically (~50 seconds)
     if (s_tickCount % 3300 == 0)
     {
-        int botCount = 0;
-        int maxClients = gpGlobals->maxClients;
-
-        for (int i = 1; i <= maxClients; i++)
-        {
-            edict_t *edict = PEntityOfEntIndex(i);
-            if (!edict || edict->IsFree())
-                continue;
-
-            IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
-            if (!info || !info->IsConnected() || !info->IsFakeClient())
-                continue;
-
-            botCount++;
-        }
-
-        if (botCount > 0)
+        if (s_resolvedBotCount > 0)
         {
             META_CONPRINTF("[SmartBots] GameFrame: %d bots active (tick %d)\n",
-                           botCount, s_tickCount);
+                           s_resolvedBotCount, s_tickCount);
         }
     }
 

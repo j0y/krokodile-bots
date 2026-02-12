@@ -85,7 +85,7 @@ services:
 
   ai-record:
     build:
-      context: ./ai-brain-old
+      context: ./ai-brain
       dockerfile: Dockerfile
     container_name: insurgency-ai-record
     restart: unless-stopped
