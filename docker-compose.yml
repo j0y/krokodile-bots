@@ -39,6 +39,28 @@ services:
       - RALLY_Z=32
       - MAP_NAME=${START_MAP:-ministry_coop}
       - DATA_DIR=/app/data
+      - TELEMETRY=1
+      - TELEMETRY_HOST=localhost
+      - TELEMETRY_PORT=5432
+    profiles:
+      - ai
+
+  telemetry-db:
+    image: postgres:17-alpine
+    container_name: telemetry-db
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - POSTGRES_USER=smartbots
+      - POSTGRES_PASSWORD=smartbots
+      - POSTGRES_DB=telemetry
+    tmpfs:
+      - /var/lib/postgresql/data
+    command: >
+      postgres
+        -c fsync=off
+        -c synchronous_commit=off
+        -c full_page_writes=off
     profiles:
       - ai
 

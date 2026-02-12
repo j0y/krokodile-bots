@@ -8,15 +8,17 @@ import signal
 import socket
 
 from tactical.planner import Planner
-from tactical.protocol import BotCommand, decode_state, encode_commands
+from tactical.protocol import decode_state, encode_commands
 from tactical.state import GameState
+from tactical.telemetry import BotStateRow, TelemetryClient
 
 log = logging.getLogger(__name__)
 
 
 class TacticalProtocol(asyncio.DatagramProtocol):
-    def __init__(self, planner: Planner) -> None:
+    def __init__(self, planner: Planner, telemetry: TelemetryClient | None = None) -> None:
         self.planner = planner
+        self.telemetry = telemetry
         self.transport: asyncio.DatagramTransport | None = None
         self._recv_count = 0
         self._send_count = 0
@@ -45,7 +47,26 @@ class TacticalProtocol(asyncio.DatagramProtocol):
                 alive,
             )
 
-        commands: list[BotCommand] = self.planner.compute_commands(state)
+        commands, cmd_rows = self.planner.compute_commands(state)
+
+        if self.telemetry is not None:
+            state_rows = [
+                BotStateRow(
+                    tick=state.tick,
+                    bot_id=b.id,
+                    alive=b.alive,
+                    team=b.team,
+                    health=b.health,
+                    pos_x=b.pos[0],
+                    pos_y=b.pos[1],
+                    pos_z=b.pos[2],
+                )
+                for b in state.bots.values()
+            ]
+            self.telemetry.record_state(state_rows)
+            if cmd_rows:
+                self.telemetry.record_commands(cmd_rows)
+
         if commands and self.transport is not None:
             payload = encode_commands(commands)
             self.transport.sendto(payload, addr)
@@ -55,7 +76,9 @@ class TacticalProtocol(asyncio.DatagramProtocol):
         log.error("UDP error: %s", exc)
 
 
-async def run_server(host: str, port: int, planner: Planner) -> None:
+async def run_server(
+    host: str, port: int, planner: Planner, telemetry: TelemetryClient | None = None,
+) -> None:
     log.info("Starting tactical brain on %s:%d", host, port)
     log.info("Rally point: (%.1f, %.1f, %.1f)", *planner.rally)
     if planner.influence_map:
@@ -71,7 +94,7 @@ async def run_server(host: str, port: int, planner: Planner) -> None:
     sock.bind((host, port))
 
     transport, _protocol = await loop.create_datagram_endpoint(
-        lambda: TacticalProtocol(planner),
+        lambda: TacticalProtocol(planner, telemetry),
         sock=sock,
     )
 
@@ -90,4 +113,6 @@ async def run_server(host: str, port: int, planner: Planner) -> None:
         await stop
     finally:
         transport.close()
+        if telemetry is not None:
+            telemetry.close()
         log.info("Tactical brain stopped")

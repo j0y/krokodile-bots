@@ -44,8 +44,15 @@ def main() -> None:
                 map_name, data_dir,
             )
 
+    telemetry = None
+    if os.environ.get("TELEMETRY") == "1":
+        from tactical.telemetry import TelemetryClient
+        tele_host = os.environ.get("TELEMETRY_HOST", "localhost")
+        tele_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
+        telemetry = TelemetryClient(host=tele_host, port=tele_port)
+
     planner = Planner(rally=(rally_x, rally_y, rally_z), influence_map=influence_map)
-    asyncio.run(run_server(host, port, planner))
+    asyncio.run(run_server(host, port, planner, telemetry=telemetry))
 
 
 main()

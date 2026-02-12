@@ -10,6 +10,7 @@ import logging
 from tactical.influence_map import InfluenceMap, WEIGHT_PROFILES
 from tactical.protocol import BotCommand
 from tactical.state import GameState
+from tactical.telemetry import BotCommandRow
 
 log = logging.getLogger(__name__)
 
@@ -24,15 +25,30 @@ class Planner:
         self.influence_map = influence_map
         self.profile_name = "defend"
 
-    def compute_commands(self, state: GameState) -> list[BotCommand]:
+    def compute_commands(
+        self, state: GameState,
+    ) -> tuple[list[BotCommand], list[BotCommandRow]]:
         alive_bots = [b for b in state.bots.values() if b.alive]
         if not alive_bots:
-            return []
+            return [], []
 
         if self.influence_map is None:
-            return self._rally_commands(alive_bots)
+            commands = self._rally_commands(alive_bots)
+        else:
+            commands = self._influence_commands(alive_bots)
 
-        return self._influence_commands(alive_bots)
+        rows = [
+            BotCommandRow(
+                tick=state.tick,
+                bot_id=cmd.id,
+                target_x=cmd.move_target[0],
+                target_y=cmd.move_target[1],
+                target_z=cmd.move_target[2],
+                profile=self.profile_name,
+            )
+            for cmd in commands
+        ]
+        return commands, rows
 
     def _rally_commands(self, alive_bots: list) -> list[BotCommand]:
         """Fallback: send all bots to the fixed rally point."""
