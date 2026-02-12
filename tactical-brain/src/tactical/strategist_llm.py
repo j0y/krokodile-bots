@@ -10,7 +10,7 @@ import httpx
 
 from tactical.areas import AreaMap
 from tactical.planner import Order, Planner
-from tactical.strategist import VALID_PROFILES, BaseStrategist, _Snapshot
+from tactical.strategist import VALID_PROFILES, BaseStrategist, TacticalEvent, _Snapshot
 
 log = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ class LLMStrategist(BaseStrategist):
     async def _decide(
         self,
         snapshot: _Snapshot,
-        events: list[str],
+        events: list[TacticalEvent],
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str | None, list[Order] | None]:
         sitrep = self._build_sitrep(snapshot, events, enemy_positions)
@@ -120,7 +120,7 @@ class LLMStrategist(BaseStrategist):
     def _build_sitrep(
         self,
         curr: _Snapshot,
-        events: list[str],
+        events: list[TacticalEvent],
         enemy_positions: list[tuple[float, float, float]],
     ) -> str:
         now = curr.timestamp

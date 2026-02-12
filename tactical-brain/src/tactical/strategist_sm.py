@@ -14,7 +14,7 @@ import logging
 
 from tactical.areas import AreaMap
 from tactical.planner import Order, Planner
-from tactical.strategist import BaseStrategist, _Snapshot
+from tactical.strategist import BaseStrategist, TacticalEvent, _Snapshot
 
 log = logging.getLogger(__name__)
 
@@ -45,16 +45,16 @@ class SMStrategist(BaseStrategist):
     async def _decide(
         self,
         snapshot: _Snapshot,
-        events: list[str],
+        events: list[TacticalEvent],
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str | None, list[Order] | None]:
         now = snapshot.timestamp
 
         # Classify events
-        has_round_start = any(e.startswith("ROUND_START") for e in events)
-        has_contact = any(e.startswith("CONTACT") for e in events)
-        has_heavy_losses = any(e.startswith("HEAVY_LOSSES") for e in events)
-        has_objective_lost = any(e.startswith("OBJECTIVE_LOST") for e in events)
+        has_round_start = any(e.kind == "ROUND_START" for e in events)
+        has_contact = any(e.kind == "CONTACT" for e in events)
+        has_heavy_losses = any(e.kind == "HEAVY_LOSSES" for e in events)
+        has_objective_lost = any(e.kind == "OBJECTIVE_LOST" for e in events)
 
         if has_contact:
             self._last_contact_time = now
@@ -71,7 +71,19 @@ class SMStrategist(BaseStrategist):
                 self._transition(_State.HOLD, now)
         elif self._state == _State.HOLD:
             if has_contact:
-                self._transition(_State.ENGAGE, now)
+                # Only engage if contact is near objective or adjacent areas
+                obj_name = self._active_objective(snapshot)
+                if obj_name:
+                    near_obj = {obj_name} | set(self._areas_near(obj_name))
+                    contact_areas: set[str] = set()
+                    for e in events:
+                        if e.kind == "CONTACT":
+                            contact_areas.update(e.areas)
+                    if contact_areas & near_obj:
+                        self._transition(_State.ENGAGE, now)
+                    # else: enemies far from objective, stay HOLD
+                else:
+                    self._transition(_State.ENGAGE, now)
         elif self._state == _State.ENGAGE:
             if self._last_contact_time and now - self._last_contact_time >= 15.0:
                 self._transition(_State.HOLD, now)

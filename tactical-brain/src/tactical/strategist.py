@@ -10,7 +10,7 @@ import asyncio
 import logging
 import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from tactical.areas import AreaMap
 from tactical.influence_map import WEIGHT_PROFILES
@@ -33,6 +33,22 @@ class _Snapshot:
     enemy_ids_alive: frozenset[int]
     current_profile: str
     objectives_captured: int
+
+
+@dataclass
+class TacticalEvent:
+    """Structured tactical event with machine-readable fields and human-readable str()."""
+
+    kind: str           # "ROUND_START", "CONTACT", "CASUALTY", "ENEMY_DOWN",
+                        # "LOST_CONTACT", "OBJECTIVE_LOST", "HEAVY_LOSSES", "STALEMATE"
+    message: str        # pre-built human-readable string (for LLM/logging)
+    count: int = 0      # primary count (enemies spotted, friendlies lost, etc.)
+    areas: dict[str, int] = field(default_factory=dict)  # area_name → count
+    remaining: int = 0  # remaining after event (alive friendlies/enemies)
+    total: int = 0      # denominator where applicable
+
+    def __str__(self) -> str:
+        return self.message
 
 
 class BaseStrategist(ABC):
@@ -107,7 +123,10 @@ class BaseStrategist(ABC):
         # Check stalemate (separate timer)
         if not events and self._prev_snapshot is not None:
             if now - self._last_event_time >= 30.0:
-                events.append(f"STALEMATE: no change for {int(now - self._last_event_time)}s")
+                events.append(TacticalEvent(
+                    kind="STALEMATE",
+                    message=f"STALEMATE: no change for {int(now - self._last_event_time)}s",
+                ))
 
         if events:
             self._last_event_time = now
@@ -150,7 +169,7 @@ class BaseStrategist(ABC):
     async def _decide(
         self,
         snapshot: _Snapshot,
-        events: list[str],
+        events: list[TacticalEvent],
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str | None, list[Order] | None]:
         """Return (reasoning, orders) or (None, None) to skip this tick."""
@@ -192,8 +211,8 @@ class BaseStrategist(ABC):
     # Area helpers for event enrichment
     # ------------------------------------------------------------------
 
-    def _area_summary(self, bot_ids: set[int] | frozenset[int], state: GameState) -> str:
-        """Map bot IDs to area names, return e.g. ' in courtyard (2), lobby' or ''."""
+    def _area_counts(self, bot_ids: set[int] | frozenset[int], state: GameState) -> dict[str, int]:
+        """Map bot IDs to area names, return {area_name: count}."""
         counts: dict[str, int] = {}
         for bid in bot_ids:
             bot = state.bots.get(bid)
@@ -202,67 +221,91 @@ class BaseStrategist(ABC):
             area = self._area_map.pos_to_area(bot.pos)
             if area:
                 counts[area] = counts.get(area, 0) + 1
-        if not counts:
+        return counts
+
+    @staticmethod
+    def _fmt_areas(areas: dict[str, int]) -> str:
+        """Format area counts as ' in courtyard (2), lobby' or '' if empty."""
+        if not areas:
             return ""
-        parts = [f"{name} ({n})" if n > 1 else name for name, n in counts.items()]
+        parts = [f"{name} ({n})" if n > 1 else name for name, n in areas.items()]
         return " in " + ", ".join(parts)
 
     # ------------------------------------------------------------------
     # Event detection
     # ------------------------------------------------------------------
 
-    def _detect_events(self, prev: _Snapshot | None, curr: _Snapshot, state: GameState) -> list[str]:
-        events: list[str] = []
+    def _detect_events(self, prev: _Snapshot | None, curr: _Snapshot, state: GameState) -> list[TacticalEvent]:
+        events: list[TacticalEvent] = []
 
         if prev is None:
-            events.append(
-                f"ROUND_START: {curr.friendly_alive} friendlies vs {curr.enemy_alive} enemies"
-            )
+            events.append(TacticalEvent(
+                kind="ROUND_START",
+                message=f"ROUND_START: {curr.friendly_alive} friendlies vs {curr.enemy_alive} enemies",
+                count=curr.friendly_alive, remaining=curr.enemy_alive,
+            ))
             return events
 
         # Round restart: everyone was dead, now alive again
         if prev.friendly_alive == 0 and curr.friendly_alive > 0:
-            events.append(
-                f"ROUND_START: {curr.friendly_alive} friendlies vs {curr.enemy_alive} enemies"
-            )
+            events.append(TacticalEvent(
+                kind="ROUND_START",
+                message=f"ROUND_START: {curr.friendly_alive} friendlies vs {curr.enemy_alive} enemies",
+                count=curr.friendly_alive, remaining=curr.enemy_alive,
+            ))
             self._heavy_losses_triggered = False
             return events
 
         # Friendly casualties
         lost = prev.friendly_ids_alive - curr.friendly_ids_alive
         if lost:
-            where = self._area_summary(lost, state)
-            events.append(
-                f"CASUALTY: lost {len(lost)} friendlies{where} ({curr.friendly_alive} remaining)"
-            )
+            areas = self._area_counts(lost, state)
+            where = self._fmt_areas(areas)
+            events.append(TacticalEvent(
+                kind="CASUALTY",
+                message=f"CASUALTY: lost {len(lost)} friendlies{where} ({curr.friendly_alive} remaining)",
+                count=len(lost), areas=areas, remaining=curr.friendly_alive,
+            ))
 
         # Enemy down
         killed = prev.enemy_ids_alive - curr.enemy_ids_alive
         if killed:
-            where = self._area_summary(killed, state)
-            events.append(
-                f"ENEMY_DOWN: {len(killed)} eliminated{where} ({curr.enemy_alive} remaining)"
-            )
+            areas = self._area_counts(killed, state)
+            where = self._fmt_areas(areas)
+            events.append(TacticalEvent(
+                kind="ENEMY_DOWN",
+                message=f"ENEMY_DOWN: {len(killed)} eliminated{where} ({curr.enemy_alive} remaining)",
+                count=len(killed), areas=areas, remaining=curr.enemy_alive,
+            ))
 
         # New contacts
         new_contacts = curr.spotted_enemy_ids - prev.spotted_enemy_ids
         if new_contacts:
-            where = self._area_summary(new_contacts, state)
-            events.append(
-                f"CONTACT: {len(new_contacts)} new enemies spotted{where} "
-                f"({len(curr.spotted_enemy_ids)} total)"
-            )
+            areas = self._area_counts(new_contacts, state)
+            where = self._fmt_areas(areas)
+            events.append(TacticalEvent(
+                kind="CONTACT",
+                message=f"CONTACT: {len(new_contacts)} new enemies spotted{where} "
+                        f"({len(curr.spotted_enemy_ids)} total)",
+                count=len(new_contacts), areas=areas,
+                remaining=len(curr.spotted_enemy_ids),
+            ))
 
         # Lost all contact
         if prev.spotted_enemy_ids and not curr.spotted_enemy_ids:
-            events.append("LOST_CONTACT: no enemies visible")
+            events.append(TacticalEvent(
+                kind="LOST_CONTACT",
+                message="LOST_CONTACT: no enemies visible",
+            ))
 
         # Objective lost
         if curr.objectives_captured > prev.objectives_captured:
-            events.append(
-                f"OBJECTIVE_LOST: objective #{curr.objectives_captured} captured by enemy "
-                f"({curr.objectives_captured} total lost)"
-            )
+            events.append(TacticalEvent(
+                kind="OBJECTIVE_LOST",
+                message=f"OBJECTIVE_LOST: objective #{curr.objectives_captured} captured by enemy "
+                        f"({curr.objectives_captured} total lost)",
+                count=curr.objectives_captured, total=curr.objectives_captured,
+            ))
 
         # Heavy losses threshold (trigger once per round)
         if (
@@ -272,9 +315,11 @@ class BaseStrategist(ABC):
             and prev.friendly_alive > prev.friendly_total * 0.5
         ):
             self._heavy_losses_triggered = True
-            events.append(
-                f"HEAVY_LOSSES: below 50% strength "
-                f"({curr.friendly_alive}/{curr.friendly_total})"
-            )
+            events.append(TacticalEvent(
+                kind="HEAVY_LOSSES",
+                message=f"HEAVY_LOSSES: below 50% strength "
+                        f"({curr.friendly_alive}/{curr.friendly_total})",
+                count=curr.friendly_alive, total=curr.friendly_total,
+            ))
 
         return events
