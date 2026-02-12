@@ -6,6 +6,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import re
 import time
 from dataclasses import dataclass
 
@@ -23,6 +24,7 @@ VALID_PROFILES = frozenset(WEIGHT_PROFILES.keys())
 
 def _build_system_prompt(area_map: AreaMap) -> str:
     area_desc = area_map.describe()
+    area_names = sorted(area_map.areas.keys())
 
     # Collect roles for enemy intel
     approach_areas = [
@@ -36,12 +38,18 @@ def _build_system_prompt(area_map: AreaMap) -> str:
             + ", ".join(approach_areas) + "."
         )
 
+    # Pick two example names for the prompt
+    ex1 = area_names[0] if len(area_names) > 0 else "area1"
+    ex2 = area_names[1] if len(area_names) > 1 else "area2"
+
     return f"""\
 You are a tactical AI commander for a team of bots in Insurgency (2014).
 Your team is defending against human attackers. Issue per-area orders
 to position your bots effectively.
 
 {area_desc}
+
+VALID AREA NAMES (use ONLY these): {", ".join(area_names)}
 
 Available postures:
 - "defend": Hold positions with good cover and sightlines near the objective.
@@ -51,10 +59,12 @@ Available postures:
 - "overrun": All-out rush to the objective. Ignore threats.
 {approach_note}
 Rules:
-- Respond ONLY with JSON: {{"orders": [{{"areas": ["area1", ...], "posture": "<name>", "bots": N}}, ...], "reasoning": "<1 sentence>"}}
+- Respond with a SINGLE LINE of compact JSON (no markdown, no code fences, no newlines): {{"orders": [{{"areas": ["{ex1}", ...], "posture": "<name>", "bots": N}}, ...], "reasoning": "<1 sentence>"}}
+- Use ONLY the area names listed above. Do NOT invent new names.
 - Each order assigns N bots to the listed areas with a posture.
-- You can combine areas: ["lobby", "courtyard"] covers both.
-- You can subtract areas: ["-balcony"] removes that zone from the order.
+- You can combine areas: ["{ex1}", "{ex2}"] covers both.
+- You can subtract areas: ["-{ex2}"] removes that zone from the order.
+- Use at most 3 orders. Keep it simple.
 - Total bots across all orders should roughly match your team size.
 - If taking heavy losses, consider changing postures.
 - If stalemate, try something more aggressive.
@@ -223,7 +233,7 @@ class Strategist:
             friendly_alive=len(friendly_alive_ids),
             friendly_total=friendly_total,
             enemy_alive=len(enemy_alive_ids),
-            spotted_enemy_ids=frozenset(spotted),
+            spotted_enemy_ids=frozenset(spotted & enemy_alive_ids),
             friendly_ids_alive=frozenset(friendly_alive_ids),
             enemy_ids_alive=frozenset(enemy_alive_ids),
             current_profile=self._planner.profile_name,
@@ -379,19 +389,55 @@ class Strategist:
 
         return self._parse_response(response.json())
 
+    @staticmethod
+    def _salvage_truncated(text: str) -> dict | None:
+        """Try to extract complete order objects from truncated JSON."""
+        # Find all complete {"areas":...,"bots":N} objects
+        pattern = r'\{"areas"\s*:\s*\[[^\]]*\]\s*,\s*"posture"\s*:\s*"[^"]+"\s*,\s*"bots"\s*:\s*\d+\s*\}'
+        matches = re.findall(pattern, text)
+        if not matches:
+            return None
+        orders = []
+        for m in matches:
+            try:
+                orders.append(json.loads(m))
+            except json.JSONDecodeError:
+                continue
+        if not orders:
+            return None
+        log.info("Strategist: salvaged %d orders from truncated response", len(orders))
+        return {"orders": orders, "reasoning": "truncated"}
+
     def _parse_response(self, body: dict) -> tuple[str | None, list[Order] | None]:
         """Parse OpenAI-compatible chat completion response into orders."""
         try:
             text = body["choices"][0]["message"]["content"].strip()
+            finish_reason = body["choices"][0].get("finish_reason", "unknown")
         except (KeyError, IndexError, TypeError):
             log.warning("Strategist: unexpected response structure: %s", body)
             return None, None
 
+        if finish_reason == "length":
+            log.warning("Strategist: response truncated (finish_reason=length)")
+
+        # Strip markdown code fences if present
+        if text.startswith("```"):
+            first_nl = text.find("\n")
+            if first_nl != -1:
+                text = text[first_nl + 1:]
+            last_fence = text.rfind("```")
+            if last_fence != -1:
+                text = text[:last_fence]
+            text = text.strip()
+
         try:
             obj = json.loads(text)
         except json.JSONDecodeError:
-            log.warning("Strategist: could not parse LLM response as JSON: %s", text[:200])
-            return None, None
+            # Try to salvage truncated JSON by extracting complete order objects
+            obj = self._salvage_truncated(text)
+            if obj is None:
+                log.warning("Strategist: could not parse LLM response as JSON: %s", text[:300])
+                return None, None
 
         reasoning = obj.get("reasoning", "")
         raw_orders = obj.get("orders")
