@@ -14,11 +14,21 @@ bool BotActionHook_InstallDetour();
 // Remove the detour, restore original bytes.
 void BotActionHook_RemoveDetour();
 
-// Set a goto target. Next time any bot's CINSBotCombat::Update fires,
-// it will be redirected to CINSBotApproach(target).
+// Set a goto target for all bots
 void BotActionHook_SetGotoTarget(float x, float y, float z);
+
+// Clear the goto target
+void BotActionHook_ClearGotoTarget();
 
 // Check if a goto command is pending
 bool BotActionHook_HasGotoTarget();
+
+// Get the current goto target coordinates. Returns false if no target.
+bool BotActionHook_GetGotoTarget(float &x, float &y, float &z);
+
+// Issue a movement request directly to a bot entity via vtable dispatch.
+// entityPtr must be a CINSNextBot* (the bot's CBaseEntity pointer).
+// Returns true if the request was successfully issued.
+bool BotActionHook_IssueMovementRequest(void *entityPtr, float x, float y, float z);
 
 #endif // _SMARTBOTS_BOT_ACTION_HOOK_H_

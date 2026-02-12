@@ -33,8 +33,18 @@ typedef void (*CINSBotCombat_Update_t)(ActionResult *sret, void *thisptr, void *
 // void CINSBotApproach::CINSBotApproach(void *this, float x, float y, float z)
 typedef void (*CINSBotApproach_Ctor_t)(void *thisptr, float x, float y, float z);
 
+// CINSBotLocomotion::AddMovementRequest(Vector, INSBotMovementType, INSBotPriority, float)
+// x86-32 cdecl: all args on stack, this = first arg
+typedef void (*AddMovementRequest_t)(void *thisptr, float x, float y, float z,
+                                     int moveType, int priority, float speed);
+
 // Object sizes from class_data_layouts.md
 static constexpr size_t CINSBOT_APPROACH_SIZE = 128;  // last member at +0x60, pad to 128
 static constexpr size_t CINSBOT_COMBAT_SIZE   = 136;  // 0x88
+
+// Movement request constants (from decompiled CINSBotApproach::OnStart)
+static constexpr int MOVE_TYPE_APPROACH = 6;
+static constexpr int MOVE_PRIORITY_NORMAL = 8;
+static constexpr float MOVE_SPEED_DEFAULT = 5.0f;
 
 #endif // _SMARTBOTS_BOT_ACTION_TYPES_H_

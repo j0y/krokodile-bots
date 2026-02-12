@@ -15,7 +15,11 @@ struct ServerOffsets
     static constexpr uintptr_t CINSBotApproach_ctor   = 0x006e7490;
     static constexpr uintptr_t CINSBotCombat_Update   = 0x00706550;
     static constexpr uintptr_t CINSBotCombat_ctor     = 0x00705390;
+    static constexpr uintptr_t CINSBotLocomotion_AddMovementRequest = 0x00750dd0;
 };
+
+// CINSNextBot vtable byte offset for GetLocomotionInterface virtual call
+static constexpr uintptr_t kVtableOff_GetLocomotionInterface = 0x96c;
 
 // Verify first N bytes at address match expected prologue
 bool VerifySignature(void *address, const unsigned char *expected, size_t len);

@@ -28,6 +28,10 @@ static uintptr_t s_serverBase = 0;
 // Tick counter for throttled logging
 static int s_tickCount = 0;
 
+// GameFrame movement request counters
+static int s_gfMoveReqCount = 0;
+static int s_gfMoveReqLogThrottle = 0;
+
 // ---- ConCommand registration (required by Source engine) ----
 
 class BaseAccessor : public IConCommandBaseAccessor
@@ -54,11 +58,23 @@ static void CC_SmartBotsGoto(const CCommand &args)
     float z = atof(args.Arg(3));
 
     BotActionHook_SetGotoTarget(x, y, z);
-    META_CONPRINTF("[SmartBots] Goto target set: %.1f %.1f %.1f (will activate on next combat tick)\n", x, y, z);
+    s_gfMoveReqCount = 0;
+    s_gfMoveReqLogThrottle = 0;
+    META_CONPRINTF("[SmartBots] Goto target set: %.1f %.1f %.1f (active on ALL bots via GameFrame)\n", x, y, z);
 }
 
 static ConCommand s_cmdGoto("smartbots_goto", CC_SmartBotsGoto,
-    "Send the next combat bot to approach a position: smartbots_goto <x> <y> <z>");
+    "Redirect combat bots to approach a position: smartbots_goto <x> <y> <z>");
+
+// ---- ConCommand: smartbots_stop ----
+
+static void CC_SmartBotsStop(const CCommand &args)
+{
+    BotActionHook_ClearGotoTarget();
+}
+
+static ConCommand s_cmdStop("smartbots_stop", CC_SmartBotsStop,
+    "Clear the goto target and let bots resume normal combat AI");
 
 // ---- ConCommand: smartbots_status ----
 
@@ -109,8 +125,49 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
     s_tickCount++;
 
-    // Log bot count every ~5 seconds (66 ticks/sec * 5 = 330)
-    if (s_tickCount % 330 == 0)
+    // If a goto target is active, issue movement requests to ALL bots every tick
+    float gotoX, gotoY, gotoZ;
+    if (BotActionHook_GetGotoTarget(gotoX, gotoY, gotoZ))
+    {
+        int maxClients = gpGlobals->maxClients;
+
+        for (int i = 1; i <= maxClients; i++)
+        {
+            edict_t *edict = PEntityOfEntIndex(i);
+            if (!edict || edict->IsFree())
+                continue;
+
+            IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
+            if (!info || !info->IsConnected() || !info->IsFakeClient())
+                continue;
+
+            // Get entity pointer (CINSNextBot*) from edict
+            IServerUnknown *pUnknown = edict->GetUnknown();
+            if (!pUnknown)
+                continue;
+
+            CBaseEntity *pEntity = pUnknown->GetBaseEntity();
+            if (!pEntity)
+                continue;
+
+            // Issue movement request via vtable dispatch
+            if (BotActionHook_IssueMovementRequest(
+                    (void *)pEntity, gotoX, gotoY, gotoZ))
+            {
+                s_gfMoveReqCount++;
+            }
+        }
+
+        // Log every ~5 seconds
+        if (s_gfMoveReqLogThrottle++ % 330 == 0)
+        {
+            META_CONPRINTF("[SmartBots] GameFrame MovReq: %d total requests issued (tick %d)\n",
+                           s_gfMoveReqCount, s_tickCount);
+        }
+    }
+
+    // Log bot count periodically
+    if (s_tickCount % 3300 == 0)
     {
         int botCount = 0;
         int maxClients = gpGlobals->maxClients;
@@ -128,7 +185,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             botCount++;
         }
 
-        if (botCount > 0 && s_tickCount % 3300 == 0) // every ~50 seconds
+        if (botCount > 0)
         {
             META_CONPRINTF("[SmartBots] GameFrame: %d bots active (tick %d)\n",
                            botCount, s_tickCount);
