@@ -10,7 +10,7 @@ import socket
 from tactical.planner import Planner
 from tactical.protocol import decode_state, encode_commands
 from tactical.state import GameState
-from tactical.strategist import Strategist
+from tactical.strategist import BaseStrategist
 from tactical.telemetry import BotStateRow, TelemetryClient
 
 log = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ class TacticalProtocol(asyncio.DatagramProtocol):
         self,
         planner: Planner,
         telemetry: TelemetryClient | None = None,
-        strategist: Strategist | None = None,
+        strategist: BaseStrategist | None = None,
     ) -> None:
         self.planner = planner
         self.telemetry = telemetry
@@ -92,7 +92,7 @@ async def run_server(
     port: int,
     planner: Planner,
     telemetry: TelemetryClient | None = None,
-    strategist: Strategist | None = None,
+    strategist: BaseStrategist | None = None,
 ) -> None:
     log.info("Starting tactical brain on %s:%d", host, port)
     log.info("Rally point: (%.1f, %.1f, %.1f)", *planner.rally)

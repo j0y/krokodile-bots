@@ -78,8 +78,8 @@ def main() -> None:
     strategist = None
     openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
     if openrouter_key and area_map is not None:
-        from tactical.strategist import Strategist
-        strategist = Strategist(
+        from tactical.strategist_llm import LLMStrategist
+        strategist = LLMStrategist(
             planner=planner,
             area_map=area_map,
             api_key=openrouter_key,
@@ -88,10 +88,12 @@ def main() -> None:
             min_interval=float(os.environ.get("STRATEGIST_MIN_INTERVAL", "12")),
         )
         log.info("LLM strategist enabled (model=%s)", strategist._model)
-    elif openrouter_key:
-        log.info("LLM strategist disabled (no area definitions)")
+    elif area_map is not None:
+        from tactical.strategist_sm import SMStrategist
+        strategist = SMStrategist(planner=planner, area_map=area_map)
+        log.info("State machine strategist enabled")
     else:
-        log.info("LLM strategist disabled (no OPENROUTER_API_KEY)")
+        log.info("Strategist disabled (no area definitions)")
 
     asyncio.run(run_server(host, port, planner, telemetry=telemetry, strategist=strategist))
 
