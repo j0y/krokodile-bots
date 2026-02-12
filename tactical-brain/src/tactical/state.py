@@ -23,7 +23,8 @@ class GameState:
     objectives_captured: int = 0
     phase: str = "active"    # "preround", "active", "over"
     capping_cp: int = -1     # CP index being captured by enemy, -1 if none
-    # Counter-attack ConVars from engine
-    ca_disabled: bool = False  # mp_checkpoint_counterattack_disable
-    ca_duration: int = 65      # mp_checkpoint_counterattack_duration
-    ca_duration_finale: int = 120  # mp_checkpoint_counterattack_duration_finale
+    # Counter-attack state from engine
+    counter_attack: bool = False  # CINSRules::IsCounterAttack() — live flag
+    ca_disabled: bool = False     # mp_checkpoint_counterattack_disable
+    ca_duration: int = 65         # mp_checkpoint_counterattack_duration
+    ca_duration_finale: int = 120 # mp_checkpoint_counterattack_duration_finale

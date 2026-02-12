@@ -16,6 +16,10 @@ struct ServerOffsets
     static constexpr uintptr_t CINSBotCombat_Update   = 0x00706550;
     static constexpr uintptr_t CINSBotCombat_ctor     = 0x00705390;
     static constexpr uintptr_t CINSBotLocomotion_AddMovementRequest = 0x00750dd0;
+    // Game rules (BSS)
+    static constexpr uintptr_t g_pGameRules           = 0x00c0c3d8;
+    // CINSRules::IsCounterAttack() const — non-virtual, thiscall
+    static constexpr uintptr_t CINSRules_IsCounterAttack = 0x0022e150;
 };
 
 // CINSNextBot vtable byte offset for GetLocomotionInterface virtual call

@@ -76,8 +76,8 @@ class BaseStrategist(ABC):
         self._task: asyncio.Task[None] | None = None
         self._heavy_losses_triggered = False
 
-        # Counter-attack tracking (timer in monotonic seconds, 0 = inactive)
-        self._counter_attack_until: float = 0.0
+        # Counter-attack tracking (driven by engine's CINSRules::IsCounterAttack flag)
+        self._prev_counter_attack: bool = False
 
         # Round/objective tracking
         self._round_num: int = 0
@@ -151,32 +151,20 @@ class BaseStrategist(ABC):
 
         events = self._detect_events(self._prev_snapshot, curr, state)
 
-        # Counter-attack management (uses engine ConVars from game state)
-        has_obj_lost = any(e.kind == "OBJECTIVE_LOST" for e in events)
-        has_round_start = any(e.kind == "ROUND_START" for e in events)
-
-        if has_round_start:
-            self._counter_attack_until = 0.0
-
-        if has_obj_lost and not state.ca_disabled:
-            duration = self._counter_attack_duration(state)
-            self._counter_attack_until = now + duration
+        # Counter-attack management (driven by CINSRules::IsCounterAttack engine flag)
+        if state.counter_attack and not self._prev_counter_attack:
             events.append(TacticalEvent(
                 kind="COUNTER_ATTACK",
-                message=f"COUNTER_ATTACK: objective lost, {duration:.0f}s counter-attack window",
+                message="COUNTER_ATTACK: engine flag active",
             ))
-            log.info("Counter-attack started (%.0fs, from engine ConVar)", duration)
-        elif has_obj_lost and state.ca_disabled:
-            log.info("Counter-attacks disabled on this server (mp_checkpoint_counterattack_disable=1)")
-
-        # Counter-attack timer expiry
-        if self._counter_attack_until > 0 and now >= self._counter_attack_until:
+            log.info("Counter-attack started (engine flag)")
+        elif not state.counter_attack and self._prev_counter_attack:
             events.append(TacticalEvent(
                 kind="COUNTER_ATTACK_END",
-                message="COUNTER_ATTACK_END: timer expired",
+                message="COUNTER_ATTACK_END: engine flag cleared",
             ))
-            self._counter_attack_until = 0.0
-            log.info("Counter-attack ended")
+            log.info("Counter-attack ended (engine flag)")
+        self._prev_counter_attack = state.counter_attack
 
         # Check stalemate (separate timer)
         if not events and self._prev_snapshot is not None:
@@ -277,20 +265,8 @@ class BaseStrategist(ABC):
             current_profile=self._planner.profile_name,
             objectives_captured=state.objectives_captured,
             capping_cp=state.capping_cp,
-            counter_attack=self._counter_attack_until > 0 and now < self._counter_attack_until,
+            counter_attack=state.counter_attack,
         )
-
-    # ------------------------------------------------------------------
-    # Counter-attack helpers
-    # ------------------------------------------------------------------
-
-    def _counter_attack_duration(self, state: GameState) -> float:
-        """Return counter-attack duration from engine ConVars. Finale if all objectives lost."""
-        obj_areas = [a for a in self._area_map.areas.values() if a.role == "objective"]
-        total = len(obj_areas) if obj_areas else 1
-        if state.objectives_captured >= total:
-            return float(state.ca_duration_finale)
-        return float(state.ca_duration)
 
     # ------------------------------------------------------------------
     # Area helpers for event enrichment

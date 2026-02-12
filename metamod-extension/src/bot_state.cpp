@@ -97,10 +97,11 @@ int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf
 
     offset += snprintf(buf + offset, bufSize - offset,
         "],\"obj\":%d,\"phase\":\"%s\",\"cap\":%d,"
-        "\"ca_off\":%d,\"ca_dur\":%d,\"ca_dur_f\":%d}",
+        "\"ca\":%d,\"ca_off\":%d,\"ca_dur\":%d,\"ca_dur_f\":%d}",
         GameEvents_GetObjectivesCaptured(),
         GameEvents_GetPhase(),
         GameEvents_GetCappingCP(),
+        GameEvents_IsCounterAttack() ? 1 : 0,
         GameEvents_CounterAttackDisabled() ? 1 : 0,
         GameEvents_CounterAttackDuration(),
         GameEvents_CounterAttackDurationFinale());

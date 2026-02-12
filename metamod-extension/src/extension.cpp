@@ -583,6 +583,9 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
         GameEvents_Init(pGameEventMgr, /*controlledTeam=*/2);
     }
 
+    // Resolve game rules for live counter-attack detection
+    GameEvents_InitGameRules(s_serverBase);
+
     META_CONPRINTF("[SmartBots] Extension loaded (v0.2.0) — Phase 2 active\n");
 
     if (late)

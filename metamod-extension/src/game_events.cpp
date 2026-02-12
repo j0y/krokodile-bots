@@ -1,5 +1,6 @@
 #include "game_events.h"
 #include "extension.h"
+#include "sig_resolve.h"
 #include <convar.h>
 
 extern ISmmAPI *g_SMAPI;   // from PLUGIN_EXPOSE macro
@@ -244,4 +245,32 @@ int GameEvents_CounterAttackDurationFinale()
 {
     CacheCounterAttackCVars();
     return s_cvCADurationFinale ? s_cvCADurationFinale->GetInt() : 120;
+}
+
+// --- Live counter-attack state via CINSRules::IsCounterAttack() ---
+
+// x86-32 Linux/GCC thiscall: `this` is first stack argument (not ECX)
+typedef bool (*IsCounterAttackFn)(void *thisRules);
+
+static void **s_pGameRules = nullptr;       // &g_pGameRules (pointer to pointer)
+static IsCounterAttackFn s_fnIsCA = nullptr;
+
+void GameEvents_InitGameRules(uintptr_t serverBase)
+{
+    s_pGameRules = reinterpret_cast<void **>(
+        serverBase + ServerOffsets::g_pGameRules);
+    s_fnIsCA = reinterpret_cast<IsCounterAttackFn>(
+        serverBase + ServerOffsets::CINSRules_IsCounterAttack);
+    META_CONPRINTF("[SmartBots] GameRules: resolved g_pGameRules=%p, IsCounterAttack=%p\n",
+                   (void *)s_pGameRules, (void *)s_fnIsCA);
+}
+
+bool GameEvents_IsCounterAttack()
+{
+    if (!s_pGameRules || !s_fnIsCA)
+        return false;
+    void *rules = *s_pGameRules;
+    if (!rules)
+        return false;
+    return s_fnIsCA(rules);
 }

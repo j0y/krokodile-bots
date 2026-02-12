@@ -1,6 +1,7 @@
 #ifndef _SMARTBOTS_GAME_EVENTS_H_
 #define _SMARTBOTS_GAME_EVENTS_H_
 
+#include <cstdint>
 #include <igameevents.h>
 
 // Store references for deferred event registration.
@@ -29,5 +30,10 @@ bool GameEvents_CounterAttackDisabled();
 int GameEvents_CounterAttackDuration();
 // mp_checkpoint_counterattack_duration_finale (default 120)
 int GameEvents_CounterAttackDurationFinale();
+
+// Live counter-attack state from CINSRules::IsCounterAttack().
+// Must be initialized with the server module base via GameEvents_InitGameRules().
+void GameEvents_InitGameRules(uintptr_t serverBase);
+bool GameEvents_IsCounterAttack();
 
 #endif // _SMARTBOTS_GAME_EVENTS_H_
