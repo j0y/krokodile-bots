@@ -26,6 +26,9 @@ class _State(enum.Enum):
     FALLBACK = "FALLBACK"
 
 
+THREAT_DECAY_SECS = 20.0
+
+
 class SMStrategist(BaseStrategist):
     def __init__(
         self,
@@ -36,7 +39,20 @@ class SMStrategist(BaseStrategist):
         super().__init__(planner, area_map, min_interval=min_interval)
         self._state = _State.SETUP
         self._state_enter_time: float = 0.0
-        self._last_contact_time: float = 0.0
+        self._threat_map: dict[str, float] = {}  # area_name → last_threat_time
+
+    # ------------------------------------------------------------------
+    # Threat memory
+    # ------------------------------------------------------------------
+
+    def _active_threats(self, now: float) -> dict[str, float]:
+        """Return {area: seconds_since_last_threat} for non-expired threats."""
+        active = {}
+        for area, t in self._threat_map.items():
+            age = now - t
+            if age < THREAT_DECAY_SECS:
+                active[area] = age
+        return active
 
     # ------------------------------------------------------------------
     # Decision: process events → transition → generate orders
@@ -57,11 +73,21 @@ class SMStrategist(BaseStrategist):
         has_objective_lost = any(e.kind == "OBJECTIVE_LOST" for e in events)
         has_capture_start = any(e.kind == "CAPTURE_START" for e in events)
 
-        if has_contact:
-            self._last_contact_time = now
+        # Update threat map from events
+        for e in events:
+            if e.kind in ("CONTACT", "CASUALTY"):
+                for area in e.areas:
+                    self._threat_map[area] = now
+
+        # Update threat map from currently visible enemies
+        if enemy_positions:
+            visible_areas = self._area_map.enemies_per_area(enemy_positions)
+            for area in visible_areas:
+                self._threat_map[area] = now
 
         # --- State transitions ---
         if has_round_start:
+            self._threat_map.clear()
             self._transition(_State.SETUP, now)
         elif has_heavy_losses:
             self._transition(_State.FALLBACK, now)
@@ -88,7 +114,7 @@ class SMStrategist(BaseStrategist):
                 else:
                     self._transition(_State.ENGAGE, now)
         elif self._state == _State.ENGAGE:
-            if self._last_contact_time and now - self._last_contact_time >= 15.0:
+            if not self._active_threats(now):
                 self._transition(_State.HOLD, now)
         elif self._state == _State.FALLBACK:
             if now - self._state_enter_time >= 20.0:
@@ -213,11 +239,21 @@ class SMStrategist(BaseStrategist):
         """Enemies spotted: push toward contact area, defend the rest."""
         n = snapshot.friendly_alive
         obj_name = self._active_objective(snapshot)
+        now = snapshot.timestamp
 
+        # Merge current sightings with threat memory
         enemies_by_area = self._area_map.enemies_per_area(enemy_positions)
+        threats = self._active_threats(now)
 
-        if enemies_by_area:
-            hottest = max(enemies_by_area, key=enemies_by_area.get)
+        combined: dict[str, int] = {}
+        for area, count in enemies_by_area.items():
+            combined[area] = count
+        for area in threats:
+            if area not in combined:
+                combined[area] = 0  # known threat, no current count
+
+        if combined:
+            hottest = max(combined, key=lambda a: combined[a])
             n_push = max(1, round(n * 0.5))
             n_defend = n - n_push
 
@@ -230,7 +266,7 @@ class SMStrategist(BaseStrategist):
                 )
             return f"engage: pushing {hottest}", orders
 
-        # No enemies located — fall back to hold posture
+        # No enemies located and no threat memory — fall back to hold posture
         return self._orders_hold(snapshot, enemy_positions)
 
     def _orders_fallback(
