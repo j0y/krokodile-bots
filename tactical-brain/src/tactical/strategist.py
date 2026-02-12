@@ -102,7 +102,7 @@ class BaseStrategist(ABC):
         curr = self._take_snapshot(state, controlled)
         now = curr.timestamp
 
-        events = self._detect_events(self._prev_snapshot, curr)
+        events = self._detect_events(self._prev_snapshot, curr, state)
 
         # Check stalemate (separate timer)
         if not events and self._prev_snapshot is not None:
@@ -189,10 +189,29 @@ class BaseStrategist(ABC):
         )
 
     # ------------------------------------------------------------------
+    # Area helpers for event enrichment
+    # ------------------------------------------------------------------
+
+    def _area_summary(self, bot_ids: set[int] | frozenset[int], state: GameState) -> str:
+        """Map bot IDs to area names, return e.g. ' in courtyard (2), lobby' or ''."""
+        counts: dict[str, int] = {}
+        for bid in bot_ids:
+            bot = state.bots.get(bid)
+            if bot is None:
+                continue
+            area = self._area_map.pos_to_area(bot.pos)
+            if area:
+                counts[area] = counts.get(area, 0) + 1
+        if not counts:
+            return ""
+        parts = [f"{name} ({n})" if n > 1 else name for name, n in counts.items()]
+        return " in " + ", ".join(parts)
+
+    # ------------------------------------------------------------------
     # Event detection
     # ------------------------------------------------------------------
 
-    def _detect_events(self, prev: _Snapshot | None, curr: _Snapshot) -> list[str]:
+    def _detect_events(self, prev: _Snapshot | None, curr: _Snapshot, state: GameState) -> list[str]:
         events: list[str] = []
 
         if prev is None:
@@ -212,22 +231,25 @@ class BaseStrategist(ABC):
         # Friendly casualties
         lost = prev.friendly_ids_alive - curr.friendly_ids_alive
         if lost:
+            where = self._area_summary(lost, state)
             events.append(
-                f"CASUALTY: lost {len(lost)} friendlies ({curr.friendly_alive} remaining)"
+                f"CASUALTY: lost {len(lost)} friendlies{where} ({curr.friendly_alive} remaining)"
             )
 
         # Enemy down
         killed = prev.enemy_ids_alive - curr.enemy_ids_alive
         if killed:
+            where = self._area_summary(killed, state)
             events.append(
-                f"ENEMY_DOWN: {len(killed)} eliminated ({curr.enemy_alive} remaining)"
+                f"ENEMY_DOWN: {len(killed)} eliminated{where} ({curr.enemy_alive} remaining)"
             )
 
         # New contacts
         new_contacts = curr.spotted_enemy_ids - prev.spotted_enemy_ids
         if new_contacts:
+            where = self._area_summary(new_contacts, state)
             events.append(
-                f"CONTACT: {len(new_contacts)} new enemies spotted "
+                f"CONTACT: {len(new_contacts)} new enemies spotted{where} "
                 f"({len(curr.spotted_enemy_ids)} total)"
             )
 

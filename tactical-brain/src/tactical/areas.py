@@ -229,6 +229,20 @@ class AreaMap:
 
         return "\n".join(lines)
 
+    def pos_to_area(self, pos: tuple[float, float, float]) -> str | None:
+        """Map a world position to the best-matching area name, or None."""
+        if not self.areas:
+            return None
+        _, idx = self._tree.query(pos)
+        idx = int(idx)
+        best_name = ""
+        best_w = 0.0
+        for name, w in self._weights.items():
+            if w[idx] > best_w:
+                best_w = w[idx]
+                best_name = name
+        return best_name if best_name and best_w > 0 else None
+
     def enemies_per_area(
         self,
         enemy_positions: list[tuple[float, float, float]],
