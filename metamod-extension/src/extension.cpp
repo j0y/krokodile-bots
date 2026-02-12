@@ -4,6 +4,7 @@
 #include "udp_bridge.h"
 #include "bot_state.h"
 #include "bot_command.h"
+#include "game_events.h"
 
 #include <dlfcn.h>
 #include <cstdlib>
@@ -570,6 +571,14 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
         }
     }
 
+    // Initialize game event listener (objective tracking)
+    {
+        IGameEventManager2 *pGameEventMgr = nullptr;
+        GET_V_IFACE_CURRENT(GetEngineFactory, pGameEventMgr,
+                             IGameEventManager2, INTERFACEVERSION_GAMEEVENTSMANAGER2);
+        GameEvents_Init(pGameEventMgr, /*controlledTeam=*/2);
+    }
+
     META_CONPRINTF("[SmartBots] Extension loaded (v0.2.0) — Phase 2 active\n");
 
     if (late)
@@ -587,6 +596,9 @@ void SmartBotsExtension::AllPluginsLoaded()
 
 bool SmartBotsExtension::Unload(char *error, size_t maxlen)
 {
+    // Unregister game event listener
+    GameEvents_Shutdown();
+
     // Close UDP bridge
     UdpBridge_Close();
 

@@ -33,6 +33,7 @@ add_library(smartbots SHARED
     src/udp_bridge.cpp
     src/bot_state.cpp
     src/bot_command.cpp
+    src/game_events.cpp
 )
 
 set_target_properties(smartbots PROPERTIES

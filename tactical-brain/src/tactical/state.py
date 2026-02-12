@@ -20,3 +20,4 @@ class BotState:
 class GameState:
     tick: int
     bots: dict[int, BotState] = field(default_factory=dict)
+    objectives_captured: int = 0

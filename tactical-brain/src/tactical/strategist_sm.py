@@ -54,6 +54,7 @@ class SMStrategist(BaseStrategist):
         has_round_start = any(e.startswith("ROUND_START") for e in events)
         has_contact = any(e.startswith("CONTACT") for e in events)
         has_heavy_losses = any(e.startswith("HEAVY_LOSSES") for e in events)
+        has_objective_lost = any(e.startswith("OBJECTIVE_LOST") for e in events)
 
         if has_contact:
             self._last_contact_time = now
@@ -63,6 +64,8 @@ class SMStrategist(BaseStrategist):
             self._transition(_State.SETUP, now)
         elif has_heavy_losses:
             self._transition(_State.FALLBACK, now)
+        elif has_objective_lost:
+            self._transition(_State.HOLD, now)
         elif self._state == _State.SETUP:
             if now - self._state_enter_time >= 5.0:
                 self._transition(_State.HOLD, now)
@@ -106,6 +109,14 @@ class SMStrategist(BaseStrategist):
             )
         ]
 
+    def _active_objective(self, snapshot: _Snapshot) -> str | None:
+        """Return the name of the objective we should be defending."""
+        objectives = self._objective_areas()
+        if not objectives:
+            return None
+        idx = min(snapshot.objectives_captured, len(objectives) - 1)
+        return objectives[idx]
+
     def _approach_areas(self) -> list[str]:
         """Area names where enemies spawn or approach from."""
         return [
@@ -131,16 +142,16 @@ class SMStrategist(BaseStrategist):
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
         """First seconds after round start: deploy to objective + ambush approaches."""
-        objectives = self._objective_areas()
         approaches = self._approach_areas()
         n = snapshot.friendly_alive
+        obj_name = self._active_objective(snapshot)
 
-        if not objectives:
+        if not obj_name:
             return "setup: defending all areas", [
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
 
-        obj = [objectives[0]]
+        obj = [obj_name]
         n_defend = max(1, round(n * 0.6))
         orders: list[Order] = [Order(areas=obj, posture="defend", bots=n_defend)]
 
@@ -158,16 +169,16 @@ class SMStrategist(BaseStrategist):
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
         """Default: defend objective, ambush approaches."""
-        objectives = self._objective_areas()
         approaches = self._approach_areas()
         n = snapshot.friendly_alive
+        obj_name = self._active_objective(snapshot)
 
-        if not objectives:
+        if not obj_name:
             return "hold: defending all areas", [
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
 
-        obj = [objectives[0]]
+        obj = [obj_name]
         n_defend = max(1, round(n * 0.6))
         orders: list[Order] = [Order(areas=obj, posture="defend", bots=n_defend)]
 
@@ -185,8 +196,8 @@ class SMStrategist(BaseStrategist):
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
         """Enemies spotted: push toward contact area, defend the rest."""
-        objectives = self._objective_areas()
         n = snapshot.friendly_alive
+        obj_name = self._active_objective(snapshot)
 
         enemies_by_area = self._area_map.enemies_per_area(enemy_positions)
 
@@ -198,9 +209,9 @@ class SMStrategist(BaseStrategist):
             orders: list[Order] = [
                 Order(areas=[hottest], posture="push", bots=n_push),
             ]
-            if objectives and n_defend > 0:
+            if obj_name and n_defend > 0:
                 orders.append(
-                    Order(areas=[objectives[0]], posture="defend", bots=n_defend),
+                    Order(areas=[obj_name], posture="defend", bots=n_defend),
                 )
             return f"engage: pushing {hottest}", orders
 
@@ -213,15 +224,14 @@ class SMStrategist(BaseStrategist):
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
         """Heavy losses: tight defense around objective, sniper on flanks."""
-        objectives = self._objective_areas()
         n = snapshot.friendly_alive
+        obj_name = self._active_objective(snapshot)
 
-        if not objectives:
+        if not obj_name:
             return "fallback: defending all areas", [
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
 
-        obj_name = objectives[0]
         n_defend = max(1, round(n * 0.8))
         n_sniper = n - n_defend
 

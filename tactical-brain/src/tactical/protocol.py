@@ -44,7 +44,11 @@ def decode_state(data: bytes) -> GameState:
             traces=b.get("traces", []),
         )
         bots[bot.id] = bot
-    return GameState(tick=int(raw.get("tick", 0)), bots=bots)
+    return GameState(
+        tick=int(raw.get("tick", 0)),
+        bots=bots,
+        objectives_captured=int(raw.get("obj", 0)),
+    )
 
 
 @dataclass

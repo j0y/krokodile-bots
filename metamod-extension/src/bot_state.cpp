@@ -1,5 +1,6 @@
 #include "bot_state.h"
 #include "extension.h"
+#include "game_events.h"
 
 #include <cstdio>
 
@@ -94,7 +95,8 @@ int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf
         if (offset >= bufSize) return bufSize - 1;
     }
 
-    offset += snprintf(buf + offset, bufSize - offset, "]}");
+    offset += snprintf(buf + offset, bufSize - offset,
+        "],\"obj\":%d}", GameEvents_GetObjectivesCaptured());
     if (offset >= bufSize) return bufSize - 1;
 
     return offset;

@@ -134,6 +134,7 @@ class LLMStrategist(BaseStrategist):
             f"- Enemy: ~{curr.enemy_alive} alive, "
             f"{len(curr.spotted_enemy_ids)} currently spotted",
             f"- Current posture: {curr.current_profile} ({profile_age}s)",
+            f"- Objectives lost: {curr.objectives_captured}",
         ]
 
         # Per-area enemy info

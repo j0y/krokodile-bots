@@ -32,6 +32,7 @@ class _Snapshot:
     friendly_ids_alive: frozenset[int]
     enemy_ids_alive: frozenset[int]
     current_profile: str
+    objectives_captured: int
 
 
 class BaseStrategist(ABC):
@@ -184,6 +185,7 @@ class BaseStrategist(ABC):
             friendly_ids_alive=frozenset(friendly_alive_ids),
             enemy_ids_alive=frozenset(enemy_alive_ids),
             current_profile=self._planner.profile_name,
+            objectives_captured=state.objectives_captured,
         )
 
     # ------------------------------------------------------------------
@@ -232,6 +234,13 @@ class BaseStrategist(ABC):
         # Lost all contact
         if prev.spotted_enemy_ids and not curr.spotted_enemy_ids:
             events.append("LOST_CONTACT: no enemies visible")
+
+        # Objective lost
+        if curr.objectives_captured > prev.objectives_captured:
+            events.append(
+                f"OBJECTIVE_LOST: objective #{curr.objectives_captured} captured by enemy "
+                f"({curr.objectives_captured} total lost)"
+            )
 
         # Heavy losses threshold (trigger once per round)
         if (
