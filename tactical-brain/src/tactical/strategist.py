@@ -36,6 +36,7 @@ class _Snapshot:
     current_profile: str
     objectives_captured: int
     capping_cp: int
+    counter_attack: bool
 
 
 @dataclass
@@ -74,6 +75,11 @@ class BaseStrategist(ABC):
 
         self._task: asyncio.Task[None] | None = None
         self._heavy_losses_triggered = False
+
+        # Counter-attack tracking
+        self._counter_attack_until: float = 0.0  # timer in monotonic seconds
+        self._obj_lost_at: float = 0.0            # when last OBJECTIVE_LOST fired
+        self._obj_lost_objectives: int = 0        # objectives_captured at that moment
 
         # Round/objective tracking
         self._round_num: int = 0
@@ -146,6 +152,49 @@ class BaseStrategist(ABC):
         now = curr.timestamp
 
         events = self._detect_events(self._prev_snapshot, curr, state)
+
+        # Counter-attack detection (confirmation-based)
+        # Phase 1: OBJECTIVE_LOST → start watching for wave respawn
+        # Phase 2: WAVE_RESPAWN within 15s of OBJECTIVE_LOST → confirmed counter-attack
+        has_obj_lost = any(e.kind == "OBJECTIVE_LOST" for e in events)
+        has_wave_respawn = any(e.kind == "WAVE_RESPAWN" for e in events)
+        has_round_start = any(e.kind == "ROUND_START" for e in events)
+
+        if has_obj_lost:
+            self._obj_lost_at = now
+            self._obj_lost_objectives = curr.objectives_captured
+            log.info("Objective lost — watching for counter-attack wave respawn")
+        if has_round_start:
+            self._counter_attack_until = 0.0
+            self._obj_lost_at = 0.0
+
+        # Confirm counter-attack: wave respawn within expected delay after objective lost
+        # Engine ConVar defaults: 12s delay (normal), 20s delay (finale) + 5s margin
+        max_wait = self._counter_attack_wave_delay(curr) + 5.0
+        if has_wave_respawn and self._obj_lost_at > 0 and now - self._obj_lost_at < max_wait:
+            elapsed = now - self._obj_lost_at
+            duration = self._counter_attack_duration(curr)
+            remaining = max(10.0, duration - elapsed)
+            self._counter_attack_until = now + remaining
+            self._obj_lost_at = 0.0
+            events.append(TacticalEvent(
+                kind="COUNTER_ATTACK",
+                message=f"COUNTER_ATTACK: confirmed (wave at {elapsed:.0f}s, {remaining:.0f}s remaining)",
+            ))
+            log.info("Counter-attack CONFIRMED (spawned at %.0fs, %.0fs remaining)", elapsed, remaining)
+        elif self._obj_lost_at > 0 and now - self._obj_lost_at >= max_wait:
+            # No wave respawn within expected window — no counter-attack
+            log.info("No counter-attack wave detected (%.0fs elapsed, window was %.0fs)", now - self._obj_lost_at, max_wait)
+            self._obj_lost_at = 0.0
+
+        # Counter-attack timer expiry
+        if self._counter_attack_until > 0 and now >= self._counter_attack_until:
+            events.append(TacticalEvent(
+                kind="COUNTER_ATTACK_END",
+                message="COUNTER_ATTACK_END: timer expired",
+            ))
+            self._counter_attack_until = 0.0
+            log.info("Counter-attack ended")
 
         # Check stalemate (separate timer)
         if not events and self._prev_snapshot is not None:
@@ -234,8 +283,9 @@ class BaseStrategist(ABC):
                 if b.alive:
                     enemy_alive_ids.add(b.id)
 
+        now = time.monotonic()
         return _Snapshot(
-            timestamp=time.monotonic(),
+            timestamp=now,
             friendly_alive=len(friendly_alive_ids),
             friendly_total=friendly_total,
             enemy_alive=len(enemy_alive_ids),
@@ -245,7 +295,34 @@ class BaseStrategist(ABC):
             current_profile=self._planner.profile_name,
             objectives_captured=state.objectives_captured,
             capping_cp=state.capping_cp,
+            counter_attack=self._counter_attack_until > 0 and now < self._counter_attack_until,
         )
+
+    # ------------------------------------------------------------------
+    # Counter-attack helpers
+    # ------------------------------------------------------------------
+
+    # Engine defaults (mp_checkpoint_counterattack_* ConVars)
+    COUNTER_ATTACK_DURATION = 65.0        # mp_checkpoint_counterattack_duration
+    COUNTER_ATTACK_DURATION_FINALE = 120.0  # mp_checkpoint_counterattack_duration_finale
+    COUNTER_ATTACK_WAVE_DELAY = 12.0      # mp_checkpoint_counterattack_delay
+    COUNTER_ATTACK_WAVE_DELAY_FINALE = 20.0  # mp_checkpoint_counterattack_delay_finale
+
+    def _counter_attack_duration(self, curr: _Snapshot) -> float:
+        """Return counter-attack duration: 120s for final objective, 65s otherwise."""
+        obj_areas = [a for a in self._area_map.areas.values() if a.role == "objective"]
+        total = len(obj_areas) if obj_areas else 1
+        if curr.objectives_captured >= total:
+            return self.COUNTER_ATTACK_DURATION_FINALE
+        return self.COUNTER_ATTACK_DURATION
+
+    def _counter_attack_wave_delay(self, curr: _Snapshot) -> float:
+        """Max expected delay before wave spawns: 20s finale, 12s normal."""
+        obj_areas = [a for a in self._area_map.areas.values() if a.role == "objective"]
+        total = len(obj_areas) if obj_areas else 1
+        if curr.objectives_captured >= total:
+            return self.COUNTER_ATTACK_WAVE_DELAY_FINALE
+        return self.COUNTER_ATTACK_WAVE_DELAY
 
     # ------------------------------------------------------------------
     # Area helpers for event enrichment
@@ -286,15 +363,20 @@ class BaseStrategist(ABC):
             ))
             return events
 
-        # Round restart: everyone was dead, now alive again
-        if prev.friendly_alive == 0 and curr.friendly_alive > 0:
+        # Wave respawn: new friendly bots appeared mid-round.
+        # Note: real round restarts go through phase="preround" which resets
+        # _prev_snapshot to None, hitting the prev is None check above.
+        # If we reach here with prev valid, phase stayed "active" → wave respawn.
+        gained = curr.friendly_ids_alive - prev.friendly_ids_alive
+        if len(gained) >= 3:
             events.append(TacticalEvent(
-                kind="ROUND_START",
-                message=f"ROUND_START: {curr.friendly_alive} friendlies vs {curr.enemy_alive} enemies",
-                count=curr.friendly_alive, remaining=curr.enemy_alive,
+                kind="WAVE_RESPAWN",
+                message=f"WAVE_RESPAWN: {len(gained)} friendlies spawned "
+                        f"({curr.friendly_alive}/{curr.friendly_total} alive)",
+                count=len(gained), remaining=curr.friendly_alive,
+                total=curr.friendly_total,
             ))
             self._heavy_losses_triggered = False
-            return events
 
         # Friendly casualties
         lost = prev.friendly_ids_alive - curr.friendly_ids_alive

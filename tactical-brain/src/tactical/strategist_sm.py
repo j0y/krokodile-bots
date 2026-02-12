@@ -3,8 +3,10 @@
 NextBot-style state machine for defensive team coordination.
 
     SETUP  -->  HOLD  <-->  ENGAGE
-                             |
-                          FALLBACK  -->  HOLD
+                  |           |
+                  |        FALLBACK  -->  HOLD
+                  |
+    any  --OBJECTIVE_LOST-->  COUNTER_ATTACK  --timer-->  HOLD
 """
 
 from __future__ import annotations
@@ -27,6 +29,7 @@ class _State(enum.Enum):
     HOLD = "HOLD"
     ENGAGE = "ENGAGE"
     FALLBACK = "FALLBACK"
+    COUNTER_ATTACK = "COUNTER_ATTACK"
 
 
 THREAT_DECAY_SECS = 20.0
@@ -77,6 +80,8 @@ class SMStrategist(BaseStrategist):
         has_heavy_losses = any(e.kind == "HEAVY_LOSSES" for e in events)
         has_objective_lost = any(e.kind == "OBJECTIVE_LOST" for e in events)
         has_capture_start = any(e.kind == "CAPTURE_START" for e in events)
+        has_counter_attack = any(e.kind == "COUNTER_ATTACK" for e in events)
+        has_counter_attack_end = any(e.kind == "COUNTER_ATTACK_END" for e in events)
 
         # Update threat map from events
         for e in events:
@@ -94,12 +99,19 @@ class SMStrategist(BaseStrategist):
         if has_round_start:
             self._threat_map.clear()
             self._transition(_State.SETUP, now)
+        elif has_counter_attack:
+            self._transition(_State.COUNTER_ATTACK, now)
+        elif self._state == _State.COUNTER_ATTACK:
+            if has_counter_attack_end:
+                self._transition(_State.HOLD, now)
+            # Stay in COUNTER_ATTACK — ignore HEAVY_LOSSES / CAPTURE_START
+        elif has_objective_lost:
+            # Objective lost but no counter-attack confirmed yet — hold position
+            self._transition(_State.HOLD, now)
         elif has_heavy_losses:
             self._transition(_State.FALLBACK, now)
         elif has_capture_start:
             self._transition(_State.ENGAGE, now)
-        elif has_objective_lost:
-            self._transition(_State.HOLD, now)
         elif self._state == _State.SETUP:
             if now - self._state_enter_time >= 5.0:
                 self._transition(_State.HOLD, now)
@@ -131,6 +143,7 @@ class SMStrategist(BaseStrategist):
             _State.HOLD: self._orders_hold,
             _State.ENGAGE: self._orders_engage,
             _State.FALLBACK: self._orders_fallback,
+            _State.COUNTER_ATTACK: self._orders_counter_attack,
         }
         return dispatch[self._state](snapshot, enemy_positions)
 
@@ -307,6 +320,42 @@ class SMStrategist(BaseStrategist):
                 orders[0] = Order(areas=[obj_name], posture="defend", bots=n)
 
         return "fallback: tight defense", orders
+
+    def _orders_counter_attack(
+        self,
+        snapshot: _Snapshot,
+        enemy_positions: list[tuple[float, float, float]],
+    ) -> tuple[str, list[Order]]:
+        """Counter-attack: push aggressively toward the lost objective."""
+        n = snapshot.friendly_alive
+        approaches = self._approach_areas()
+
+        # Target the just-lost objective (objectives_captured - 1)
+        objectives = self._objective_areas()
+        lost_obj: str | None = None
+        if objectives and snapshot.objectives_captured > 0:
+            lost_idx = min(snapshot.objectives_captured - 1, len(objectives) - 1)
+            lost_obj = objectives[lost_idx]
+
+        if not lost_obj:
+            lost_obj = self._active_objective(snapshot)
+
+        if not lost_obj:
+            return "counter-attack: pushing all", [
+                Order(areas=self._all_area_names(), posture="push", bots=n),
+            ]
+
+        n_push = max(1, round(n * 0.7))
+        n_flank = n - n_push
+
+        orders: list[Order] = [Order(areas=[lost_obj], posture="push", bots=n_push)]
+
+        if n_flank > 0 and approaches:
+            orders.append(Order(areas=approaches, posture="push", bots=n_flank))
+        elif n_flank > 0:
+            orders[0] = Order(areas=[lost_obj], posture="push", bots=n)
+
+        return f"counter-attack: pushing {lost_obj}", orders
 
     # ------------------------------------------------------------------
     # Telemetry hooks

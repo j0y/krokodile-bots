@@ -139,6 +139,8 @@ class LLMStrategist(BaseStrategist):
             f"- Objectives lost: {curr.objectives_captured}",
         ]
 
+        if curr.counter_attack:
+            lines.append("- COUNTER-ATTACK PHASE: push aggressively to retake the lost objective!")
         if curr.capping_cp >= 0:
             lines.append(f"- ALERT: Enemy capturing point {curr.capping_cp}!")
 
