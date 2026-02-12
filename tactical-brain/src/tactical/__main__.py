@@ -51,7 +51,12 @@ def main() -> None:
         tele_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
         telemetry = TelemetryClient(host=tele_host, port=tele_port)
 
-    planner = Planner(rally=(rally_x, rally_y, rally_z), influence_map=influence_map)
+    controlled_team = int(os.environ.get("CONTROLLED_TEAM", "2"))
+    planner = Planner(
+        rally=(rally_x, rally_y, rally_z),
+        controlled_team=controlled_team,
+        influence_map=influence_map,
+    )
     asyncio.run(run_server(host, port, planner, telemetry=telemetry))
 
 

@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS bot_state (
   alive      BOOLEAN,
   team       INTEGER,
   health     INTEGER,
-  pos_x      REAL, pos_y REAL, pos_z REAL
+  pos_x      REAL, pos_y REAL, pos_z REAL,
+  is_bot     BOOLEAN
 )"""
 
 _CREATE_COMMANDS_TABLE = """\
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS bot_commands (
 )"""
 
 _INSERT_STATE = (
-    "INSERT INTO bot_state VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    "INSERT INTO bot_state VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 )
 
 _INSERT_COMMAND = (
@@ -50,6 +51,7 @@ class BotStateRow:
     pos_x: float
     pos_y: float
     pos_z: float
+    is_bot: bool
 
 
 @dataclass

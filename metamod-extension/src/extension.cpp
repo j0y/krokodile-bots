@@ -188,47 +188,56 @@ static void ResolveBots()
     BotActionHook_ClearEntityMap();
 
     int maxClients = gpGlobals->maxClients;
-    for (int i = 1; i <= maxClients && s_resolvedBotCount < 32; i++)
+    for (int i = 1; i <= maxClients; i++)
     {
         edict_t *edict = PEntityOfEntIndex(i);
         if (!edict || edict->IsFree())
             continue;
 
         IPlayerInfo *info = g_pPlayerInfoManager->GetPlayerInfo(edict);
-        if (!info || !info->IsConnected() || !info->IsFakeClient())
+        if (!info || !info->IsConnected())
             continue;
 
-        IServerUnknown *pUnknown = edict->GetUnknown();
-        if (!pUnknown)
-            continue;
+        bool isBot = info->IsFakeClient();
 
-        CBaseEntity *pEntity = pUnknown->GetBaseEntity();
-        if (!pEntity)
-            continue;
+        // Bot resolution: fake clients only (for movement/combat hooks)
+        if (isBot && s_resolvedBotCount < 32)
+        {
+            IServerUnknown *pUnknown = edict->GetUnknown();
+            if (pUnknown)
+            {
+                CBaseEntity *pEntity = pUnknown->GetBaseEntity();
+                if (pEntity)
+                {
+                    s_resolvedBots[s_resolvedBotCount].edictIndex = i;
+                    s_resolvedBots[s_resolvedBotCount].entity = pEntity;
+                    s_resolvedBotCount++;
 
-        // Cache resolved bot
-        s_resolvedBots[s_resolvedBotCount].edictIndex = i;
-        s_resolvedBots[s_resolvedBotCount].entity = pEntity;
-        s_resolvedBotCount++;
+                    BotActionHook_RegisterEntity((void *)pEntity, i);
+                }
+            }
+        }
 
-        BotActionHook_RegisterEntity((void *)pEntity, i);
+        // State collection: ALL connected players (for Python brain)
+        if (s_stateCount < 32)
+        {
+            Vector pos = info->GetAbsOrigin();
+            QAngle ang = info->GetAbsAngles();
 
-        // Also collect state for serialization (avoids second IPlayerInfo scan)
-        Vector pos = info->GetAbsOrigin();
-        QAngle ang = info->GetAbsAngles();
-
-        BotStateEntry &entry = s_stateArray[s_stateCount];
-        entry.id = i;
-        entry.pos[0] = pos.x;
-        entry.pos[1] = pos.y;
-        entry.pos[2] = pos.z;
-        entry.ang[0] = ang.x;
-        entry.ang[1] = ang.y;
-        entry.ang[2] = ang.z;
-        entry.health = info->GetHealth();
-        entry.alive = info->IsDead() ? 0 : 1;
-        entry.team = info->GetTeamIndex();
-        s_stateCount++;
+            BotStateEntry &entry = s_stateArray[s_stateCount];
+            entry.id = i;
+            entry.pos[0] = pos.x;
+            entry.pos[1] = pos.y;
+            entry.pos[2] = pos.z;
+            entry.ang[0] = ang.x;
+            entry.ang[1] = ang.y;
+            entry.ang[2] = ang.z;
+            entry.health = info->GetHealth();
+            entry.alive = info->IsDead() ? 0 : 1;
+            entry.team = info->GetTeamIndex();
+            entry.is_bot = isBot ? 1 : 0;
+            s_stateCount++;
+        }
     }
 
     s_lastResolveTick = s_tickCount;

@@ -60,6 +60,7 @@ class TacticalProtocol(asyncio.DatagramProtocol):
                     pos_x=b.pos[0],
                     pos_y=b.pos[1],
                     pos_z=b.pos[2],
+                    is_bot=b.is_bot,
                 )
                 for b in state.bots.values()
             ]

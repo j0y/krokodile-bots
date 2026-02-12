@@ -1,7 +1,7 @@
 """JSON encode/decode for the C++ extension <-> Python protocol.
 
 State (C++ -> Python): JSON
-    {"tick": 123, "bots": [{"id": 3, "pos": [x,y,z], "ang": [p,y,r], "hp": 100, "alive": 1, "team": 2}]}
+    {"tick": 123, "bots": [{"id": 3, "pos": [x,y,z], "ang": [p,y,r], "hp": 100, "alive": 1, "team": 2, "bot": 1}]}
 
 Commands (Python -> C++): line-based text, one bot per line
     <id> <mx> <my> <mz> <lx> <ly> <lz> <flags>\n
@@ -39,6 +39,7 @@ def decode_state(data: bytes) -> GameState:
             health=int(b["hp"]),
             alive=bool(b["alive"]),
             team=int(b["team"]),
+            is_bot=bool(b.get("bot", 1)),
             traces=b.get("traces", []),
         )
         bots[bot.id] = bot

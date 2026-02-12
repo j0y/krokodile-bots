@@ -66,13 +66,15 @@ int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf
             "\"ang\":[%.1f,%.1f,%.1f],"
             "\"hp\":%d,"
             "\"alive\":%d,"
-            "\"team\":%d}",
+            "\"team\":%d,"
+            "\"bot\":%d}",
             b.id,
             b.pos[0], b.pos[1], b.pos[2],
             b.ang[0], b.ang[1], b.ang[2],
             b.health,
             b.alive,
-            b.team);
+            b.team,
+            b.is_bot);
 
         if (offset >= bufSize) return bufSize - 1;
     }
