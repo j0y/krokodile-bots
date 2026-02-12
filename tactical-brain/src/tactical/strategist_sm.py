@@ -174,7 +174,10 @@ class SMStrategist(BaseStrategist):
         objectives = self._objective_areas()
         if not objectives:
             return None
-        idx = min(snapshot.objectives_captured, len(objectives) - 1)
+        if snapshot.active_cp >= 0:
+            idx = min(snapshot.active_cp, len(objectives) - 1)
+        else:
+            idx = min(snapshot.objectives_captured, len(objectives) - 1)
         return objectives[idx]
 
     def _approach_areas(self) -> list[str]:
@@ -326,16 +329,15 @@ class SMStrategist(BaseStrategist):
         snapshot: _Snapshot,
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
-        """Counter-attack: push aggressively toward the lost objective."""
+        """Counter-attack: push aggressively toward the active CP from the engine."""
         n = snapshot.friendly_alive
         approaches = self._approach_areas()
 
-        # Target the just-lost objective (objectives_captured - 1)
-        objectives = self._objective_areas()
+        # Use the engine's active CP index to look up the objective directly
+        objectives = self._objective_areas()  # sorted by order
         lost_obj: str | None = None
-        if objectives and snapshot.objectives_captured > 0:
-            lost_idx = min(snapshot.objectives_captured - 1, len(objectives) - 1)
-            lost_obj = objectives[lost_idx]
+        if snapshot.active_cp >= 0 and snapshot.active_cp < len(objectives):
+            lost_obj = objectives[snapshot.active_cp]
 
         if not lost_obj:
             lost_obj = self._active_objective(snapshot)

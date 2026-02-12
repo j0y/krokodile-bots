@@ -37,6 +37,7 @@ class _Snapshot:
     objectives_captured: int
     capping_cp: int
     counter_attack: bool
+    active_cp: int
 
 
 @dataclass
@@ -266,6 +267,7 @@ class BaseStrategist(ABC):
             objectives_captured=state.objectives_captured,
             capping_cp=state.capping_cp,
             counter_attack=state.counter_attack,
+            active_cp=state.active_cp,
         )
 
     # ------------------------------------------------------------------

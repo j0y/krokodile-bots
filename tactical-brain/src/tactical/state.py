@@ -28,3 +28,5 @@ class GameState:
     ca_disabled: bool = False     # mp_checkpoint_counterattack_disable
     ca_duration: int = 65         # mp_checkpoint_counterattack_duration
     ca_duration_finale: int = 120 # mp_checkpoint_counterattack_duration_finale
+    # Active control point index from g_pObjectiveResource
+    active_cp: int = -1

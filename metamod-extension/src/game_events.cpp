@@ -254,6 +254,7 @@ typedef bool (*IsCounterAttackFn)(void *thisRules);
 
 static void **s_pGameRules = nullptr;       // &g_pGameRules (pointer to pointer)
 static IsCounterAttackFn s_fnIsCA = nullptr;
+static void **s_pObjResource = nullptr;     // &g_pObjectiveResource (pointer to pointer)
 
 void GameEvents_InitGameRules(uintptr_t serverBase)
 {
@@ -261,8 +262,10 @@ void GameEvents_InitGameRules(uintptr_t serverBase)
         serverBase + ServerOffsets::g_pGameRules);
     s_fnIsCA = reinterpret_cast<IsCounterAttackFn>(
         serverBase + ServerOffsets::CINSRules_IsCounterAttack);
-    META_CONPRINTF("[SmartBots] GameRules: resolved g_pGameRules=%p, IsCounterAttack=%p\n",
-                   (void *)s_pGameRules, (void *)s_fnIsCA);
+    s_pObjResource = reinterpret_cast<void **>(
+        serverBase + ServerOffsets::g_pObjectiveResource);
+    META_CONPRINTF("[SmartBots] GameRules: resolved g_pGameRules=%p, IsCounterAttack=%p, ObjResource=%p\n",
+                   (void *)s_pGameRules, (void *)s_fnIsCA, (void *)s_pObjResource);
 }
 
 bool GameEvents_IsCounterAttack()
@@ -273,4 +276,39 @@ bool GameEvents_IsCounterAttack()
     if (!rules)
         return false;
     return s_fnIsCA(rules);
+}
+
+// --- Active control point from g_pObjectiveResource ---
+// Layout from decompiled CINSBotActionCheckpoint::Update / CINSNextBotManager::GetDesiredPushTypeObjective:
+//   *(g_pObjectiveResource + 0x770) = current active CP index (int)
+//   *(g_pObjectiveResource + 0x5d0 + idx * 0xc) = CP position (Vector3, 3 floats)
+
+static constexpr uintptr_t kObjRes_ActiveCP = 0x770;
+static constexpr uintptr_t kObjRes_CPPositions = 0x5d0;
+static constexpr int kMaxCPs = 16;
+
+int GameEvents_GetActiveCP()
+{
+    if (!s_pObjResource || !*s_pObjResource)
+        return -1;
+    int idx = *reinterpret_cast<int *>(
+        reinterpret_cast<uintptr_t>(*s_pObjResource) + kObjRes_ActiveCP);
+    if (idx < 0 || idx >= kMaxCPs)
+        return -1;
+    return idx;
+}
+
+bool GameEvents_GetCPPos(int cpIdx, float *out)
+{
+    if (!s_pObjResource || !*s_pObjResource || cpIdx < 0 || cpIdx >= kMaxCPs)
+    {
+        out[0] = out[1] = out[2] = 0.0f;
+        return false;
+    }
+    uintptr_t base = reinterpret_cast<uintptr_t>(*s_pObjResource)
+                     + kObjRes_CPPositions + cpIdx * 0xc;
+    out[0] = *reinterpret_cast<float *>(base);
+    out[1] = *reinterpret_cast<float *>(base + 4);
+    out[2] = *reinterpret_cast<float *>(base + 8);
+    return true;
 }

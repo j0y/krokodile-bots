@@ -36,4 +36,10 @@ int GameEvents_CounterAttackDurationFinale();
 void GameEvents_InitGameRules(uintptr_t serverBase);
 bool GameEvents_IsCounterAttack();
 
+// Active control point from g_pObjectiveResource.
+// Returns the engine's current active CP index, or -1 if unavailable.
+int GameEvents_GetActiveCP();
+// Position of a CP by index. Writes to out[3]. Returns false if unavailable.
+bool GameEvents_GetCPPos(int cpIdx, float *out);
+
 #endif // _SMARTBOTS_GAME_EVENTS_H_

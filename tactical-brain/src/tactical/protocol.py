@@ -54,6 +54,7 @@ def decode_state(data: bytes) -> GameState:
         ca_disabled=bool(raw.get("ca_off", 0)),
         ca_duration=int(raw.get("ca_dur", 65)),
         ca_duration_finale=int(raw.get("ca_dur_f", 120)),
+        active_cp=int(raw.get("acp", -1)),
     )
 
 

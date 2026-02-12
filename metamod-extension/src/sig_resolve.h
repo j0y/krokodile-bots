@@ -20,6 +20,8 @@ struct ServerOffsets
     static constexpr uintptr_t g_pGameRules           = 0x00c0c3d8;
     // CINSRules::IsCounterAttack() const — non-virtual, thiscall
     static constexpr uintptr_t CINSRules_IsCounterAttack = 0x0022e150;
+    // g_pObjectiveResource (BSS, pointer to CINSObjectiveResource)
+    static constexpr uintptr_t g_pObjectiveResource      = 0x00cc2760;
 };
 
 // CINSNextBot vtable byte offset for GetLocomotionInterface virtual call
