@@ -379,22 +379,35 @@ class BaseStrategist(ABC):
     def _update_round_tracking(
         self, events: list[TacticalEvent], curr: _Snapshot, state: GameState,
     ) -> None:
-        """Update round_num, objective_num based on events. Manage round lifecycle."""
+        """Update round_num, objective_num based on events. Manage round lifecycle.
+
+        Round = one full game attempt (all waves). Detected by objectives_captured
+        going DOWN (engine resets on game_end / changelevel). Wave respawns within
+        the same attempt keep objectives_captured the same or higher.
+        """
         for ev in events:
             if ev.kind == "ROUND_START":
                 obj = curr.objectives_captured
-                if obj == 0 and self._prev_objectives_captured > 0:
-                    # Full reset → new round attempt
+                if self._round_num == 0:
+                    # First spawn of session → round 1
+                    self._round_num = 1
+                    self._objective_num = obj
+                    self._start_new_round(curr, state)
+                elif obj < self._prev_objectives_captured:
+                    # objectives went DOWN → map restart → new round
                     self._end_current_round(curr, state)
                     self._round_num += 1
-                elif self._round_num == 0:
-                    # First round of session
-                    self._round_num = 1
+                    self._objective_num = obj
+                    self._start_new_round(curr, state)
                 else:
-                    # Respawn within same round (e.g. wave respawn)
-                    pass
-                self._objective_num = obj
-                self._start_new_round(curr, state)
+                    # Wave respawn within same round — don't reset counters.
+                    # Objectives may have advanced during non-active phase.
+                    if obj > self._prev_objectives_captured:
+                        self._objective_num = obj
+                        log.info(
+                            "Objective advanced during respawn: %d → %d",
+                            self._prev_objectives_captured, obj,
+                        )
             elif ev.kind == "OBJECTIVE_LOST":
                 self._objective_num = curr.objectives_captured
             elif ev.kind == "CASUALTY":
