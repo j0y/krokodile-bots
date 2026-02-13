@@ -52,8 +52,8 @@ class Planner:
         self._spotted_memory: dict[
             int, tuple[float, tuple[float, float, float], tuple[float, float]]
         ] = {}
-        # Stuck detection: {bot_id: (last_pos, stuck_since)}
-        self._stuck_tracker: dict[int, tuple[tuple[float, float], float]] = {}
+        # Stuck detection: {bot_id: (last_pos, stuck_since, logged)}
+        self._stuck_tracker: dict[int, tuple[tuple[float, float], float, bool]] = {}
 
     def compute_commands(
         self, state: GameState,
@@ -358,18 +358,20 @@ class Planner:
                 now = time.monotonic()
                 bot_xy = (bot.pos[0], bot.pos[1])
                 if bot.id in self._stuck_tracker:
-                    last_pos, stuck_since = self._stuck_tracker[bot.id]
+                    last_pos, stuck_since, logged = self._stuck_tracker[bot.id]
                     moved = ((bot_xy[0] - last_pos[0]) ** 2
                              + (bot_xy[1] - last_pos[1]) ** 2) ** 0.5
                     if moved > STUCK_THRESHOLD:
-                        self._stuck_tracker[bot.id] = (bot_xy, now)
+                        self._stuck_tracker[bot.id] = (bot_xy, now, False)
                     elif dist2 > STUCK_MIN_DIST ** 2 \
                             and now - stuck_since > STUCK_SECONDS:
-                        log.info("Bot %d stuck at (%.0f,%.0f), %.0fu from target, releasing to native AI",
-                                 bot.id, bot.pos[0], bot.pos[1], dist2 ** 0.5)
+                        if not logged:
+                            log.info("Bot %d stuck at (%.0f,%.0f), %.0fu from target, releasing to native AI",
+                                     bot.id, bot.pos[0], bot.pos[1], dist2 ** 0.5)
+                            self._stuck_tracker[bot.id] = (last_pos, stuck_since, True)
                         continue  # skip command — native AI takes over
                 else:
-                    self._stuck_tracker[bot.id] = (bot_xy, now)
+                    self._stuck_tracker[bot.id] = (bot_xy, now, False)
 
                 commands.append(BotCommand(
                     id=bot.id,
