@@ -2,12 +2,17 @@
 
 Loads a walkgraph.npz and uses two-level routing:
   1. Coarse: O(1) next-hop lookup from precomputed all-pairs table
-  2. Fine: string-pull along door points using vismatrix visibility checks
+  2. Fine: string-pull along cell centroids using vismatrix visibility
 
-Look direction uses a "slice the pie" sweep: the bot watches the farthest
-visible corner (weapon covers the edge), then gradually sweeps toward the
-area beyond it as it approaches.  At the instant the next door becomes
-visible the bot was already looking near it, so the handoff is smooth.
+Look targets are cell centroids (room/corridor centers), not cell-boundary
+door points.  Centroids correspond to where threats actually are ("inside
+the next room"), and the string-pull naturally skips open-space transitions
+because the bot can see through to distant centroids.
+
+Sweep: the bot watches the farthest visible centroid, gradually sweeping
+toward the next hidden one as it approaches.  Transition is smooth because
+at the instant the hidden centroid becomes visible the bot was already
+looking near it.
 """
 
 from __future__ import annotations
@@ -16,6 +21,7 @@ import logging
 from typing import Callable
 
 import numpy as np
+from scipy.spatial import KDTree
 
 log = logging.getLogger(__name__)
 
@@ -23,24 +29,35 @@ log = logging.getLogger(__name__)
 class PathFinder:
     """Precomputed coarse routing + runtime string-pulling for look direction."""
 
+    # Distance at which the bot begins sweeping from the visible centroid
+    # toward the hidden one.  At 220 u/s walk speed ≈ 2.3 s of sweep.
+    SWEEP_DIST = 500.0
+
+    # Only consider this many hops ahead for look direction.
+    # Limits sensitivity to routing mismatches with the engine's pathfinder.
+    MAX_LOOKAHEAD = 8
+
     def __init__(
         self,
         walkgraph_path: str,
         points: np.ndarray,
         vis_adj_index: np.ndarray,
         vis_adj_list: np.ndarray,
+        tree: KDTree | None = None,
     ) -> None:
         wg = np.load(walkgraph_path)
         self.fine_to_coarse: np.ndarray = wg["fine_to_coarse"]       # uint16[N]
         self.coarse_next_hop: np.ndarray = wg["coarse_next_hop"]     # int16[C, C]
         self.coarse_centroids: np.ndarray = wg["coarse_centroids"]   # float32[C, 3]
-        self.door_adj_index: np.ndarray = wg["door_adj_index"]       # int32[C, 2]
-        self.door_adj_list: np.ndarray = wg["door_adj_list"]         # int32[E]
-        self.door_grid_points: np.ndarray = wg["door_grid_points"]   # int32[E]
 
         self.points = points
         self.vis_adj_index = vis_adj_index
         self.vis_adj_list = vis_adj_list
+
+        # Map each cell centroid to its nearest grid point for vis checks
+        if tree is None:
+            tree = KDTree(points)
+        _, self.centroid_grid_idx = tree.query(self.coarse_centroids)
 
         num_cells = len(self.coarse_centroids)
         log.info("PathFinder loaded: %d fine points, %d coarse cells", len(points), num_cells)
@@ -73,18 +90,6 @@ class PathFinder:
 
         return None  # loop safety
 
-    def _get_door_point(self, from_cell: int, to_cell: int) -> int | None:
-        """Get the fine grid point index for the door from from_cell to to_cell."""
-        start, count = self.door_adj_index[from_cell]
-        for k in range(count):
-            if self.door_adj_list[start + k] == to_cell:
-                return int(self.door_grid_points[start + k])
-        return None
-
-    # Distance at which the bot begins sweeping from the visible corner
-    # toward the area beyond it.  At 220 u/s walk speed ≈ 2.3 s of sweep.
-    SWEEP_DIST = 500.0
-
     def find_look_target(
         self,
         bot_pos: tuple[float, float, float],
@@ -93,10 +98,9 @@ class PathFinder:
     ) -> tuple[float, float, float] | None:
         """Determine where a walking bot should look.
 
-        Uses a "slice the pie" sweep:
-          - Far from corner: weapon covers the visible corner edge (D_vis)
-          - Approaching: gradually sweep toward the area beyond (D_invis)
-          - At the corner: fully covering the next corridor
+        Uses cell centroids as waypoints (room/corridor centers).
+        String-pull finds the farthest visible centroid, then sweeps
+        toward the next hidden one as the bot approaches.
 
         Returns a world position, or None if the bot has direct line of
         sight to the goal (last leg — caller uses arrival look).
@@ -120,55 +124,52 @@ class PathFinder:
         if not path or len(path) < 2:
             return None
 
-        # Collect door point grid indices along the path
-        door_indices: list[int] = []
-        for i in range(len(path) - 1):
-            dp = self._get_door_point(path[i], path[i + 1])
-            if dp is not None:
-                door_indices.append(dp)
+        # Cell centroids as waypoints, skipping bot's own cell,
+        # limited to MAX_LOOKAHEAD to stay near the actual engine path
+        waypoints: list[tuple[int, int]] = []   # (grid_idx, cell_id)
+        for cell_id in path[1 : 1 + self.MAX_LOOKAHEAD]:
+            waypoints.append((int(self.centroid_grid_idx[cell_id]), cell_id))
 
-        if not door_indices:
+        if not waypoints:
             return None
 
-        # String-pull: find farthest visible door from bot position
+        # String-pull: find farthest visible centroid
         last_visible = -1
-        for i, dp_idx in enumerate(door_indices):
-            if self._is_visible(bot_idx, dp_idx):
+        for i, (gidx, _) in enumerate(waypoints):
+            if self._is_visible(bot_idx, gidx):
                 last_visible = i
 
         if last_visible < 0:
-            # Can't see any door — look at the first one (direction to go)
-            dp = door_indices[0]
-            return (float(self.points[dp, 0]), float(self.points[dp, 1]), float(self.points[dp, 2]))
+            # Can't see any centroid — look toward the first one
+            c = self.coarse_centroids[waypoints[0][1]]
+            return (float(c[0]), float(c[1]), float(c[2]))
 
-        if last_visible + 1 >= len(door_indices):
-            # Can see all door points — last leg
+        if last_visible + 1 >= len(waypoints):
+            # Can see all waypoints in lookahead — last leg
             return None
 
-        # ── Gradual sweep ("slice the pie") ─────────────────────────
+        # ── Gradual sweep ────────────────────────────────────────────
         #
-        # D_vis  = farthest visible door (the corner edge — weapon covers it)
-        # D_invis = first invisible door (the area beyond the corner)
+        # vis_c  = farthest visible centroid (threat area the weapon covers)
+        # invis_c = first hidden centroid    (area beyond the next corner)
         #
-        # As the bot approaches D_vis the blend shifts from watching the
-        # corner toward covering the next corridor.  When the bot finally
-        # rounds the corner and D_invis becomes visible, the look target
-        # was already near D_invis, so the handoff to the next pair is
-        # nearly continuous.
+        # As the bot approaches vis_c the blend sweeps into invis_c.
+        # When the bot rounds the corner and invis_c becomes visible,
+        # the look target was already near it — smooth handoff.
 
-        vis_pos = self.points[door_indices[last_visible]]
-        invis_pos = self.points[door_indices[last_visible + 1]]
+        vis_c = self.coarse_centroids[waypoints[last_visible][1]]
+        invis_c = self.coarse_centroids[waypoints[last_visible + 1][1]]
 
-        # 2D distance to the visible corner
-        dx = bot_pos[0] - float(vis_pos[0])
-        dy = bot_pos[1] - float(vis_pos[1])
-        dist_to_corner = (dx * dx + dy * dy) ** 0.5
+        # 2D distance to the visible centroid
+        dx = bot_pos[0] - float(vis_c[0])
+        dy = bot_pos[1] - float(vis_c[1])
+        dist = (dx * dx + dy * dy) ** 0.5
 
-        # t = 0 far away (look at corner), t = 1 at corner (look beyond)
-        t = max(0.0, 1.0 - dist_to_corner / self.SWEEP_DIST)
+        # t = 0 far away (look at visible room), t = 1 close (look beyond)
+        t = max(0.0, 1.0 - dist / self.SWEEP_DIST)
 
         return (
-            float(vis_pos[0]) + t * (float(invis_pos[0]) - float(vis_pos[0])),
-            float(vis_pos[1]) + t * (float(invis_pos[1]) - float(vis_pos[1])),
-            float(vis_pos[2]) + t * (float(invis_pos[2]) - float(vis_pos[2])),
+            float(vis_c[0]) + t * (float(invis_c[0]) - float(vis_c[0])),
+            float(vis_c[1]) + t * (float(invis_c[1]) - float(vis_c[1])),
+            float(vis_c[2]) + t * (float(invis_c[2]) - float(vis_c[2])),
         )

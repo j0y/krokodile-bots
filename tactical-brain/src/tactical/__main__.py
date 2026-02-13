@@ -86,6 +86,7 @@ def main() -> None:
                 influence_map.points,
                 influence_map.adj_index,
                 influence_map.adj_list,
+                influence_map.tree,
             )
             log.info("Loaded walk graph for %s", map_name)
         else:

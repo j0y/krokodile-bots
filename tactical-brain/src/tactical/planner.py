@@ -20,6 +20,8 @@ log = logging.getLogger(__name__)
 
 
 SPOTTED_COOLDOWN = 5.0  # seconds to remember enemy after losing sight
+MAX_PREDICT_TIME = 2.0  # max seconds to extrapolate enemy movement
+THREAT_LOOK_RANGE = 1500.0  # look at threats within this distance while walking
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,7 +45,10 @@ class Planner:
         self.pathfinder = pathfinder
         self.profile_name = "defend"  # set by strategist, used for telemetry context
         self.orders: list[Order] | None = None
-        self._spotted_memory: dict[int, tuple[float, tuple[float, float, float]]] = {}
+        # (timestamp, position, velocity_xy)
+        self._spotted_memory: dict[
+            int, tuple[float, tuple[float, float, float], tuple[float, float]]
+        ] = {}
 
     def compute_commands(
         self, state: GameState,
@@ -73,25 +78,40 @@ class Planner:
             if b.alive and b.team != self.controlled_team and b.team > 1
         }
 
-        # Update spotted memory: refresh timestamp for currently-seen enemies
+        # Update spotted memory: refresh timestamp + track velocity
         now = time.monotonic()
         for eid in spotted_ids:
             if eid in all_enemies:
-                self._spotted_memory[eid] = (now, all_enemies[eid].pos)
+                new_pos = all_enemies[eid].pos
+                vx, vy = 0.0, 0.0
+                if eid in self._spotted_memory:
+                    old_t, old_pos, old_vel = self._spotted_memory[eid]
+                    dt = now - old_t
+                    if dt > 0.05:
+                        vx = (new_pos[0] - old_pos[0]) / dt
+                        vy = (new_pos[1] - old_pos[1]) / dt
+                    else:
+                        vx, vy = old_vel
+                self._spotted_memory[eid] = (now, new_pos, (vx, vy))
 
         # Prune expired entries
         self._spotted_memory = {
-            eid: (t, pos) for eid, (t, pos) in self._spotted_memory.items()
-            if now - t < SPOTTED_COOLDOWN
+            eid: entry for eid, entry in self._spotted_memory.items()
+            if now - entry[0] < SPOTTED_COOLDOWN
         }
 
-        # Enemy positions = currently seen (live pos) + recently seen (last known pos)
+        # Enemy positions = live pos OR extrapolated from last known + velocity
         enemy_positions: list[tuple[float, float, float]] = []
-        for eid, (t, pos) in self._spotted_memory.items():
+        for eid, (t, pos, vel) in self._spotted_memory.items():
             if eid in spotted_ids and eid in all_enemies:
-                enemy_positions.append(all_enemies[eid].pos)  # live position
+                enemy_positions.append(all_enemies[eid].pos)
             else:
-                enemy_positions.append(pos)  # last known position
+                dt = min(now - t, MAX_PREDICT_TIME)
+                enemy_positions.append((
+                    pos[0] + vel[0] * dt,
+                    pos[1] + vel[1] * dt,
+                    pos[2],
+                ))
 
         # Build per-bot profile map for telemetry
         bot_profiles: dict[int, str] = {}
@@ -169,6 +189,24 @@ class Planner:
             approach[1] + dy * scale,
             approach[2],
         )
+
+    @staticmethod
+    def _nearest_enemy(
+        bot_pos: tuple[float, float, float],
+        enemy_positions: list[tuple[float, float, float]],
+        max_dist: float = THREAT_LOOK_RANGE,
+    ) -> tuple[float, float, float] | None:
+        """Return the nearest enemy position within max_dist (2D), or None."""
+        best: tuple[float, float, float] | None = None
+        best_d2 = max_dist * max_dist
+        for ep in enemy_positions:
+            dx = ep[0] - bot_pos[0]
+            dy = ep[1] - bot_pos[1]
+            d2 = dx * dx + dy * dy
+            if d2 < best_d2:
+                best_d2 = d2
+                best = ep
+        return best
 
     def _objective_centroid(self, area_names: list[str]) -> tuple[float, float, float]:
         """Centroid of only the objective-role area within area_names.
@@ -259,18 +297,26 @@ class Planner:
                 # Walking vs arrived dispatch
                 dx = bot.pos[0] - target[0]
                 dy = bot.pos[1] - target[1]
-                dz = bot.pos[2] - target[2]
-                dist2 = dx * dx + dy * dy + dz * dz
+                dist2 = dx * dx + dy * dy
 
                 if dist2 < 150.0 * 150.0:
                     look = arrived_look
-                elif self.pathfinder is not None and self.influence_map is not None:
-                    corner = self.pathfinder.find_look_target(
-                        bot.pos, target, self.influence_map.nearest_point,
-                    )
-                    look = corner if corner else target
                 else:
-                    look = arrived_look
+                    # Threat priority: look at nearest remembered enemy
+                    threat = self._nearest_enemy(bot.pos, enemy_positions)
+                    if threat is not None:
+                        look = threat
+                    elif self.pathfinder is not None and self.influence_map is not None:
+                        corner = self.pathfinder.find_look_target(
+                            bot.pos, target, self.influence_map.nearest_point,
+                        )
+                        look = corner if corner else target
+                    else:
+                        look = arrived_look
+
+                # Force horizontal aim — avoid looking up/down due to
+                # centroid Z averaging across floors
+                look = (look[0], look[1], bot.pos[2])
 
                 commands.append(BotCommand(
                     id=bot.id,

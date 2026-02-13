@@ -138,6 +138,8 @@ static ConVar s_cvarAiPort("smartbots_ai_port", "9000", 0,
     "Python AI brain port");
 static ConVar s_cvarAiEnabled("smartbots_ai_enabled", "1", 0,
     "Enable/disable UDP bridge to Python AI brain");
+static ConVar s_cvarTeam("smartbots_team", "3", 0,
+    "Controlled team index (3=insurgents for coop)");
 
 // ---- ConCommand registration (required by Source engine) ----
 
@@ -387,6 +389,135 @@ static void ComputeEnemyThreats()
     }
 }
 
+// ---- Team intel: enemy positions seen by any friendly bot ----
+
+static float s_intelPos[32][3];   // enemy positions from team intel
+static int   s_intelCount = 0;
+static int   s_intelLogThrottle = 0;
+
+// Collect enemy positions visible to any bot on the controlled team.
+// Called after ComputeVision so sees[] is populated.
+static void ComputeTeamIntel()
+{
+    s_intelCount = 0;
+    int team = s_cvarTeam.GetInt();
+
+    bool recorded[33] = {};  // avoid duplicates by edict index
+
+    for (int i = 0; i < s_stateCount; i++)
+    {
+        BotStateEntry &entry = s_stateArray[i];
+        if (!entry.alive || entry.team != team)
+            continue;
+
+        for (int s = 0; s < entry.sees_count; s++)
+        {
+            int enemyId = entry.sees[s];
+            if (enemyId < 1 || enemyId > 32 || recorded[enemyId])
+                continue;
+
+            // Find this enemy in state array
+            for (int j = 0; j < s_stateCount; j++)
+            {
+                if (s_stateArray[j].id == enemyId && s_stateArray[j].alive
+                    && s_stateArray[j].team != team)
+                {
+                    s_intelPos[s_intelCount][0] = s_stateArray[j].pos[0];
+                    s_intelPos[s_intelCount][1] = s_stateArray[j].pos[1];
+                    s_intelPos[s_intelCount][2] = s_stateArray[j].pos[2];
+                    s_intelCount++;
+                    recorded[enemyId] = true;
+                    break;
+                }
+            }
+            if (s_intelCount >= 32)
+                break;
+        }
+        if (s_intelCount >= 32)
+            break;
+    }
+}
+
+// For uncontrolled bots with no visible enemy, look at nearest team intel enemy.
+static void ApplyTeamIntelLook()
+{
+    if (s_intelCount == 0)
+        return;
+
+    int team = s_cvarTeam.GetInt();
+    int applied = 0;
+
+    for (int i = 0; i < s_resolvedBotCount; i++)
+    {
+        int idx = s_resolvedBots[i].edictIndex;
+        if (!ValidateBot(idx, s_resolvedBots[i].entity))
+            continue;
+
+        // Skip bots with Python commands — they already have look targets
+        BotCommandEntry cmd;
+        if (BotCommand_Get(idx, cmd))
+            continue;
+
+        // Skip bots that already see enemies — native combat handles aim
+        if (BotActionHook_HasVisibleEnemy(idx))
+            continue;
+
+        // Find this bot's team and position from state array
+        float botPos[3] = {};
+        int botTeam = 0;
+        for (int j = 0; j < s_stateCount; j++)
+        {
+            if (s_stateArray[j].id == idx)
+            {
+                botPos[0] = s_stateArray[j].pos[0];
+                botPos[1] = s_stateArray[j].pos[1];
+                botPos[2] = s_stateArray[j].pos[2];
+                botTeam = s_stateArray[j].team;
+                break;
+            }
+        }
+        if (botTeam != team)
+            continue;
+
+        // Find nearest enemy from team intel
+        float bestDist2 = 1e18f;
+        int bestIdx = -1;
+        for (int e = 0; e < s_intelCount; e++)
+        {
+            float dx = s_intelPos[e][0] - botPos[0];
+            float dy = s_intelPos[e][1] - botPos[1];
+            float d2 = dx * dx + dy * dy;
+            if (d2 < bestDist2)
+            {
+                bestDist2 = d2;
+                bestIdx = e;
+            }
+        }
+
+        if (bestIdx >= 0)
+        {
+            // Horizontal aim: use bot's own Z
+            float lx = s_intelPos[bestIdx][0];
+            float ly = s_intelPos[bestIdx][1];
+            float lz = botPos[2];
+
+            if (LookTargetChanged(idx, lx, ly, lz))
+            {
+                BotActionHook_IssueLookAt(
+                    (void *)s_resolvedBots[i].entity, lx, ly, lz);
+                RecordLookTarget(idx, lx, ly, lz);
+                applied++;
+            }
+        }
+    }
+
+    if (applied > 0 && s_intelLogThrottle++ % 120 == 0)
+    {
+        META_CONPRINTF("[SmartBots] TeamIntel: %d enemies known, look applied to %d bots\n",
+                       s_intelCount, applied);
+    }
+}
+
 // ---- GameFrame hook ----
 
 void SmartBotsExtension::Hook_GameFrame(bool simulating)
@@ -411,6 +542,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         ResolveBots();
         ComputeVision();
         ComputeEnemyThreats();
+        ComputeTeamIntel();
         freshScan = true;
     }
 
@@ -546,6 +678,9 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                 }
             }
         }
+
+        // Share enemy intel with uncontrolled bots (look-at only, no movement)
+        ApplyTeamIntelLook();
     }
 
     // Log bot count periodically (~50 seconds)
