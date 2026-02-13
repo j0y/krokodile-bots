@@ -65,12 +65,6 @@ public:
 
     void RecordObjectiveLost(const char *source)
     {
-        if (m_objectiveLostThisRound)
-        {
-            META_CONPRINTF("[SmartBots] Objective lost [%s] (duplicate, ignoring)\n", source);
-            return;
-        }
-        m_objectiveLostThisRound = true;
         m_objectivesCaptured++;
         META_CONPRINTF("[SmartBots] Objective lost [%s] (total lost: %d)\n",
                        source, m_objectivesCaptured);
@@ -83,11 +77,10 @@ public:
 
         if (strcmp(name, "round_start") == 0)
         {
-            // Don't reset m_objectivesCaptured — in coop checkpoint each cache
-            // is its own round, so the counter must persist across rounds.
+            // In coop checkpoint only one round_start fires per game —
+            // no round transitions between objectives.
             m_phase = "preround";
             m_cappingCP = -1;
-            m_objectiveLostThisRound = false;
             META_CONPRINTF("[SmartBots] Round start — preround (objectives lost so far: %d)\n",
                            m_objectivesCaptured);
         }
@@ -107,9 +100,6 @@ public:
             int winner = event->GetInt("winner");
             m_phase = "over";
             m_cappingCP = -1;
-
-            if (winner != 0 && winner != m_controlledTeam)
-                RecordObjectiveLost("round_end");
 
             META_CONPRINTF("[SmartBots] Round over (winner: team %d, objectives lost: %d)\n",
                            winner, m_objectivesCaptured);
@@ -172,7 +162,6 @@ private:
     int m_objectivesCaptured = 0;
     const char *m_phase = "active";
     int m_cappingCP = -1;
-    bool m_objectiveLostThisRound = false;
     bool m_registered = false;
 };
 

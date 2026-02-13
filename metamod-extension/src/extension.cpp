@@ -580,7 +580,9 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
         IGameEventManager2 *pGameEventMgr = nullptr;
         GET_V_IFACE_CURRENT(GetEngineFactory, pGameEventMgr,
                              IGameEventManager2, INTERFACEVERSION_GAMEEVENTSMANAGER2);
-        GameEvents_Init(pGameEventMgr, /*controlledTeam=*/2);
+        const char *teamEnv = std::getenv("CONTROLLED_TEAM");
+        int controlledTeam = teamEnv ? std::atoi(teamEnv) : 3;
+        GameEvents_Init(pGameEventMgr, controlledTeam);
     }
 
     // Resolve game rules for live counter-attack detection

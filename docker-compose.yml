@@ -18,6 +18,7 @@ services:
       - GAME_MODE=coop
       - TICKRATE=64
       - NB_DEBUG=${NB_DEBUG:-0}
+      - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
     stdin_open: true
     tty: true
     profiles:
