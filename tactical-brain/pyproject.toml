@@ -30,4 +30,5 @@ typeCheckingMode = "basic"
 dev = [
     "pyright>=1.1.408",
     "ruff>=0.15.0",
+    "matplotlib>=3.9",
 ]

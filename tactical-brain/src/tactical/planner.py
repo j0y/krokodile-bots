@@ -119,6 +119,7 @@ class Planner:
         if self.orders is not None and self.area_map is not None and self.influence_map is not None:
             commands = self._area_commands(
                 our_bots, friendly_positions, enemy_positions, bot_profiles,
+                objectives_lost=state.objectives_lost,
             )
         else:
             # No strategist orders — send nothing, let vanilla AI control all bots
@@ -150,6 +151,18 @@ class Planner:
             a.center for a in self.area_map.areas.values()
             if a.role in ("enemy_spawn", "enemy_approach")
         ]
+
+    def _enemy_spawn(self, objectives_lost: int = 0) -> tuple[float, float, float] | None:
+        """Current enemy spawn: last captured objective, or original spawn."""
+        assert self.area_map is not None
+        if objectives_lost > 0:
+            for a in self.area_map.areas.values():
+                if a.role == "objective" and a.order == objectives_lost:
+                    return a.center
+        for a in self.area_map.areas.values():
+            if a.role == "enemy_spawn":
+                return a.center
+        return None
 
     @staticmethod
     def _nearest_approach(
@@ -229,6 +242,7 @@ class Planner:
         friendly_positions: list[tuple[float, float, float]],
         enemy_positions: list[tuple[float, float, float]],
         bot_profiles: dict[int, str],
+        objectives_lost: int = 0,
     ) -> list[BotCommand]:
         """Assign bots to area-based orders from the strategist."""
         assert self.influence_map is not None
@@ -240,6 +254,7 @@ class Planner:
         remaining = list(our_bots)
 
         approach_positions = self._approach_positions()
+        enemy_spawn = self._enemy_spawn(objectives_lost)
 
         for order in self.orders:
             if not remaining:
@@ -306,11 +321,13 @@ class Planner:
                     threat = self._nearest_enemy(bot.pos, enemy_positions)
                     if threat is not None:
                         look = threat
-                    elif self.pathfinder is not None and self.influence_map is not None:
+                    elif self.pathfinder is not None and self.influence_map is not None \
+                            and enemy_spawn is not None:
+                        # Slice-the-pie toward enemy spawn entrance
                         corner = self.pathfinder.find_look_target(
-                            bot.pos, target, self.influence_map.nearest_point,
+                            bot.pos, enemy_spawn, self.influence_map.nearest_point,
                         )
-                        look = corner if corner else target
+                        look = corner if corner else arrived_look
                     else:
                         look = arrived_look
 
