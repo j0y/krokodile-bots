@@ -65,6 +65,11 @@ public:
 
     void RecordObjectiveLost(const char *source)
     {
+        if (strcmp(m_phase, "over") == 0)
+        {
+            META_CONPRINTF("[SmartBots] Ignoring objective event [%s] — round is over\n", source);
+            return;
+        }
         m_objectivesLost++;
         META_CONPRINTF("[SmartBots] Objective lost [%s] (total lost: %d)\n",
                        source, m_objectivesLost);

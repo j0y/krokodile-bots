@@ -565,9 +565,11 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
     BotCommand_Init();
 
     // Initialize UDP bridge to Python brain
+    // ConVar +overrides aren't applied yet at this point, so read env var directly
     if (s_cvarAiEnabled.GetBool())
     {
-        const char *host = s_cvarAiHost.GetString();
+        const char *hostEnv = std::getenv("AI_HOST");
+        const char *host = (hostEnv && hostEnv[0]) ? hostEnv : s_cvarAiHost.GetString();
         int port = s_cvarAiPort.GetInt();
         if (!UdpBridge_Init(host, port))
         {
