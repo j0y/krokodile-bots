@@ -270,7 +270,18 @@ class Planner:
                 break
 
             n = min(order.bots, len(remaining))
-            mask = self.area_map.build_mask(order.areas)
+
+            # Auto-expand areas: include 1-hop adjacent rooms so bots
+            # have room to spread.  The strategist only names the target
+            # area; the planner decides where around it to position bots.
+            expanded = list(order.areas)
+            for a in order.areas:
+                if a.startswith("-"):
+                    continue
+                for neighbor in self.area_map._adjacency.get(a, []):
+                    if neighbor not in expanded:
+                        expanded.append(neighbor)
+            mask = self.area_map.build_mask(expanded)
 
             # For defend orders with adjacent areas, use only the objective area
             # for proximity pull so bots aren't pulled toward adjacent centroids
