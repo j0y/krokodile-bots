@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import math
 import time
 from dataclasses import dataclass
 
@@ -100,17 +101,23 @@ class Planner:
             # No strategist orders — send nothing, let vanilla AI control all bots
             commands = []
 
-        rows = [
-            BotCommandRow(
+        rows = []
+        for cmd in commands:
+            dx = cmd.look_target[0] - cmd.move_target[0]
+            dy = cmd.look_target[1] - cmd.move_target[1]
+            yaw = math.degrees(math.atan2(dy, dx)) if (dx * dx + dy * dy) > 1.0 else 0.0
+            rows.append(BotCommandRow(
                 tick=state.tick,
                 bot_id=cmd.id,
                 target_x=cmd.move_target[0],
                 target_y=cmd.move_target[1],
                 target_z=cmd.move_target[2],
+                look_x=cmd.look_target[0],
+                look_y=cmd.look_target[1],
+                look_z=cmd.look_target[2],
+                look_yaw=yaw,
                 profile=bot_profiles.get(cmd.id, "unknown"),
-            )
-            for cmd in commands
-        ]
+            ))
         return commands, rows
 
     def _approach_positions(self) -> list[tuple[float, float, float]]:
@@ -143,18 +150,21 @@ class Planner:
         approach: tuple[float, float, float],
         obj_centroid: tuple[float, float, float],
     ) -> tuple[float, float, float]:
-        """Project 2000u past the approach centroid, away from the objective."""
+        """Project 2000u past the approach centroid, away from the objective.
+
+        Uses only XY for direction so bots look horizontally, not up/down.
+        Z is kept at the approach height.
+        """
         dx = approach[0] - obj_centroid[0]
         dy = approach[1] - obj_centroid[1]
-        dz = approach[2] - obj_centroid[2]
-        length = (dx * dx + dy * dy + dz * dz) ** 0.5
+        length = (dx * dx + dy * dy) ** 0.5
         if length < 1.0:
             return approach
         scale = 2000.0 / length
         return (
             approach[0] + dx * scale,
             approach[1] + dy * scale,
-            approach[2] + dz * scale,
+            approach[2],
         )
 
     def _objective_centroid(self, area_names: list[str]) -> tuple[float, float, float]:

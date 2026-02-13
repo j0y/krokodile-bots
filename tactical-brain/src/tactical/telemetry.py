@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS bot_commands (
     ts         TIMESTAMPTZ NOT NULL DEFAULT now(),
     bot_id     INTEGER,
     target_x   REAL, target_y REAL, target_z REAL,
+    look_x     REAL, look_y REAL, look_z REAL,
+    look_yaw   REAL,
     profile    TEXT
 )"""
 
@@ -123,8 +125,8 @@ _INSERT_STATE = (
 )
 
 _INSERT_COMMAND = (
-    "INSERT INTO bot_commands (session_id, tick, bot_id, target_x, target_y, target_z, profile)"
-    " VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    "INSERT INTO bot_commands (session_id, tick, bot_id, target_x, target_y, target_z, look_x, look_y, look_z, look_yaw, profile)"
+    " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 )
 
 _INSERT_GAME_EVENT = (
@@ -184,6 +186,10 @@ class BotCommandRow:
     target_x: float
     target_y: float
     target_z: float
+    look_x: float
+    look_y: float
+    look_z: float
+    look_yaw: float
     profile: str
 
 
