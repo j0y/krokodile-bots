@@ -12,7 +12,7 @@ public:
     {
         m_pEventMgr = mgr;
         m_controlledTeam = controlledTeam;
-        m_objectivesCaptured = 0;
+        m_objectivesLost = 0;
         // Default to "active" so strategist works even if events never fire
         m_phase = "active";
         m_cappingCP = -1;
@@ -59,15 +59,15 @@ public:
         }
     }
 
-    int GetObjectivesCaptured() const { return m_objectivesCaptured; }
+    int GetObjectivesLost() const { return m_objectivesLost; }
     const char *GetPhase() const { return m_phase; }
     int GetCappingCP() const { return m_cappingCP; }
 
     void RecordObjectiveLost(const char *source)
     {
-        m_objectivesCaptured++;
+        m_objectivesLost++;
         META_CONPRINTF("[SmartBots] Objective lost [%s] (total lost: %d)\n",
-                       source, m_objectivesCaptured);
+                       source, m_objectivesLost);
     }
 
     // IGameEventListener2
@@ -82,13 +82,13 @@ public:
             m_phase = "preround";
             m_cappingCP = -1;
             META_CONPRINTF("[SmartBots] Round start — preround (objectives lost so far: %d)\n",
-                           m_objectivesCaptured);
+                           m_objectivesLost);
         }
         else if (strcmp(name, "game_end") == 0)
         {
             META_CONPRINTF("[SmartBots] Game ended — resetting objectives (was %d)\n",
-                           m_objectivesCaptured);
-            m_objectivesCaptured = 0;
+                           m_objectivesLost);
+            m_objectivesLost = 0;
         }
         else if (strcmp(name, "round_begin") == 0 || strcmp(name, "round_freeze_end") == 0)
         {
@@ -102,7 +102,7 @@ public:
             m_cappingCP = -1;
 
             META_CONPRINTF("[SmartBots] Round over (winner: team %d, objectives lost: %d)\n",
-                           winner, m_objectivesCaptured);
+                           winner, m_objectivesLost);
         }
         else if (strcmp(name, "controlpoint_captured") == 0)
         {
@@ -159,7 +159,7 @@ public:
 private:
     IGameEventManager2 *m_pEventMgr = nullptr;
     int m_controlledTeam = 2;
-    int m_objectivesCaptured = 0;
+    int m_objectivesLost = 0;
     const char *m_phase = "active";
     int m_cappingCP = -1;
     bool m_registered = false;
@@ -186,9 +186,9 @@ void GameEvents_Shutdown()
     s_listener.Shutdown();
 }
 
-int GameEvents_GetObjectivesCaptured()
+int GameEvents_GetObjectivesLost()
 {
-    return s_listener.GetObjectivesCaptured();
+    return s_listener.GetObjectivesLost();
 }
 
 const char *GameEvents_GetPhase()
@@ -243,7 +243,6 @@ typedef bool (*IsCounterAttackFn)(void *thisRules);
 
 static void **s_pGameRules = nullptr;       // &g_pGameRules (pointer to pointer)
 static IsCounterAttackFn s_fnIsCA = nullptr;
-static void **s_pObjResource = nullptr;     // &g_pObjectiveResource (pointer to pointer)
 
 void GameEvents_InitGameRules(uintptr_t serverBase)
 {
@@ -251,10 +250,8 @@ void GameEvents_InitGameRules(uintptr_t serverBase)
         serverBase + ServerOffsets::g_pGameRules);
     s_fnIsCA = reinterpret_cast<IsCounterAttackFn>(
         serverBase + ServerOffsets::CINSRules_IsCounterAttack);
-    s_pObjResource = reinterpret_cast<void **>(
-        serverBase + ServerOffsets::g_pObjectiveResource);
-    META_CONPRINTF("[SmartBots] GameRules: resolved g_pGameRules=%p, IsCounterAttack=%p, ObjResource=%p\n",
-                   (void *)s_pGameRules, (void *)s_fnIsCA, (void *)s_pObjResource);
+    META_CONPRINTF("[SmartBots] GameRules: resolved g_pGameRules=%p, IsCounterAttack=%p\n",
+                   (void *)s_pGameRules, (void *)s_fnIsCA);
 }
 
 bool GameEvents_IsCounterAttack()
@@ -265,39 +262,4 @@ bool GameEvents_IsCounterAttack()
     if (!rules)
         return false;
     return s_fnIsCA(rules);
-}
-
-// --- Active control point from g_pObjectiveResource ---
-// Layout from decompiled CINSBotActionCheckpoint::Update / CINSNextBotManager::GetDesiredPushTypeObjective:
-//   *(g_pObjectiveResource + 0x770) = current active CP index (int)
-//   *(g_pObjectiveResource + 0x5d0 + idx * 0xc) = CP position (Vector3, 3 floats)
-
-static constexpr uintptr_t kObjRes_ActiveCP = 0x770;
-static constexpr uintptr_t kObjRes_CPPositions = 0x5d0;
-static constexpr int kMaxCPs = 16;
-
-int GameEvents_GetActiveCP()
-{
-    if (!s_pObjResource || !*s_pObjResource)
-        return -1;
-    int idx = *reinterpret_cast<int *>(
-        reinterpret_cast<uintptr_t>(*s_pObjResource) + kObjRes_ActiveCP);
-    if (idx < 0 || idx >= kMaxCPs)
-        return -1;
-    return idx;
-}
-
-bool GameEvents_GetCPPos(int cpIdx, float *out)
-{
-    if (!s_pObjResource || !*s_pObjResource || cpIdx < 0 || cpIdx >= kMaxCPs)
-    {
-        out[0] = out[1] = out[2] = 0.0f;
-        return false;
-    }
-    uintptr_t base = reinterpret_cast<uintptr_t>(*s_pObjResource)
-                     + kObjRes_CPPositions + cpIdx * 0xc;
-    out[0] = *reinterpret_cast<float *>(base);
-    out[1] = *reinterpret_cast<float *>(base + 4);
-    out[2] = *reinterpret_cast<float *>(base + 8);
-    return true;
 }

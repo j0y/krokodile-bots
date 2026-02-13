@@ -34,10 +34,9 @@ class _Snapshot:
     friendly_ids_alive: frozenset[int]
     enemy_ids_alive: frozenset[int]
     current_profile: str
-    objectives_captured: int
+    objectives_lost: int
     capping_cp: int
     counter_attack: bool
-    active_cp: int
 
 
 @dataclass
@@ -83,7 +82,7 @@ class BaseStrategist(ABC):
         # Round/objective tracking
         self._round_num: int = 0
         self._objective_num: int = 0
-        self._prev_objectives_captured: int = 0
+        self._prev_objectives_lost: int = 0
         self._round_casualties: int = 0
         self._round_contacts: int = 0
         self._round_enemies_down: int = 0
@@ -264,10 +263,9 @@ class BaseStrategist(ABC):
             friendly_ids_alive=frozenset(friendly_alive_ids),
             enemy_ids_alive=frozenset(enemy_alive_ids),
             current_profile=self._planner.profile_name,
-            objectives_captured=state.objectives_captured,
+            objectives_lost=state.objectives_lost,
             capping_cp=state.capping_cp,
             counter_attack=state.counter_attack,
-            active_cp=state.active_cp,
         )
 
     # ------------------------------------------------------------------
@@ -367,12 +365,12 @@ class BaseStrategist(ABC):
             ))
 
         # Objective lost
-        if curr.objectives_captured > prev.objectives_captured:
+        if curr.objectives_lost > prev.objectives_lost:
             events.append(TacticalEvent(
                 kind="OBJECTIVE_LOST",
-                message=f"OBJECTIVE_LOST: objective #{curr.objectives_captured} captured by enemy "
-                        f"({curr.objectives_captured} total lost)",
-                count=curr.objectives_captured, total=curr.objectives_captured,
+                message=f"OBJECTIVE_LOST: objective #{curr.objectives_lost} lost "
+                        f"({curr.objectives_lost} total lost)",
+                count=curr.objectives_lost, total=curr.objectives_lost,
             ))
 
         # Capture in progress
@@ -409,19 +407,19 @@ class BaseStrategist(ABC):
     ) -> None:
         """Update round_num, objective_num based on events. Manage round lifecycle.
 
-        Round = one full game attempt (all waves). Detected by objectives_captured
+        Round = one full game attempt (all waves). Detected by objectives_lost
         going DOWN (engine resets on game_end / changelevel). Wave respawns within
-        the same attempt keep objectives_captured the same or higher.
+        the same attempt keep objectives_lost the same or higher.
         """
         for ev in events:
             if ev.kind == "ROUND_START":
-                obj = curr.objectives_captured
+                obj = curr.objectives_lost
                 if self._round_num == 0:
                     # First spawn of session → round 1
                     self._round_num = 1
                     self._objective_num = obj
                     self._start_new_round(curr, state)
-                elif obj < self._prev_objectives_captured:
+                elif obj < self._prev_objectives_lost:
                     # objectives went DOWN → map restart → new round
                     self._end_current_round(curr, state)
                     self._round_num += 1
@@ -430,14 +428,14 @@ class BaseStrategist(ABC):
                 else:
                     # Wave respawn within same round — don't reset counters.
                     # Objectives may have advanced during non-active phase.
-                    if obj > self._prev_objectives_captured:
+                    if obj > self._prev_objectives_lost:
                         self._objective_num = obj
                         log.info(
                             "Objective advanced during respawn: %d → %d",
-                            self._prev_objectives_captured, obj,
+                            self._prev_objectives_lost, obj,
                         )
             elif ev.kind == "OBJECTIVE_LOST":
-                self._objective_num = curr.objectives_captured
+                self._objective_num = curr.objectives_lost
             elif ev.kind == "CASUALTY":
                 self._round_casualties += ev.count
             elif ev.kind == "CONTACT":
@@ -445,7 +443,7 @@ class BaseStrategist(ABC):
             elif ev.kind == "ENEMY_DOWN":
                 self._round_enemies_down += ev.count
 
-        self._prev_objectives_captured = curr.objectives_captured
+        self._prev_objectives_lost = curr.objectives_lost
 
     def _start_new_round(self, curr: _Snapshot, state: GameState) -> None:
         """Reset round counters and record round start."""
@@ -465,11 +463,11 @@ class BaseStrategist(ABC):
             a for a in self._area_map.areas.values() if a.role == "objective"
         ]
         total_objectives = len(obj_areas) if obj_areas else 1
-        round_won = self._prev_objectives_captured >= total_objectives
+        round_won = self._prev_objectives_lost >= total_objectives
         self._telemetry.end_round(
             round_num=self._round_num,
             tick=state.tick,
-            objectives_completed=self._prev_objectives_captured,
+            objectives_completed=self._prev_objectives_lost,
             round_won=round_won,
             total_casualties=self._round_casualties,
             total_contacts=self._round_contacts,
@@ -497,7 +495,7 @@ class BaseStrategist(ABC):
                 areas_json=json.dumps(ev.areas) if ev.areas else None,
                 friendly_alive=curr.friendly_alive,
                 enemy_alive=curr.enemy_alive,
-                objectives_captured=curr.objectives_captured,
+                objectives_lost=curr.objectives_lost,
             )
             for ev in events
         ]
@@ -530,7 +528,7 @@ class BaseStrategist(ABC):
             friendly_total=curr.friendly_total,
             enemy_alive=curr.enemy_alive,
             spotted_count=len(curr.spotted_enemy_ids),
-            objectives_captured=curr.objectives_captured,
+            objectives_lost=curr.objectives_lost,
             reasoning=reasoning,
             orders_json=json.dumps(orders_data),
             trigger_events=json.dumps(trigger_data),

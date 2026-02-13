@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS game_events (
     areas_json          JSONB,
     friendly_alive      INTEGER,
     enemy_alive         INTEGER,
-    objectives_captured INTEGER
+    objectives_lost INTEGER
 )"""
 
 _CREATE_STRATEGY_DECISIONS = """\
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS strategy_decisions (
     friendly_total      INTEGER NOT NULL,
     enemy_alive         INTEGER NOT NULL,
     spotted_count       INTEGER NOT NULL,
-    objectives_captured INTEGER NOT NULL,
+    objectives_lost INTEGER NOT NULL,
     reasoning           TEXT,
     orders_json         JSONB NOT NULL,
     trigger_events      JSONB NOT NULL,
@@ -131,7 +131,7 @@ _INSERT_GAME_EVENT = (
     "INSERT INTO game_events"
     " (session_id, tick, round_num, objective_num, kind, message,"
     "  count, remaining, total_field, areas_json,"
-    "  friendly_alive, enemy_alive, objectives_captured)"
+    "  friendly_alive, enemy_alive, objectives_lost)"
     " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 )
 
@@ -139,7 +139,7 @@ _INSERT_DECISION = (
     "INSERT INTO strategy_decisions"
     " (session_id, tick, round_num, objective_num, state, prev_state,"
     "  friendly_alive, friendly_total, enemy_alive, spotted_count,"
-    "  objectives_captured, reasoning, orders_json, trigger_events, threat_map_json)"
+    "  objectives_lost, reasoning, orders_json, trigger_events, threat_map_json)"
     " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 )
 
@@ -200,7 +200,7 @@ class GameEventRow:
     areas_json: str | None  # JSON string
     friendly_alive: int | None
     enemy_alive: int | None
-    objectives_captured: int | None
+    objectives_lost: int | None
 
 
 @dataclass
@@ -214,7 +214,7 @@ class StrategyDecisionRow:
     friendly_total: int
     enemy_alive: int
     spotted_count: int
-    objectives_captured: int
+    objectives_lost: int
     reasoning: str | None
     orders_json: str  # JSON string
     trigger_events: str  # JSON string

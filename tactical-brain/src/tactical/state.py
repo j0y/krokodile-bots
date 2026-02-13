@@ -20,7 +20,7 @@ class BotState:
 class GameState:
     tick: int
     bots: dict[int, BotState] = field(default_factory=dict)
-    objectives_captured: int = 0
+    objectives_lost: int = 0
     phase: str = "active"    # "preround", "active", "over"
     capping_cp: int = -1     # CP index being captured by enemy, -1 if none
     # Counter-attack state from engine
@@ -28,5 +28,3 @@ class GameState:
     ca_disabled: bool = False     # mp_checkpoint_counterattack_disable
     ca_duration: int = 65         # mp_checkpoint_counterattack_duration
     ca_duration_finale: int = 120 # mp_checkpoint_counterattack_duration_finale
-    # Active control point index from g_pObjectiveResource
-    active_cp: int = -1

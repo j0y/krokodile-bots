@@ -47,14 +47,13 @@ def decode_state(data: bytes) -> GameState:
     return GameState(
         tick=int(raw.get("tick", 0)),
         bots=bots,
-        objectives_captured=int(raw.get("obj", 0)),
+        objectives_lost=int(raw.get("obj", 0)),
         phase=raw.get("phase", "active"),
         capping_cp=int(raw.get("cap", -1)),
         counter_attack=bool(raw.get("ca", 0)),
         ca_disabled=bool(raw.get("ca_off", 0)),
         ca_duration=int(raw.get("ca_dur", 65)),
         ca_duration_finale=int(raw.get("ca_dur_f", 120)),
-        active_cp=int(raw.get("acp", -1)),
     )
 
 

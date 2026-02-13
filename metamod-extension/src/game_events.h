@@ -14,8 +14,8 @@ void GameEvents_RegisterListeners();
 // Unregister listener. Call on plugin unload.
 void GameEvents_Shutdown();
 
-// Number of objectives captured by the attacking team since last round_start.
-int GameEvents_GetObjectivesCaptured();
+// Number of objectives lost by the defending team since game start.
+int GameEvents_GetObjectivesLost();
 
 // Round phase: "preround", "active", "over"
 const char *GameEvents_GetPhase();
@@ -35,11 +35,5 @@ int GameEvents_CounterAttackDurationFinale();
 // Must be initialized with the server module base via GameEvents_InitGameRules().
 void GameEvents_InitGameRules(uintptr_t serverBase);
 bool GameEvents_IsCounterAttack();
-
-// Active control point from g_pObjectiveResource.
-// Returns the engine's current active CP index, or -1 if unavailable.
-int GameEvents_GetActiveCP();
-// Position of a CP by index. Writes to out[3]. Returns false if unavailable.
-bool GameEvents_GetCPPos(int cpIdx, float *out);
 
 #endif // _SMARTBOTS_GAME_EVENTS_H_
