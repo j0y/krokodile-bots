@@ -18,6 +18,7 @@ string-pull advances naturally.
 from __future__ import annotations
 
 import logging
+import math
 from typing import Callable
 
 import numpy as np
@@ -32,6 +33,9 @@ class PathFinder:
     # Distance at which the bot begins sweeping from the visible centroid
     # toward the hidden one.  At 220 u/s walk speed ≈ 2.3 s of sweep.
     SWEEP_DIST = 500.0
+
+    # Degrees to rotate look toward the open side of a corner ("pie slicing").
+    PEEK_OFFSET_DEG = 20.0
 
     # Only consider this many hops ahead for look direction.
     # Limits sensitivity to routing mismatches with the engine's pathfinder.
@@ -191,6 +195,24 @@ class PathFinder:
 
         corner = self._find_corner_point(bot_idx, invis_c)
         if corner is not None:
+            # Pie-slice: rotate look toward the open side of the turn.
+            # Cross product of (bot→corner) × (corner→hidden) gives turn dir.
+            bc_x = corner[0] - bot_pos[0]
+            bc_y = corner[1] - bot_pos[1]
+            ch_x = float(invis_c[0]) - corner[0]
+            ch_y = float(invis_c[1]) - corner[1]
+            cross = bc_x * ch_y - bc_y * ch_x
+
+            if abs(cross) > 1.0:  # skip if nearly straight
+                offset_rad = math.radians(self.PEEK_OFFSET_DEG)
+                if cross > 0:     # left turn → look right
+                    offset_rad = -offset_rad
+                cos_a = math.cos(offset_rad)
+                sin_a = math.sin(offset_rad)
+                new_x = bc_x * cos_a - bc_y * sin_a
+                new_y = bc_x * sin_a + bc_y * cos_a
+                corner = (bot_pos[0] + new_x, bot_pos[1] + new_y, corner[2])
+
             return corner
 
         # Fallback: look at farthest visible centroid
