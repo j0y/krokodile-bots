@@ -22,6 +22,9 @@ log = logging.getLogger(__name__)
 SPOTTED_COOLDOWN = 5.0  # seconds to remember enemy after losing sight
 MAX_PREDICT_TIME = 2.0  # max seconds to extrapolate enemy movement
 THREAT_LOOK_RANGE = 1500.0  # look at threats within this distance while walking
+STUCK_THRESHOLD = 50.0  # bot must move this far to be considered "not stuck"
+STUCK_SECONDS = 3.0     # seconds without movement before releasing to native AI
+STUCK_MIN_DIST = 300.0  # only release if bot is this far from its move target
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,6 +52,8 @@ class Planner:
         self._spotted_memory: dict[
             int, tuple[float, tuple[float, float, float], tuple[float, float]]
         ] = {}
+        # Stuck detection: {bot_id: (last_pos, stuck_since)}
+        self._stuck_tracker: dict[int, tuple[tuple[float, float], float]] = {}
 
     def compute_commands(
         self, state: GameState,
@@ -58,6 +63,10 @@ class Planner:
             b for b in state.bots.values()
             if b.alive and b.is_bot and b.team == self.controlled_team
         ]
+        alive_ids = {b.id for b in our_bots}
+        self._stuck_tracker = {
+            k: v for k, v in self._stuck_tracker.items() if k in alive_ids
+        }
         if not our_bots:
             return [], []
 
@@ -334,6 +343,24 @@ class Planner:
                 # Force horizontal aim — avoid looking up/down due to
                 # centroid Z averaging across floors
                 look = (look[0], look[1], bot.pos[2])
+
+                # Stuck detection: if bot hasn't moved for STUCK_SECONDS
+                # despite being far from target, release to native AI
+                now = time.monotonic()
+                bot_xy = (bot.pos[0], bot.pos[1])
+                if bot.id in self._stuck_tracker:
+                    last_pos, stuck_since = self._stuck_tracker[bot.id]
+                    moved = ((bot_xy[0] - last_pos[0]) ** 2
+                             + (bot_xy[1] - last_pos[1]) ** 2) ** 0.5
+                    if moved > STUCK_THRESHOLD:
+                        self._stuck_tracker[bot.id] = (bot_xy, now)
+                    elif dist2 > STUCK_MIN_DIST ** 2 \
+                            and now - stuck_since > STUCK_SECONDS:
+                        log.info("Bot %d stuck at (%.0f,%.0f), %.0fu from target, releasing to native AI",
+                                 bot.id, bot.pos[0], bot.pos[1], dist2 ** 0.5)
+                        continue  # skip command — native AI takes over
+                else:
+                    self._stuck_tracker[bot.id] = (bot_xy, now)
 
                 commands.append(BotCommand(
                     id=bot.id,

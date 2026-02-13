@@ -167,6 +167,33 @@ def load_map_data(data_dir: Path, map_name: str):
     return points, areas
 
 
+def find_nav_file(map_name: str) -> Path | None:
+    """Try to locate the .nav file for the given map."""
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    p = repo_root / "insurgency-server" / "server-files" / "insurgency" / "maps" / f"{map_name}.nav"
+    return p if p.exists() else None
+
+
+def load_nav_areas(nav_path: Path, floor_z: float, floor_tolerance: float
+                   ) -> list[tuple[float, float, float, float]]:
+    """Parse .nav and return walkable rectangles [(x, y, w, h)] for one floor."""
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    sys.path.insert(0, str(repo_root / "navMeshParser"))
+    from parse_nav import parse_nav
+
+    mesh = parse_nav(nav_path)
+    rects = []
+    for area in mesh.areas.values():
+        avg_z = (area.nw.z + area.se.z + area.ne_z + area.sw_z) / 4
+        if abs(avg_z - floor_z) < floor_tolerance:
+            x_min = min(area.nw.x, area.se.x)
+            x_max = max(area.nw.x, area.se.x)
+            y_min = min(area.nw.y, area.se.y)
+            y_max = max(area.nw.y, area.se.y)
+            rects.append((x_min, y_min, x_max - x_min, y_max - y_min))
+    return rects
+
+
 def build_wall_grid(floor_points_2d: np.ndarray, cell: float = 16.0,
                     close_iterations: int = 2):
     """Build an occupancy grid from floor nav points and return contour-ready data.
@@ -199,6 +226,20 @@ def build_wall_grid(floor_points_2d: np.ndarray, cell: float = 16.0,
 # ---------------------------------------------------------------------------
 # Drawing helpers
 # ---------------------------------------------------------------------------
+
+def draw_nav_walls(ax, nav_rects: list[tuple[float, float, float, float]]):
+    """Draw walls as inverse of nav mesh. Gray background = wall, white = walkable."""
+    from matplotlib.patches import Rectangle
+    from matplotlib.collections import PatchCollection
+
+    if not nav_rects:
+        return
+    ax.set_facecolor("#e0e0e0")
+    patches = [Rectangle((x, y), w, h) for x, y, w, h in nav_rects]
+    pc = PatchCollection(patches, facecolor="white", edgecolor="#d0d0d0",
+                         linewidth=0.15, zorder=0)
+    ax.add_collection(pc)
+
 
 def draw_walls(ax, wall_grid, wall_xs, wall_ys, wall_cell: float):
     """Draw wall outlines from occupancy grid.  Light fill + contour edges."""
@@ -306,11 +347,13 @@ def draw_trajectory(ax, traj: list, death_tick: int, dist: float, profile: str,
 BOT_COLORS = ["blue", "purple", "green", "orange", "red", "cyan", "magenta", "brown"]
 
 
-def plot_session_tail(args, conn, session_id: str, points, areas):
+def plot_session_tail(args, conn, session_id: str, points, areas, nav_rects=None):
     """Plot the last N seconds of a session showing all bots + player."""
-    floor_mask = abs(points[:, 2] - args.floor_z) < args.floor_tolerance
-    floor_pts_2d = points[floor_mask, :2]
-    wall_grid, wall_xs, wall_ys, wall_cell = build_wall_grid(floor_pts_2d)
+    wall_data = None
+    if nav_rects is None:
+        floor_mask = abs(points[:, 2] - args.floor_z) < args.floor_tolerance
+        floor_pts_2d = points[floor_mask, :2]
+        wall_data = build_wall_grid(floor_pts_2d)
 
     bots, cmds, last_tick = fetch_session_tail(conn, session_id, args.last)
     if not bots:
@@ -327,7 +370,10 @@ def plot_session_tail(args, conn, session_id: str, points, areas):
             bot_ids.append(bid)
 
     fig, ax = plt.subplots(1, 1, figsize=(20, 14))
-    draw_walls(ax, wall_grid, wall_xs, wall_ys, wall_cell)
+    if nav_rects is not None:
+        draw_nav_walls(ax, nav_rects)
+    else:
+        draw_walls(ax, *wall_data)
 
     # Compute bounds from all bot/player positions for area overlay
     all_x = [p[1] for traj in bots.values() for p in traj]
@@ -410,6 +456,8 @@ def main():
     parser.add_argument("--dbname", default="telemetry")
     parser.add_argument("--map", default="ministry_coop", help="Map name")
     parser.add_argument("--data-dir", default="data", help="Path to precomputed map data")
+    parser.add_argument("--nav-file", default=None,
+                        help="Path to .nav file (auto-detected from --map if omitted)")
     parser.add_argument("--output", default="/tmp/deaths.png", help="Output image path")
     parser.add_argument("--floor-z", type=float, default=32.0, help="Floor Z height")
     parser.add_argument("--floor-tolerance", type=float, default=20.0, help="Z tolerance for floor filter")
@@ -420,6 +468,13 @@ def main():
 
     data_dir = Path(args.data_dir)
     points, areas = load_map_data(data_dir, args.map)
+
+    # Try nav mesh for sharp wall rendering, fall back to vismatrix grid
+    nav_rects = None
+    nav_path = Path(args.nav_file) if args.nav_file else find_nav_file(args.map)
+    if nav_path:
+        nav_rects = load_nav_areas(nav_path, args.floor_z, args.floor_tolerance)
+        print(f"Loaded {len(nav_rects)} nav areas from {nav_path.name}")
 
     conn = connect_db(args.host, args.port, args.user, args.password, args.dbname)
 
@@ -436,13 +491,15 @@ def main():
         if not session_id:
             print("No session found.", file=sys.stderr)
             sys.exit(1)
-        plot_session_tail(args, conn, session_id, points, areas)
+        plot_session_tail(args, conn, session_id, points, areas, nav_rects)
         conn.close()
         return
 
-    floor_mask = abs(points[:, 2] - args.floor_z) < args.floor_tolerance
-    floor_pts_2d = points[floor_mask, :2]
-    wall_grid, wall_xs, wall_ys, wall_cell = build_wall_grid(floor_pts_2d)
+    wall_data = None
+    if nav_rects is None:
+        floor_mask = abs(points[:, 2] - args.floor_z) < args.floor_tolerance
+        floor_pts_2d = points[floor_mask, :2]
+        wall_data = build_wall_grid(floor_pts_2d)
 
     deaths = fetch_deaths(conn, args.deaths, session_id=session_id)
 
@@ -473,7 +530,10 @@ def main():
     overview_cy = (min(all_y) + max(all_y)) / 2
     overview_margin = max(max(all_x) - min(all_x), max(all_y) - min(all_y)) / 2 + 400
 
-    draw_walls(ax0, wall_grid, wall_xs, wall_ys, wall_cell)
+    if nav_rects is not None:
+        draw_nav_walls(ax0, nav_rects)
+    else:
+        draw_walls(ax0, *wall_data)
     draw_areas(ax0, areas, overview_cx, overview_cy, overview_margin)
 
     for i, d in enumerate(deaths):
@@ -501,7 +561,10 @@ def main():
                                       session_id=session_id)
         profile = traj[-1][7] if traj else "?"
 
-        draw_walls(ax, wall_grid, wall_xs, wall_ys, wall_cell)
+        if nav_rects is not None:
+            draw_nav_walls(ax, nav_rects)
+        else:
+            draw_walls(ax, *wall_data)
         draw_areas(ax, areas, px, py, args.margin)
         draw_trajectory(ax, traj, death_tick, dist, profile, bot_id)
 
