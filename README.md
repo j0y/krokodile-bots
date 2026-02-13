@@ -16,22 +16,35 @@ Three-layer AI for Insurgency 2014 bots: C++ Metamod extension controls bots via
 # 1. Download server files (one-time, ~10GB)
 cd insurgency-server && ./download-server.sh && cd ..
 
-# 2. Precompute spatial data for a map
+# 2. Precompute spatial data (all coop maps, ~30 min)
 cd bspMeshExporter
-uv run python -m bsp_mesh_exporter extract ministry_coop \
+uv run python -m bsp_mesh_exporter extract --batch \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
     --output-dir ../data/
-uv run python -m bsp_mesh_exporter vismatrix ministry_coop \
+uv run python -m bsp_mesh_exporter objectives --batch \
+    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
+    --output-dir ../data/
+uv run python -m bsp_mesh_exporter zones --batch \
+    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
+    --output-dir ../data/
+uv run python -m bsp_mesh_exporter vismatrix --batch \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
     --mesh-dir ../data/ --output-dir ../data/
-uv run python -m bsp_mesh_exporter influence ministry_coop \
+uv run python -m bsp_mesh_exporter influence --batch \
     --vismatrix-dir ../data/ --output-dir ../data/
 cd ..
 
-# 3. Run game server + tactical brain
+# 3. Cluster nav mesh into rooms (needs .glb + .nav from above)
+cd navMeshParser
+python3 cluster_nav.py --batch \
+    --nav-dir ../insurgency-server/server-files/insurgency/maps \
+    --data-dir ../data
+cd ..
+
+# 4. Run game server + tactical brain
 docker compose --profile ai up --build
 
-# 4. Connect in-game to port 27025
+# 5. Connect in-game to port 27025
 ```
 
 ## Project Structure
