@@ -11,6 +11,7 @@ import numpy as np
 
 from tactical.areas import AreaMap
 from tactical.influence_map import InfluenceMap, WEIGHT_PROFILES
+from tactical.pathfinding import PathFinder
 from tactical.protocol import BotCommand
 from tactical.state import GameState
 from tactical.telemetry import BotCommandRow
@@ -34,10 +35,12 @@ class Planner:
         controlled_team: int = 2,
         influence_map: InfluenceMap | None = None,
         area_map: AreaMap | None = None,
+        pathfinder: PathFinder | None = None,
     ) -> None:
         self.controlled_team = controlled_team
         self.influence_map = influence_map
         self.area_map = area_map
+        self.pathfinder = pathfinder
         self.profile_name = "defend"  # set by strategist, used for telemetry context
         self.orders: list[Order] | None = None
         self._spotted_memory: dict[int, tuple[float, tuple[float, float, float]]] = {}
@@ -243,15 +246,31 @@ class Planner:
 
             profile_tag = f"area:{order.posture}"
             for bot, target in zip(batch, positions):
+                # Arrived look: approach-watching for defensive postures
                 if order.posture in ("defend", "ambush", "sniper"):
                     nearest = self._nearest_approach(target, approach_positions)
                     if nearest is not None:
-                        look = self._look_past_approach(nearest, obj_centroid)
+                        arrived_look = self._look_past_approach(nearest, obj_centroid)
                     else:
-                        look = target
+                        arrived_look = target
                 else:
-                    # push/overrun: no look override
-                    look = target
+                    arrived_look = target
+
+                # Walking vs arrived dispatch
+                dx = bot.pos[0] - target[0]
+                dy = bot.pos[1] - target[1]
+                dz = bot.pos[2] - target[2]
+                dist2 = dx * dx + dy * dy + dz * dz
+
+                if dist2 < 150.0 * 150.0:
+                    look = arrived_look
+                elif self.pathfinder is not None and self.influence_map is not None:
+                    corner = self.pathfinder.find_look_target(
+                        bot.pos, target, self.influence_map.nearest_point,
+                    )
+                    look = corner if corner else target
+                else:
+                    look = arrived_look
 
                 commands.append(BotCommand(
                     id=bot.id,

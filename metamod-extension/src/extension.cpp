@@ -524,9 +524,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                     }
                 }
 
-                // Apply look-at only when bot has arrived at its move target.
-                // Check: lookTarget differs from moveTarget (distance > 1u)
-                //        AND bot is near moveTarget (distance < 150u)
+                // Apply look direction — Python decides arrived vs walking look
                 {
                     float ldx = cmd.lookTarget[0] - cmd.moveTarget[0];
                     float ldy = cmd.lookTarget[1] - cmd.moveTarget[1];
@@ -535,45 +533,13 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
                     if (lookMoveDist2 > 1.0f)
                     {
-                        // Find bot's current position from state array
-                        float botX = 0, botY = 0, botZ = 0;
-                        bool foundPos = false;
-                        for (int si = 0; si < s_stateCount; si++)
+                        if (LookTargetChanged(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
                         {
-                            if (s_stateArray[si].id == idx)
+                            if (BotActionHook_IssueLookAt(
+                                    (void *)s_resolvedBots[i].entity,
+                                    cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
                             {
-                                botX = s_stateArray[si].pos[0];
-                                botY = s_stateArray[si].pos[1];
-                                botZ = s_stateArray[si].pos[2];
-                                foundPos = true;
-                                break;
-                            }
-                        }
-
-                        if (foundPos)
-                        {
-                            float bdx = botX - cmd.moveTarget[0];
-                            float bdy = botY - cmd.moveTarget[1];
-                            float bdz = botZ - cmd.moveTarget[2];
-                            float botDist2 = bdx * bdx + bdy * bdy + bdz * bdz;
-
-                            // Bot is within 150u of move target — apply look direction
-                            if (botDist2 < 150.0f * 150.0f)
-                            {
-                                if (LookTargetChanged(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
-                                {
-                                    if (BotActionHook_IssueLookAt(
-                                            (void *)s_resolvedBots[i].entity,
-                                            cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
-                                    {
-                                        RecordLookTarget(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // Still walking — clear look target so it re-fires when arrived
-                                s_lastLookTargetValid[idx] = false;
+                                RecordLookTarget(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]);
                             }
                         }
                     }

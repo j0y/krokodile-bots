@@ -31,6 +31,7 @@ from bsp_mesh_exporter.influence import compute_influence
 from bsp_mesh_exporter.nav_parser import parse_nav
 from bsp_mesh_exporter.visibility import compute_visibility
 from bsp_mesh_exporter.vismatrix import compute_vismatrix, generate_grid_points
+from bsp_mesh_exporter.walk_graph import compute_walk_graph
 
 log = logging.getLogger("bsp_mesh_exporter")
 
@@ -326,6 +327,51 @@ def _cmd_influence(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
+# ── walk-graph subcommand ────────────────────────────────────────
+
+
+def _walk_graph_one(
+    map_name: str,
+    vismatrix_dir: Path,
+    output_dir: Path,
+    *,
+    walk_radius: float,
+    cell_size: float,
+) -> bool:
+    vismatrix_path = vismatrix_dir / f"{map_name}_vismatrix.npz"
+    if not vismatrix_path.exists():
+        log.error("Vismatrix not found: %s (run 'vismatrix' first)", vismatrix_path)
+        return False
+
+    log.info("=== Walk graph %s ===", map_name)
+    result = compute_walk_graph(vismatrix_path, walk_radius=walk_radius, cell_size=cell_size)
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    npz_path = output_dir / f"{map_name}_walkgraph.npz"
+    result.save(npz_path)
+    return True
+
+
+def _cmd_walk_graph(args: argparse.Namespace) -> None:
+    kw = dict(walk_radius=args.walk_radius, cell_size=args.cell_size)
+    if args.batch:
+        vm_files = sorted(args.vismatrix_dir.glob("*_vismatrix.npz"))
+        ok, fail = 0, 0
+        for f in vm_files:
+            map_name = f.name.removesuffix("_vismatrix.npz")
+            if _walk_graph_one(map_name, args.vismatrix_dir, args.output_dir, **kw):
+                ok += 1
+            else:
+                fail += 1
+        log.info("Walk graph batch: %d succeeded, %d failed", ok, fail)
+    elif args.map_name:
+        if not _walk_graph_one(args.map_name, args.vismatrix_dir, args.output_dir, **kw):
+            sys.exit(1)
+    else:
+        log.error("Provide a map name or use --batch")
+        sys.exit(1)
+
+
 # ── main ─────────────────────────────────────────────────────────────
 
 
@@ -379,6 +425,15 @@ def main() -> None:
     p_inf.add_argument("--vismatrix-dir", type=Path, required=True, help="Directory with *_vismatrix.npz files")
     p_inf.add_argument("--output-dir", type=Path, required=True, help="Output directory for .npz")
 
+    # walk-graph
+    p_wg = sub.add_parser("walk-graph", help="Vismatrix → walk graph + coarse routing NPZ")
+    p_wg.add_argument("map_name", nargs="?", help="Map name (e.g. ministry_coop)")
+    p_wg.add_argument("--batch", action="store_true", help="Process all *_vismatrix.npz files")
+    p_wg.add_argument("--vismatrix-dir", type=Path, required=True, help="Directory with *_vismatrix.npz files")
+    p_wg.add_argument("--output-dir", type=Path, required=True, help="Output directory for .npz")
+    p_wg.add_argument("--walk-radius", type=float, default=100.0, help="Max edge distance for walk graph (default 100)")
+    p_wg.add_argument("--cell-size", type=float, default=256.0, help="Coarse cell size in units (default 256)")
+
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -397,6 +452,8 @@ def main() -> None:
         _cmd_vismatrix(args)
     elif args.command == "influence":
         _cmd_influence(args)
+    elif args.command == "walk-graph":
+        _cmd_walk_graph(args)
     else:
         parser.print_help()
         sys.exit(1)

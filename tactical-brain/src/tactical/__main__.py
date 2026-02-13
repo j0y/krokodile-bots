@@ -75,10 +75,27 @@ def main() -> None:
         else:
             log.info("No area definitions for %s", map_name)
 
+    # Load walk graph for path-based look direction (if available)
+    pathfinder = None
+    if influence_map is not None and map_name:
+        walkgraph_path = Path(data_dir) / f"{map_name}_walkgraph.npz"
+        if walkgraph_path.exists():
+            from tactical.pathfinding import PathFinder
+            pathfinder = PathFinder(
+                str(walkgraph_path),
+                influence_map.points,
+                influence_map.adj_index,
+                influence_map.adj_list,
+            )
+            log.info("Loaded walk graph for %s", map_name)
+        else:
+            log.info("No walk graph for %s (bots will use arrival-only look)", map_name)
+
     planner = Planner(
         controlled_team=controlled_team,
         influence_map=influence_map,
         area_map=area_map,
+        pathfinder=pathfinder,
     )
 
     strategist = None
