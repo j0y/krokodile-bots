@@ -77,12 +77,13 @@ public:
 
         if (strcmp(name, "round_start") == 0)
         {
-            // In coop checkpoint only one round_start fires per game —
-            // no round transitions between objectives.
+            // In coop checkpoint, round_start fires once at game start and
+            // again when Security fails and the map restarts.
+            // No round_start fires between objectives within a round.
+            m_objectivesLost = 0;
             m_phase = "preround";
             m_cappingCP = -1;
-            META_CONPRINTF("[SmartBots] Round start — preround (objectives lost so far: %d)\n",
-                           m_objectivesLost);
+            META_CONPRINTF("[SmartBots] Round start — preround\n");
         }
         else if (strcmp(name, "game_end") == 0)
         {

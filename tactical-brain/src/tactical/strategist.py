@@ -78,6 +78,8 @@ class BaseStrategist(ABC):
 
         # Counter-attack tracking (driven by engine's CINSRules::IsCounterAttack flag)
         self._prev_counter_attack: bool = False
+        # Accumulated events between rate-limited decisions
+        self._pending_events: list[TacticalEvent] = []
 
         # Round/objective tracking
         self._round_num: int = 0
@@ -186,13 +188,21 @@ class BaseStrategist(ABC):
 
         self._prev_snapshot = curr
 
-        if not events:
+        # Accumulate events for next decision
+        self._pending_events.extend(events)
+
+        if not self._pending_events:
             return
 
-        # Rate limiting
-        if now - self._last_call_time < self._min_interval:
-            log.debug("Strategist: rate limited, skipping decision (events: %s)", events)
+        # Critical events bypass rate limiting
+        _URGENT = frozenset({"COUNTER_ATTACK", "COUNTER_ATTACK_END", "ROUND_START"})
+        urgent = any(e.kind in _URGENT for e in self._pending_events)
+        if not urgent and now - self._last_call_time < self._min_interval:
             return
+
+        # Drain accumulated events
+        decision_events = self._pending_events
+        self._pending_events = []
 
         # Build enemy positions for area mapping
         enemy_positions: list[tuple[float, float, float]] = []
@@ -201,10 +211,10 @@ class BaseStrategist(ABC):
                 if b.id in curr.spotted_enemy_ids:
                     enemy_positions.append(b.pos)
 
-        log.info("Strategist: triggering decision -- events: %s", events)
+        log.info("Strategist: triggering decision -- events: %s", decision_events)
         self._last_call_time = now
 
-        reasoning, orders = await self._decide(curr, events, enemy_positions)
+        reasoning, orders = await self._decide(curr, decision_events, enemy_positions)
 
         if orders is not None:
             self._planner.orders = orders
@@ -217,7 +227,7 @@ class BaseStrategist(ABC):
             # Record decision to telemetry
             self._round_decisions += 1
             if self._telemetry is not None:
-                self._record_decision(curr, events, reasoning, orders)
+                self._record_decision(curr, decision_events, reasoning, orders)
 
     # ------------------------------------------------------------------
     # Abstract decision method
