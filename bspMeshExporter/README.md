@@ -19,14 +19,14 @@ Single map:
 ```
 uv run python -m bsp_mesh_exporter extract ministry_coop \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --output-dir ../ai-brain/data/
+    --output-dir ../data/
 ```
 
 All maps:
 ```
 uv run python -m bsp_mesh_exporter extract --batch \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --output-dir ../ai-brain/data/
+    --output-dir ../data/
 ```
 
 ### visibility — GLB + NAV to visibility NPZ
@@ -35,16 +35,16 @@ Single map:
 ```
 uv run python -m bsp_mesh_exporter visibility ministry_coop \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --mesh-dir ../ai-brain/data/ \
-    --output-dir ../ai-brain/data/
+    --mesh-dir ../data/ \
+    --output-dir ../data/
 ```
 
 All maps:
 ```
 uv run python -m bsp_mesh_exporter visibility --batch \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --mesh-dir ../ai-brain/data/ \
-    --output-dir ../ai-brain/data/
+    --mesh-dir ../data/ \
+    --output-dir ../data/
 ```
 
 Options:
@@ -54,4 +54,4 @@ Options:
 ## Output
 
 - `{map}.glb` — world geometry mesh (viewable in Blender/MeshLab)
-- `{map}_visibility.npz` — precomputed visibility loaded by ai-brain at runtime
+- `{map}_visibility.npz` — precomputed visibility loaded by tactical-brain at runtime

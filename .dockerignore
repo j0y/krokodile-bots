@@ -1,7 +1,5 @@
 # Build artifacts
 metamod-extension/build/
-ai-brain/.venv/
-ai-brain/.ruff_cache/
 bspMeshExporter/
 navMeshParser/
 reverseEngeneering/

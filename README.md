@@ -43,7 +43,6 @@ docker compose --profile ai up --build
 ├── tactical-brain/           # Python tactical planner (influence map scoring)
 ├── bspMeshExporter/          # Offline spatial data pipeline (BSP mesh, vismatrix, influence)
 ├── navMeshParser/            # Nav mesh parser (30/30 maps)
-├── ai-brain-old/             # Legacy Python AI (reference)
 └── reverseEngineering/       # Analysis docs and design specs
 ```
 
@@ -54,4 +53,4 @@ docker compose --profile ai up --build
 3. Best positions are assigned to bots based on concealment, sightline to objective, threat from enemies, objective proximity, and team spread
 4. Extension receives target positions and uses native bot action classes (approach, combat) — engine handles pathfinding, aim, firing
 
-Docker profiles: `ai` (extension + tactical brain), `vanilla` (original AI), `record` (observer + recording).
+Docker profiles: `ai` (extension + tactical brain), `vanilla` (original AI).

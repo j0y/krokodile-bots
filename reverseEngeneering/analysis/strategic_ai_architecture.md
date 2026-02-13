@@ -339,12 +339,12 @@ or Python sends a new assignment.
 
 | Data | Format | File Pattern | Content | Status |
 |------|--------|-------------|---------|--------|
-| 3D mesh | GLB | `ai-brain/data/{map}.glb` | World geometry (Blender/Three.js compatible) | Exists |
+| 3D mesh | GLB | `data/{map}.glb` | World geometry (Blender/Three.js compatible) | Exists |
 | Nav mesh | JSON | `navMeshParser --json` | Areas, connections, hiding spots, flags | Exists |
-| Area visibility | NPZ | `ai-brain/data/{map}_visibility.npz` | Pairwise area visibility (317K pairs for ministry) | Exists |
-| Clearance | NPZ | `ai-brain/data/{map}_clearance.npz` | 72-azimuth radial clearance per sample | Exists |
-| **Visibility matrix** | NPZ | `ai-brain/data/{map}_vismatrix.npz` | **Point-to-point visibility on 64u grid** | **New** |
-| **Influence layers** | NPZ | `ai-brain/data/{map}_influence.npz` | **Precomputed cover + sightline layers** | **New** |
+| Area visibility | NPZ | `data/{map}_visibility.npz` | Pairwise area visibility (317K pairs for ministry) | Exists |
+| Clearance | NPZ | `data/{map}_clearance.npz` | 72-azimuth radial clearance per sample | Exists |
+| **Visibility matrix** | NPZ | `data/{map}_vismatrix.npz` | **Point-to-point visibility on 64u grid** | **New** |
+| **Influence layers** | NPZ | `data/{map}_influence.npz` | **Precomputed cover + sightline layers** | **New** |
 
 ### Precompute Pipeline
 
