@@ -95,6 +95,6 @@ COPY --chown=steam:steam \
 # ============================================================
 # Ports
 # ============================================================
-EXPOSE 27015/udp 27015/tcp 27005/udp 27020/udp 26901/udp
+EXPOSE 27025/udp 27025/tcp
 
 ENTRYPOINT ["/home/steam/entrypoint.sh"]

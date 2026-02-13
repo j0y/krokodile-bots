@@ -14,6 +14,7 @@ MAX_PLAYERS="${MAX_PLAYERS:-32}"
 START_MAP="${START_MAP:-ministry_coop}"
 GAME_MODE="${GAME_MODE:-coop}"
 TICKRATE="${TICKRATE:-64}"
+AI_HOST="${AI_HOST:-127.0.0.1}"
 
 echo "=============================================="
 echo " Insurgency 2014 Dedicated Server"
@@ -197,4 +198,5 @@ exec ./srcds_linux \
     +maxplayers "${MAX_PLAYERS}" \
     -tickrate "${TICKRATE}" \
     -sv_playlist "${PLAYLIST}" \
+    +smartbots_ai_host "${AI_HOST}" \
     "$@"

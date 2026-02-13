@@ -6,7 +6,9 @@ services:
       dockerfile: insurgency-server/Dockerfile
     container_name: insurgency-server
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "27025:27025/udp"
+      - "27025:27025/tcp"
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
     environment:
@@ -19,6 +21,7 @@ services:
       - TICKRATE=64
       - NB_DEBUG=${NB_DEBUG:-0}
       - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
+      - AI_HOST=tactical-brain
     stdin_open: true
     tty: true
     profiles:
@@ -31,7 +34,6 @@ services:
       dockerfile: Dockerfile
     container_name: tactical-brain
     restart: unless-stopped
-    network_mode: host
     volumes:
       - ./data:/app/data:ro
     environment:
@@ -44,7 +46,7 @@ services:
       - DATA_DIR=/app/data
       - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
       - TELEMETRY=1
-      - TELEMETRY_HOST=localhost
+      - TELEMETRY_HOST=telemetry-db
       - TELEMETRY_PORT=5432
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
       - OPENROUTER_MODEL=${OPENROUTER_MODEL:-}
@@ -56,7 +58,8 @@ services:
     image: postgres:17-alpine
     container_name: telemetry-db
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "127.0.0.1:5432:5432"
     environment:
       - POSTGRES_USER=smartbots
       - POSTGRES_PASSWORD=smartbots
@@ -76,7 +79,8 @@ services:
     image: postgres:17-alpine
     container_name: telemetry-db
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "127.0.0.1:5432:5432"
     environment:
       - POSTGRES_USER=smartbots
       - POSTGRES_PASSWORD=smartbots
@@ -97,7 +101,9 @@ services:
       dockerfile: insurgency-server/Dockerfile
     container_name: insurgency-vanilla
     restart: unless-stopped
-    network_mode: host
+    ports:
+      - "27025:27025/udp"
+      - "27025:27025/tcp"
     entrypoint: /home/steam/entrypoint-vanilla.sh
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
