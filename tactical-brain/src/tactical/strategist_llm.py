@@ -16,52 +16,24 @@ from tactical.telemetry import TelemetryClient
 log = logging.getLogger(__name__)
 
 
-def _build_system_prompt(area_map: AreaMap) -> str:
-    area_desc = area_map.describe()
-    area_names = sorted(area_map.areas.keys())
-
-    # Collect roles for enemy intel
-    approach_areas = [
-        a.name for a in area_map.areas.values()
-        if a.role in ("enemy_spawn", "enemy_approach")
-    ]
-    approach_note = ""
-    if approach_areas:
-        approach_note = (
-            "\n\nEnemy likely approaches from: "
-            + ", ".join(approach_areas) + "."
-        )
-
-    # Pick two example names for the prompt
-    ex1 = area_names[0] if len(area_names) > 0 else "area1"
-    ex2 = area_names[1] if len(area_names) > 1 else "area2"
-
-    return f"""\
+_SYSTEM_PROMPT = """\
 You are a tactical AI commander for a team of bots in Insurgency (2014).
-Your team is defending against human attackers. Issue per-area orders
-to position your bots effectively.
-
-{area_desc}
-
-VALID AREA NAMES (use ONLY these): {", ".join(area_names)}
+Your team is defending against human attackers who capture objectives in sequence.
 
 Available postures:
-- "defend": Hold positions with good cover and sightlines near the objective.
-- "push": Aggressively advance toward the objective. Low concern for cover.
-- "ambush": Hide in concealed positions. Surprise enemies who pass by.
+- "defend": Hold positions with good cover and sightlines near the area.
+- "push": Aggressively advance toward the area. Low concern for cover.
+- "ambush": Hide in concealed positions near the area.
 - "sniper": Long sightlines, elevated positions, spread out.
-- "overrun": All-out rush to the objective. Ignore threats.
-{approach_note}
+- "overrun": All-out rush. Ignore threats.
+
 Rules:
-- Respond with a SINGLE LINE of compact JSON (no markdown, no code fences, no newlines): {{"orders": [{{"areas": ["{ex1}", ...], "posture": "<name>", "bots": N}}, ...], "reasoning": "<1 sentence>"}}
-- Use ONLY the area names listed above. Do NOT invent new names.
-- Each order assigns N bots to the listed areas with a posture.
-- You can combine areas: ["{ex1}", "{ex2}"] covers both.
-- You can subtract areas: ["-{ex2}"] removes that zone from the order.
-- Use at most 3 orders. Keep it simple.
-- Total bots across all orders should roughly match your team size.
-- If taking heavy losses, consider changing postures.
-- If stalemate, try something more aggressive.
+- Respond with a SINGLE LINE of compact JSON: {"orders": [{"areas": ["<area>"], "posture": "<name>", "bots": N}, ...], "reasoning": "<1 sentence>"}
+- Each order names ONE target area. Bots automatically spread to adjacent rooms.
+- Use ONLY area names from the AREA NAMES list in the sitrep.
+- Use at most 3 orders. Total bots should match your team size.
+- If taking heavy losses, consider "sniper" posture or pulling back.
+- If stalemate, try "push" or "ambush" near the entry corridors.
 - Vary your choices — don't always pick "defend".\
 """
 
@@ -81,10 +53,30 @@ class LLMStrategist(BaseStrategist):
         self._api_key = api_key
         self._model = model
         self._base_url = base_url.rstrip("/")
-        self._system_prompt = _build_system_prompt(area_map)
         self._client = httpx.AsyncClient()
         # Last 5 decisions for context in sitrep
         self._profile_history: list[tuple[float, str, str]] = []
+
+        # Pre-compute objective sequence and per-spawn entry corridors
+        self._objectives = sorted(
+            (a for a in area_map.areas.values() if a.role == "objective"),
+            key=lambda a: a.order,
+        )
+        self._spawn_names = [
+            a.name for a in area_map.areas.values()
+            if a.role in ("enemy_spawn", "enemy_approach")
+        ]
+        # entry_corridors[i] = rooms adjacent to spawn point after i objectives lost
+        # i=0 → original spawn, i=1 → obj_a fell, etc.
+        self._entry_corridors: list[list[str]] = []
+        for spawn_src in self._spawn_names:
+            entries = [n for n in area_map._adjacency.get(spawn_src, [])
+                       if area_map.areas[n].role == "zone"]
+            self._entry_corridors.append(sorted(entries))
+        for obj in self._objectives:
+            entries = [n for n in area_map._adjacency.get(obj.name, [])
+                       if area_map.areas[n].role == "zone"]
+            self._entry_corridors.append(sorted(entries))
 
     async def close(self) -> None:
         await super().close()
@@ -116,6 +108,53 @@ class LLMStrategist(BaseStrategist):
         return reasoning, orders
 
     # ------------------------------------------------------------------
+    # Tactical context: current objective, enemy spawn, entry corridors
+    # ------------------------------------------------------------------
+
+    def _tactical_context(self, objectives_lost: int) -> tuple[str, list[str]]:
+        """Build dynamic tactical context based on objectives_lost.
+
+        Returns (context_text, valid_area_names).
+        """
+        lines: list[str] = []
+        valid_names: list[str] = []
+
+        # Current objective
+        if objectives_lost < len(self._objectives):
+            obj = self._objectives[objectives_lost]
+            lines.append(f"Defending: {obj.name}")
+            valid_names.append(obj.name)
+        else:
+            lines.append("All objectives lost!")
+
+        # Enemy spawn location
+        if objectives_lost > 0 and objectives_lost <= len(self._objectives):
+            spawn_obj = self._objectives[objectives_lost - 1]
+            lines.append(f"Enemy spawns at: {spawn_obj.name} (last captured)")
+        else:
+            lines.append(f"Enemy spawns at: {', '.join(self._spawn_names)}")
+
+        # Entry corridors from current enemy spawn
+        # Index into _entry_corridors: first len(_spawn_names) entries are
+        # for original spawns, then one per objective
+        entries: list[str] = []
+        if objectives_lost > 0 and objectives_lost <= len(self._objectives):
+            idx = len(self._spawn_names) + objectives_lost - 1
+            if idx < len(self._entry_corridors):
+                entries = self._entry_corridors[idx]
+        else:
+            for i in range(len(self._spawn_names)):
+                if i < len(self._entry_corridors):
+                    entries.extend(self._entry_corridors[i])
+            entries = sorted(set(entries))
+
+        if entries:
+            lines.append(f"Entry corridors (where enemies enter): {', '.join(entries)}")
+            valid_names.extend(entries)
+
+        return "\n".join(lines), valid_names
+
+    # ------------------------------------------------------------------
     # SITREP builder
     # ------------------------------------------------------------------
 
@@ -130,42 +169,26 @@ class LLMStrategist(BaseStrategist):
             now - (self._profile_history[-1][0] if self._profile_history else now)
         )
 
+        # Dynamic tactical context
+        context, valid_names = self._tactical_context(curr.objectives_lost)
+
         lines = [
             "SITREP:",
             f"- Friendly: {curr.friendly_alive}/{curr.friendly_total} alive",
             f"- Enemy: ~{curr.enemy_alive} alive, "
             f"{len(curr.spotted_enemy_ids)} currently spotted",
             f"- Current posture: {curr.current_profile} ({profile_age}s)",
-            f"- Objectives lost: {curr.objectives_lost}",
+            f"- {context.replace(chr(10), chr(10) + '- ')}",
         ]
-
-        # Objective progression
-        objectives = [
-            a.name for a in sorted(
-                (a for a in self._area_map.areas.values() if a.role == "objective"),
-                key=lambda a: a.order,
-            )
-        ]
-        if objectives:
-            if curr.objectives_lost < len(objectives):
-                active = objectives[curr.objectives_lost]
-                lines.append(f"- Defending: {active}")
-            if curr.objectives_lost > 0:
-                last_lost = objectives[curr.objectives_lost - 1]
-                lines.append(f"- Last lost: {last_lost}")
 
         if curr.counter_attack:
-            lost_name = objectives[curr.objectives_lost - 1] if curr.objectives_lost > 0 and objectives else "unknown"
-            lines.append(f"- COUNTER-ATTACK PHASE: push aggressively to retake {lost_name}!")
+            obj_name = self._objectives[curr.objectives_lost - 1].name if curr.objectives_lost > 0 else "unknown"
+            lines.append(f"- COUNTER-ATTACK PHASE: push aggressively to retake {obj_name}!")
         if curr.capping_cp >= 0:
             lines.append(f"- ALERT: Enemy capturing point {curr.capping_cp}!")
 
         # Per-area enemy info
         enemies_by_area = self._area_map.enemies_per_area(enemy_positions)
-        approach_areas = [
-            a.name for a in self._area_map.areas.values()
-            if a.role in ("enemy_spawn", "enemy_approach")
-        ]
         lines.append("")
         lines.append("ENEMY SITUATION:")
         if enemies_by_area:
@@ -175,8 +198,6 @@ class LLMStrategist(BaseStrategist):
             lines.append(f"- Spotted: {', '.join(spotted_parts)}")
         else:
             lines.append("- Spotted: none")
-        if approach_areas:
-            lines.append(f"- Likely approach: {', '.join(approach_areas)}")
 
         lines.append("")
         lines.append("EVENTS:")
@@ -189,6 +210,9 @@ class LLMStrategist(BaseStrategist):
             for t, profile, reasoning in self._profile_history:
                 ago = int(now - t)
                 lines.append(f"- {ago}s ago: {profile} (\"{reasoning}\")")
+
+        lines.append("")
+        lines.append(f"AREA NAMES (use these): {', '.join(valid_names)}")
 
         return "\n".join(lines)
 
@@ -210,7 +234,7 @@ class LLMStrategist(BaseStrategist):
                 json={
                     "model": self._model,
                     "messages": [
-                        {"role": "system", "content": self._system_prompt},
+                        {"role": "system", "content": _SYSTEM_PROMPT},
                         {"role": "user", "content": sitrep},
                     ],
                     "temperature": 0.7,
