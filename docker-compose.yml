@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - ./ai-brain-old/data:/app/data:ro
+      - ./data:/app/data:ro
     environment:
       - LISTEN_HOST=0.0.0.0
       - LISTEN_PORT=9000
@@ -121,7 +121,7 @@ services:
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
       - ./ai-brain-old/reference/smartbots_observer.smx:/home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/custom/smartbots_observer.smx:ro
-      - ./ai-brain-old/data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
+      - ./data:/home/steam/insurgency-server/insurgency/addons/sourcemod/data/smartbots
     environment:
       - SERVER_HOSTNAME=Insurgency Smart Bots Recorder
       - SERVER_PASSWORD=
@@ -144,7 +144,7 @@ services:
     network_mode: host
     volumes:
       - ./insurgency-server/server-files/insurgency/maps:/app/maps:ro
-      - ./ai-brain-old/data:/app/data
+      - ./data:/app/data
       - ./ai-brain-old/src:/app/src:ro
     environment:
       - AI_LISTEN_HOST=0.0.0.0

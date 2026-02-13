@@ -20,12 +20,12 @@ cd insurgency-server && ./download-server.sh && cd ..
 cd bspMeshExporter
 uv run python -m bsp_mesh_exporter extract ministry_coop \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --output-dir ../ai-brain-old/data/
+    --output-dir ../data/
 uv run python -m bsp_mesh_exporter vismatrix ministry_coop \
     --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --mesh-dir ../ai-brain-old/data/ --output-dir ../ai-brain-old/data/
+    --mesh-dir ../data/ --output-dir ../data/
 uv run python -m bsp_mesh_exporter influence ministry_coop \
-    --vismatrix-dir ../ai-brain-old/data/ --output-dir ../ai-brain-old/data/
+    --vismatrix-dir ../data/ --output-dir ../data/
 cd ..
 
 # 3. Run game server + tactical brain
