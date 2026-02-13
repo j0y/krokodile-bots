@@ -1,9 +1,9 @@
 {
   "obj_a": {
     "center": [
-      2196,
-      -1103,
-      52
+      1871,
+      -2326,
+      73
     ],
     "radius": 400,
     "falloff": 250,
@@ -13,9 +13,9 @@
   },
   "obj_b": {
     "center": [
-      -2144,
-      -1086,
-      56
+      158,
+      -1977,
+      48
     ],
     "radius": 400,
     "falloff": 250,
@@ -25,9 +25,9 @@
   },
   "obj_c": {
     "center": [
-      7,
-      -432,
-      -183
+      -3063,
+      -37,
+      209
     ],
     "radius": 400,
     "falloff": 250,
@@ -37,9 +37,9 @@
   },
   "obj_d": {
     "center": [
-      0,
-      -720,
-      306
+      96,
+      32,
+      32
     ],
     "radius": 400,
     "falloff": 250,
@@ -49,9 +49,9 @@
   },
   "obj_e": {
     "center": [
-      -135,
-      -3261,
-      -229
+      2749,
+      615,
+      9
     ],
     "radius": 400,
     "falloff": 250,
@@ -61,9 +61,9 @@
   },
   "obj_f": {
     "center": [
-      -5066,
-      -252,
-      120
+      425,
+      2304,
+      224
     ],
     "radius": 400,
     "falloff": 250,
@@ -71,11 +71,35 @@
     "order": 6,
     "type": "capture"
   },
+  "obj_g": {
+    "center": [
+      -1518,
+      1504,
+      238
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 7,
+    "type": "capture"
+  },
+  "obj_h": {
+    "center": [
+      -4992,
+      1947,
+      265
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 8,
+    "type": "capture"
+  },
   "attacker_spawn": {
     "center": [
-      3997,
-      -2166,
-      115
+      4704,
+      -3134,
+      264
     ],
     "radius": 500,
     "falloff": 300,
@@ -83,9 +107,9 @@
   },
   "approach": {
     "center": [
-      3097,
-      -1634,
-      83
+      3288,
+      -2730,
+      169
     ],
     "radius": 700,
     "falloff": 300,

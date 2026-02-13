@@ -1,0 +1,178 @@
+{
+  "obj_a": {
+    "center": [
+      1000,
+      -5055,
+      -78
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 1,
+    "type": "destroy"
+  },
+  "obj_b": {
+    "center": [
+      1283,
+      -3141,
+      163
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 2,
+    "type": "capture"
+  },
+  "obj_c": {
+    "center": [
+      -980,
+      -3662,
+      396
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 3,
+    "type": "destroy"
+  },
+  "obj_d": {
+    "center": [
+      -2710,
+      -4406,
+      419
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 4,
+    "type": "destroy"
+  },
+  "obj_e": {
+    "center": [
+      -4224,
+      -4064,
+      560
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 5,
+    "type": "capture"
+  },
+  "obj_f": {
+    "center": [
+      -5878,
+      -2122,
+      761
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 6,
+    "type": "destroy"
+  },
+  "obj_g": {
+    "center": [
+      -4768,
+      -40,
+      1139
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 7,
+    "type": "capture"
+  },
+  "obj_h": {
+    "center": [
+      -4230,
+      1503,
+      1088
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 8,
+    "type": "destroy"
+  },
+  "obj_i": {
+    "center": [
+      -3624,
+      -1976,
+      674
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 9,
+    "type": "destroy"
+  },
+  "obj_j": {
+    "center": [
+      -4768,
+      -3136,
+      553
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 10,
+    "type": "capture"
+  },
+  "obj_k": {
+    "center": [
+      -2557,
+      -2908,
+      479
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 11,
+    "type": "capture"
+  },
+  "obj_l": {
+    "center": [
+      -208,
+      -2678,
+      477
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 12,
+    "type": "capture"
+  },
+  "obj_m": {
+    "center": [
+      1219,
+      -4057,
+      -10
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 13,
+    "type": "capture"
+  },
+  "attacker_spawn": {
+    "center": [
+      864,
+      -6528,
+      192
+    ],
+    "radius": 500,
+    "falloff": 300,
+    "role": "enemy_spawn"
+  },
+  "approach": {
+    "center": [
+      932,
+      -5791,
+      57
+    ],
+    "radius": 700,
+    "falloff": 300,
+    "role": "enemy_approach"
+  }
+}

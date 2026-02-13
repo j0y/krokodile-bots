@@ -1,45 +1,45 @@
 {
   "obj_a": {
     "center": [
-      2196,
-      -1103,
-      52
+      294,
+      -2915,
+      406
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 1,
-    "type": "destroy"
+    "type": "capture"
   },
   "obj_b": {
     "center": [
-      -2144,
-      -1086,
-      56
+      302,
+      -835,
+      428
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 2,
-    "type": "destroy"
+    "type": "capture"
   },
   "obj_c": {
     "center": [
-      7,
-      -432,
-      -183
+      2970,
+      403,
+      393
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 3,
-    "type": "capture"
+    "type": "destroy"
   },
   "obj_d": {
     "center": [
-      0,
-      -720,
-      306
+      1300,
+      3072,
+      402
     ],
     "radius": 400,
     "falloff": 250,
@@ -49,21 +49,21 @@
   },
   "obj_e": {
     "center": [
-      -135,
-      -3261,
-      -229
+      -800,
+      5856,
+      515
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 5,
-    "type": "destroy"
+    "type": "capture"
   },
   "obj_f": {
     "center": [
-      -5066,
-      -252,
-      120
+      -423,
+      2646,
+      376
     ],
     "radius": 400,
     "falloff": 250,
@@ -71,11 +71,47 @@
     "order": 6,
     "type": "capture"
   },
+  "obj_g": {
+    "center": [
+      -1383,
+      550,
+      410
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 7,
+    "type": "capture"
+  },
+  "obj_h": {
+    "center": [
+      66,
+      -2951,
+      340
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 8,
+    "type": "destroy"
+  },
+  "obj_i": {
+    "center": [
+      1450,
+      -5903,
+      432
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 9,
+    "type": "capture"
+  },
   "attacker_spawn": {
     "center": [
-      3997,
-      -2166,
-      115
+      1368,
+      -4296,
+      452
     ],
     "radius": 500,
     "falloff": 300,
@@ -83,9 +119,9 @@
   },
   "approach": {
     "center": [
-      3097,
-      -1634,
-      83
+      831,
+      -3606,
+      429
     ],
     "radius": 700,
     "falloff": 300,

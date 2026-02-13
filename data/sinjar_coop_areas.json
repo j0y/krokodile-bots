@@ -1,81 +1,93 @@
 {
   "obj_a": {
     "center": [
-      2196,
-      -1103,
-      52
+      -3104,
+      4368,
+      -638
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 1,
-    "type": "destroy"
+    "type": "capture"
   },
   "obj_b": {
     "center": [
-      -2144,
-      -1086,
-      56
+      2876,
+      5170,
+      -420
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 2,
-    "type": "destroy"
+    "type": "capture"
   },
   "obj_c": {
     "center": [
-      7,
-      -432,
-      -183
+      3450,
+      2114,
+      -182
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 3,
-    "type": "capture"
+    "type": "destroy"
   },
   "obj_d": {
     "center": [
-      0,
-      -720,
-      306
+      5502,
+      -592,
+      -282
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 4,
-    "type": "capture"
+    "type": "destroy"
   },
   "obj_e": {
     "center": [
-      -135,
-      -3261,
-      -229
+      3342,
+      664,
+      24
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 5,
-    "type": "destroy"
+    "type": "capture"
   },
   "obj_f": {
     "center": [
-      -5066,
-      -252,
-      120
+      -540,
+      -786,
+      -508
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 6,
+    "type": "destroy"
+  },
+  "obj_g": {
+    "center": [
+      -1080,
+      2008,
+      -152
+    ],
+    "radius": 400,
+    "falloff": 250,
+    "role": "objective",
+    "order": 7,
     "type": "capture"
   },
   "attacker_spawn": {
     "center": [
-      3997,
-      -2166,
-      115
+      -6176,
+      1952,
+      -1631
     ],
     "radius": 500,
     "falloff": 300,
@@ -83,9 +95,9 @@
   },
   "approach": {
     "center": [
-      3097,
-      -1634,
-      83
+      -4640,
+      3160,
+      -1134
     ],
     "radius": 700,
     "falloff": 300,

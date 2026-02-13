@@ -18,6 +18,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import sys
 from pathlib import Path
@@ -25,6 +26,7 @@ from pathlib import Path
 import numpy as np
 import trimesh
 
+from bsp_mesh_exporter.areas_extraction import extract_areas
 from bsp_mesh_exporter.bsp_extraction import extract_mesh
 from bsp_mesh_exporter.clearance import compute_clearance
 from bsp_mesh_exporter.influence import compute_influence
@@ -372,6 +374,47 @@ def _cmd_walk_graph(args: argparse.Namespace) -> None:
         sys.exit(1)
 
 
+# ── areas subcommand ────────────────────────────────────────────────
+
+
+def _areas_one(map_name: str, maps_dir: Path, output_dir: Path) -> bool:
+    bsp_path = maps_dir / f"{map_name}.bsp"
+    if not bsp_path.exists():
+        log.error("BSP not found: %s", bsp_path)
+        return False
+
+    log.info("=== Areas %s ===", map_name)
+    areas = extract_areas(bsp_path)
+
+    if not areas:
+        log.warning("No areas extracted for %s", map_name)
+        return False
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    json_path = output_dir / f"{map_name}_areas.json"
+    json_path.write_text(json.dumps(areas, indent=2) + "\n")
+    log.info("Wrote %s (%d areas)", json_path, len(areas))
+    return True
+
+
+def _cmd_areas(args: argparse.Namespace) -> None:
+    if args.batch:
+        bsp_files = sorted(args.maps_dir.glob("*_coop.bsp"))
+        ok, fail = 0, 0
+        for f in bsp_files:
+            if _areas_one(f.stem, args.maps_dir, args.output_dir):
+                ok += 1
+            else:
+                fail += 1
+        log.info("Areas batch: %d succeeded, %d failed", ok, fail)
+    elif args.map_name:
+        if not _areas_one(args.map_name, args.maps_dir, args.output_dir):
+            sys.exit(1)
+    else:
+        log.error("Provide a map name or use --batch")
+        sys.exit(1)
+
+
 # ── main ─────────────────────────────────────────────────────────────
 
 
@@ -434,6 +477,13 @@ def main() -> None:
     p_wg.add_argument("--walk-radius", type=float, default=100.0, help="Max edge distance for walk graph (default 100)")
     p_wg.add_argument("--cell-size", type=float, default=256.0, help="Coarse cell size in units (default 256)")
 
+    # areas
+    p_areas = sub.add_parser("areas", help="BSP entities → areas JSON (objectives, spawns)")
+    p_areas.add_argument("map_name", nargs="?", help="Map name (e.g. ministry_coop)")
+    p_areas.add_argument("--batch", action="store_true", help="Process all *_coop.bsp files")
+    p_areas.add_argument("--maps-dir", type=Path, required=True, help="Directory with .bsp files")
+    p_areas.add_argument("--output-dir", type=Path, required=True, help="Output directory for .json")
+
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -454,6 +504,8 @@ def main() -> None:
         _cmd_influence(args)
     elif args.command == "walk-graph":
         _cmd_walk_graph(args)
+    elif args.command == "areas":
+        _cmd_areas(args)
     else:
         parser.print_help()
         sys.exit(1)
