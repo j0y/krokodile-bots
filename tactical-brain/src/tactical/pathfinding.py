@@ -9,10 +9,10 @@ door points.  Centroids correspond to where threats actually are ("inside
 the next room"), and the string-pull naturally skips open-space transitions
 because the bot can see through to distant centroids.
 
-Sweep: the bot watches the farthest visible centroid, gradually sweeping
-toward the next hidden one as it approaches.  Transition is smooth because
-at the instant the hidden centroid becomes visible the bot was already
-looking near it.
+Corner watching: the bot looks at the visible grid point closest to the
+next hidden centroid — the wall corner where an enemy would first appear.
+As the bot rounds the corner, the hidden centroid becomes visible and the
+string-pull advances naturally.
 """
 
 from __future__ import annotations
@@ -61,6 +61,31 @@ class PathFinder:
 
         num_cells = len(self.coarse_centroids)
         log.info("PathFinder loaded: %d fine points, %d coarse cells", len(points), num_cells)
+
+    def _visible_from(self, idx: int) -> np.ndarray:
+        """All grid point indices visible from *idx*."""
+        start, count = self.vis_adj_index[idx]
+        if count <= 0:
+            return np.empty(0, dtype=np.int32)
+        return self.vis_adj_list[start:start + count]
+
+    def _find_corner_point(
+        self, bot_idx: int, target_pos: np.ndarray,
+    ) -> tuple[float, float, float] | None:
+        """Find the visible grid point closest to *target_pos*.
+
+        This is the wall corner — the last visible point before the
+        hidden area.  Always returns a point the bot can actually see.
+        """
+        visible = self._visible_from(bot_idx)
+        if len(visible) == 0:
+            return None
+        vis_pts = self.points[visible]
+        target_2d = np.array([float(target_pos[0]), float(target_pos[1])], dtype=np.float32)
+        dists = np.linalg.norm(vis_pts[:, :2] - target_2d, axis=1)
+        best = visible[int(np.argmin(dists))]
+        p = self.points[best]
+        return (float(p[0]), float(p[1]), float(p[2]))
 
     def _is_visible(self, idx_a: int, idx_b: int) -> bool:
         """Check if two grid points can see each other (vismatrix lookup)."""
@@ -140,36 +165,33 @@ class PathFinder:
                 last_visible = i
 
         if last_visible < 0:
-            # Can't see any centroid — look toward the first one
+            # Can't see any centroid — find the corner toward the first one
             c = self.coarse_centroids[waypoints[0][1]]
-            return (float(c[0]), float(c[1]), float(c[2]))
+            corner = self._find_corner_point(bot_idx, c)
+            return corner if corner else (float(c[0]), float(c[1]), float(c[2]))
 
         if last_visible + 1 >= len(waypoints):
             # Can see all waypoints in lookahead — last leg
             return None
 
-        # ── Gradual sweep ────────────────────────────────────────────
+        # ── Corner watching ───────────────────────────────────────────
         #
-        # vis_c  = farthest visible centroid (threat area the weapon covers)
-        # invis_c = first hidden centroid    (area beyond the next corner)
+        # vis_c   = farthest visible centroid (room the weapon covers)
+        # invis_c = first hidden centroid     (room beyond the next corner)
         #
-        # As the bot approaches vis_c the blend sweeps into invis_c.
-        # When the bot rounds the corner and invis_c becomes visible,
-        # the look target was already near it — smooth handoff.
+        # Instead of blending toward invis_c (which is behind a wall),
+        # find the visible grid point closest to invis_c.  That point
+        # IS the corner — the wall edge where an enemy would first appear.
+        #
+        # As the bot approaches and rounds the corner, invis_c becomes
+        # visible and the string-pull advances naturally.
 
         vis_c = self.coarse_centroids[waypoints[last_visible][1]]
         invis_c = self.coarse_centroids[waypoints[last_visible + 1][1]]
 
-        # 2D distance to the visible centroid
-        dx = bot_pos[0] - float(vis_c[0])
-        dy = bot_pos[1] - float(vis_c[1])
-        dist = (dx * dx + dy * dy) ** 0.5
+        corner = self._find_corner_point(bot_idx, invis_c)
+        if corner is not None:
+            return corner
 
-        # t = 0 far away (look at visible room), t = 1 close (look beyond)
-        t = max(0.0, 1.0 - dist / self.SWEEP_DIST)
-
-        return (
-            float(vis_c[0]) + t * (float(invis_c[0]) - float(vis_c[0])),
-            float(vis_c[1]) + t * (float(invis_c[1]) - float(vis_c[1])),
-            float(vis_c[2]) + t * (float(invis_c[2]) - float(vis_c[2])),
-        )
+        # Fallback: look at farthest visible centroid
+        return (float(vis_c[0]), float(vis_c[1]), float(vis_c[2]))

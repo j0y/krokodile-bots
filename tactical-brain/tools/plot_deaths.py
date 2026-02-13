@@ -271,6 +271,33 @@ def draw_areas(ax, areas: dict, cx: float, cy: float, margin: float):
                     ha="center", va="center", color="#999", style="italic")
 
 
+def draw_visibility(ax, death_pos, vismatrix, floor_z: float, floor_tol: float):
+    """Overlay points visible from the death position (vismatrix lookup)."""
+    pts = vismatrix["point_positions"]
+    adj_idx = vismatrix["adj_index"]
+    adj_list = vismatrix["adj_list"]
+
+    # Find nearest grid point to death position
+    diffs = pts - np.array(death_pos, dtype=np.float32)
+    nearest_idx = int(np.argmin(np.linalg.norm(diffs, axis=1)))
+
+    start, count = adj_idx[nearest_idx]
+    if count <= 0:
+        return
+    visible_indices = adj_list[start:start + count]
+    vis_pts = pts[visible_indices]
+
+    # Filter to same floor
+    floor_mask = abs(vis_pts[:, 2] - floor_z) < floor_tol
+    vis_floor = vis_pts[floor_mask]
+    if len(vis_floor) == 0:
+        return
+
+    dists = np.linalg.norm(vis_floor[:, :2] - np.array(death_pos[:2]), axis=0)
+    ax.scatter(vis_floor[:, 0], vis_floor[:, 1], c="#4CAF50", s=14,
+               alpha=0.45, zorder=1, edgecolors="none", label="visible from here")
+
+
 def draw_trajectory(ax, traj: list, death_tick: int, dist: float, profile: str,
                     bot_id: int):
     """Draw one bot's trajectory with look arrows + player position."""
@@ -463,6 +490,8 @@ def main():
     parser.add_argument("--floor-tolerance", type=float, default=20.0, help="Z tolerance for floor filter")
     parser.add_argument("--margin", type=float, default=300.0, help="Zoom margin per panel (units)")
     parser.add_argument("--lookback", type=int, default=80, help="Ticks before death to show")
+    parser.add_argument("--visibility", action="store_true",
+                        help="Overlay visible points from death position (vismatrix)")
     parser.add_argument("--dpi", type=int, default=150)
     args = parser.parse_args()
 
@@ -475,6 +504,12 @@ def main():
     if nav_path:
         nav_rects = load_nav_areas(nav_path, args.floor_z, args.floor_tolerance)
         print(f"Loaded {len(nav_rects)} nav areas from {nav_path.name}")
+
+    vismatrix = None
+    if args.visibility:
+        vm_path = data_dir / f"{args.map}_vismatrix.npz"
+        vismatrix = np.load(vm_path)
+        print(f"Loaded vismatrix: {vismatrix['point_positions'].shape[0]} points")
 
     conn = connect_db(args.host, args.port, args.user, args.password, args.dbname)
 
@@ -565,6 +600,9 @@ def main():
             draw_nav_walls(ax, nav_rects)
         else:
             draw_walls(ax, *wall_data)
+        if vismatrix is not None:
+            draw_visibility(ax, (px, py, pz), vismatrix,
+                            args.floor_z, args.floor_tolerance)
         draw_areas(ax, areas, px, py, args.margin)
         draw_trajectory(ax, traj, death_tick, dist, profile, bot_id)
 
