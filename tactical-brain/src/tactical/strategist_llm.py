@@ -139,8 +139,24 @@ class LLMStrategist(BaseStrategist):
             f"- Objectives lost: {curr.objectives_lost}",
         ]
 
+        # Objective progression
+        objectives = [
+            a.name for a in sorted(
+                (a for a in self._area_map.areas.values() if a.role == "objective"),
+                key=lambda a: a.order,
+            )
+        ]
+        if objectives:
+            if curr.objectives_lost < len(objectives):
+                active = objectives[curr.objectives_lost]
+                lines.append(f"- Defending: {active}")
+            if curr.objectives_lost > 0:
+                last_lost = objectives[curr.objectives_lost - 1]
+                lines.append(f"- Last lost: {last_lost}")
+
         if curr.counter_attack:
-            lines.append("- COUNTER-ATTACK PHASE: push aggressively to retake the lost objective!")
+            lost_name = objectives[curr.objectives_lost - 1] if curr.objectives_lost > 0 and objectives else "unknown"
+            lines.append(f"- COUNTER-ATTACK PHASE: push aggressively to retake {lost_name}!")
         if curr.capping_cp >= 0:
             lines.append(f"- ALERT: Enemy capturing point {curr.capping_cp}!")
 

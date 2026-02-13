@@ -326,11 +326,14 @@ class SMStrategist(BaseStrategist):
         snapshot: _Snapshot,
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
-        """Counter-attack: push aggressively toward the lost objective."""
+        """Counter-attack: push to retake the objective that was just lost."""
         n = snapshot.friendly_alive
         approaches = self._approach_areas()
 
-        lost_obj = self._active_objective(snapshot)
+        # objectives_lost already incremented — go back one to get the lost objective
+        objectives = self._objective_areas()
+        idx = snapshot.objectives_lost - 1
+        lost_obj = objectives[idx] if 0 <= idx < len(objectives) else None
 
         if not lost_obj:
             return "counter-attack: pushing all", [
