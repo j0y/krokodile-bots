@@ -326,18 +326,27 @@ class Planner:
                 if dist2 < 150.0 * 150.0:
                     look = arrived_look
                 else:
-                    # Threat priority: look at nearest remembered enemy
+                    look = None
+                    # Threat priority: look at nearest remembered enemy,
+                    # but only if visible (not behind a wall)
                     threat = self._nearest_enemy(bot.pos, enemy_positions)
-                    if threat is not None:
-                        look = threat
-                    elif self.pathfinder is not None and self.influence_map is not None \
+                    if threat is not None and self.influence_map is not None:
+                        bot_idx = self.influence_map.nearest_point(bot.pos)
+                        thr_idx = self.influence_map.nearest_point(threat)
+                        if thr_idx in self.influence_map.visible_from(bot_idx):
+                            look = threat
+
+                    # Fall through: watch the corner toward enemy spawn
+                    if look is None and self.pathfinder is not None \
+                            and self.influence_map is not None \
                             and enemy_spawn is not None:
-                        # Slice-the-pie toward enemy spawn entrance
                         corner = self.pathfinder.find_look_target(
                             bot.pos, enemy_spawn, self.influence_map.nearest_point,
                         )
-                        look = corner if corner else arrived_look
-                    else:
+                        if corner is not None:
+                            look = corner
+
+                    if look is None:
                         look = arrived_look
 
                 # Force horizontal aim — avoid looking up/down due to
