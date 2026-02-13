@@ -4,7 +4,7 @@
 # First run: imports binary + full auto-analysis (15-25 min) + decompile
 # Re-runs:   skips analysis, only re-runs decompile script (15-25 min)
 #
-# Usage: ./reverseEngeneering/decompile.sh
+# Usage: ./reverseEngineering/decompile.sh
 
 set -euo pipefail
 

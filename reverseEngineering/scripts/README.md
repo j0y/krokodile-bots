@@ -6,25 +6,25 @@ First run Ghidra headless decompilation, then the annotation scripts in order:
 
 ```bash
 # 1. Decompile (from repo root) — first run takes ~30-50 min, re-runs skip analysis
-./reverseEngeneering/decompile.sh
+./reverseEngineering/decompile.sh
 
 # 2. Resolve PIC GOT-relative references (strings, symbols)
-python3 reverseEngeneering/scripts/resolve_pic_refs.py
+python3 reverseEngineering/scripts/resolve_pic_refs.py
 
 # 3. Replace misleading .rodata PIC annotations with actual float values
-python3 reverseEngeneering/scripts/annotate_rodata_floats.py
+python3 reverseEngineering/scripts/annotate_rodata_floats.py
 
 # 4. Annotate vtable dispatches with method names
-python3 reverseEngeneering/scripts/annotate_vtable.py
+python3 reverseEngineering/scripts/annotate_vtable.py
 
 # 5. Annotate IEEE 754 float constants in hex literals
-python3 reverseEngeneering/scripts/annotate_floats.py
+python3 reverseEngineering/scripts/annotate_floats.py
 
 # 6. Annotate ActionResult type codes (Continue/ChangeTo/SuspendFor/Done)
-python3 reverseEngeneering/scripts/annotate_actionresult.py
+python3 reverseEngineering/scripts/annotate_actionresult.py
 
 # 7. Annotate CountdownTimer patterns (IsElapsed, Start, Invalidate)
-python3 reverseEngeneering/scripts/annotate_timers.py
+python3 reverseEngineering/scripts/annotate_timers.py
 ```
 
 Order matters: `resolve_pic_refs` must run first. `annotate_rodata_floats` must run before `annotate_vtable` since both replace PIC annotations — rodata_floats handles float constants, then vtable replaces remaining PIC annotations on vtable dispatches.

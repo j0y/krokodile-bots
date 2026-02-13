@@ -2,7 +2,7 @@
 metamod-extension/build/
 bspMeshExporter/
 navMeshParser/
-reverseEngeneering/
+reverseEngineering/
 
 # Git
 .git/

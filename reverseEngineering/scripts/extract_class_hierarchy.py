@@ -7,7 +7,7 @@ single-inheritance, or virtual/multiple-inheritance, then reads parent pointers
 from the binary to build a full inheritance tree.
 
 Output:
-  - reverseEngeneering/analysis/class_hierarchy.json (machine-readable)
+  - reverseEngineering/analysis/class_hierarchy.json (machine-readable)
   - Console: tree visualization with bot AI subtrees highlighted
 """
 

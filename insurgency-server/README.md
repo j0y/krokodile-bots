@@ -1,32 +1,26 @@
 # Insurgency Server
 
-Dockerized Insurgency 2014 dedicated server with MetaMod + SourceMod.
+Dockerized Insurgency 2014 dedicated server with a custom Metamod extension for bot control.
 
 ## Setup
 
 1. Download server files: `./download-server.sh`
-2. Build and run (from repo root): `docker compose up insurgency --build`
+2. Build and run (from repo root): `docker compose --profile ai up --build`
 3. Connect: `connect YOUR_IP:27025`
 
 ## Directory Structure
 
 ```
 insurgency-server/
-├── Dockerfile              # Game server image (debian:bullseye-slim)
+├── Dockerfile              # Multi-stage: builds Metamod extension + game server image
 ├── download-server.sh      # Downloads server + MM + SM to server-files/
-├── server-files/            # Pre-downloaded game files (~10GB, gitignored)
+├── server-files/           # Pre-downloaded game files (~10GB, gitignored)
 ├── scripts/
-│   ├── entrypoint.sh       # Server startup, config generation, MM/SM verification
+│   ├── entrypoint.sh       # Server startup, config generation, MM verification
 │   ├── entrypoint-vanilla.sh
 │   ├── server.cfg          # Template (overwritten at runtime)
 │   └── betterbots.cfg      # Bot behavior CVars
-├── cfg/                    # Mount custom .cfg files here
-├── plugins/                # Custom SM plugins (.sp source + .smx compiled)
-│   ├── smartbots_bridge.sp # SmartBots DHooks bridge plugin source
-│   └── smartbots_bridge.smx
-├── gamedata/               # DHooks gamedata files
-│   └── smartbots_bridge.txt # Vtable offsets + signatures for Insurgency NextBot
-└── .env
+└── cfg/                    # Custom .cfg files mounted into server
 ```
 
 ## Configuration
@@ -40,25 +34,18 @@ insurgency-server/
 | START_MAP       | ministry_coop                    | Starting map            |
 | GAME_MODE       | coop                             | coop or pvp             |
 | TICKRATE        | 64                               | Server tick rate        |
+| NB_DEBUG        | 0                                | NextBot debug level     |
+| CONTROLLED_TEAM | 3                                | Team controlled by AI (2=Security, 3=Insurgents) |
 
-## Custom Plugins
+## How It Works
 
-Plugins in `./plugins/` are mounted into SM's `plugins/custom/` dir (auto-loaded by SourceMod).
-Gamedata files in `./gamedata/` are mounted into SM's `gamedata/` dir.
+The Dockerfile uses a multi-stage build:
+1. **Stage 1** — Compiles the Metamod extension (32-bit .so) from `metamod-extension/`
+2. **Stage 2** — Copies pre-downloaded server files, configs, and the compiled extension into the final image
 
-### Compiling plugins
-
-```bash
-cd insurgency-server
-./server-files/insurgency/addons/sourcemod/scripting/spcomp \
-  plugins/smartbots_bridge.sp \
-  -i./server-files/insurgency/addons/sourcemod/scripting/include \
-  -o./plugins/smartbots_bridge.smx
-```
+The extension is installed as a Metamod plugin at `addons/smartbots/` and communicates with the tactical brain over UDP.
 
 ## Version Compatibility
-
-Insurgency 2014 is picky about versions:
 
 | Component      | Version              | Notes                           |
 |----------------|----------------------|---------------------------------|
@@ -66,18 +53,17 @@ Insurgency 2014 is picky about versions:
 | MetaMod:Source | 1.12.0-git1219       | Dev snapshots required          |
 | SourceMod      | 1.11.0-git6968       | Dev snapshots required          |
 | Server flags   | `-32bit`             | Required for Insurgency         |
-| Socket ext     | 3.0.1                | UDP bridge, needs typedef fix   |
 
 ## Troubleshooting
 
-- **SourceMod not loading:** check `-32bit` flag, run `meta list` in console
+- **Extension not loading:** run `meta list` in console, check Metamod logs
 - **Bots not spawning:** ensure coop map (e.g. `ministry_coop`), check `bot_quota`
-- **Server crashes:** usually MM/SM version mismatch, check `addons/sourcemod/logs/`
+- **Server crashes:** usually MM version mismatch, check server console output
 
 ## Useful RCON commands
 
 ```
-meta list           # Verify MetaMod
-sm plugins list     # List SM plugins
+meta list           # Verify MetaMod and extension
 bot_add / bot_kick  # Manage bots
+nb_debug 1          # Enable NextBot debug overlay
 ```
