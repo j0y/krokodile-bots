@@ -43,7 +43,7 @@ def load_map(map_name: str, data_dir: str) -> MapData | None:
     vismatrix_path = d / f"{map_name}_vismatrix.npz"
     influence_path = d / f"{map_name}_influence.npz"
     objectives_path = d / f"{map_name}_objectives.json"
-    zones_path = d / f"{map_name}_zones.json"
+    clusters_path = d / f"{map_name}_clusters.json"
     walkgraph_path = d / f"{map_name}_walkgraph.npz"
 
     if not (vismatrix_path.exists() and influence_path.exists()):
@@ -56,7 +56,7 @@ def load_map(map_name: str, data_dir: str) -> MapData | None:
     if objectives_path.exists():
         area_map = AreaMap(
             str(objectives_path),
-            str(zones_path) if zones_path.exists() else None,
+            str(clusters_path) if clusters_path.exists() else None,
             influence_map.points,
             influence_map.concealment,
             influence_map.tree,

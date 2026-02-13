@@ -1,7 +1,8 @@
-"""Fuzzy tactical areas: objectives + named zones with soft boundaries.
+"""Fuzzy tactical areas: objectives + room clusters with soft boundaries.
 
 Objectives (from *_objectives.json) define capture/destroy points and spawns.
-Zones (from *_zones.json) define named map regions derived from soundscapes.
+Clusters (from *_clusters.json) define room-like regions detected from BSP
+wall geometry and nav mesh adjacency.
 
 Each area has a center, radius, and falloff distance. Grid points within
 the radius get weight 1.0; between radius and radius+falloff they linearly
@@ -42,28 +43,31 @@ class AreaMap:
     def __init__(
         self,
         objectives_path: str,
-        zones_path: str | None,
+        clusters_path: str | None,
         points: np.ndarray,
         concealment: np.ndarray,
         tree: KDTree,
     ) -> None:
         self.areas: dict[str, AreaDef] = {}
-        self.zones: dict[str, AreaDef] = {}  # zone-only subset
+        self.zones: dict[str, AreaDef] = {}  # zone-only subset (clusters)
         self._weights: dict[str, np.ndarray] = {}
         self._points = points
         self._concealment = concealment
         self._tree = tree
-        self._zone_markers: dict[str, np.ndarray] = {}  # zone → Nx3 marker positions
+        self._zone_centroids: np.ndarray | None = None  # Kx3 centroid array
+        self._zone_names: list[str] = []  # parallel to _zone_centroids rows
 
         # Load objectives
         raw = json.loads(Path(objectives_path).read_text())
         for name, defn in raw.items():
             self._load_area(name, defn)
 
-        # Load zones (if available)
-        if zones_path and Path(zones_path).exists():
-            raw_zones = json.loads(Path(zones_path).read_text())
-            for name, defn in raw_zones.items():
+        # Load clusters (room-like regions from BSP wall detection)
+        cluster_adjacency: dict[str, list[str]] = {}
+        if clusters_path and Path(clusters_path).exists():
+            raw_clusters = json.loads(Path(clusters_path).read_text())
+            centroids: list[list[float]] = []
+            for name, defn in raw_clusters.items():
                 center = tuple(defn["centroid"])
                 radius = float(defn.get("radius", 400))
                 falloff = radius * 0.5
@@ -79,21 +83,40 @@ class AreaMap:
                 self.areas[name] = area
                 self.zones[name] = area
                 self._compute_weights(name, center, radius, falloff)
-                # Store markers for nearest-neighbor zone labeling
-                markers = defn.get("markers", [])
-                if markers:
-                    self._zone_markers[name] = np.array(markers, dtype=np.float32)
-            log.info("Loaded %d zones from %s", len(self.zones), zones_path)
+                centroids.append(list(center))
+                self._zone_names.append(name)
+                if "adjacent" in defn:
+                    cluster_adjacency[name] = defn["adjacent"]
+            if centroids:
+                self._zone_centroids = np.array(centroids, dtype=np.float32)
+            log.info("Loaded %d clusters from %s", len(self.zones), clusters_path)
 
-        # Pre-compute adjacency graph (areas whose masks overlap)
+        # Build adjacency graph from cluster doorway connections
         self._adjacency: dict[str, list[str]] = {name: [] for name in self.areas}
-        names = list(self.areas)
-        for i, a in enumerate(names):
-            wa = self._weights[a]
-            for b in names[i + 1:]:
-                if np.any((wa > 0) & (self._weights[b] > 0)):
-                    self._adjacency[a].append(b)
-                    self._adjacency[b].append(a)
+        if cluster_adjacency:
+            # Use pre-computed adjacency from clustering (nav mesh doorway edges)
+            for name, neighbors in cluster_adjacency.items():
+                self._adjacency[name] = [n for n in neighbors if n in self.areas]
+            # Connect objectives/spawns to their containing room + room's neighbors
+            for name, area in self.areas.items():
+                if area.role != "zone" and self._zone_centroids is not None:
+                    zone = self.pos_to_zone(area.center)
+                    if zone:
+                        # Objective gets its room + room's neighbors
+                        room_neighbors = cluster_adjacency.get(zone, [])
+                        self._adjacency[name] = [zone] + [
+                            n for n in room_neighbors if n in self.areas
+                        ]
+                        self._adjacency[zone].append(name)
+        else:
+            # Fallback: weight overlap (for maps without clusters)
+            names = list(self.areas)
+            for i, a in enumerate(names):
+                wa = self._weights[a]
+                for b in names[i + 1:]:
+                    if np.any((wa > 0) & (self._weights[b] > 0)):
+                        self._adjacency[a].append(b)
+                        self._adjacency[b].append(a)
 
         log.info("AreaMap loaded: %d objectives + %d zones",
                  len(self.areas) - len(self.zones), len(self.zones))
@@ -293,23 +316,17 @@ class AreaMap:
         return "\n".join(lines)
 
     def pos_to_zone(self, pos: tuple[float, float, float]) -> str | None:
-        """Map a world position to the nearest zone name using marker positions.
+        """Map a world position to the nearest zone (cluster) by centroid distance.
 
-        Uses 2D (XY) nearest-neighbor against zone markers for accurate
-        zone labeling. Returns None if no zones are loaded.
+        Uses 2D (XY) nearest-neighbor against cluster centroids.
+        Returns None if no clusters are loaded.
         """
-        if not self._zone_markers:
+        if self._zone_centroids is None:
             return None
         pos_2d = np.array([pos[0], pos[1]], dtype=np.float32)
-        best_name: str | None = None
-        best_dist = float("inf")
-        for name, markers in self._zone_markers.items():
-            dists = np.linalg.norm(markers[:, :2] - pos_2d, axis=1)
-            d = float(dists.min())
-            if d < best_dist:
-                best_dist = d
-                best_name = name
-        return best_name
+        dists = np.linalg.norm(self._zone_centroids[:, :2] - pos_2d, axis=1)
+        idx = int(np.argmin(dists))
+        return self._zone_names[idx]
 
     def pos_to_area(self, pos: tuple[float, float, float]) -> str | None:
         """Map a world position to the best-matching area name, or None.
