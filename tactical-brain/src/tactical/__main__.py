@@ -59,21 +59,25 @@ def main() -> None:
             port=tele_port,
         )
 
-    # Load area definitions (if available)
+    # Load objectives + zones (if available)
     area_map = None
     if influence_map is not None and map_name:
-        areas_path = Path(data_dir) / f"{map_name}_areas.json"
-        if areas_path.exists():
+        objectives_path = Path(data_dir) / f"{map_name}_objectives.json"
+        zones_path = Path(data_dir) / f"{map_name}_zones.json"
+        if objectives_path.exists():
             from tactical.areas import AreaMap
             area_map = AreaMap(
-                str(areas_path),
+                str(objectives_path),
+                str(zones_path) if zones_path.exists() else None,
                 influence_map.points,
                 influence_map.concealment,
                 influence_map.tree,
             )
-            log.info("Loaded area definitions for %s (%d areas)", map_name, len(area_map.areas))
+            log.info("Loaded %d objectives + %d zones for %s",
+                     len(area_map.areas) - len(area_map.zones),
+                     len(area_map.zones), map_name)
         else:
-            log.info("No area definitions for %s", map_name)
+            log.info("No objectives for %s", map_name)
 
     # Load walk graph for path-based look direction (if available)
     pathfinder = None

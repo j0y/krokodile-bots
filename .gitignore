@@ -2,4 +2,4 @@ CLAUDE.md
 metamod-extension/build/
 .env
 data/*
-!data/*_areas.json
+!data/.gitkeep

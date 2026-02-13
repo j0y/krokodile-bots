@@ -1,6 +1,6 @@
-"""Extract objective and spawn area definitions from BSP + cpsetup config.
+"""Extract objective and spawn definitions from BSP + cpsetup config.
 
-Produces *_areas.json files compatible with tactical.areas.AreaMap.
+Produces *_objectives.json files for use by the tactical brain.
 Works for Insurgency checkpoint/coop maps.
 
 Primary data source: maps/<mapname>.txt (cpsetup config, extracted from VPK).
@@ -136,7 +136,7 @@ def _parse_kv(text: str) -> dict[str, Any]:
 # ── Main extraction ─────────────────────────────────────────────────
 
 
-def extract_areas(bsp_path: str | Path) -> dict[str, Any]:
+def extract_objectives(bsp_path: str | Path) -> dict[str, Any]:
     """Extract area definitions from a BSP file + cpsetup config.
 
     Returns a dict ready to be serialized as JSON, matching the

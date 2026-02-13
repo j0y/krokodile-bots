@@ -158,10 +158,10 @@ def load_map_data(data_dir: Path, map_name: str):
     points = vis["point_positions"]
 
     areas = {}
-    areas_path = data_dir / f"{map_name}_areas.json"
-    if areas_path.exists():
+    objectives_path = data_dir / f"{map_name}_objectives.json"
+    if objectives_path.exists():
         import json
-        with open(areas_path) as f:
+        with open(objectives_path) as f:
             areas = json.load(f)
 
     return points, areas
