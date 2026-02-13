@@ -21,6 +21,6 @@ struct BotStateEntry {
 int BotState_Collect(BotStateEntry *out, int maxBots);
 
 // Serialize bot state array to JSON string. Returns bytes written (excluding null terminator).
-int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf, int bufSize);
+int BotState_Serialize(const BotStateEntry *bots, int count, int tick, const char *mapName, char *buf, int bufSize);
 
 #endif // _SMARTBOTS_BOT_STATE_H_

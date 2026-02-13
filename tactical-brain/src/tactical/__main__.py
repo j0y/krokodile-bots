@@ -6,10 +6,11 @@ import asyncio
 import logging
 import os
 import uuid
-from pathlib import Path
 
+from tactical.map_data import MapData, preload_all_maps
 from tactical.planner import Planner
 from tactical.server import run_server
+from tactical.strategist import BaseStrategist
 
 logging.basicConfig(
     level=logging.INFO,
@@ -22,123 +23,69 @@ log = logging.getLogger(__name__)
 def main() -> None:
     host = os.environ.get("LISTEN_HOST", "0.0.0.0")
     port = int(os.environ.get("LISTEN_PORT", "9000"))
-
-    influence_map = None
-    map_name = os.environ.get("MAP_NAME", "")
     data_dir = os.environ.get("DATA_DIR", "/app/data")
-
-    if map_name:
-        vismatrix_path = Path(data_dir) / f"{map_name}_vismatrix.npz"
-        influence_path = Path(data_dir) / f"{map_name}_influence.npz"
-
-        if vismatrix_path.exists() and influence_path.exists():
-            from tactical.influence_map import InfluenceMap
-            influence_map = InfluenceMap(str(vismatrix_path), str(influence_path))
-            log.info("Loaded influence map for %s", map_name)
-        else:
-            log.warning(
-                "Map data not found for %s (looked in %s), falling back to rally point",
-                map_name, data_dir,
-            )
-
     controlled_team = int(os.environ.get("CONTROLLED_TEAM", "2"))
 
+    # Preload all available maps
+    map_registry = preload_all_maps(data_dir)
+
+    # Telemetry setup
     telemetry = None
     session_id = str(uuid.uuid4())
     if os.environ.get("TELEMETRY") == "1":
         from tactical.telemetry import TelemetryClient
         tele_host = os.environ.get("TELEMETRY_HOST", "localhost")
         tele_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
-        # strategist_type determined below, placeholder for now
         telemetry = TelemetryClient(
             session_id=session_id,
-            map_name=map_name or "unknown",
+            map_name="pending",
             controlled_team=controlled_team,
-            strategist_type="none",  # updated after strategist selection
+            strategist_type="none",
             host=tele_host,
             port=tele_port,
         )
 
-    # Load objectives + zones (if available)
-    area_map = None
-    if influence_map is not None and map_name:
-        objectives_path = Path(data_dir) / f"{map_name}_objectives.json"
-        zones_path = Path(data_dir) / f"{map_name}_zones.json"
-        if objectives_path.exists():
-            from tactical.areas import AreaMap
-            area_map = AreaMap(
-                str(objectives_path),
-                str(zones_path) if zones_path.exists() else None,
-                influence_map.points,
-                influence_map.concealment,
-                influence_map.tree,
-            )
-            log.info("Loaded %d objectives + %d zones for %s",
-                     len(area_map.areas) - len(area_map.zones),
-                     len(area_map.zones), map_name)
-        else:
-            log.info("No objectives for %s", map_name)
+    # Planner starts empty — populated on first map switch from C++ packet
+    planner = Planner(controlled_team=controlled_team)
 
-    # Load walk graph for path-based look direction (if available)
-    pathfinder = None
-    if influence_map is not None and map_name:
-        walkgraph_path = Path(data_dir) / f"{map_name}_walkgraph.npz"
-        if walkgraph_path.exists():
-            from tactical.pathfinding import PathFinder
-            pathfinder = PathFinder(
-                str(walkgraph_path),
-                influence_map.points,
-                influence_map.adj_index,
-                influence_map.adj_list,
-                influence_map.tree,
-            )
-            log.info("Loaded walk graph for %s", map_name)
-        else:
-            log.info("No walk graph for %s (bots will use arrival-only look)", map_name)
-
-    planner = Planner(
-        controlled_team=controlled_team,
-        influence_map=influence_map,
-        area_map=area_map,
-        pathfinder=pathfinder,
-    )
-
-    strategist = None
-    strategist_type = "none"
+    # Strategist factory: captures config, creates strategist for a given map
     openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
-    if openrouter_key and area_map is not None:
-        from tactical.strategist_llm import LLMStrategist
-        strategist = LLMStrategist(
-            planner=planner,
-            area_map=area_map,
-            api_key=openrouter_key,
-            model=os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-haiku"),
-            base_url=os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1"),
-            min_interval=float(os.environ.get("STRATEGIST_MIN_INTERVAL", "12")),
-            telemetry=telemetry,
-        )
-        strategist_type = "llm"
-        log.info("LLM strategist enabled (model=%s)", strategist._model)
-    elif area_map is not None:
-        from tactical.strategist_sm import SMStrategist
-        strategist = SMStrategist(planner=planner, area_map=area_map, telemetry=telemetry)
-        strategist_type = "sm"
-        log.info("State machine strategist enabled")
-    else:
-        log.info("Strategist disabled (no area definitions)")
+    openrouter_model = os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-haiku")
+    openrouter_url = os.environ.get("OPENROUTER_URL", "https://openrouter.ai/api/v1")
+    strategist_min_interval = float(os.environ.get("STRATEGIST_MIN_INTERVAL", "12"))
 
-    # Update the session row with the actual strategist type
-    if telemetry is not None and strategist_type != "none":
-        try:
-            telemetry._conn.execute(
-                "UPDATE sessions SET strategist_type = %s WHERE session_id = %s",
-                (strategist_type, session_id),
+    def make_strategist(md: MapData) -> BaseStrategist | None:
+        if md.area_map is None:
+            return None
+        if openrouter_key:
+            from tactical.strategist_llm import LLMStrategist
+            strat = LLMStrategist(
+                planner=planner,
+                area_map=md.area_map,
+                api_key=openrouter_key,
+                model=openrouter_model,
+                base_url=openrouter_url,
+                min_interval=strategist_min_interval,
+                telemetry=telemetry,
             )
-            telemetry._conn.commit()
-        except Exception:
-            log.warning("Failed to update session strategist_type")
+            log.info("Created LLM strategist for %s (model=%s)", md.name, openrouter_model)
+            return strat
+        else:
+            from tactical.strategist_sm import SMStrategist
+            strat = SMStrategist(
+                planner=planner,
+                area_map=md.area_map,
+                telemetry=telemetry,
+            )
+            log.info("Created SM strategist for %s", md.name)
+            return strat
 
-    asyncio.run(run_server(host, port, planner, telemetry=telemetry, strategist=strategist))
+    asyncio.run(run_server(
+        host, port, planner,
+        telemetry=telemetry,
+        map_registry=map_registry,
+        strategist_factory=make_strategist,
+    ))
 
 
 main()

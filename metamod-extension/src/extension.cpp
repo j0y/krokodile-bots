@@ -608,8 +608,9 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         // Send state to Python brain
         if (s_cvarAiEnabled.GetBool() && s_stateCount > 0)
         {
+            const char *currentMap = STRING(gpGlobals->mapname);
             int len = BotState_Serialize(s_stateArray, s_stateCount, s_tickCount,
-                                         s_sendBuf, sizeof(s_sendBuf));
+                                         currentMap, s_sendBuf, sizeof(s_sendBuf));
             if (UdpBridge_Send(s_sendBuf, len))
             {
                 s_bridgeSendCount++;

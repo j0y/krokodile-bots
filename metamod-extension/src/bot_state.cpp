@@ -43,12 +43,13 @@ int BotState_Collect(BotStateEntry *out, int maxBots)
     return count;
 }
 
-int BotState_Serialize(const BotStateEntry *bots, int count, int tick, char *buf, int bufSize)
+int BotState_Serialize(const BotStateEntry *bots, int count, int tick, const char *mapName, char *buf, int bufSize)
 {
     // Build JSON manually — format is simple and fixed, no library needed.
     int offset = 0;
 
-    offset += snprintf(buf + offset, bufSize - offset, "{\"tick\":%d,\"bots\":[", tick);
+    offset += snprintf(buf + offset, bufSize - offset,
+        "{\"tick\":%d,\"map\":\"%s\",\"bots\":[", tick, mapName ? mapName : "");
     if (offset >= bufSize) return bufSize - 1;
 
     for (int i = 0; i < count; i++)
