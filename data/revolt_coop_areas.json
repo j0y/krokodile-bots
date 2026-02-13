@@ -1,9 +1,9 @@
 {
   "obj_a": {
     "center": [
-      -221,
-      2193,
-      62
+      -503,
+      1841,
+      33
     ],
     "radius": 400,
     "falloff": 250,
@@ -37,9 +37,9 @@
   },
   "obj_d": {
     "center": [
-      2471,
-      22,
-      427
+      1961,
+      137,
+      560
     ],
     "radius": 400,
     "falloff": 250,
@@ -73,9 +73,9 @@
   },
   "obj_g": {
     "center": [
-      -41,
-      -947,
-      130
+      -438,
+      -824,
+      449
     ],
     "radius": 400,
     "falloff": 250,
@@ -95,18 +95,6 @@
     "order": 8,
     "type": "capture"
   },
-  "obj_i": {
-    "center": [
-      -5494,
-      -2923,
-      -138
-    ],
-    "radius": 400,
-    "falloff": 250,
-    "role": "objective",
-    "order": 9,
-    "type": "capture"
-  },
   "attacker_spawn": {
     "center": [
       -3808,
@@ -119,9 +107,9 @@
   },
   "approach": {
     "center": [
-      -2015,
-      1096,
-      47
+      -2156,
+      920,
+      32
     ],
     "radius": 700,
     "falloff": 300,

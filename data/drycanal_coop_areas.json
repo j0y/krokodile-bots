@@ -85,21 +85,21 @@
   },
   "obj_h": {
     "center": [
-      5740,
-      -5577,
-      329
+      4864,
+      -3920,
+      336
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 8,
-    "type": "capture"
+    "type": "destroy"
   },
   "obj_i": {
     "center": [
-      7114,
-      -7063,
-      359
+      5740,
+      -5577,
+      329
     ],
     "radius": 400,
     "falloff": 250,
@@ -109,15 +109,15 @@
   },
   "obj_j": {
     "center": [
-      6236,
-      -7037,
-      24
+      7114,
+      -7063,
+      359
     ],
     "radius": 400,
     "falloff": 250,
     "role": "objective",
     "order": 10,
-    "type": "destroy"
+    "type": "capture"
   },
   "attacker_spawn": {
     "center": [
