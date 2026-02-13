@@ -38,6 +38,12 @@ typedef void (*CINSBotApproach_Ctor_t)(void *thisptr, float x, float y, float z)
 typedef void (*AddMovementRequest_t)(void *thisptr, float x, float y, float z,
                                      int moveType, int priority, float speed);
 
+// IBody::AimHeadTowards(const Vector &target, int priority, float duration, INextBotReply*, const char*)
+// x86-32 Linux/GCC: this + all args on stack
+typedef void (*AimHeadTowards_t)(void *thisBody, const float *target,
+                                  int priority, float duration,
+                                  void *reply, const char *reason);
+
 // Object sizes from class_data_layouts.md
 static constexpr size_t CINSBOT_APPROACH_SIZE = 128;  // last member at +0x60, pad to 128
 static constexpr size_t CINSBOT_COMBAT_SIZE   = 136;  // 0x88

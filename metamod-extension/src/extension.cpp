@@ -61,6 +61,10 @@ static int s_lastResolveTick = 0;
 static float s_lastTarget[33][3];  // [edictIndex][x/y/z]
 static bool  s_lastTargetValid[33];
 
+// Last-issued look target per bot — avoids redundant AimHeadTowards calls.
+static float s_lastLookTarget[33][3];
+static bool  s_lastLookTargetValid[33];
+
 static bool TargetChanged(int edictIndex, float x, float y, float z)
 {
     if (edictIndex < 1 || edictIndex > 32)
@@ -83,6 +87,30 @@ static void RecordTarget(int edictIndex, float x, float y, float z)
         s_lastTarget[edictIndex][1] = y;
         s_lastTarget[edictIndex][2] = z;
         s_lastTargetValid[edictIndex] = true;
+    }
+}
+
+static bool LookTargetChanged(int edictIndex, float x, float y, float z)
+{
+    if (edictIndex < 1 || edictIndex > 32)
+        return true;
+    if (!s_lastLookTargetValid[edictIndex])
+        return true;
+
+    float dx = s_lastLookTarget[edictIndex][0] - x;
+    float dy = s_lastLookTarget[edictIndex][1] - y;
+    float dz = s_lastLookTarget[edictIndex][2] - z;
+    return (dx * dx + dy * dy + dz * dz) > 1.0f;
+}
+
+static void RecordLookTarget(int edictIndex, float x, float y, float z)
+{
+    if (edictIndex >= 1 && edictIndex <= 32)
+    {
+        s_lastLookTarget[edictIndex][0] = x;
+        s_lastLookTarget[edictIndex][1] = y;
+        s_lastLookTarget[edictIndex][2] = z;
+        s_lastLookTargetValid[edictIndex] = true;
     }
 }
 
@@ -151,6 +179,7 @@ static void CC_SmartBotsStop(const CCommand &args)
 {
     BotActionHook_ClearGotoTarget();
     memset(s_lastTargetValid, 0, sizeof(s_lastTargetValid));
+    memset(s_lastLookTargetValid, 0, sizeof(s_lastLookTargetValid));
 }
 
 static ConCommand s_cmdStop("smartbots_stop", CC_SmartBotsStop,
@@ -419,10 +448,11 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                 int idx = s_resolvedBots[i].edictIndex;
                 if (!ValidateBot(idx, s_resolvedBots[i].entity))
                     continue;
-                // Bot in combat — let native AI control movement
+                // Bot in combat — let native AI control movement and aim
                 if (BotActionHook_HasVisibleEnemy(idx))
                 {
                     s_lastTargetValid[idx] = false;
+                    s_lastLookTargetValid[idx] = false;
                     continue;
                 }
                 if (!TargetChanged(idx, gotoX, gotoY, gotoZ))
@@ -475,22 +505,78 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                 if (!BotCommand_Get(idx, cmd))
                     continue;
 
-                // Bot in combat — let native AI control movement
+                // Bot in combat — let native AI control movement and aim
                 if (BotActionHook_HasVisibleEnemy(idx))
                 {
                     s_lastTargetValid[idx] = false;
+                    s_lastLookTargetValid[idx] = false;
                     continue;
                 }
 
-                if (!TargetChanged(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
-                    continue;
-
-                if (BotActionHook_IssueMovementRequest(
-                        (void *)s_resolvedBots[i].entity,
-                        cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
+                if (TargetChanged(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
                 {
-                    RecordTarget(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
-                    s_bridgeCmdExecCount++;
+                    if (BotActionHook_IssueMovementRequest(
+                            (void *)s_resolvedBots[i].entity,
+                            cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
+                    {
+                        RecordTarget(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
+                        s_bridgeCmdExecCount++;
+                    }
+                }
+
+                // Apply look-at only when bot has arrived at its move target.
+                // Check: lookTarget differs from moveTarget (distance > 1u)
+                //        AND bot is near moveTarget (distance < 150u)
+                {
+                    float ldx = cmd.lookTarget[0] - cmd.moveTarget[0];
+                    float ldy = cmd.lookTarget[1] - cmd.moveTarget[1];
+                    float ldz = cmd.lookTarget[2] - cmd.moveTarget[2];
+                    float lookMoveDist2 = ldx * ldx + ldy * ldy + ldz * ldz;
+
+                    if (lookMoveDist2 > 1.0f)
+                    {
+                        // Find bot's current position from state array
+                        float botX = 0, botY = 0, botZ = 0;
+                        bool foundPos = false;
+                        for (int si = 0; si < s_stateCount; si++)
+                        {
+                            if (s_stateArray[si].id == idx)
+                            {
+                                botX = s_stateArray[si].pos[0];
+                                botY = s_stateArray[si].pos[1];
+                                botZ = s_stateArray[si].pos[2];
+                                foundPos = true;
+                                break;
+                            }
+                        }
+
+                        if (foundPos)
+                        {
+                            float bdx = botX - cmd.moveTarget[0];
+                            float bdy = botY - cmd.moveTarget[1];
+                            float bdz = botZ - cmd.moveTarget[2];
+                            float botDist2 = bdx * bdx + bdy * bdy + bdz * bdz;
+
+                            // Bot is within 150u of move target — apply look direction
+                            if (botDist2 < 150.0f * 150.0f)
+                            {
+                                if (LookTargetChanged(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
+                                {
+                                    if (BotActionHook_IssueLookAt(
+                                            (void *)s_resolvedBots[i].entity,
+                                            cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
+                                    {
+                                        RecordLookTarget(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Still walking — clear look target so it re-fires when arrived
+                                s_lastLookTargetValid[idx] = false;
+                            }
+                        }
+                    }
                 }
             }
         }

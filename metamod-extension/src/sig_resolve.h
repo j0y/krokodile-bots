@@ -25,8 +25,14 @@ struct ServerOffsets
 // CINSNextBot vtable byte offset for GetLocomotionInterface virtual call
 static constexpr uintptr_t kVtableOff_GetLocomotionInterface = 0x96c;
 
+// CINSNextBot vtable byte offset for GetBodyInterface virtual call
+static constexpr uintptr_t kVtableOff_GetBodyInterface = 0x970;
+
 // CINSNextBot vtable byte offset for GetVisionInterface virtual call
 static constexpr uintptr_t kVtableOff_GetVisionInterface = 0x974;
+
+// IBody vtable byte offset for AimHeadTowards(const Vector &, int, float, INextBotReply*, const char*)
+static constexpr uintptr_t kVtableOff_IBody_AimHeadTowards_Vec = 0xd4;
 
 // CINSBotVision (IVision) vtable byte offsets
 static constexpr uintptr_t kVtableOff_IVision_IsAbleToSee_Entity = 260;  // (CBaseEntity*, int checkFOV, Vector*)

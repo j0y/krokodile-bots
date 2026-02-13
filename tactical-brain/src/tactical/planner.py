@@ -121,6 +121,42 @@ class Planner:
             if a.role in ("enemy_spawn", "enemy_approach")
         ]
 
+    @staticmethod
+    def _nearest_approach(
+        pos: tuple[float, float, float],
+        approaches: list[tuple[float, float, float]],
+    ) -> tuple[float, float, float] | None:
+        """Return the approach centroid closest to *pos*."""
+        if not approaches:
+            return None
+        best = approaches[0]
+        best_d2 = sum((a - b) ** 2 for a, b in zip(pos, best))
+        for ap in approaches[1:]:
+            d2 = sum((a - b) ** 2 for a, b in zip(pos, ap))
+            if d2 < best_d2:
+                best_d2 = d2
+                best = ap
+        return best
+
+    @staticmethod
+    def _look_past_approach(
+        approach: tuple[float, float, float],
+        obj_centroid: tuple[float, float, float],
+    ) -> tuple[float, float, float]:
+        """Project 2000u past the approach centroid, away from the objective."""
+        dx = approach[0] - obj_centroid[0]
+        dy = approach[1] - obj_centroid[1]
+        dz = approach[2] - obj_centroid[2]
+        length = (dx * dx + dy * dy + dz * dz) ** 0.5
+        if length < 1.0:
+            return approach
+        scale = 2000.0 / length
+        return (
+            approach[0] + dx * scale,
+            approach[1] + dy * scale,
+            approach[2] + dz * scale,
+        )
+
     def _objective_centroid(self, area_names: list[str]) -> tuple[float, float, float]:
         """Centroid of only the objective-role area within area_names.
 
@@ -197,10 +233,20 @@ class Planner:
 
             profile_tag = f"area:{order.posture}"
             for bot, target in zip(batch, positions):
+                if order.posture in ("defend", "ambush", "sniper"):
+                    nearest = self._nearest_approach(target, approach_positions)
+                    if nearest is not None:
+                        look = self._look_past_approach(nearest, obj_centroid)
+                    else:
+                        look = target
+                else:
+                    # push/overrun: no look override
+                    look = target
+
                 commands.append(BotCommand(
                     id=bot.id,
                     move_target=target,
-                    look_target=target,
+                    look_target=look,
                     flags=0,
                 ))
                 bot_profiles[bot.id] = profile_tag

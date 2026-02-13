@@ -26,6 +26,11 @@ bool BotActionHook_HasGotoTarget();
 // Get the current goto target coordinates. Returns false if no target.
 bool BotActionHook_GetGotoTarget(float &x, float &y, float &z);
 
+// Issue a look-at request via IBody::AimHeadTowards vtable dispatch.
+// entityPtr must be a CINSNextBot*. Priority INTERESTING (2), duration 1.0s.
+// Returns true if the call was dispatched.
+bool BotActionHook_IssueLookAt(void *entityPtr, float x, float y, float z);
+
 // Issue a movement request directly to a bot entity via vtable dispatch.
 // entityPtr must be a CINSNextBot* (the bot's CBaseEntity pointer).
 // Returns true if the request was successfully issued.

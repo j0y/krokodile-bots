@@ -211,6 +211,43 @@ bool BotActionHook_GetGotoTarget(float &x, float &y, float &z)
     return true;
 }
 
+bool BotActionHook_IssueLookAt(void *entityPtr, float x, float y, float z)
+{
+    if (!entityPtr)
+        return false;
+
+    // Get body interface via vtable dispatch:
+    // entity->vtable[0x970 / 4](entity)
+    void **vtable = *reinterpret_cast<void ***>(entityPtr);
+    if (!vtable)
+        return false;
+
+    typedef void *(*GetBodyFn_t)(void *);
+    GetBodyFn_t getBodyFn = reinterpret_cast<GetBodyFn_t>(
+        vtable[kVtableOff_GetBodyInterface / 4]);
+    if (!getBodyFn)
+        return false;
+
+    void *body = getBodyFn(entityPtr);
+    if (!body)
+        return false;
+
+    // AimHeadTowards via IBody vtable[0xd4 / 4]
+    void **bodyVtable = *reinterpret_cast<void ***>(body);
+    if (!bodyVtable)
+        return false;
+
+    auto fnAim = reinterpret_cast<AimHeadTowards_t>(
+        bodyVtable[kVtableOff_IBody_AimHeadTowards_Vec / 4]);
+    if (!fnAim)
+        return false;
+
+    float target[3] = { x, y, z };
+    // Priority 2 = INTERESTING: overrides idle scan but yields to combat aim
+    fnAim(body, target, 2, 1.0f, nullptr, "SmartBots look");
+    return true;
+}
+
 bool BotActionHook_IssueMovementRequest(void *entityPtr, float x, float y, float z)
 {
     if (!entityPtr || !s_AddMovementRequest)
