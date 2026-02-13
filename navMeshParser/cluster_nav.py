@@ -1,518 +1,452 @@
-"""Cluster nav mesh areas into room-like regions using BSP wall geometry.
+"""Flow-based nav mesh segmentation.
 
-Algorithm:
-1. Parse .nav file, build adjacency graph from nav area connections
-2. Load BSP mesh (.glb), extract wall outlines via cross-sections at multiple Z levels
-3. Rasterize wall segments onto a 2D grid (16u cells)
-4. For each adjacent nav area pair, check if line between centers crosses wall cells
-5. Union-find: merge areas NOT separated by walls
-6. Merge tiny fragments (<5 areas) into nearest large cluster
-7. Directional split: rooms with connections on opposing sides are split (east/west or north/south)
-8. Output clusters JSON compatible with tactical-brain's AreaMap
+Agglomerative clustering: starts with each nav area as its own segment,
+then repeatedly merges the pair of adjacent segments connected by the
+widest total opening (sum of shared-edge widths across all boundary
+connections).  Stops when remaining boundaries are narrow (doorways).
+
+Doorways have low aggregate boundary width (1-3 narrow edges ≈ 50-100u).
+Room interiors have high aggregate boundary width (many parallel edges ≈ 200u+).
+
+After merging, segments are ordered by Dijkstra distance from enemy spawn.
 
 Usage:
-    python cluster_nav.py <map.nav> --glb map.glb [-o output.json] [--min-size 5]
+    python cluster_nav.py <map.nav> --objectives obj.json [-o output.json]
     python cluster_nav.py --batch --nav-dir DIR --data-dir DIR
 """
 
 from __future__ import annotations
 
 import argparse
+import heapq
 import json
 import math
-import sys
-from collections import defaultdict
-from dataclasses import dataclass, field
+from collections import defaultdict, deque
+from dataclasses import dataclass
 from pathlib import Path
-
-import numpy as np
 
 from parse_nav import NavArea, NavMesh, parse_nav
 
-# ── Constants ──────────────────────────────────────────────────────
+# ── Thresholds ─────────────────────────────────────────────────────
 
-CELL = 16          # wall grid resolution (units per cell)
-Z_MIN = -200       # lowest cross-section height
-Z_MAX = 600        # highest cross-section height
-Z_STEP = 30        # step between cross-sections
-MIN_FRAG = 5       # merge fragments smaller than this
-SPLIT_MIN = 10     # only split rooms with >= this many areas
+MERGE_THRESHOLD = 120.0  # stop merging when widest boundary < this (units)
+MIN_SEGMENT = 5          # merge segments with fewer areas into neighbors
+BRIDGE_MAX_DIST = 500.0  # max distance to bridge disconnected nav components
 
 
-# ── Union-Find ──────────────────────────────────────────────────────
+# ── Helpers ────────────────────────────────────────────────────────
 
-class UnionFind:
-    def __init__(self, elements: list[int]) -> None:
-        self.parent = {e: e for e in elements}
-        self.rank = {e: 0 for e in elements}
-
-    def find(self, x: int) -> int:
-        while self.parent[x] != x:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a: int, b: int) -> None:
-        ra, rb = self.find(a), self.find(b)
-        if ra == rb:
-            return
-        if self.rank[ra] < self.rank[rb]:
-            ra, rb = rb, ra
-        self.parent[rb] = ra
-        if self.rank[ra] == self.rank[rb]:
-            self.rank[ra] += 1
-
-    def components(self) -> dict[int, list[int]]:
-        groups: dict[int, list[int]] = defaultdict(list)
-        for e in self.parent:
-            groups[self.find(e)].append(e)
-        return dict(groups)
+def nearest_area(mesh: NavMesh, pos: tuple[float, float, float]) -> int:
+    """Find the nav area whose center is closest to *pos* (2D)."""
+    px, py = pos[0], pos[1]
+    best_id = -1
+    best_d2 = float("inf")
+    for aid, area in mesh.areas.items():
+        c = area.center()
+        d2 = (c.x - px) ** 2 + (c.y - py) ** 2
+        if d2 < best_d2:
+            best_d2 = d2
+            best_id = aid
+    return best_id
 
 
-# ── Wall grid ──────────────────────────────────────────────────────
-
-def _rasterize_line(x0: int, y0: int, x1: int, y1: int) -> list[tuple[int, int]]:
-    """Bresenham's line algorithm — returns all cells along the line."""
-    cells = []
-    dx = abs(x1 - x0)
-    dy = abs(y1 - y0)
-    sx = 1 if x0 < x1 else -1
-    sy = 1 if y0 < y1 else -1
-    err = dx - dy
-    while True:
-        cells.append((x0, y0))
-        if x0 == x1 and y0 == y1:
-            break
-        e2 = 2 * err
-        if e2 > -dy:
-            err -= dy
-            x0 += sx
-        if e2 < dx:
-            err += dx
-            y0 += sy
-    return cells
+def find_nav_components(mesh: NavMesh) -> list[set[int]]:
+    """Find connected components of the nav mesh graph."""
+    remaining = set(mesh.areas.keys())
+    components: list[set[int]] = []
+    while remaining:
+        start = next(iter(remaining))
+        visited: set[int] = set()
+        queue = deque([start])
+        visited.add(start)
+        while queue:
+            aid = queue.popleft()
+            for nid in mesh.areas[aid].neighbor_ids():
+                if nid in remaining and nid not in visited:
+                    visited.add(nid)
+                    queue.append(nid)
+        components.append(visited)
+        remaining -= visited
+    components.sort(key=len, reverse=True)
+    return components
 
 
-def build_wall_grid(
-    glb_path: str | Path,
-) -> tuple[np.ndarray, float, float, float, float]:
-    """Load BSP mesh and build a 2D wall occupancy grid.
-
-    Returns (grid, xmin, ymin, xmax, ymax) where grid[gy, gx] is True for wall cells.
-    """
-    import trimesh
-
-    mesh = trimesh.load(str(glb_path), force="mesh")
-
-    # Extract wall segments from cross-sections at multiple Z levels
-    segments: list[tuple[float, float, float, float]] = []
-    for z in range(Z_MIN, Z_MAX, Z_STEP):
-        try:
-            sl = mesh.section(plane_origin=[0, 0, z], plane_normal=[0, 0, 1])
-            if sl is None:
-                continue
-            for entity in sl.entities:
-                pts = sl.vertices[entity.points][:, :2]
-                for i in range(len(pts) - 1):
-                    segments.append((pts[i, 0], pts[i, 1], pts[i + 1, 0], pts[i + 1, 1]))
-        except Exception:
-            pass
-
-    if not segments:
-        raise RuntimeError(f"No wall segments extracted from {glb_path}")
-
-    segs = np.array(segments)
-    xmin = float(segs[:, [0, 2]].min())
-    xmax = float(segs[:, [0, 2]].max())
-    ymin = float(segs[:, [1, 3]].min())
-    ymax = float(segs[:, [1, 3]].max())
-
-    nx = int((xmax - xmin) / CELL) + 2
-    ny = int((ymax - ymin) / CELL) + 2
-    grid = np.zeros((ny, nx), dtype=bool)
-
-    for x0, y0, x1, y1 in segments:
-        gx0 = int((x0 - xmin) / CELL)
-        gy0 = int((y0 - ymin) / CELL)
-        gx1 = int((x1 - xmin) / CELL)
-        gy1 = int((y1 - ymin) / CELL)
-        for gx, gy in _rasterize_line(gx0, gy0, gx1, gy1):
-            if 0 <= gy < ny and 0 <= gx < nx:
-                grid[gy, gx] = True
-
-    return grid, xmin, ymin, xmax, ymax
-
-
-def line_crosses_wall(
-    x1: float, y1: float, x2: float, y2: float,
-    grid: np.ndarray, xmin: float, ymin: float,
-) -> bool:
-    """Check if the line between two points crosses any wall cells.
-
-    Skips the first and last cells (the endpoints themselves may sit on walls).
-    """
-    gx1 = int((x1 - xmin) / CELL)
-    gy1 = int((y1 - ymin) / CELL)
-    gx2 = int((x2 - xmin) / CELL)
-    gy2 = int((y2 - ymin) / CELL)
-
-    cells = _rasterize_line(gx1, gy1, gx2, gy2)
-    ny, nx = grid.shape
-
-    # Check interior cells (skip first and last)
-    for gx, gy in cells[1:-1]:
-        if 0 <= gy < ny and 0 <= gx < nx and grid[gy, gx]:
-            return True
-    return False
-
-
-# ── Clustering ──────────────────────────────────────────────────────
-
-@dataclass
-class Cluster:
-    id: int
-    area_ids: list[int]
-    centroid: tuple[float, float, float]
-    name: str = ""
-
-
-def cluster_by_walls(
-    mesh: NavMesh,
-    grid: np.ndarray,
-    xmin: float,
-    ymin: float,
-    min_frag: int = MIN_FRAG,
-) -> list[Cluster]:
-    """Cluster nav areas: merge adjacent pairs not separated by walls."""
-    area_ids = list(mesh.areas.keys())
-    if not area_ids:
+def bridge_components(
+    mesh: NavMesh, max_dist: float = BRIDGE_MAX_DIST,
+) -> list[tuple[int, int]]:
+    """Find nearest area pairs between disconnected nav components."""
+    components = find_nav_components(mesh)
+    if len(components) <= 1:
         return []
 
-    uf = UnionFind(area_ids)
+    bridges: list[tuple[int, int]] = []
+    main_comp = components[0]
+    main_centers = {
+        aid: (mesh.areas[aid].center().x, mesh.areas[aid].center().y)
+        for aid in main_comp
+    }
 
-    # For each adjacent pair, check wall line-of-sight
-    seen: set[tuple[int, int]] = set()
-    for aid, area in mesh.areas.items():
+    for comp in components[1:]:
+        best_d2 = max_dist * max_dist
+        best_pair: tuple[int, int] | None = None
+        for aid in comp:
+            ac = mesh.areas[aid].center()
+            for mid, (mx, my) in main_centers.items():
+                d2 = (ac.x - mx) ** 2 + (ac.y - my) ** 2
+                if d2 < best_d2:
+                    best_d2 = d2
+                    best_pair = (aid, mid)
+        if best_pair is not None:
+            bridges.append(best_pair)
+
+    return bridges
+
+
+def dijkstra(
+    mesh: NavMesh,
+    start: int,
+    extra_edges: list[tuple[int, int]] | None = None,
+) -> dict[int, float]:
+    """Shortest-path distances from *start*."""
+    extra_adj: dict[int, list[int]] = defaultdict(list)
+    if extra_edges:
+        for a, b in extra_edges:
+            extra_adj[a].append(b)
+            extra_adj[b].append(a)
+
+    dist: dict[int, float] = {start: 0.0}
+    heap = [(0.0, start)]
+    while heap:
+        d, aid = heapq.heappop(heap)
+        if d > dist.get(aid, float("inf")):
+            continue
+        area = mesh.areas[aid]
         ac = area.center()
-        for nid in area.neighbor_ids():
+        neighbors = list(area.neighbor_ids())
+        if aid in extra_adj:
+            neighbors.extend(extra_adj[aid])
+        for nid in neighbors:
             if nid not in mesh.areas:
                 continue
-            key = (min(aid, nid), max(aid, nid))
-            if key in seen:
-                continue
-            seen.add(key)
-
             nc = mesh.areas[nid].center()
-            if not line_crosses_wall(ac.x, ac.y, nc.x, nc.y, grid, xmin, ymin):
-                uf.union(aid, nid)
+            edge_len = (
+                (ac.x - nc.x) ** 2 + (ac.y - nc.y) ** 2 + (ac.z - nc.z) ** 2
+            ) ** 0.5
+            new_d = d + edge_len
+            if new_d < dist.get(nid, float("inf")):
+                dist[nid] = new_d
+                heapq.heappush(heap, (new_d, nid))
+    return dist
 
-    components = uf.components()
-    sorted_comps = sorted(components.values(), key=len, reverse=True)
 
-    # Separate large and small
+def connection_width(area_a: NavArea, area_b: NavArea, dir_from_a: int) -> float:
+    """Shared-edge overlap between two adjacent nav areas.
+
+    dir_from_a: 0=N, 1=E, 2=S, 3=W (which side of area_a faces area_b).
+    In Source engine nav meshes: nw = (min_x, min_y), se = (max_x, max_y).
+    """
+    if dir_from_a in (0, 2):  # N or S → overlap along X
+        return max(
+            0.0,
+            min(area_a.se.x, area_b.se.x) - max(area_a.nw.x, area_b.nw.x),
+        )
+    else:  # E or W → overlap along Y
+        return max(
+            0.0,
+            min(area_a.se.y, area_b.se.y) - max(area_a.nw.y, area_b.nw.y),
+        )
+
+
+def load_spawn_pos(objectives_path: Path) -> tuple[float, float, float] | None:
+    """Read enemy spawn position from objectives JSON."""
+    data = json.loads(objectives_path.read_text())
+    for name, obj in data.items():
+        if obj.get("role") == "enemy_spawn":
+            c = obj["center"]
+            return (c[0], c[1], c[2])
+    for name, obj in data.items():
+        if obj.get("role") == "enemy_approach":
+            c = obj["center"]
+            return (c[0], c[1], c[2])
+    return None
+
+
+# ── Agglomerative segmentation ─────────────────────────────────────
+
+@dataclass
+class Segment:
+    name: str
+    area_ids: list[int]
+    centroid: tuple[float, float, float]
+
+
+def agglomerative_segment(
+    mesh: NavMesh,
+    threshold: float = MERGE_THRESHOLD,
+    min_segment: int = MIN_SEGMENT,
+) -> list[list[int]]:
+    """Segment nav areas by agglomerative merging.
+
+    Merges adjacent area-clusters connected by wide openings (high
+    aggregate boundary width).  Stops when remaining boundaries are
+    narrow (doorways/chokepoints).
+    """
+    # ── Compute connection widths ──────────────────────────────────
+    edge_widths: dict[tuple[int, int], float] = {}
+    seen: set[tuple[int, int]] = set()
+    for aid, area in mesh.areas.items():
+        for dir_idx, connected_ids in enumerate(area.connections):
+            for nid in connected_ids:
+                if nid not in mesh.areas:
+                    continue
+                key = (min(aid, nid), max(aid, nid))
+                if key in seen:
+                    continue
+                seen.add(key)
+                edge_widths[key] = connection_width(area, mesh.areas[nid], dir_idx)
+
+    # ── Initialize clusters ────────────────────────────────────────
+    cluster_of: dict[int, int] = {aid: aid for aid in mesh.areas}
+    cluster_areas: dict[int, set[int]] = {aid: {aid} for aid in mesh.areas}
+
+    # Boundary width: for each pair of adjacent clusters, the total
+    # shared-edge width across all connections between them.
+    # neighbors[c] = {other_cluster: total_boundary_width}
+    neighbors: dict[int, dict[int, float]] = defaultdict(lambda: defaultdict(float))
+
+    for (a, b), w in edge_widths.items():
+        ca, cb = cluster_of[a], cluster_of[b]
+        if ca != cb:
+            neighbors[ca][cb] += w
+            neighbors[cb][ca] += w
+
+    # Max-heap of boundary widths (negate for min-heap)
+    heap: list[tuple[float, int, int]] = []
+    pushed: set[tuple[int, int]] = set()
+    for c1, nbrs in neighbors.items():
+        for c2, bw in nbrs.items():
+            key = (min(c1, c2), max(c1, c2))
+            if key not in pushed:
+                pushed.add(key)
+                heapq.heappush(heap, (-bw, key[0], key[1]))
+
+    # ── Merge loop ─────────────────────────────────────────────────
+    merge_count = 0
+    while heap:
+        neg_bw, c1, c2 = heapq.heappop(heap)
+        bw = -neg_bw
+
+        if bw < threshold:
+            break
+
+        # Validate: both clusters still exist and boundary is current
+        if c1 not in cluster_areas or c2 not in cluster_areas:
+            continue
+        actual_bw = neighbors.get(c1, {}).get(c2, 0.0)
+        if abs(actual_bw - bw) > 0.01:
+            # Stale entry — re-push if still valid
+            if actual_bw >= threshold:
+                heapq.heappush(heap, (-actual_bw, min(c1, c2), max(c1, c2)))
+            continue
+
+        # Merge c2 into c1
+        for aid in cluster_areas[c2]:
+            cluster_of[aid] = c1
+        cluster_areas[c1] |= cluster_areas[c2]
+        del cluster_areas[c2]
+
+        # Update neighbor boundaries
+        for other, obw in list(neighbors[c2].items()):
+            if other == c1:
+                continue
+            if other not in cluster_areas:
+                continue
+            # Transfer c2's boundary with 'other' to c1
+            neighbors[c1][other] += obw
+            neighbors[other][c1] += obw
+            # Remove c2 from other's neighbors
+            if c2 in neighbors[other]:
+                del neighbors[other][c2]
+            # Push updated boundary
+            new_bw = neighbors[c1][other]
+            heapq.heappush(heap, (-new_bw, min(c1, other), max(c1, other)))
+
+        # Clean up c2
+        del neighbors[c2]
+        if c2 in neighbors[c1]:
+            del neighbors[c1][c2]
+
+        merge_count += 1
+
+    print(f"  Merges: {merge_count}, clusters: {len(cluster_areas)}")
+
+    # ── Collect clusters ───────────────────────────────────────────
+    sorted_comps = sorted(cluster_areas.values(), key=len, reverse=True)
+
+    # Merge small fragments into the large segment they share the
+    # most nav mesh connections with (not nearest centroid).
     large: list[list[int]] = []
     small: list[list[int]] = []
     for comp in sorted_comps:
-        if len(comp) >= min_frag:
-            large.append(comp)
+        comp_list = list(comp)
+        if len(comp_list) >= min_segment:
+            large.append(comp_list)
         else:
-            small.append(comp)
+            small.append(comp_list)
 
-    # Merge small fragments into nearest large cluster
     if large and small:
-        large_centroids: list[tuple[float, float]] = []
-        for comp in large:
-            cx = sum(mesh.areas[a].center().x for a in comp) / len(comp)
-            cy = sum(mesh.areas[a].center().y for a in comp) / len(comp)
-            large_centroids.append((cx, cy))
+        # Build area → large-segment index
+        area_to_large: dict[int, int] = {}
+        for i, comp in enumerate(large):
+            for aid in comp:
+                area_to_large[aid] = i
 
         for frag in small:
-            fx = sum(mesh.areas[a].center().x for a in frag) / len(frag)
-            fy = sum(mesh.areas[a].center().y for a in frag) / len(frag)
-            best_idx = 0
-            best_dist = float("inf")
-            for i, (cx, cy) in enumerate(large_centroids):
-                d = (fx - cx) ** 2 + (fy - cy) ** 2
-                if d < best_dist:
-                    best_dist = d
-                    best_idx = i
-            large[best_idx].extend(frag)
+            # Count nav mesh connections to each large segment
+            conn_counts: dict[int, int] = defaultdict(int)
+            for aid in frag:
+                for nid in mesh.areas[aid].neighbor_ids():
+                    if nid in area_to_large:
+                        conn_counts[area_to_large[nid]] += 1
 
-    # Build Cluster objects
-    clusters: list[Cluster] = []
-    for i, comp in enumerate(large):
-        cx = sum(mesh.areas[a].center().x for a in comp) / len(comp)
-        cy = sum(mesh.areas[a].center().y for a in comp) / len(comp)
-        cz = sum(mesh.areas[a].center().z for a in comp) / len(comp)
-        clusters.append(Cluster(
-            id=i,
-            area_ids=sorted(comp),
-            centroid=(round(cx, 1), round(cy, 1), round(cz, 1)),
-        ))
-
-    return clusters
-
-
-# ── Directional splitting ──────────────────────────────────────────
-
-def _direction_of(from_xy: tuple[float, float], to_xy: tuple[float, float]) -> str:
-    """Classify direction from one point to another as N/E/S/W."""
-    dx = to_xy[0] - from_xy[0]
-    dy = to_xy[1] - from_xy[1]
-    if abs(dx) > abs(dy):
-        return "east" if dx > 0 else "west"
-    else:
-        return "north" if dy > 0 else "south"
-
-
-def directional_split(
-    clusters: list[Cluster],
-    mesh: NavMesh,
-    grid: np.ndarray,
-    xmin: float,
-    ymin: float,
-    min_size: int = SPLIT_MIN,
-) -> list[Cluster]:
-    """Split rooms that have connections on opposing sides.
-
-    For rooms connected east+west, split into east/west halves.
-    For rooms connected north+south, split into north/south halves.
-    If both, split on the longer axis (more spread).
-    """
-    # Build area_id → cluster_id
-    area_to_cluster: dict[int, int] = {}
-    for cl in clusters:
-        for aid in cl.area_ids:
-            area_to_cluster[aid] = cl.id
-
-    # Find doorway edges (wall-blocked connections between different clusters)
-    doorway_edges: dict[int, list[tuple[int, int]]] = defaultdict(list)  # cluster_id → [(aid, nid)]
-    seen: set[tuple[int, int]] = set()
-    for aid, area in mesh.areas.items():
-        cid = area_to_cluster.get(aid)
-        if cid is None:
-            continue
-        for nid in area.neighbor_ids():
-            if nid not in mesh.areas:
-                continue
-            nid_cid = area_to_cluster.get(nid)
-            if nid_cid is None or nid_cid == cid:
-                continue
-            key = (min(aid, nid), max(aid, nid))
-            if key in seen:
-                continue
-            seen.add(key)
-            doorway_edges[cid].append((aid, nid))
-            doorway_edges[nid_cid].append((nid, aid))
-
-    result: list[Cluster] = []
-    next_id = 0
-
-    for cl in clusters:
-        if len(cl.area_ids) < min_size or cl.id not in doorway_edges:
-            cl.id = next_id
-            next_id += 1
-            result.append(cl)
-            continue
-
-        cx, cy = cl.centroid[0], cl.centroid[1]
-        center = (cx, cy)
-
-        # Classify doorway directions
-        dirs: set[str] = set()
-        for aid, nid in doorway_edges[cl.id]:
-            nc = mesh.areas[nid].center()
-            dirs.add(_direction_of(center, (nc.x, nc.y)))
-
-        has_ew = "east" in dirs and "west" in dirs
-        has_ns = "north" in dirs and "south" in dirs
-
-        if not has_ew and not has_ns:
-            cl.id = next_id
-            next_id += 1
-            result.append(cl)
-            continue
-
-        # Decide split axis
-        if has_ew and has_ns:
-            # Split on the longer axis (more spread)
-            xs = [mesh.areas[a].center().x for a in cl.area_ids]
-            ys = [mesh.areas[a].center().y for a in cl.area_ids]
-            x_spread = max(xs) - min(xs)
-            y_spread = max(ys) - min(ys)
-            split_ew = x_spread >= y_spread
-        else:
-            split_ew = has_ew
-
-        # Partition area IDs
-        half_a: list[int] = []
-        half_b: list[int] = []
-        for aid in cl.area_ids:
-            c = mesh.areas[aid].center()
-            if split_ew:
-                if c.x <= cx:
-                    half_a.append(aid)
-                else:
-                    half_b.append(aid)
+            if conn_counts:
+                best_idx = max(conn_counts, key=conn_counts.get)
             else:
-                if c.y <= cy:
-                    half_a.append(aid)
-                else:
-                    half_b.append(aid)
+                # No connections to any large segment — fall back to nearest
+                fx = sum(mesh.areas[a].center().x for a in frag) / len(frag)
+                fy = sum(mesh.areas[a].center().y for a in frag) / len(frag)
+                best_idx = 0
+                best_d2 = float("inf")
+                for i, comp in enumerate(large):
+                    cx = sum(mesh.areas[a].center().x for a in comp) / len(comp)
+                    cy = sum(mesh.areas[a].center().y for a in comp) / len(comp)
+                    d2 = (fx - cx) ** 2 + (fy - cy) ** 2
+                    if d2 < best_d2:
+                        best_d2 = d2
+                        best_idx = i
 
-        # Don't produce empty halves
-        if not half_a or not half_b:
-            cl.id = next_id
-            next_id += 1
-            result.append(cl)
-            continue
+            large[best_idx].extend(frag)
+            # Update lookup so subsequent fragments see merged areas
+            for aid in frag:
+                area_to_large[aid] = best_idx
 
-        # Build two clusters
-        for half, suffix in [(half_a, "west" if split_ew else "south"),
-                             (half_b, "east" if split_ew else "north")]:
-            hcx = sum(mesh.areas[a].center().x for a in half) / len(half)
-            hcy = sum(mesh.areas[a].center().y for a in half) / len(half)
-            hcz = sum(mesh.areas[a].center().z for a in half) / len(half)
-            result.append(Cluster(
-                id=next_id,
-                area_ids=sorted(half),
-                centroid=(round(hcx, 1), round(hcy, 1), round(hcz, 1)),
-                name=suffix,  # temporary suffix, used during naming
-            ))
-            next_id += 1
-
-    return result
+    print(f"  Segments: {len(large)} (merged {len(small)} fragments)")
+    return large
 
 
-# ── Naming ──────────────────────────────────────────────────────────
-
-def name_clusters(clusters: list[Cluster]) -> None:
-    """Assign numeric names with directional suffixes.
-
-    Clusters from directional splitting already have a suffix (east/west/north/south).
-    Base rooms just get a number.
-    """
-    for cl in clusters:
-        if cl.name:
-            # Has directional suffix from split — prepend room number
-            cl.name = f"room_{cl.id}_{cl.name}"
-        else:
-            cl.name = f"room_{cl.id}"
-
-
-# ── Output ──────────────────────────────────────────────────────────
+# ── Output ─────────────────────────────────────────────────────────
 
 def compute_adjacency(
-    clusters: list[Cluster], mesh: NavMesh,
+    segments: list[Segment], mesh: NavMesh,
 ) -> dict[str, list[str]]:
-    """Compute which clusters share doorway edges (nav connections across boundaries)."""
+    """Compute which segments share nav mesh connections."""
     area_to_name: dict[int, str] = {}
-    for cl in clusters:
-        for aid in cl.area_ids:
-            area_to_name[aid] = cl.name
+    for seg in segments:
+        for aid in seg.area_ids:
+            area_to_name[aid] = seg.name
 
-    adj: dict[str, set[str]] = {cl.name: set() for cl in clusters}
+    adj: dict[str, set[str]] = {seg.name: set() for seg in segments}
     for aid, area in mesh.areas.items():
-        cname = area_to_name.get(aid)
-        if cname is None:
+        sname = area_to_name.get(aid)
+        if sname is None:
             continue
         for nid in area.neighbor_ids():
             nname = area_to_name.get(nid)
-            if nname is not None and nname != cname:
-                adj[cname].add(nname)
-                adj[nname].add(cname)
+            if nname is not None and nname != sname:
+                adj[sname].add(nname)
+                adj[nname].add(sname)
 
     return {name: sorted(neighbors) for name, neighbors in adj.items()}
 
 
-def clusters_to_json(
-    clusters: list[Cluster], mesh: NavMesh, adjacency: dict[str, list[str]],
+def segments_to_json(
+    segments: list[Segment], mesh: NavMesh, adjacency: dict[str, list[str]],
 ) -> dict:
-    """Convert clusters to JSON format compatible with AreaMap zones."""
+    """Convert segments to JSON format compatible with AreaMap."""
     result = {}
-    for cl in clusters:
+    for seg in segments:
         max_dist = 0.0
-        for aid in cl.area_ids:
-            area = mesh.areas[aid]
-            c = area.center()
-            d = ((c.x - cl.centroid[0]) ** 2 + (c.y - cl.centroid[1]) ** 2) ** 0.5
+        for aid in seg.area_ids:
+            c = mesh.areas[aid].center()
+            d = ((c.x - seg.centroid[0]) ** 2 + (c.y - seg.centroid[1]) ** 2) ** 0.5
             if d > max_dist:
                 max_dist = d
 
-        result[cl.name] = {
-            "centroid": [round(cl.centroid[0]), round(cl.centroid[1]), round(cl.centroid[2])],
+        result[seg.name] = {
+            "centroid": [round(seg.centroid[0]), round(seg.centroid[1]), round(seg.centroid[2])],
             "radius": round(max_dist),
-            "adjacent": adjacency.get(cl.name, []),
-            "nav_area_ids": cl.area_ids,
-            "nav_area_count": len(cl.area_ids),
+            "adjacent": adjacency.get(seg.name, []),
+            "nav_area_ids": seg.area_ids,
+            "nav_area_count": len(seg.area_ids),
         }
-
     return result
 
 
-# ── CLI ─────────────────────────────────────────────────────────────
+# ── CLI ────────────────────────────────────────────────────────────
 
 def process_map(
     nav_path: Path,
-    glb_path: Path,
+    objectives_path: Path,
     output_path: Path,
-    min_frag: int = MIN_FRAG,
-    split_min: int = SPLIT_MIN,
 ) -> None:
-    """Process a single map: build wall grid, cluster, split, write JSON."""
+    """Process a single map."""
     mesh = parse_nav(str(nav_path))
     print(f"  Parsed {len(mesh.areas)} nav areas")
 
-    print(f"  Building wall grid from {glb_path.name}...")
-    grid, gxmin, gymin, gxmax, gymax = build_wall_grid(glb_path)
-    wall_cells = int(grid.sum())
-    print(f"  Wall grid: {grid.shape[1]}x{grid.shape[0]} cells, {wall_cells} wall cells")
+    spawn_pos = load_spawn_pos(objectives_path)
+    if spawn_pos is None:
+        print(f"  ERROR: no enemy_spawn in {objectives_path}")
+        return
 
-    clusters = cluster_by_walls(mesh, grid, gxmin, gymin, min_frag=min_frag)
-    print(f"  Found {len(clusters)} rooms")
+    # Segment by agglomerative merging
+    raw_segments = agglomerative_segment(mesh)
 
-    clusters = directional_split(clusters, mesh, grid, gxmin, gymin, min_size=split_min)
-    print(f"  After directional split: {len(clusters)} zones")
+    # Order segments by Dijkstra distance from spawn
+    bridges = bridge_components(mesh)
+    spawn_aid = nearest_area(mesh, spawn_pos)
+    dist = dijkstra(mesh, spawn_aid, extra_edges=bridges)
 
-    name_clusters(clusters)
+    raw_segments.sort(
+        key=lambda comp: min(dist.get(a, float("inf")) for a in comp)
+    )
 
-    # Ensure unique names (shouldn't happen but safety)
-    seen_names: dict[str, int] = {}
-    for cl in clusters:
-        if cl.name in seen_names:
-            seen_names[cl.name] += 1
-            cl.name = f"{cl.name}_{seen_names[cl.name]}"
-        else:
-            seen_names[cl.name] = 0
+    # Build Segment objects
+    segments: list[Segment] = []
+    for i, comp in enumerate(raw_segments):
+        cx = sum(mesh.areas[a].center().x for a in comp) / len(comp)
+        cy = sum(mesh.areas[a].center().y for a in comp) / len(comp)
+        cz = sum(mesh.areas[a].center().z for a in comp) / len(comp)
+        segments.append(Segment(
+            name=f"seg_{i}",
+            area_ids=sorted(comp),
+            centroid=(round(cx, 1), round(cy, 1), round(cz, 1)),
+        ))
 
-    adjacency = compute_adjacency(clusters, mesh)
-    result = clusters_to_json(clusters, mesh, adjacency)
+    adjacency = compute_adjacency(segments, mesh)
+    result = segments_to_json(segments, mesh, adjacency)
     output_path.write_text(json.dumps(result, indent=2) + "\n")
-    print(f"  Wrote {output_path} ({len(result)} zones)")
+    print(f"  Wrote {output_path} ({len(result)} segments)")
 
-    # Summary of largest zones
-    by_size = sorted(clusters, key=lambda c: len(c.area_ids), reverse=True)
-    for cl in by_size[:10]:
-        print(f"    {cl.name:30s} ({len(cl.area_ids):4d} areas)")
-    if len(clusters) > 10:
-        print(f"    ... and {len(clusters) - 10} more")
+    # Summary
+    by_size = sorted(segments, key=lambda s: len(s.area_ids), reverse=True)
+    for seg in by_size[:10]:
+        adj_count = len(adjacency.get(seg.name, []))
+        print(f"    {seg.name:20s} ({len(seg.area_ids):4d} areas, {adj_count} adj)")
+    if len(segments) > 10:
+        print(f"    ... and {len(segments) - 10} more")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Cluster nav mesh into room-like regions using BSP wall geometry"
+        description="Flow-based nav mesh segmentation"
     )
     parser.add_argument("nav_file", nargs="?", help="Path to .nav file")
-    parser.add_argument("--glb", help="Path to BSP .glb mesh file")
+    parser.add_argument("--objectives", help="Path to objectives JSON")
     parser.add_argument("-o", "--output", help="Output JSON path")
-    parser.add_argument("--min-frag", type=int, default=MIN_FRAG,
-                        help=f"Merge fragments smaller than this (default: {MIN_FRAG})")
-    parser.add_argument("--split-min", type=int, default=SPLIT_MIN,
-                        help=f"Only split rooms with >= this many areas (default: {SPLIT_MIN})")
     parser.add_argument("--batch", action="store_true",
                         help="Process all maps found in --nav-dir")
     parser.add_argument("--nav-dir", help="Directory containing .nav files")
-    parser.add_argument("--data-dir", help="Directory containing .glb meshes + output")
+    parser.add_argument("--data-dir", help="Directory with objectives + output")
     args = parser.parse_args()
 
     if args.batch:
@@ -523,28 +457,29 @@ def main() -> None:
 
         for nav_path in sorted(nav_dir.glob("*_coop.nav")):
             map_name = nav_path.stem
-            glb_path = data_dir / f"{map_name}.glb"
+            obj_path = data_dir / f"{map_name}_objectives.json"
             output_path = data_dir / f"{map_name}_clusters.json"
 
             print(f"\n=== {map_name} ===")
-            if not glb_path.exists():
-                print(f"  Skipping: no GLB mesh file")
+            if not obj_path.exists():
+                print(f"  Skipping: no objectives file")
                 continue
 
-            process_map(nav_path, glb_path, output_path,
-                        min_frag=args.min_frag, split_min=args.split_min)
+            process_map(nav_path, obj_path, output_path)
     else:
         if not args.nav_file:
             parser.error("nav_file is required (or use --batch)")
         nav_path = Path(args.nav_file)
-        if not args.glb:
-            parser.error("--glb is required for single-map mode")
-        glb_path = Path(args.glb)
-        output_path = Path(args.output) if args.output else nav_path.with_suffix(".clusters.json")
+        if not args.objectives:
+            parser.error("--objectives is required for single-map mode")
+        obj_path = Path(args.objectives)
+        output_path = (
+            Path(args.output) if args.output
+            else nav_path.with_name(nav_path.stem + "_clusters.json")
+        )
 
         print(f"Processing {nav_path.name}")
-        process_map(nav_path, glb_path, output_path,
-                    min_frag=args.min_frag, split_min=args.split_min)
+        process_map(nav_path, obj_path, output_path)
 
 
 if __name__ == "__main__":
