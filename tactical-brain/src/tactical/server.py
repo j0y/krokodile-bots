@@ -95,11 +95,10 @@ async def run_server(
     strategist: BaseStrategist | None = None,
 ) -> None:
     log.info("Starting tactical brain on %s:%d", host, port)
-    log.info("Rally point: (%.1f, %.1f, %.1f)", *planner.rally)
     if planner.influence_map:
         log.info("Influence map active: %d grid points", planner.influence_map.n)
     else:
-        log.info("No influence map — using rally point fallback")
+        log.info("No influence map — vanilla AI only")
 
     loop = asyncio.get_running_loop()
 

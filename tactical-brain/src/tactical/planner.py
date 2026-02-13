@@ -1,7 +1,4 @@
-"""Tactical planner: score grid positions using the influence map and assign bots.
-
-Falls back to a fixed rally point if no map data is available.
-"""
+"""Tactical planner: score grid positions using the influence map and assign bots."""
 
 from __future__ import annotations
 
@@ -33,16 +30,14 @@ class Order:
 class Planner:
     def __init__(
         self,
-        rally: tuple[float, float, float],
         controlled_team: int = 2,
         influence_map: InfluenceMap | None = None,
         area_map: AreaMap | None = None,
     ) -> None:
-        self.rally = rally
         self.controlled_team = controlled_team
         self.influence_map = influence_map
         self.area_map = area_map
-        self.profile_name = "defend"
+        self.profile_name = "defend"  # set by strategist, used for telemetry context
         self.orders: list[Order] | None = None
         self._spotted_memory: dict[int, tuple[float, tuple[float, float, float]]] = {}
 
@@ -97,16 +92,13 @@ class Planner:
         # Build per-bot profile map for telemetry
         bot_profiles: dict[int, str] = {}
 
-        if self.influence_map is None:
-            commands = self._rally_commands(our_bots)
-        elif self.orders is not None and self.area_map is not None:
+        if self.orders is not None and self.area_map is not None and self.influence_map is not None:
             commands = self._area_commands(
                 our_bots, friendly_positions, enemy_positions, bot_profiles,
             )
         else:
-            commands = self._influence_commands(
-                our_bots, friendly_positions, enemy_positions,
-            )
+            # No strategist orders — send nothing, let vanilla AI control all bots
+            commands = []
 
         rows = [
             BotCommandRow(
@@ -115,50 +107,11 @@ class Planner:
                 target_x=cmd.move_target[0],
                 target_y=cmd.move_target[1],
                 target_z=cmd.move_target[2],
-                profile=bot_profiles.get(cmd.id, self.profile_name),
+                profile=bot_profiles.get(cmd.id, "unknown"),
             )
             for cmd in commands
         ]
         return commands, rows
-
-    def _rally_commands(self, our_bots: list) -> list[BotCommand]:
-        """Fallback: send all bots to the fixed rally point."""
-        return [
-            BotCommand(id=bot.id, move_target=self.rally, look_target=self.rally, flags=0)
-            for bot in our_bots
-        ]
-
-    def _influence_commands(
-        self,
-        our_bots: list,
-        friendly_positions: list[tuple[float, float, float]],
-        enemy_positions: list[tuple[float, float, float]],
-    ) -> list[BotCommand]:
-        """Score positions using influence map and assign one per bot."""
-        assert self.influence_map is not None
-
-        weights = WEIGHT_PROFILES.get(self.profile_name, WEIGHT_PROFILES["defend"])
-
-        positions = self.influence_map.best_positions(
-            weights,
-            num=len(our_bots),
-            objective_center=self.rally,
-            objective_positions=[self.rally],
-            friendly_positions=friendly_positions,
-            enemy_positions=enemy_positions,
-        )
-
-        commands: list[BotCommand] = []
-        for bot, target in zip(our_bots, positions):
-            commands.append(
-                BotCommand(
-                    id=bot.id,
-                    move_target=target,
-                    look_target=target,
-                    flags=0,
-                )
-            )
-        return commands
 
     def _area_commands(
         self,
@@ -199,8 +152,8 @@ class Planner:
                 weights,
                 num=len(batch),
                 mask=mask,
-                objective_center=self.rally,
-                objective_positions=[self.rally],
+                objective_center=centroid,
+                objective_positions=[centroid],
                 friendly_positions=friendly_positions,
                 enemy_positions=enemy_positions,
             )
@@ -216,23 +169,7 @@ class Planner:
                 bot_profiles[bot.id] = profile_tag
                 assigned_ids.add(bot.id)
 
-        # Leftover bots: fallback to global profile without mask
-        if remaining:
-            weights = WEIGHT_PROFILES.get(self.profile_name, WEIGHT_PROFILES["defend"])
-            positions = self.influence_map.best_positions(
-                weights,
-                num=len(remaining),
-                objective_center=self.rally,
-                objective_positions=[self.rally],
-                friendly_positions=friendly_positions,
-                enemy_positions=enemy_positions,
-            )
-            for bot, target in zip(remaining, positions):
-                commands.append(BotCommand(
-                    id=bot.id,
-                    move_target=target,
-                    look_target=target,
-                    flags=0,
-                ))
+        # Leftover bots (not assigned by any order): no commands sent,
+        # vanilla AI controls them.
 
         return commands
