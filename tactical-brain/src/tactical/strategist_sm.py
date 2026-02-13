@@ -201,19 +201,68 @@ class SMStrategist(BaseStrategist):
     ) -> tuple[int, list[str], list[str]]:
         """Compute defend count, defend areas, and adjacent areas for an objective.
 
-        Excludes other objectives from adjacent list so bots don't leak
-        into neighboring objectives (e.g. obj_c_basement → obj_d_upper).
+        Filters adjacent areas to those facing the enemy approach direction
+        so bots don't spread into areas behind the objective. Excludes
+        other objectives from adjacent list.
 
         Returns (n_defend, defend_areas, adjacent).
         """
-        adjacent = [
+        all_adjacent = [
             a for a in self._areas_near(obj_name)
             if self._area_map.areas[a].role != "objective"
         ]
+
+        # Filter to areas facing the threat direction
+        adjacent = self._filter_toward_threat(obj_name, all_adjacent)
+
         n_per_approach = 2
         n_defend = min(n, 1 + len(adjacent) * n_per_approach)
         defend_areas = [obj_name] + adjacent
         return n_defend, defend_areas, adjacent
+
+    def _filter_toward_threat(
+        self, obj_name: str, candidates: list[str],
+    ) -> list[str]:
+        """Keep only areas whose centroid is on the enemy side of the objective.
+
+        Uses the vector from objective to enemy spawn/approach as the
+        threat direction. Areas with a positive dot product (within ~120°
+        of the threat direction) are kept.
+        """
+        obj = self._area_map.areas[obj_name]
+        obj_xy = (obj.center[0], obj.center[1])
+
+        # Build threat direction from enemy spawn + approach centroids
+        threat_areas = self._approach_areas()
+        if not threat_areas:
+            return candidates  # no threat info, keep all
+
+        tx, ty = 0.0, 0.0
+        for name in threat_areas:
+            a = self._area_map.areas[name]
+            tx += a.center[0] - obj_xy[0]
+            ty += a.center[1] - obj_xy[1]
+        length = (tx * tx + ty * ty) ** 0.5
+        if length < 1.0:
+            return candidates
+        tx /= length
+        ty /= length
+
+        result = []
+        for name in candidates:
+            a = self._area_map.areas[name]
+            dx = a.center[0] - obj_xy[0]
+            dy = a.center[1] - obj_xy[1]
+            # dot > -0.25 keeps areas within ~105° of threat direction
+            dot = dx * tx + dy * ty
+            d = (dx * dx + dy * dy) ** 0.5
+            if d < 1.0 or dot / d > -0.25:
+                result.append(name)
+
+        if not result:
+            return candidates  # safety: don't return empty
+
+        return result
 
     def _orders_setup(
         self,
