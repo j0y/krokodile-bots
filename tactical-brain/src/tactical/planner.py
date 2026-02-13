@@ -336,15 +336,18 @@ class Planner:
                         if thr_idx in self.influence_map.visible_from(bot_idx):
                             look = threat
 
-                    # Fall through: watch the corner toward enemy spawn
+                    # Fall through: watch the corner toward last known
+                    # enemy position, or enemy spawn if no contacts
                     if look is None and self.pathfinder is not None \
-                            and self.influence_map is not None \
-                            and enemy_spawn is not None:
-                        corner = self.pathfinder.find_look_target(
-                            bot.pos, enemy_spawn, self.influence_map.nearest_point,
-                        )
-                        if corner is not None:
-                            look = corner
+                            and self.influence_map is not None:
+                        look_goal = threat if threat is not None else enemy_spawn
+                        if look_goal is not None:
+                            corner = self.pathfinder.find_look_target(
+                                bot.pos, look_goal,
+                                self.influence_map.nearest_point,
+                            )
+                            if corner is not None:
+                                look = corner
 
                     if look is None:
                         look = arrived_look
