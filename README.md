@@ -34,7 +34,7 @@ uv run python -m bsp_mesh_exporter influence --batch \
     --vismatrix-dir ../data/ --output-dir ../data/
 cd ..
 
-# 3. Cluster nav mesh into rooms (needs .glb + .nav from above)
+# 3. Segment nav mesh into tactical areas (needs objectives + .nav)
 cd navMeshParser
 python3 cluster_nav.py --batch \
     --nav-dir ../insurgency-server/server-files/insurgency/maps \

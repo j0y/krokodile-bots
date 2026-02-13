@@ -10,23 +10,21 @@ python3 parse_nav.py <path_to.nav> [--dump] [--stats] [--json out.json]
 
 ## cluster_nav.py
 
-Clusters nav mesh areas into room-like regions using BSP wall geometry. The tactical brain loads these as zones for the strategist.
+Segments nav mesh areas into tactical regions using agglomerative merging. The tactical brain loads these as zones for the strategist.
 
 ### Algorithm
 
-1. Load BSP mesh (`.glb`), extract wall outlines via cross-sections at multiple Z levels
-2. Rasterize wall segments onto a 2D grid (16u cells)
-3. For each adjacent nav area pair, check if the line between centers crosses a wall cell (Bresenham)
-4. Union-find: merge areas NOT separated by walls
-5. Merge tiny fragments (<5 areas) into nearest large cluster
-6. Directional split: rooms with doorway connections on opposing sides are split into east/west or north/south halves
-7. Compute room adjacency from nav mesh connections that cross cluster boundaries
+1. Compute connection width (shared-edge overlap) for each pair of adjacent nav areas
+2. Agglomerative merge: repeatedly merge the two adjacent clusters with the widest total boundary (sum of shared-edge widths across all connections)
+3. Stop when remaining boundaries are narrow (doorways/chokepoints, < 120u aggregate)
+4. Merge tiny fragments (< 5 areas) into the segment they share the most nav connections with
+5. Order segments by Dijkstra distance from enemy spawn
 
 ### Usage
 
 Single map:
 ```bash
-python3 cluster_nav.py <map>.nav --glb <map>.glb -o <map>_clusters.json
+python3 cluster_nav.py <map>.nav --objectives <map>_objectives.json -o <map>_clusters.json
 ```
 
 All coop maps (batch):
@@ -36,17 +34,17 @@ python3 cluster_nav.py --batch \
     --data-dir ../data
 ```
 
-Batch mode processes every `*_coop.nav` that has a matching `.glb` in `--data-dir`.
+Batch mode processes every `*_coop.nav` that has a matching `*_objectives.json` in `--data-dir`.
 
 ### Output
 
-`*_clusters.json` — one entry per room:
+`*_clusters.json` — one entry per segment:
 ```json
 {
-  "room_0_south": {
+  "seg_0": {
     "centroid": [x, y, z],
     "radius": 919,
-    "adjacent": ["room_1_north", "room_8_west"],
+    "adjacent": ["seg_1", "seg_8"],
     "nav_area_ids": [101, 102, ...],
     "nav_area_count": 176
   }
@@ -55,8 +53,4 @@ Batch mode processes every `*_coop.nav` that has a matching `.glb` in `--data-di
 
 ### Prerequisites
 
-Requires `.glb` mesh files in `data/` (from `bspMeshExporter mesh`) and `.nav` files in the server maps directory.
-
-```bash
-pip3 install numpy trimesh
-```
+Requires `*_objectives.json` files in `data/` (from `bspMeshExporter objectives`) and `.nav` files in the server maps directory.
