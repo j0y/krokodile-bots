@@ -113,6 +113,29 @@ class Planner:
         ]
         return commands, rows
 
+    def _approach_positions(self) -> list[tuple[float, float, float]]:
+        """Centroids of enemy_spawn and enemy_approach areas."""
+        assert self.area_map is not None
+        return [
+            a.center for a in self.area_map.areas.values()
+            if a.role in ("enemy_spawn", "enemy_approach")
+        ]
+
+    def _objective_centroid(self, area_names: list[str]) -> tuple[float, float, float]:
+        """Centroid of only the objective-role area within area_names.
+
+        Falls back to full area centroid if no objective-role area is found.
+        """
+        assert self.area_map is not None
+        obj_only = [
+            n for n in area_names
+            if not n.startswith("-") and n in self.area_map.areas
+            and self.area_map.areas[n].role == "objective"
+        ]
+        if obj_only:
+            return self.area_map.area_centroid(obj_only)
+        return self.area_map.area_centroid(area_names)
+
     def _area_commands(
         self,
         our_bots: list,
@@ -129,13 +152,27 @@ class Planner:
         assigned_ids: set[int] = set()
         remaining = list(our_bots)
 
+        approach_positions = self._approach_positions()
+
         for order in self.orders:
             if not remaining:
                 break
 
             n = min(order.bots, len(remaining))
             mask = self.area_map.build_mask(order.areas)
+
+            # For defend orders with adjacent areas, use only the objective area
+            # for proximity pull so bots aren't pulled toward adjacent centroids
+            obj_centroid = self._objective_centroid(order.areas)
             centroid = self.area_map.area_centroid(order.areas)
+
+            # Determine sightline targets (what should bots watch?)
+            if order.posture in ("defend", "ambush", "sniper"):
+                # Watch approaches + recent threats instead of objective center
+                sightline_targets = approach_positions + enemy_positions
+            else:
+                # push/overrun: look at objective
+                sightline_targets = [centroid]
 
             # Sort unassigned bots by distance to area centroid, take closest N
             centroid_arr = np.array(centroid, dtype=np.float32)
@@ -152,8 +189,8 @@ class Planner:
                 weights,
                 num=len(batch),
                 mask=mask,
-                objective_center=centroid,
-                objective_positions=[centroid],
+                objective_center=obj_centroid,
+                objective_positions=sightline_targets if sightline_targets else [obj_centroid],
                 friendly_positions=friendly_positions,
                 enemy_positions=enemy_positions,
             )

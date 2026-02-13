@@ -196,6 +196,25 @@ class SMStrategist(BaseStrategist):
     # Per-state order generators
     # ------------------------------------------------------------------
 
+    def _defend_allocation(
+        self, n: int, obj_name: str,
+    ) -> tuple[int, list[str], list[str]]:
+        """Compute defend count, defend areas, and adjacent areas for an objective.
+
+        Excludes other objectives from adjacent list so bots don't leak
+        into neighboring objectives (e.g. obj_c_basement → obj_d_upper).
+
+        Returns (n_defend, defend_areas, adjacent).
+        """
+        adjacent = [
+            a for a in self._areas_near(obj_name)
+            if self._area_map.areas[a].role != "objective"
+        ]
+        n_per_approach = 2
+        n_defend = min(n, 1 + len(adjacent) * n_per_approach)
+        defend_areas = [obj_name] + adjacent
+        return n_defend, defend_areas, adjacent
+
     def _orders_setup(
         self,
         snapshot: _Snapshot,
@@ -211,15 +230,14 @@ class SMStrategist(BaseStrategist):
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
 
-        obj = [obj_name]
-        n_defend = max(1, round(n * 0.6))
-        orders: list[Order] = [Order(areas=obj, posture="defend", bots=n_defend)]
+        n_defend, defend_areas, _ = self._defend_allocation(n, obj_name)
+        orders: list[Order] = [Order(areas=defend_areas, posture="defend", bots=n_defend)]
 
         rest = n - n_defend
         if rest > 0 and approaches:
             orders.append(Order(areas=approaches, posture="ambush", bots=rest))
         elif rest > 0:
-            orders[0] = Order(areas=obj, posture="defend", bots=n)
+            orders[0] = Order(areas=defend_areas, posture="defend", bots=n)
 
         return "setup: initial deployment", orders
 
@@ -238,15 +256,14 @@ class SMStrategist(BaseStrategist):
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
 
-        obj = [obj_name]
-        n_defend = max(1, round(n * 0.6))
-        orders: list[Order] = [Order(areas=obj, posture="defend", bots=n_defend)]
+        n_defend, defend_areas, _ = self._defend_allocation(n, obj_name)
+        orders: list[Order] = [Order(areas=defend_areas, posture="defend", bots=n_defend)]
 
         rest = n - n_defend
         if rest > 0 and approaches:
             orders.append(Order(areas=approaches, posture="ambush", bots=rest))
         elif rest > 0:
-            orders[0] = Order(areas=obj, posture="defend", bots=n)
+            orders[0] = Order(areas=defend_areas, posture="defend", bots=n)
 
         return "hold: defending objective", orders
 
@@ -273,15 +290,23 @@ class SMStrategist(BaseStrategist):
 
         if combined:
             hottest = max(combined, key=lambda a: combined[a])
-            n_push = max(1, round(n * 0.5))
-            n_defend = n - n_push
 
-            orders: list[Order] = [
-                Order(areas=[hottest], posture="push", bots=n_push),
-            ]
+            if obj_name:
+                n_defend, defend_areas, _ = self._defend_allocation(n, obj_name)
+                n_push = n - n_defend
+            else:
+                n_push = max(1, round(n * 0.5))
+                n_defend = n - n_push
+                defend_areas = []
+
+            orders: list[Order] = []
+            if n_push > 0:
+                orders.append(
+                    Order(areas=[hottest], posture="push", bots=n_push),
+                )
             if obj_name and n_defend > 0:
                 orders.append(
-                    Order(areas=[obj_name], posture="defend", bots=n_defend),
+                    Order(areas=defend_areas, posture="defend", bots=n_defend),
                 )
             return f"engage: pushing {hottest}", orders
 
@@ -302,22 +327,19 @@ class SMStrategist(BaseStrategist):
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
 
-        n_defend = max(1, round(n * 0.8))
+        n_defend, defend_areas, adjacent = self._defend_allocation(n, obj_name)
         n_sniper = n - n_defend
 
         orders: list[Order] = [
-            Order(areas=[obj_name], posture="defend", bots=n_defend),
+            Order(areas=defend_areas, posture="defend", bots=n_defend),
         ]
 
-        if n_sniper > 0:
-            adjacent = self._areas_near(obj_name)
-            if adjacent:
-                orders.append(
-                    Order(areas=adjacent, posture="sniper", bots=n_sniper),
-                )
-            else:
-                # No flanks known — all on defense
-                orders[0] = Order(areas=[obj_name], posture="defend", bots=n)
+        if n_sniper > 0 and adjacent:
+            orders.append(
+                Order(areas=adjacent, posture="sniper", bots=n_sniper),
+            )
+        elif n_sniper > 0:
+            orders[0] = Order(areas=defend_areas, posture="defend", bots=n)
 
         return "fallback: tight defense", orders
 
@@ -340,15 +362,21 @@ class SMStrategist(BaseStrategist):
                 Order(areas=self._all_area_names(), posture="push", bots=n),
             ]
 
-        n_push = max(1, round(n * 0.7))
+        adjacent = [
+            a for a in self._areas_near(lost_obj)
+            if self._area_map.areas[a].role != "objective"
+        ]
+        n_per_approach = 2
+        n_push = min(n, 1 + len(adjacent) * n_per_approach + 2)  # slightly more for aggression
         n_flank = n - n_push
 
-        orders: list[Order] = [Order(areas=[lost_obj], posture="push", bots=n_push)]
+        push_areas = [lost_obj] + adjacent
+        orders: list[Order] = [Order(areas=push_areas, posture="push", bots=n_push)]
 
         if n_flank > 0 and approaches:
             orders.append(Order(areas=approaches, posture="push", bots=n_flank))
         elif n_flank > 0:
-            orders[0] = Order(areas=[lost_obj], posture="push", bots=n)
+            orders[0] = Order(areas=push_areas, posture="push", bots=n)
 
         return f"counter-attack: pushing {lost_obj}", orders
 

@@ -23,7 +23,7 @@ from scipy.spatial import KDTree
 log = logging.getLogger(__name__)
 
 WEIGHT_PROFILES: dict[str, dict[str, float]] = {
-    "defend":  {"concealment": 0.0, "sightline": 0.6, "objective": 0.9, "threat": 0.7, "spread": 0.5},
+    "defend":  {"concealment": 0.3, "sightline": 0.8, "objective": 0.5, "threat": 0.7, "spread": 0.8},
     "push":    {"concealment": 0.0, "sightline": 0.8, "objective": 1.0, "threat": 0.3, "spread": 0.3},
     "ambush":  {"concealment": 0.9, "sightline": 0.4, "objective": 0.2, "threat": 0.5, "spread": 0.8},
     "sniper":  {"concealment": 0.7, "sightline": 1.0, "objective": 0.3, "threat": 0.6, "spread": 0.9},
