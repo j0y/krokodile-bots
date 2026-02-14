@@ -74,6 +74,7 @@ COPY --chown=steam:steam insurgency-server/server-files/ /home/steam/insurgency-
 # ============================================================
 COPY --chown=steam:steam insurgency-server/scripts/server.cfg /home/steam/insurgency-server/insurgency/cfg/server.cfg
 COPY --chown=steam:steam insurgency-server/scripts/betterbots.cfg /home/steam/insurgency-server/insurgency/cfg/betterbots.cfg
+COPY --chown=steam:steam insurgency-server/scripts/hardbots.cfg /home/steam/insurgency-server/insurgency/cfg/hardbots.cfg
 COPY --chown=steam:steam insurgency-server/scripts/entrypoint.sh /home/steam/entrypoint.sh
 COPY --chown=steam:steam insurgency-server/scripts/entrypoint-vanilla.sh /home/steam/entrypoint-vanilla.sh
 

@@ -20,6 +20,7 @@ services:
       - GAME_MODE=coop
       - TICKRATE=64
       - NB_DEBUG=${NB_DEBUG:-0}
+      - HARD_BOTS=${HARD_BOTS:-0}
       - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
       - AI_HOST=tactical-brain
     stdin_open: true
