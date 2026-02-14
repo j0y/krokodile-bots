@@ -118,6 +118,7 @@ class TacticalProtocol(asyncio.DatagramProtocol):
         self.planner.orders = None
         self.planner._spotted_memory.clear()
         self.planner._stuck_tracker.clear()
+        self.planner._commitments.clear()
 
         # Recreate strategist with new area_map
         if self.strategist is not None:

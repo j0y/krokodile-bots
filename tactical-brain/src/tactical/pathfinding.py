@@ -119,6 +119,25 @@ class PathFinder:
 
         return None  # loop safety
 
+    def hop_count(
+        self,
+        src_pos: tuple[float, float, float],
+        dst_pos: tuple[float, float, float],
+        nearest_point_fn: Callable[[tuple[float, float, float]], int],
+    ) -> int:
+        """Number of coarse cell hops between two world positions.
+
+        Returns a large value (999) if unreachable.
+        """
+        src_cell = int(self.fine_to_coarse[nearest_point_fn(src_pos)])
+        dst_cell = int(self.fine_to_coarse[nearest_point_fn(dst_pos)])
+        if src_cell == dst_cell:
+            return 0
+        path = self._coarse_path(src_cell, dst_cell)
+        if path is None:
+            return 999
+        return len(path) - 1
+
     def find_look_target(
         self,
         bot_pos: tuple[float, float, float],
