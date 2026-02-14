@@ -29,6 +29,15 @@ COMMIT_TIMEOUT = 15.0   # max seconds to reach a position before re-scoring
 HOLD_DURATION = 8.0     # seconds to hold at position after arriving
 ARRIVE_RADIUS = 150.0   # distance to target to be considered "arrived"
 
+# Posture → voice concept ID (see reverseEngineering/analysis/voice-concepts.md)
+POSTURE_VOICE: dict[str, int] = {
+    "defend":  101,  # TLK_RADIAL_HOLD_POSITION — "Hold position!"
+    "push":     82,  # TLK_RADIAL_MOVING        — "Moving!"
+    "ambush":   94,  # TLK_RADIAL_GET_READY     — "Get ready!"
+    "sniper":   96,  # TLK_RADIAL_WATCH_AREA    — "Watch that area"
+    "overrun":  97,  # TLK_RADIAL_GO            — "Go go go!"
+}
+
 
 @dataclass(frozen=True, slots=True)
 class Order:
@@ -67,6 +76,8 @@ class Planner:
         self._stuck_tracker: dict[int, tuple[tuple[float, float], float, bool]] = {}
         # Position commitment: bots stick to their target for a while
         self._commitments: dict[int, Commitment] = {}
+        # Previous order_key per bot — for voice callout on change
+        self._prev_order_key: dict[int, tuple[tuple[str, ...], str]] = {}
 
     def compute_commands(
         self, state: GameState,
@@ -346,6 +357,22 @@ class Planner:
             self._stuck_tracker[bot.id] = (bot_xy, now, False)
         return False
 
+    @staticmethod
+    def _has_nearby_teammate(
+        bot,
+        friendly_positions: list[tuple[float, float, float]],
+        radius: float = 1000.0,
+    ) -> bool:
+        """Return True if any friendly (excluding self) is within radius (2D)."""
+        r2 = radius * radius
+        for fp in friendly_positions:
+            dx = fp[0] - bot.pos[0]
+            dy = fp[1] - bot.pos[1]
+            d2 = dx * dx + dy * dy
+            if 1.0 < d2 < r2:  # >1 to skip self (same position)
+                return True
+        return False
+
     def _area_commands(
         self,
         our_bots: list,
@@ -497,6 +524,7 @@ class Planner:
 
             # Emit commands for all bots (holding + moving)
             profile_tag = f"area:{order.posture}"
+            speaker_chosen = False
             for bot in holding + moving:
                 c = self._commitments.get(bot.id)
                 if c is None:
@@ -512,14 +540,31 @@ class Planner:
                     enemy_positions, enemy_spawn,
                 )
 
+                # Voice callout: one bot per order group when posture changes.
+                # Only if batch has >1 bot and speaker has a nearby teammate.
+                voice = 0
+                if not speaker_chosen and len(batch) > 1 \
+                        and self._prev_order_key.get(bot.id) != order_key \
+                        and self._has_nearby_teammate(bot, friendly_positions):
+                    voice = POSTURE_VOICE.get(order.posture, 0)
+                    if voice:
+                        speaker_chosen = True
+                        log.info("Bot %d calls out posture '%s' (concept %d)",
+                                 bot.id, order.posture, voice)
+
                 commands.append(BotCommand(
                     id=bot.id,
                     move_target=target,
                     look_target=look,
                     flags=0,
+                    voice=voice,
                 ))
                 bot_profiles[bot.id] = profile_tag
                 assigned_ids.add(bot.id)
+
+            # Update prev order keys for all bots in this batch
+            for bot in batch:
+                self._prev_order_key[bot.id] = order_key
 
         # Leftover bots (not assigned by any order): no commands sent,
         # vanilla AI controls them.

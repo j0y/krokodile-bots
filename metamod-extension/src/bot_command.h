@@ -10,6 +10,7 @@ struct BotCommandEntry {
     float moveTarget[3];
     float lookTarget[3];
     int flags;
+    int voice;        // concept ID to speak (0 = silent)
     int tick;         // game tick when received (for age tracking)
     bool valid;       // has a command been received for this bot?
 };

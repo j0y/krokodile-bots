@@ -5,6 +5,7 @@
 #include "bot_state.h"
 #include "bot_command.h"
 #include "game_events.h"
+#include "bot_voice.h"
 
 #include <dlfcn.h>
 #include <cstdlib>
@@ -209,6 +210,36 @@ static void CC_SmartBotsStatus(const CCommand &args)
 
 static ConCommand s_cmdStatus("smartbots_status", CC_SmartBotsStatus,
     "Show all bot positions and extension status");
+
+// ---- ConCommand: smartbots_voice <concept_id> ----
+
+static void CC_SmartBotsVoice(const CCommand &args)
+{
+    if (args.ArgC() < 2)
+    {
+        META_CONPRINTF("[SmartBots] Usage: smartbots_voice <concept_id>\n");
+        return;
+    }
+
+    int conceptId = atoi(args.Arg(1));
+
+    int spoken = 0;
+    for (int i = 0; i < s_resolvedBotCount; i++)
+    {
+        int idx = s_resolvedBots[i].edictIndex;
+        if (!ValidateBot(idx, s_resolvedBots[i].entity))
+            continue;
+
+        if (BotVoice_Speak((void *)s_resolvedBots[i].entity, conceptId))
+            spoken++;
+    }
+
+    META_CONPRINTF("[SmartBots] Voice: concept %d (0x%02x) sent to %d bots\n",
+                   conceptId, conceptId, spoken);
+}
+
+static ConCommand s_cmdVoice("smartbots_voice", CC_SmartBotsVoice,
+    "Trigger a specific voice concept on all bots: smartbots_voice <concept_id>");
 
 // ---- Edict scan: resolve all bots + collect state (called at 8Hz) ----
 
@@ -676,6 +707,12 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                             }
                         }
                     }
+                }
+
+                // Voice callout — Python sets voice > 0 on order changes
+                if (cmd.voice > 0)
+                {
+                    BotVoice_Speak((void *)s_resolvedBots[i].entity, cmd.voice);
                 }
             }
         }

@@ -34,6 +34,7 @@ add_library(smartbots SHARED
     src/bot_state.cpp
     src/bot_command.cpp
     src/game_events.cpp
+    src/bot_voice.cpp
 )
 
 set_target_properties(smartbots PROPERTIES

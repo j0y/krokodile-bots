@@ -66,6 +66,7 @@ class BotCommand:
     move_target: tuple[float, float, float]
     look_target: tuple[float, float, float]
     flags: int = 0
+    voice: int = 0  # concept ID to speak (0 = silent), see voice-concepts.md
 
 
 def encode_commands(commands: list[BotCommand]) -> bytes:
@@ -77,5 +78,6 @@ def encode_commands(commands: list[BotCommand]) -> bytes:
             f" {cmd.move_target[0]:.1f} {cmd.move_target[1]:.1f} {cmd.move_target[2]:.1f}"
             f" {cmd.look_target[0]:.1f} {cmd.look_target[1]:.1f} {cmd.look_target[2]:.1f}"
             f" {cmd.flags}"
+            f" {cmd.voice}"
         )
     return "\n".join(lines).encode("utf-8")

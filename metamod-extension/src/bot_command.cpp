@@ -37,13 +37,14 @@ void BotCommand_Parse(const char *data, int len, int currentTick)
             continue;
         }
 
-        // Parse: "<id> <mx> <my> <mz> <lx> <ly> <lz> <flags>"
+        // Parse: "<id> <mx> <my> <mz> <lx> <ly> <lz> <flags> <voice>"
         int id = 0;
         float mx, my, mz, lx, ly, lz;
         int flags = 0;
+        int voice = 0;
 
-        int parsed = sscanf(line, "%d %f %f %f %f %f %f %d",
-                            &id, &mx, &my, &mz, &lx, &ly, &lz, &flags);
+        int parsed = sscanf(line, "%d %f %f %f %f %f %f %d %d",
+                            &id, &mx, &my, &mz, &lx, &ly, &lz, &flags, &voice);
 
         if (parsed >= 7 && id >= 1 && id < MAX_BOT_SLOTS)
         {
@@ -55,6 +56,7 @@ void BotCommand_Parse(const char *data, int len, int currentTick)
             cmd.lookTarget[1] = ly;
             cmd.lookTarget[2] = lz;
             cmd.flags = (parsed >= 8) ? flags : 0;
+            cmd.voice = (parsed >= 9) ? voice : 0;
             cmd.tick = currentTick;
             cmd.valid = true;
         }
