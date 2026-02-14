@@ -92,6 +92,15 @@ class LLMStrategist(BaseStrategist):
         events: list[TacticalEvent],
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str | None, list[Order] | None]:
+        # Counter-attack: skip LLM, release all bots to vanilla AI.
+        # The engine's native push logic is better than anything we
+        # can plan in 60s, and bots respawn after anyway.
+        if snapshot.counter_attack:
+            log.info("LLMStrategist: counter-attack → vanilla AI takes over")
+            self._planner.orders = None
+            self._planner._commitments.clear()
+            return "COUNTER-ATTACK: releasing to vanilla AI", None
+
         sitrep = self._build_sitrep(snapshot, events, enemy_positions)
         reasoning, orders = await self._call_llm(sitrep)
 
@@ -181,9 +190,11 @@ class LLMStrategist(BaseStrategist):
             f"- {context.replace(chr(10), chr(10) + '- ')}",
         ]
 
+        # Note: counter-attack is handled before _build_sitrep is called
+        # (vanilla AI takes over), so this branch shouldn't be reached.
         if curr.counter_attack:
             obj_name = self._objectives[curr.objectives_lost - 1].name if curr.objectives_lost > 0 else "unknown"
-            lines.append(f"- COUNTER-ATTACK PHASE: push aggressively to retake {obj_name}!")
+            lines.append(f"- COUNTER-ATTACK PHASE: retake {obj_name}!")
         if curr.capping_cp >= 0:
             lines.append(f"- ALERT: Enemy capturing point {curr.capping_cp}!")
 
