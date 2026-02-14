@@ -466,7 +466,7 @@ class Planner:
                 self._commitments[coverer.id] = Commitment(
                     target=coverer.pos,
                     assigned_at=now,
-                    hold_until=now + HOLD_DURATION,
+                    hold_until=now + HOLD_DURATION / 2,
                     order_key=order_key,
                 )
                 holding.append(coverer)
