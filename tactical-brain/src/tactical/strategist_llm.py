@@ -301,6 +301,8 @@ class LLMStrategist(BaseStrategist):
             )
             return None, None
 
+        log.info("LLMStrategist: raw response (finish=%s): %s", finish_reason, text)
+
         if finish_reason == "length":
             log.warning(
                 "LLMStrategist: response truncated (finish_reason=length)",

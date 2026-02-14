@@ -367,13 +367,6 @@ class BaseStrategist(ABC):
                 remaining=len(curr.spotted_enemy_ids),
             ))
 
-        # Lost all contact
-        if prev.spotted_enemy_ids and not curr.spotted_enemy_ids:
-            events.append(TacticalEvent(
-                kind="LOST_CONTACT",
-                message="LOST_CONTACT: no enemies visible",
-            ))
-
         # Objective lost
         if curr.objectives_lost > prev.objectives_lost:
             events.append(TacticalEvent(
