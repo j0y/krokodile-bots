@@ -1,6 +1,7 @@
 #include "bot_action_hook.h"
 #include "bot_action_types.h"
 #include "bot_command.h"
+#include "bot_voice.h"
 #include "sig_resolve.h"
 #include "detour.h"
 
@@ -84,26 +85,10 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
         return;
     }
 
-    // No visible enemies — suppress combat if we have a movement override
-    bool shouldSuppress = false;
-
-    if (s_hasGotoTarget && actor)
-    {
-        shouldSuppress = true;
-    }
-    else if (edictIndex > 0)
-    {
-        BotCommandEntry cmd;
-        if (BotCommand_Get(edictIndex, cmd))
-        {
-            shouldSuppress = true;
-        }
-    }
-
-    // Don't suppress combat if bot is in a native approach action.
-    // Let combat finish naturally (DONE) so approach resumes.
-    if (shouldSuppress && edictIndex > 0 && s_inNativeAction[edictIndex])
-        shouldSuppress = false;
+    // No visible enemies — suppress combat if we have a goto override.
+    // Python commands are handled by the checkpoint hook (SUSPEND_FOR approach),
+    // so combat suppression is only needed for the debug goto command.
+    bool shouldSuppress = s_hasGotoTarget && actor;
 
     if (shouldSuppress)
     {
@@ -151,6 +136,14 @@ static void Hook_ActionCheckpoint_Update(
             sret->reason = "SmartBots: Python approach";
 
             s_inNativeAction[edictIdx] = true;
+
+            // Voice callout — fire once when Python sets voice > 0
+            if (cmd.voice > 0)
+            {
+                BotVoice_Speak(actor, cmd.voice);
+                BotCommand_ClearVoice(edictIdx);
+            }
+
             return;
         }
     }

@@ -654,72 +654,10 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             }
         }
 
-        // Execute Python commands (skip if manual goto is active)
+        // Clean stale Python commands (movement is handled by checkpoint hook)
         if (s_cvarAiEnabled.GetBool() && !hasGoto)
         {
             BotCommand_ClearStale(s_tickCount, 66);
-
-            for (int i = 0; i < s_resolvedBotCount; i++)
-            {
-                int idx = s_resolvedBots[i].edictIndex;
-                if (!ValidateBot(idx, s_resolvedBots[i].entity))
-                    continue;
-
-                // Bot in native approach action — checkpoint hook handles movement
-                if (BotActionHook_IsInNativeAction(idx))
-                    continue;
-
-                BotCommandEntry cmd;
-                if (!BotCommand_Get(idx, cmd))
-                    continue;
-
-                // Bot in combat — let native AI control movement and aim
-                if (BotActionHook_HasVisibleEnemy(idx))
-                {
-                    s_lastTargetValid[idx] = false;
-                    s_lastLookTargetValid[idx] = false;
-                    continue;
-                }
-
-                if (TargetChanged(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
-                {
-                    if (BotActionHook_IssueMovementRequest(
-                            (void *)s_resolvedBots[i].entity,
-                            cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]))
-                    {
-                        RecordTarget(idx, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
-                        s_bridgeCmdExecCount++;
-                    }
-                }
-
-                // Apply look direction — Python decides arrived vs walking look
-                {
-                    float ldx = cmd.lookTarget[0] - cmd.moveTarget[0];
-                    float ldy = cmd.lookTarget[1] - cmd.moveTarget[1];
-                    float ldz = cmd.lookTarget[2] - cmd.moveTarget[2];
-                    float lookMoveDist2 = ldx * ldx + ldy * ldy + ldz * ldz;
-
-                    if (lookMoveDist2 > 1.0f)
-                    {
-                        if (LookTargetChanged(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
-                        {
-                            if (BotActionHook_IssueLookAt(
-                                    (void *)s_resolvedBots[i].entity,
-                                    cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]))
-                            {
-                                RecordLookTarget(idx, cmd.lookTarget[0], cmd.lookTarget[1], cmd.lookTarget[2]);
-                            }
-                        }
-                    }
-                }
-
-                // Voice callout — Python sets voice > 0 on order changes (fire-once)
-                if (cmd.voice > 0)
-                {
-                    BotVoice_Speak((void *)s_resolvedBots[i].entity, cmd.voice);
-                    BotCommand_ClearVoice(idx);
-                }
-            }
         }
 
         // Share enemy intel with uncontrolled bots (look-at only, no movement)
