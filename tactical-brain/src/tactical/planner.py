@@ -29,13 +29,15 @@ COMMIT_TIMEOUT = 15.0   # max seconds to reach a position before re-scoring
 HOLD_DURATION = 8.0     # seconds to hold at position after arriving
 ARRIVE_RADIUS = 150.0   # distance to target to be considered "arrived"
 
-# Posture → voice concept ID (see reverseEngineering/analysis/voice-concepts.md)
-POSTURE_VOICE: dict[str, int] = {
-    "defend":  101,  # TLK_RADIAL_HOLD_POSITION — "Hold position!"
-    "push":     82,  # TLK_RADIAL_MOVING        — "Moving!"
-    "ambush":   94,  # TLK_RADIAL_GET_READY     — "Get ready!"
-    "sniper":   96,  # TLK_RADIAL_WATCH_AREA    — "Watch that area"
-    "overrun":  97,  # TLK_RADIAL_GO            — "Go go go!"
+# Posture → (priority, voice concept ID).  Higher priority = more likely to be called out.
+# Only the single highest-priority changed posture triggers a callout per tick.
+# See reverseEngineering/analysis/voice-concepts.md
+POSTURE_VOICE: dict[str, tuple[int, int]] = {
+    "defend":  (1, 101),  # TLK_RADIAL_HOLD_POSITION — "Hold position!"
+    "ambush":  (2,  94),  # TLK_RADIAL_GET_READY     — "Get ready!"
+    "sniper":  (2,  96),  # TLK_RADIAL_WATCH_AREA    — "Watch that area"
+    "push":    (3,  82),  # TLK_RADIAL_MOVING        — "Moving!"
+    "overrun": (4,  97),  # TLK_RADIAL_GO            — "Go go go!"
 }
 
 
@@ -76,8 +78,8 @@ class Planner:
         self._stuck_tracker: dict[int, tuple[tuple[float, float], float, bool]] = {}
         # Position commitment: bots stick to their target for a while
         self._commitments: dict[int, Commitment] = {}
-        # Previous order_key per bot — for voice callout on change
-        self._prev_order_key: dict[int, tuple[tuple[str, ...], str]] = {}
+        # Previous orders snapshot — voice callouts only fire when strategist changes orders
+        self._prev_orders_key: tuple | None = None
 
     def compute_commands(
         self, state: GameState,
@@ -391,6 +393,13 @@ class Planner:
         remaining = list(our_bots)
         now = time.monotonic()
 
+        # Detect strategist order change (not per-bot reassignment)
+        orders_key = tuple((tuple(o.areas), o.posture, o.bots) for o in self.orders)
+        orders_changed = orders_key != self._prev_orders_key
+        self._prev_orders_key = orders_key
+        # (priority, concept_id, cmd_index, posture, bot_id) — best picked after all orders
+        voice_candidates: list[tuple[int, int, int, str, int]] = []
+
         approach_positions = self._approach_positions()
         enemy_spawn = self._enemy_spawn(objectives_lost)
 
@@ -423,15 +432,21 @@ class Planner:
             else:
                 sightline_targets = [centroid]
 
-            # Sort unassigned bots by distance to area centroid, take closest N
+            # Partition: bots already committed to this order first, then by distance.
+            # This keeps the same bots on the same order when orders don't change.
+            committed_here = [b for b in remaining
+                              if b.id in self._commitments
+                              and self._commitments[b.id].order_key == order_key]
+            others = [b for b in remaining if b not in committed_here]
             centroid_arr = np.array(centroid, dtype=np.float32)
-            remaining.sort(
+            others.sort(
                 key=lambda b: float(np.linalg.norm(
                     np.array(b.pos, dtype=np.float32) - centroid_arr,
                 )),
             )
-            batch = remaining[:n]
-            remaining = remaining[n:]
+            pool = committed_here + others
+            batch = pool[:n]
+            remaining = [b for b in remaining if b not in batch]
 
             # --- Commitment-based assignment ---
             # Separate batch into committed (holding/moving) vs needs-new-position
@@ -524,7 +539,7 @@ class Planner:
 
             # Emit commands for all bots (holding + moving)
             profile_tag = f"area:{order.posture}"
-            speaker_chosen = False
+            voice_candidate_chosen = False
             for bot in holding + moving:
                 c = self._commitments.get(bot.id)
                 if c is None:
@@ -540,31 +555,40 @@ class Planner:
                     enemy_positions, enemy_spawn,
                 )
 
-                # Voice callout: one bot per order group when posture changes.
-                # Only if batch has >1 bot and speaker has a nearby teammate.
-                voice = 0
-                if not speaker_chosen and len(batch) > 1 \
-                        and self._prev_order_key.get(bot.id) != order_key \
+                # Collect voice candidate: one per order group, best picked later.
+                # Only when strategist actually changed the orders.
+                cmd_idx = len(commands)
+                if orders_changed and not voice_candidate_chosen \
+                        and len(batch) > 1 \
                         and self._has_nearby_teammate(bot, friendly_positions):
-                    voice = POSTURE_VOICE.get(order.posture, 0)
-                    if voice:
-                        speaker_chosen = True
-                        log.info("Bot %d calls out posture '%s' (concept %d)",
-                                 bot.id, order.posture, voice)
+                    pv = POSTURE_VOICE.get(order.posture)
+                    if pv is not None:
+                        voice_candidate_chosen = True
+                        voice_candidates.append((pv[0], pv[1], cmd_idx, order.posture, bot.id))
 
                 commands.append(BotCommand(
                     id=bot.id,
                     move_target=target,
                     look_target=look,
                     flags=0,
-                    voice=voice,
                 ))
                 bot_profiles[bot.id] = profile_tag
                 assigned_ids.add(bot.id)
 
-            # Update prev order keys for all bots in this batch
-            for bot in batch:
-                self._prev_order_key[bot.id] = order_key
+        # Pick the single highest-priority voice callout across all orders.
+        # Offensive postures (overrun, push) beat defensive (defend).
+        if voice_candidates:
+            voice_candidates.sort(key=lambda c: c[0], reverse=True)
+            _prio, concept, cmd_idx, posture, bot_id = voice_candidates[0]
+            commands[cmd_idx] = BotCommand(
+                id=commands[cmd_idx].id,
+                move_target=commands[cmd_idx].move_target,
+                look_target=commands[cmd_idx].look_target,
+                flags=commands[cmd_idx].flags,
+                voice=concept,
+            )
+            log.info("Bot %d calls out posture '%s' (concept %d)",
+                     bot_id, posture, concept)
 
         # Leftover bots (not assigned by any order): no commands sent,
         # vanilla AI controls them.
