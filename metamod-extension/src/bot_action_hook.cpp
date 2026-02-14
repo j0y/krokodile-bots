@@ -15,8 +15,10 @@ static CINSBotApproach_Ctor_t  s_ApproachCtor  = nullptr;
 static CINSBotCombat_Update_t  s_CombatUpdateOriginal = nullptr;
 static AddMovementRequest_t    s_AddMovementRequest = nullptr;
 
-// Detour instance
+// Detour instances
 static InlineDetour s_CombatUpdateDetour;
+static InlineDetour s_CheckpointUpdateDetour;
+static CINSBotActionCheckpoint_Update_t s_CheckpointUpdateOriginal = nullptr;
 
 // Cached server base (set during Init)
 static uintptr_t s_serverBase = 0;
@@ -34,6 +36,10 @@ static void *s_entityPtrs[MAX_ENTITY_MAP];     // entityPtrs[edictIndex] = entit
 // Per-edict flag: bot can see at least one enemy (set from GameFrame after vision scan)
 static bool s_hasVisibleEnemy[MAX_ENTITY_MAP];
 
+// Per-edict flag: bot is in a native action (CINSBotApproach) via checkpoint hook.
+// GameFrame should skip movement for these bots — the action handles it.
+static bool s_inNativeAction[MAX_ENTITY_MAP];
+
 // Diagnostic state
 static int  s_hookCallCount = 0;
 static int  s_moveRequestCount = 0;
@@ -45,6 +51,8 @@ static const unsigned char kCombatUpdatePrologue[] = { 0x55, 0x89, 0xE5, 0x57, 0
 static const unsigned char kApproachCtorPrologue[] = { 0x55, 0x89, 0xE5, 0x57, 0x56, 0x53 };
 // AddMovementRequest: push ebp; mov ebp,esp (minimum 3-byte check)
 static const unsigned char kAddMovementRequestPrologue[] = { 0x55, 0x89, 0xE5 };
+// CINSBotActionCheckpoint::Update — same standard prologue
+static const unsigned char kCheckpointUpdatePrologue[] = { 0x55, 0x89, 0xE5, 0x57, 0x56, 0x53 };
 
 // Resolve actor pointer → edict index using the entity map.
 static int LookupEdictIndex(void *actor)
@@ -67,15 +75,13 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
 {
     s_hookCallCount++;
 
+    int edictIndex = actor ? LookupEdictIndex(actor) : -1;
+
     // If the bot can see enemies, let native combat AI handle it (shoot, take cover, etc.)
-    if (actor)
+    if (edictIndex > 0 && s_hasVisibleEnemy[edictIndex])
     {
-        int edictIndex = LookupEdictIndex(actor);
-        if (edictIndex > 0 && s_hasVisibleEnemy[edictIndex])
-        {
-            s_CombatUpdateOriginal(sret, thisptr, actor, interval);
-            return;
-        }
+        s_CombatUpdateOriginal(sret, thisptr, actor, interval);
+        return;
     }
 
     // No visible enemies — suppress combat if we have a movement override
@@ -85,18 +91,19 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
     {
         shouldSuppress = true;
     }
-    else if (actor)
+    else if (edictIndex > 0)
     {
-        int edictIndex = LookupEdictIndex(actor);
-        if (edictIndex > 0)
+        BotCommandEntry cmd;
+        if (BotCommand_Get(edictIndex, cmd))
         {
-            BotCommandEntry cmd;
-            if (BotCommand_Get(edictIndex, cmd))
-            {
-                shouldSuppress = true;
-            }
+            shouldSuppress = true;
         }
     }
+
+    // Don't suppress combat if bot is in a native approach action.
+    // Let combat finish naturally (DONE) so approach resumes.
+    if (shouldSuppress && edictIndex > 0 && s_inNativeAction[edictIndex])
+        shouldSuppress = false;
 
     if (shouldSuppress)
     {
@@ -112,6 +119,46 @@ static void Hook_CINSBotCombat_Update(ActionResult *sret, void *thisptr, void *a
     s_CombatUpdateOriginal(sret, thisptr, actor, interval);
 }
 
+// The hook function — called instead of CINSBotActionCheckpoint::Update.
+// When Python has a command, SUSPEND_FOR CINSBotApproach(target).
+// When no command, call original (guard CP, investigate, combat, etc.)
+static void Hook_ActionCheckpoint_Update(
+    ActionResult *sret, void *thisAction, void *actor, float interval)
+{
+    int edictIdx = -1;
+    if (actor)
+        edictIdx = LookupEdictIndex(actor);
+
+    // If checkpoint is running, any previous SUSPEND_FOR approach has finished
+    if (edictIdx > 0)
+        s_inNativeAction[edictIdx] = false;
+
+    // Check for Python command
+    if (edictIdx > 0)
+    {
+        BotCommandEntry cmd;
+        if (BotCommand_Get(edictIdx, cmd))
+        {
+            // Construct CINSBotApproach with Python's move target.
+            // Approach handles pathfinding internally. If it sees an enemy,
+            // its own Update will SUSPEND_FOR CINSBotCombat → engine fights.
+            void *action = ::operator new(CINSBOT_APPROACH_SIZE);
+            memset(action, 0, CINSBOT_APPROACH_SIZE);
+            s_ApproachCtor(action, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
+
+            sret->type   = ACTION_RESULT_SUSPEND_FOR;
+            sret->action = action;
+            sret->reason = "SmartBots: Python approach";
+
+            s_inNativeAction[edictIdx] = true;
+            return;
+        }
+    }
+
+    // No Python command — let original engine decide (guard CP, combat, investigate)
+    s_CheckpointUpdateOriginal(sret, thisAction, actor, interval);
+}
+
 bool BotActionHook_Init(uintptr_t serverBase)
 {
     if (serverBase == 0)
@@ -121,23 +168,27 @@ bool BotActionHook_Init(uintptr_t serverBase)
     }
 
     // Resolve addresses
-    void *combatUpdate = ResolveOffset(serverBase, ServerOffsets::CINSBotCombat_Update);
-    void *approachCtor = ResolveOffset(serverBase, ServerOffsets::CINSBotApproach_ctor);
-    void *addMoveReq   = ResolveOffset(serverBase, ServerOffsets::CINSBotLocomotion_AddMovementRequest);
+    void *combatUpdate     = ResolveOffset(serverBase, ServerOffsets::CINSBotCombat_Update);
+    void *approachCtor     = ResolveOffset(serverBase, ServerOffsets::CINSBotApproach_ctor);
+    void *addMoveReq       = ResolveOffset(serverBase, ServerOffsets::CINSBotLocomotion_AddMovementRequest);
+    void *checkpointUpdate = ResolveOffset(serverBase, ServerOffsets::CINSBotActionCheckpoint_Update);
 
     // Verify signatures
-    bool combatOk   = VerifySignature(combatUpdate, kCombatUpdatePrologue, sizeof(kCombatUpdatePrologue));
-    bool approachOk = VerifySignature(approachCtor, kApproachCtorPrologue, sizeof(kApproachCtorPrologue));
-    bool moveReqOk  = VerifySignature(addMoveReq, kAddMovementRequestPrologue, sizeof(kAddMovementRequestPrologue));
+    bool combatOk      = VerifySignature(combatUpdate, kCombatUpdatePrologue, sizeof(kCombatUpdatePrologue));
+    bool approachOk    = VerifySignature(approachCtor, kApproachCtorPrologue, sizeof(kApproachCtorPrologue));
+    bool moveReqOk     = VerifySignature(addMoveReq, kAddMovementRequestPrologue, sizeof(kAddMovementRequestPrologue));
+    bool checkpointOk  = VerifySignature(checkpointUpdate, kCheckpointUpdatePrologue, sizeof(kCheckpointUpdatePrologue));
 
-    META_CONPRINTF("[SmartBots] CINSBotCombat::Update   @ %p — sig %s\n",
+    META_CONPRINTF("[SmartBots] CINSBotCombat::Update          @ %p — sig %s\n",
                    combatUpdate, combatOk ? "PASS" : "FAIL");
-    META_CONPRINTF("[SmartBots] CINSBotApproach::ctor    @ %p — sig %s\n",
+    META_CONPRINTF("[SmartBots] CINSBotApproach::ctor           @ %p — sig %s\n",
                    approachCtor, approachOk ? "PASS" : "FAIL");
-    META_CONPRINTF("[SmartBots] AddMovementRequest       @ %p — sig %s\n",
+    META_CONPRINTF("[SmartBots] AddMovementRequest              @ %p — sig %s\n",
                    addMoveReq, moveReqOk ? "PASS" : "FAIL");
+    META_CONPRINTF("[SmartBots] CINSBotActionCheckpoint::Update @ %p — sig %s\n",
+                   checkpointUpdate, checkpointOk ? "PASS" : "FAIL");
 
-    if (!combatOk || !approachOk || !moveReqOk)
+    if (!combatOk || !approachOk || !moveReqOk || !checkpointOk)
     {
         META_CONPRINTF("[SmartBots] ERROR: Signature verification failed. Wrong binary?\n");
         return false;
@@ -168,11 +219,29 @@ bool BotActionHook_InstallDetour()
         s_CombatUpdateDetour.GetTrampoline());
 
     META_CONPRINTF("[SmartBots] CINSBotCombat::Update detour installed\n");
+
+    // Install CINSBotActionCheckpoint::Update detour
+    void *checkpointUpdate = ResolveOffset(s_serverBase, ServerOffsets::CINSBotActionCheckpoint_Update);
+    if (!s_CheckpointUpdateDetour.Install(checkpointUpdate, (void *)Hook_ActionCheckpoint_Update))
+    {
+        META_CONPRINTF("[SmartBots] ERROR: Failed to install CINSBotActionCheckpoint::Update detour\n");
+        s_CombatUpdateDetour.Remove();
+        s_CombatUpdateOriginal = nullptr;
+        return false;
+    }
+    s_CheckpointUpdateOriginal = reinterpret_cast<CINSBotActionCheckpoint_Update_t>(
+        s_CheckpointUpdateDetour.GetTrampoline());
+
+    META_CONPRINTF("[SmartBots] CINSBotActionCheckpoint::Update detour installed\n");
     return true;
 }
 
 void BotActionHook_RemoveDetour()
 {
+    s_CheckpointUpdateDetour.Remove();
+    s_CheckpointUpdateOriginal = nullptr;
+    META_CONPRINTF("[SmartBots] CINSBotActionCheckpoint::Update detour removed\n");
+
     s_CombatUpdateDetour.Remove();
     s_CombatUpdateOriginal = nullptr;
     META_CONPRINTF("[SmartBots] CINSBotCombat::Update detour removed\n");
@@ -304,4 +373,11 @@ bool BotActionHook_HasVisibleEnemy(int edictIndex)
 void BotActionHook_ClearVisibleEnemies()
 {
     memset(s_hasVisibleEnemy, 0, sizeof(s_hasVisibleEnemy));
+}
+
+bool BotActionHook_IsInNativeAction(int edictIndex)
+{
+    if (edictIndex >= 1 && edictIndex < MAX_ENTITY_MAP)
+        return s_inNativeAction[edictIndex];
+    return false;
 }

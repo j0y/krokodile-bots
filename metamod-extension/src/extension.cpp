@@ -665,6 +665,10 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                 if (!ValidateBot(idx, s_resolvedBots[i].entity))
                     continue;
 
+                // Bot in native approach action — checkpoint hook handles movement
+                if (BotActionHook_IsInNativeAction(idx))
+                    continue;
+
                 BotCommandEntry cmd;
                 if (!BotCommand_Get(idx, cmd))
                     continue;

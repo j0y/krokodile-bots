@@ -29,6 +29,9 @@ static_assert(sizeof(ActionResult) == 12, "ActionResult must be 12 bytes (x86-32
 // EAX = sret on return.
 typedef void (*CINSBotCombat_Update_t)(ActionResult *sret, void *thisptr, void *actor, float interval);
 
+// CINSBotActionCheckpoint::Update — same sret ABI as CINSBotCombat::Update
+typedef void (*CINSBotActionCheckpoint_Update_t)(ActionResult *sret, void *thisptr, void *actor, float interval);
+
 // CINSBotApproach constructor: takes Vector by value (3 floats on stack for x86-32)
 // void CINSBotApproach::CINSBotApproach(void *this, float x, float y, float z)
 typedef void (*CINSBotApproach_Ctor_t)(void *thisptr, float x, float y, float z);

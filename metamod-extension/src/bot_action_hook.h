@@ -52,4 +52,8 @@ bool BotActionHook_HasVisibleEnemy(int edictIndex);
 // Clear all visibility flags (called at start of each vision scan).
 void BotActionHook_ClearVisibleEnemies();
 
+// Check if a bot is currently in a native action (e.g. CINSBotApproach via checkpoint hook).
+// GameFrame should skip movement for these bots — the action handles it.
+bool BotActionHook_IsInNativeAction(int edictIndex);
+
 #endif // _SMARTBOTS_BOT_ACTION_HOOK_H_

@@ -16,6 +16,7 @@ struct ServerOffsets
     static constexpr uintptr_t CINSBotCombat_Update   = 0x00706550;
     static constexpr uintptr_t CINSBotCombat_ctor     = 0x00705390;
     static constexpr uintptr_t CINSBotLocomotion_AddMovementRequest = 0x00750dd0;
+    static constexpr uintptr_t CINSBotActionCheckpoint_Update = 0x00726a50;
     // Game rules (BSS)
     static constexpr uintptr_t g_pGameRules           = 0x00c0c3d8;
     // CINSRules::IsCounterAttack() const — non-virtual, thiscall
