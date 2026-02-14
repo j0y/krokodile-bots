@@ -12,16 +12,16 @@ services:
     volumes:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
     environment:
-      - SERVER_HOSTNAME=Insurgency Smart Bots Dev Server
-      - SERVER_PASSWORD=
-      - RCON_PASSWORD=changeme
-      - MAX_PLAYERS=32
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME:-Insurgency Smart Bots Dev Server}
+      - SERVER_PASSWORD=${SERVER_PASSWORD:-}
+      - RCON_PASSWORD=${RCON_PASSWORD:-changeme}
+      - MAX_PLAYERS=${MAX_PLAYERS:-32}
       - START_MAP=${START_MAP:-ministry_coop}
-      - GAME_MODE=coop
-      - TICKRATE=64
+      - GAME_MODE=${GAME_MODE:-checkpoint}
+      - TICKRATE=${TICKRATE:-64}
       - NB_DEBUG=${NB_DEBUG:-0}
       - HARD_BOTS=${HARD_BOTS:-0}
-      - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
+      - CONTROLLED_TEAM=${CONTROLLED_TEAM:-3}
       - AI_HOST=tactical-brain
     stdin_open: true
     tty: true
@@ -106,8 +106,8 @@ services:
       - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
     environment:
       - START_MAP=${START_MAP:-ministry_coop}
-      - MAX_PLAYERS=32
-      - TICKRATE=64
+      - MAX_PLAYERS=${MAX_PLAYERS:-32}
+      - TICKRATE=${TICKRATE:-64}
     stdin_open: true
     tty: true
     profiles:
