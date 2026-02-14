@@ -709,10 +709,11 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                     }
                 }
 
-                // Voice callout — Python sets voice > 0 on order changes
+                // Voice callout — Python sets voice > 0 on order changes (fire-once)
                 if (cmd.voice > 0)
                 {
                     BotVoice_Speak((void *)s_resolvedBots[i].entity, cmd.voice);
+                    BotCommand_ClearVoice(idx);
                 }
             }
         }

@@ -80,6 +80,12 @@ bool BotCommand_Get(int botId, BotCommandEntry &cmd)
     return true;
 }
 
+void BotCommand_ClearVoice(int botId)
+{
+    if (botId >= 1 && botId < MAX_BOT_SLOTS)
+        s_commands[botId].voice = 0;
+}
+
 void BotCommand_ClearStale(int currentTick, int maxAge)
 {
     for (int i = 0; i < MAX_BOT_SLOTS; i++)

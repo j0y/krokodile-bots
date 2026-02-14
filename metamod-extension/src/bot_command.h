@@ -25,6 +25,9 @@ void BotCommand_Parse(const char *data, int len, int currentTick);
 // Get the command for a specific bot. Returns true if a valid command exists.
 bool BotCommand_Get(int botId, BotCommandEntry &cmd);
 
+// Clear the voice field for a bot (fire-once: called after speaking).
+void BotCommand_ClearVoice(int botId);
+
 // Invalidate commands older than maxAge ticks.
 void BotCommand_ClearStale(int currentTick, int maxAge);
 
