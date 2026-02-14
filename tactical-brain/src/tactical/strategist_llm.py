@@ -28,7 +28,7 @@ Available postures:
 - "overrun": All-out rush. Ignore threats.
 
 Rules:
-- Respond with a SINGLE LINE of compact JSON: {"orders": [{"areas": ["<area>"], "posture": "<name>", "bots": N}, ...], "reasoning": "<1 sentence>"}
+- Respond with a SINGLE LINE of compact JSON: {"orders": [{"area": "<area>", "posture": "<name>", "bots": N}, ...], "reasoning": "<1 sentence>"}
 - Each order names ONE target area. Bots automatically spread to adjacent rooms.
 - Use ONLY area names from the AREA NAMES list in the sitrep.
 - Use at most 3 orders. Total bots should match your team size.
@@ -267,7 +267,7 @@ class LLMStrategist(BaseStrategist):
     def _salvage_truncated(text: str) -> dict | None:
         """Try to extract complete order objects from truncated JSON."""
         pattern = (
-            r'\{"areas"\s*:\s*\[[^\]]*\]\s*,\s*'
+            r'\{"area(?:s)?"\s*:\s*(?:\[[^\]]*\]|"[^"]+")\s*,\s*'
             r'"posture"\s*:\s*"[^"]+"\s*,\s*'
             r'"bots"\s*:\s*\d+\s*\}'
         )
@@ -340,18 +340,22 @@ class LLMStrategist(BaseStrategist):
         orders: list[Order] = []
         for entry in raw_orders:
             try:
-                areas = entry["areas"]
+                # Accept both "area" (string) and "areas" (list) formats
+                raw_area = entry.get("area", entry.get("areas"))
+                if isinstance(raw_area, str):
+                    areas = [raw_area]
+                elif isinstance(raw_area, list) and raw_area:
+                    areas = raw_area[:1]  # take only the first area
+                else:
+                    log.warning(
+                        "LLMStrategist: order has no area: %s", entry,
+                    )
+                    continue
                 posture = entry["posture"].lower().strip()
                 bots = int(entry["bots"])
             except (KeyError, TypeError, ValueError) as exc:
                 log.warning(
                     "LLMStrategist: invalid order entry %s: %s", entry, exc,
-                )
-                continue
-
-            if not isinstance(areas, list) or not areas:
-                log.warning(
-                    "LLMStrategist: order has empty areas: %s", entry,
                 )
                 continue
             if posture not in VALID_PROFILES:
