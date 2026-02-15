@@ -15,16 +15,8 @@ from typing import Any
 
 from tactical.state import BotState, GameState
 
-# Action flag bitmask constants (must match C++ extension)
-FLAG_JUMP = 1
-FLAG_DUCK = 2
-FLAG_ATTACK = 4
-FLAG_RELOAD = 8
-FLAG_WALK = 16
-FLAG_SPRINT = 32
-FLAG_USE = 64
-FLAG_ATTACK2 = 128
-FLAG_TELEPORT = 256
+# Command flag bitmask constants (must match C++ CMD_FLAG_* in bot_action_types.h)
+CMD_FLAG_INVESTIGATE = 1  # Use CINSBotInvestigate (cautious) instead of CINSBotApproach (run)
 
 
 def decode_state(data: bytes) -> GameState:

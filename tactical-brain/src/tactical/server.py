@@ -14,6 +14,7 @@ from tactical.protocol import decode_state, encode_commands
 from tactical.state import GameState
 from tactical.strategist import BaseStrategist
 from tactical.telemetry import BotStateRow, TelemetryClient
+from tactical.wave_front import WaveFront
 
 log = logging.getLogger(__name__)
 
@@ -105,6 +106,7 @@ class TacticalProtocol(asyncio.DatagramProtocol):
             self.planner.influence_map = None
             self.planner.area_map = None
             self.planner.pathfinder = None
+            self.planner.wave_front = None
             self.planner.orders = None
             if self.strategist is not None:
                 asyncio.get_event_loop().create_task(self.strategist.close())
@@ -119,6 +121,12 @@ class TacticalProtocol(asyncio.DatagramProtocol):
         self.planner._spotted_memory.clear()
         self.planner._stuck_tracker.clear()
         self.planner._commitments.clear()
+
+        # Create wave front if pathfinder + influence map are available
+        if md.pathfinder is not None and md.influence_map is not None:
+            self.planner.wave_front = WaveFront(md.pathfinder, md.influence_map)
+        else:
+            self.planner.wave_front = None
 
         # Recreate strategist with new area_map
         if self.strategist is not None:

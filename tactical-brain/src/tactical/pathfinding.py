@@ -99,6 +99,11 @@ class PathFinder:
         visible = self.vis_adj_list[start:start + count]
         return int(idx_b) in visible
 
+    def coarse_neighbors(self, cell: int) -> list[int]:
+        """Directly adjacent coarse cells (next_hop[cell, j] == j)."""
+        row = self.coarse_next_hop[cell]
+        return [int(j) for j in range(len(row)) if row[j] == j and j != cell]
+
     def _coarse_path(self, src_cell: int, dst_cell: int) -> list[int] | None:
         """Walk the coarse path from src to dst using the next-hop table."""
         if src_cell == dst_cell:

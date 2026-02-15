@@ -12,9 +12,10 @@ import numpy as np
 from tactical.areas import AreaMap
 from tactical.influence_map import InfluenceMap, WEIGHT_PROFILES
 from tactical.pathfinding import PathFinder
-from tactical.protocol import BotCommand
+from tactical.protocol import BotCommand, CMD_FLAG_INVESTIGATE
 from tactical.state import GameState
 from tactical.telemetry import BotCommandRow
+from tactical.wave_front import WaveFront
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ STUCK_SECONDS = 3.0     # seconds without movement before releasing to native AI
 STUCK_MIN_DIST = 300.0  # only release if bot is this far from its move target
 COMMIT_TIMEOUT = 15.0   # max seconds to reach a position before re-scoring
 HOLD_DURATION = 8.0     # seconds to hold at position after arriving
+INTERMEDIATE_HOLD = 2.0 # seconds to pause at intermediate areas en route
 ARRIVE_RADIUS = 150.0   # distance to target to be considered "arrived"
 
 # Posture → (priority, voice concept ID).  Higher priority = more likely to be called out.
@@ -54,6 +56,7 @@ class Commitment:
     assigned_at: float
     hold_until: float  # 0 = still moving; >0 = holding at position until this time
     order_key: tuple[tuple[str, ...], str]  # (areas, posture) — invalidates on change
+    intermediate: bool = False  # True = en-route area, short hold; False = final area
 
 
 class Planner:
@@ -68,6 +71,7 @@ class Planner:
         self.influence_map = influence_map
         self.area_map = area_map
         self.pathfinder = pathfinder
+        self.wave_front: WaveFront | None = None
         self.profile_name = "defend"  # set by strategist, used for telemetry context
         self.orders: list[Order] | None = None
         # (timestamp, position, velocity_xy)
@@ -118,6 +122,14 @@ class Planner:
 
         # Update spotted memory: refresh timestamp + track velocity
         now = time.monotonic()
+
+        # Update wave front (danger progression from enemy spawn)
+        if self.wave_front is not None:
+            enemy_spawn = self._enemy_spawn(state.objectives_lost)
+            self.wave_front.update(
+                state.objectives_lost, state.phase, enemy_spawn, now,
+            )
+
         for eid in spotted_ids:
             if eid in all_enemies:
                 new_pos = all_enemies[eid].pos
@@ -468,9 +480,11 @@ class Planner:
                         dx = bot.pos[0] - c.target[0]
                         dy = bot.pos[1] - c.target[1]
                         if dx * dx + dy * dy < ARRIVE_RADIUS * ARRIVE_RADIUS:
-                            c.hold_until = now + HOLD_DURATION
+                            hold_dur = INTERMEDIATE_HOLD if c.intermediate else HOLD_DURATION
+                            c.hold_until = now + hold_dur
                             holding.append(bot)
-                            log.debug("Bot %d arrived, holding for %.0fs", bot.id, HOLD_DURATION)
+                            log.debug("Bot %d arrived (%s), holding for %.0fs",
+                                      bot.id, "intermediate" if c.intermediate else "final", hold_dur)
                         else:
                             moving.append(bot)
                     else:
@@ -515,27 +529,75 @@ class Planner:
                 log.debug("Bot %d designated as coverer at (%.0f,%.0f)",
                           coverer.id, coverer.pos[0], coverer.pos[1])
 
-            # Score new positions only for bots that need assignment
+            # Score new positions — area-by-area routing for distant bots
             if needs_assignment:
-                mask = self.area_map.build_mask(expanded)
                 weights = WEIGHT_PROFILES.get(order.posture, WEIGHT_PROFILES["defend"])
-                positions = self.influence_map.best_positions(
-                    weights,
-                    num=len(needs_assignment),
-                    mask=mask,
-                    objective_center=obj_centroid,
-                    objective_positions=sightline_targets if sightline_targets else [obj_centroid],
-                    friendly_positions=friendly_positions,
-                    enemy_positions=enemy_positions,
-                )
-                for bot, target in zip(needs_assignment, positions):
-                    self._commitments[bot.id] = Commitment(
-                        target=target,
-                        assigned_at=now,
-                        hold_until=0,
-                        order_key=order_key,
+
+                # Group bots by their scoring area (next area on path or final)
+                # groups: {(area_mask_key, is_intermediate): [bot, ...]}
+                final_bots: list = []
+                intermediate_groups: dict[str, list] = {}  # next_area_name -> bots
+
+                for bot in needs_assignment:
+                    bot_area = self.area_map.pos_to_area(bot.pos)
+                    in_target = bot_area is not None and bot_area in expanded
+
+                    if in_target or bot_area is None:
+                        final_bots.append(bot)
+                    else:
+                        # Find next area on path toward the first target area
+                        target_area = order.areas[0]
+                        path = self.area_map._bfs_path(bot_area, target_area)
+                        if path and len(path) > 1:
+                            next_area = path[1]
+                            intermediate_groups.setdefault(next_area, []).append(bot)
+                        else:
+                            # No path — fall back to final scoring
+                            final_bots.append(bot)
+
+                # Score final-area bots (existing behavior)
+                if final_bots:
+                    mask = self.area_map.build_mask(expanded)
+                    positions = self.influence_map.best_positions(
+                        weights,
+                        num=len(final_bots),
+                        mask=mask,
+                        objective_center=obj_centroid,
+                        objective_positions=sightline_targets if sightline_targets else [obj_centroid],
+                        friendly_positions=friendly_positions,
+                        enemy_positions=enemy_positions,
                     )
-                    moving.append(bot)
+                    for bot, target in zip(final_bots, positions):
+                        self._commitments[bot.id] = Commitment(
+                            target=target,
+                            assigned_at=now,
+                            hold_until=0,
+                            order_key=order_key,
+                            intermediate=False,
+                        )
+                        moving.append(bot)
+
+                # Score intermediate-area bots (grouped by next area)
+                for next_area_name, group in intermediate_groups.items():
+                    area_mask = self.area_map.build_mask([next_area_name])
+                    positions = self.influence_map.best_positions(
+                        weights,
+                        num=len(group),
+                        mask=area_mask,
+                        objective_center=obj_centroid,
+                        objective_positions=sightline_targets if sightline_targets else [obj_centroid],
+                        friendly_positions=friendly_positions,
+                        enemy_positions=enemy_positions,
+                    )
+                    for bot, target in zip(group, positions):
+                        self._commitments[bot.id] = Commitment(
+                            target=target,
+                            assigned_at=now,
+                            hold_until=0,
+                            order_key=order_key,
+                            intermediate=True,
+                        )
+                        moving.append(bot)
 
             # Emit commands for all bots (holding + moving)
             profile_tag = f"area:{order.posture}"
@@ -566,11 +628,25 @@ class Planner:
                         voice_candidate_chosen = True
                         voice_candidates.append((pv[0], pv[1], cmd_idx, order.posture, bot.id))
 
+                # Wave-front flags: intermediate bots in safe areas run,
+                # bots in danger areas or at final position investigate.
+                if c.intermediate and self.wave_front is not None:
+                    # Look up the area center for the intermediate target
+                    tgt_area = self.area_map.pos_to_area(target)
+                    if tgt_area and tgt_area in self.area_map.areas:
+                        area_center = self.area_map.areas[tgt_area].center
+                        flags = CMD_FLAG_INVESTIGATE if self.wave_front.is_area_danger(area_center, now) else 0
+                    else:
+                        flags = CMD_FLAG_INVESTIGATE
+                else:
+                    # Final area or no wave front — always cautious
+                    flags = CMD_FLAG_INVESTIGATE
+
                 commands.append(BotCommand(
                     id=bot.id,
                     move_target=target,
                     look_target=look,
-                    flags=0,
+                    flags=flags,
                 ))
                 bot_profiles[bot.id] = profile_tag
                 assigned_ids.add(bot.id)

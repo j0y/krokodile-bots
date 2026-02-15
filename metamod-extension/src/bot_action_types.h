@@ -36,6 +36,10 @@ typedef void (*CINSBotActionCheckpoint_Update_t)(ActionResult *sret, void *thisp
 // void CINSBotApproach::CINSBotApproach(void *this, float x, float y, float z)
 typedef void (*CINSBotApproach_Ctor_t)(void *thisptr, float x, float y, float z);
 
+// CINSBotInvestigate constructor: takes Vector by value (3 floats, same as Approach)
+// Walks cautiously, checks threats more carefully, stealth movement
+typedef void (*CINSBotInvestigate_Ctor_Vec_t)(void *thisptr, float x, float y, float z);
+
 // CINSBotLocomotion::AddMovementRequest(Vector, INSBotMovementType, INSBotPriority, float)
 // x86-32 cdecl: all args on stack, this = first arg
 typedef void (*AddMovementRequest_t)(void *thisptr, float x, float y, float z,
@@ -48,8 +52,12 @@ typedef void (*AimHeadTowards_t)(void *thisBody, const float *target,
                                   void *reply, const char *reason);
 
 // Object sizes from class_data_layouts.md
-static constexpr size_t CINSBOT_APPROACH_SIZE = 128;  // last member at +0x60, pad to 128
-static constexpr size_t CINSBOT_COMBAT_SIZE   = 136;  // 0x88
+static constexpr size_t CINSBOT_APPROACH_SIZE     = 128;  // last member at +0x60, pad to 128
+static constexpr size_t CINSBOT_COMBAT_SIZE       = 136;  // 0x88
+static constexpr size_t CINSBOT_INVESTIGATE_SIZE  = 752;  // 0x2f0 — embeds CINSPathFollower
+
+// Command flags (Python → C++ via BotCommandEntry.flags)
+static constexpr int CMD_FLAG_INVESTIGATE = 1;  // Use CINSBotInvestigate instead of CINSBotApproach
 
 // Movement request constants (from decompiled CINSBotApproach::OnStart)
 static constexpr int MOVE_TYPE_APPROACH = 6;
