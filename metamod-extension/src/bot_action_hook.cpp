@@ -144,7 +144,7 @@ static void Hook_ActionCheckpoint_Update(
                 action = ::operator new(CINSBOT_INVESTIGATE_SIZE);
                 memset(action, 0, CINSBOT_INVESTIGATE_SIZE);
                 s_InvestigateCtor(action, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
-                reason = "SmartBots: Python investigate";
+                reason = "SmartBots: investigate";
             }
             else
             {
@@ -152,7 +152,7 @@ static void Hook_ActionCheckpoint_Update(
                 action = ::operator new(CINSBOT_APPROACH_SIZE);
                 memset(action, 0, CINSBOT_APPROACH_SIZE);
                 s_ApproachCtor(action, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
-                reason = "SmartBots: Python approach";
+                reason = "SmartBots: tactical approach";
             }
 
             sret->type   = ACTION_RESULT_SUSPEND_FOR;

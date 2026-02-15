@@ -1,5 +1,5 @@
 services:
-  # --- AI mode: Metamod extension + Python tactical planner ---
+  # --- Dev mode: game server with Metamod extension ---
   insurgency:
     image: insurgencysamrtbots-insurgency
     build:
@@ -22,75 +22,11 @@ services:
       - HARD_BOTS=${HARD_BOTS:-0}
       - DEV_MODE=${DEV_MODE:-0}
       - CONTROLLED_TEAM=${CONTROLLED_TEAM:-3}
-      - AI_HOST=tactical-brain
+
     stdin_open: true
     tty: true
     profiles:
-      - ai
       - dev
-      - prod
-
-  tactical-brain:
-    image: insurgencysamrtbots-tactical-brain
-    build:
-      context: .
-      dockerfile: tactical-brain/Dockerfile
-    container_name: tactical-brain
-    restart: unless-stopped
-    environment:
-      - LISTEN_HOST=0.0.0.0
-      - LISTEN_PORT=9000
-      - DATA_DIR=/app/data
-      - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
-      - TELEMETRY=${DEV_MODE:-0}
-      - TELEMETRY_HOST=telemetry-db
-      - TELEMETRY_PORT=5432
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
-      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-}
-    profiles:
-      - ai
-      - dev
-      - prod
-
-  telemetry-db:
-    image: postgres:17-alpine
-    container_name: telemetry-db
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:5432:5432"
-    environment:
-      - POSTGRES_USER=smartbots
-      - POSTGRES_PASSWORD=smartbots
-      - POSTGRES_DB=telemetry
-    tmpfs:
-      - /var/lib/postgresql/data
-    command: >
-      postgres
-        -c fsync=off
-        -c synchronous_commit=off
-        -c full_page_writes=off
-    profiles:
-      - dev
-
-  # --- Prod mode: same as ai but with persistent telemetry ---
-  telemetry-db-prod:
-    image: postgres:17-alpine
-    container_name: telemetry-db
-    restart: unless-stopped
-    ports:
-      - "127.0.0.1:5432:5432"
-    environment:
-      - POSTGRES_USER=smartbots
-      - POSTGRES_PASSWORD=smartbots
-      - POSTGRES_DB=telemetry
-    volumes:
-      - telemetry-data:/var/lib/postgresql/data
-    command: >
-      postgres
-        -c synchronous_commit=off
-        -c full_page_writes=off
-    profiles:
-      - prod
 
   # --- Vanilla debug mode: original bot AI + nb_debug logging ---
   insurgency-vanilla:
@@ -111,6 +47,3 @@ services:
     tty: true
     profiles:
       - vanilla
-
-volumes:
-  telemetry-data:

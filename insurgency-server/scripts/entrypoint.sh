@@ -14,23 +14,10 @@ MAX_PLAYERS="${MAX_PLAYERS:-32}"
 START_MAP="${START_MAP:-ministry_coop}"
 GAME_MODE="${GAME_MODE:-coop}"
 TICKRATE="${TICKRATE:-64}"
-# Resolve AI_HOST hostname to IP (the C++ extension needs a numeric address)
-AI_HOST="${AI_HOST:-127.0.0.1}"
-if ! echo "$AI_HOST" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
-    RESOLVED=$(getent hosts "$AI_HOST" | awk '{print $1}')
-    if [ -n "$RESOLVED" ]; then
-        echo "[*] Resolved AI_HOST: $AI_HOST -> $RESOLVED"
-        AI_HOST="$RESOLVED"
-    else
-        echo "[!] WARNING: cannot resolve AI_HOST=$AI_HOST, falling back to 127.0.0.1"
-        AI_HOST="127.0.0.1"
-    fi
-fi
-export AI_HOST
 
 echo "=============================================="
 echo " Insurgency 2014 Dedicated Server"
-echo " with SourceMod + NavBot"
+echo " with SmartBots Metamod Extension"
 echo "=============================================="
 
 # ============================================================
@@ -241,6 +228,5 @@ exec ./srcds_linux \
     +maxplayers "${MAX_PLAYERS}" \
     -tickrate "${TICKRATE}" \
     -sv_playlist "${PLAYLIST}" \
-    +smartbots_ai_host "${AI_HOST}" \
     ${DEV_ARGS} \
     "$@"

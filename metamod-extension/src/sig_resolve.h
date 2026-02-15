@@ -22,6 +22,12 @@ struct ServerOffsets
     static constexpr uintptr_t g_pGameRules           = 0x00c0c3d8;
     // CINSRules::IsCounterAttack() const — non-virtual, thiscall
     static constexpr uintptr_t CINSRules_IsCounterAttack = 0x0022e150;
+
+    // Nav mesh globals and functions
+    static constexpr uintptr_t TheNavMesh                     = 0x00c99800;
+    static constexpr uintptr_t CNavMesh_GetNearestNavArea     = 0x004f20d0;
+    static constexpr uintptr_t CNavArea_IsPotentiallyVisible  = 0x004ae260;
+    static constexpr uintptr_t CNavArea_IsBlocked             = 0x004adc40;
 };
 
 // CINSNextBot vtable byte offset for GetLocomotionInterface virtual call

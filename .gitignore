@@ -3,3 +3,4 @@ metamod-extension/build/
 .env
 data/*
 !data/.gitkeep
+build

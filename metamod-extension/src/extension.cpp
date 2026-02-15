@@ -1,12 +1,16 @@
 #include "extension.h"
 #include "sig_resolve.h"
 #include "bot_action_hook.h"
-#include "udp_bridge.h"
 #include "bot_state.h"
 #include "bot_command.h"
 #include "game_events.h"
 #include "bot_voice.h"
+#include "nav_flanking.h"
+#include "nav_objectives.h"
+#include "bot_tactics.h"
+#include "bot_trace.h"
 
+#include <toolframework/itoolentity.h>
 #include <dlfcn.h>
 #include <cstdlib>
 
@@ -33,20 +37,15 @@ static uintptr_t s_serverBase = 0;
 // Tick counter for throttled logging
 static int s_tickCount = 0;
 
+// Trace enabled (env DEV_MODE=1)
+static bool s_traceEnabled = false;
+
 // GameFrame movement request counters
 static int s_gfMoveReqCount = 0;
 static int s_gfMoveReqLogThrottle = 0;
 
-// UDP bridge send/recv buffers
-static char s_sendBuf[8192];
-static char s_recvBuf[4096];
 static BotStateEntry s_stateArray[32];
 static CBaseEntity *s_playerEntities[32];  // parallel to s_stateArray — entity ptrs for vision checks
-
-// Bridge logging throttle
-static int s_bridgeSendCount = 0;
-static int s_bridgeRecvCount = 0;
-static int s_bridgeCmdExecCount = 0;
 
 // Per-bot resolved data — refreshed at 8Hz, reused every tick
 struct ResolvedBot {
@@ -133,12 +132,6 @@ static bool ValidateBot(int edictIndex, CBaseEntity *cachedEntity)
 
 // ---- ConVars ----
 
-static ConVar s_cvarAiHost("smartbots_ai_host", "127.0.0.1", 0,
-    "Python AI brain address");
-static ConVar s_cvarAiPort("smartbots_ai_port", "9000", 0,
-    "Python AI brain port");
-static ConVar s_cvarAiEnabled("smartbots_ai_enabled", "1", 0,
-    "Enable/disable UDP bridge to Python AI brain");
 static ConVar s_cvarTeam("smartbots_team", "3", 0,
     "Controlled team index (3=insurgents for coop)");
 
@@ -202,14 +195,48 @@ static void CC_SmartBotsStatus(const CCommand &args)
 
     if (BotActionHook_HasGotoTarget())
         META_CONPRINTF("[SmartBots] Goto target: ACTIVE\n");
-
-    META_CONPRINTF("[SmartBots] Bridge: %s (sent=%d recv=%d exec=%d)\n",
-                   s_cvarAiEnabled.GetBool() ? "enabled" : "disabled",
-                   s_bridgeSendCount, s_bridgeRecvCount, s_bridgeCmdExecCount);
 }
 
 static ConCommand s_cmdStatus("smartbots_status", CC_SmartBotsStatus,
     "Show all bot positions and extension status");
+
+// ---- ConCommand: smartbots_objectives ----
+
+static void CC_SmartBotsObjectives(const CCommand &args)
+{
+    if (!NavObjectives_IsReady())
+    {
+        META_CONPRINTF("[SmartBots] Objectives: not scanned yet\n");
+        return;
+    }
+
+    int count = NavObjectives_Count();
+    int current = NavObjectives_CurrentIndex();
+    META_CONPRINTF("[SmartBots] Objectives: %d total, current=#%d (lost=%d)\n",
+                   count, current, GameEvents_GetObjectivesLost());
+
+    for (int i = 0; i < count; i++)
+    {
+        const ObjectiveInfo *obj = NavObjectives_Get(i);
+        if (!obj) continue;
+        META_CONPRINTF("  %s[%d] '%s' %s at (%.0f, %.0f, %.0f)\n",
+                       (i == current) ? ">> " : "   ",
+                       obj->order, obj->name,
+                       obj->isCapture ? "capture" : "destroy",
+                       obj->pos[0], obj->pos[1], obj->pos[2]);
+    }
+
+    float ax, ay, az;
+    if (NavObjectives_GetAttackerSpawn(ax, ay, az))
+        META_CONPRINTF("  Attacker spawn: (%.0f, %.0f, %.0f)\n", ax, ay, az);
+
+    float px, py, pz;
+    if (NavObjectives_GetApproachPoint(px, py, pz))
+        META_CONPRINTF("  Approach point: (%.0f, %.0f, %.0f)\n", px, py, pz);
+}
+
+static ConCommand s_cmdObjectives("smartbots_objectives", CC_SmartBotsObjectives,
+    "Show discovered map objectives and current active objective");
 
 // ---- ConCommand: smartbots_voice <concept_id> ----
 
@@ -562,7 +589,28 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
     // Deferred event registration — events may not exist during Load()
     if (s_tickCount == 1)
+    {
         GameEvents_RegisterListeners();
+        NavObjectives_Scan();
+    }
+
+    // Detect round start → reset flanking paths
+    {
+        static const char *s_lastPhase = nullptr;
+        const char *phase = GameEvents_GetPhase();
+        if (phase != s_lastPhase)
+        {
+            if (phase && strcmp(phase, "preround") == 0)
+            {
+                NavFlanking_Reset();
+                BotTactics_Reset();
+                NavObjectives_Scan();
+                if (s_traceEnabled)
+                    BotTrace_Open();  // fresh trace each round
+            }
+            s_lastPhase = phase;
+        }
+    }
 
     // Refresh bot list + state at 8Hz (every 8 ticks).
     // IPlayerInfo calls are expensive (trigger UTIL_GetListenServerHost),
@@ -577,30 +625,106 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         freshScan = true;
     }
 
-    // --- UDP bridge: receive commands every tick (non-blocking, cheap) ---
-    if (s_cvarAiEnabled.GetBool())
-    {
-        int bytesRead = UdpBridge_Recv(s_recvBuf, sizeof(s_recvBuf) - 1);
-        if (bytesRead > 0)
-        {
-            s_recvBuf[bytesRead] = '\0';
-            BotCommand_Parse(s_recvBuf, bytesRead, s_tickCount);
-            s_bridgeRecvCount++;
-
-            if (s_bridgeRecvCount == 1 || s_bridgeRecvCount % 240 == 0)
-            {
-                META_CONPRINTF("[SmartBots] Bridge: recv commands #%d (%d bytes)\n",
-                               s_bridgeRecvCount, bytesRead);
-            }
-        }
-    }
-
     // --- All heavy work gated to 8Hz (every 8 ticks) ---
     // AddMovementRequest triggers the game's pathfinder internally.
     // Calling it 66x/sec per bot overloads the server. 8Hz is plenty —
     // the locomotion system continues executing the last path between updates.
     if (freshScan)
     {
+        // ---- Tactical deployment: spread bots around current objective ----
+        {
+            int tacEdicts[32];
+            float tacPositions[32][3];
+            int tacCount = 0;
+            int team = s_cvarTeam.GetInt();
+
+            for (int i = 0; i < s_resolvedBotCount && tacCount < 32; i++)
+            {
+                int idx = s_resolvedBots[i].edictIndex;
+                if (!ValidateBot(idx, s_resolvedBots[i].entity))
+                    continue;
+
+                for (int j = 0; j < s_stateCount; j++)
+                {
+                    if (s_stateArray[j].id == idx && s_stateArray[j].alive
+                        && s_stateArray[j].team == team)
+                    {
+                        tacEdicts[tacCount] = idx;
+                        tacPositions[tacCount][0] = s_stateArray[j].pos[0];
+                        tacPositions[tacCount][1] = s_stateArray[j].pos[1];
+                        tacPositions[tacCount][2] = s_stateArray[j].pos[2];
+                        tacCount++;
+                        break;
+                    }
+                }
+            }
+
+            if (tacCount > 0)
+                BotTactics_Update(tacEdicts, tacPositions, tacCount, s_tickCount);
+        }
+
+        // ---- Nav mesh flanking: route bots around enemy sightlines ----
+        {
+            // Build arrays of flanking-eligible bots: alive, no visible enemy, no Python command
+            int flankEdicts[32];
+            void *flankEntities[32];
+            float flankPositions[32][3];
+            int flankCount = 0;
+            int team = s_cvarTeam.GetInt();
+
+            for (int i = 0; i < s_resolvedBotCount && flankCount < 32; i++)
+            {
+                int idx = s_resolvedBots[i].edictIndex;
+                if (!ValidateBot(idx, s_resolvedBots[i].entity))
+                    continue;
+                if (BotActionHook_HasVisibleEnemy(idx))
+                    continue;
+
+                // Skip bots with Python commands — planner controls them
+                BotCommandEntry cmd;
+                if (BotCommand_Get(idx, cmd))
+                    continue;
+
+                // Find this bot's position and team from state array
+                for (int j = 0; j < s_stateCount; j++)
+                {
+                    if (s_stateArray[j].id == idx && s_stateArray[j].alive
+                        && s_stateArray[j].team == team)
+                    {
+                        flankEdicts[flankCount] = idx;
+                        flankEntities[flankCount] = (void *)s_resolvedBots[i].entity;
+                        flankPositions[flankCount][0] = s_stateArray[j].pos[0];
+                        flankPositions[flankCount][1] = s_stateArray[j].pos[1];
+                        flankPositions[flankCount][2] = s_stateArray[j].pos[2];
+                        flankCount++;
+                        break;
+                    }
+                }
+            }
+
+            if (flankCount > 0 && s_intelCount > 0)
+            {
+                NavFlanking_Update(flankEdicts, flankEntities, flankPositions, flankCount,
+                                   s_intelPos, s_intelCount);
+
+                // Issue movement requests for bots with active flanking paths
+                for (int i = 0; i < flankCount; i++)
+                {
+                    float fx, fy, fz;
+                    if (NavFlanking_GetTarget(flankEdicts[i], fx, fy, fz))
+                    {
+                        if (TargetChanged(flankEdicts[i], fx, fy, fz))
+                        {
+                            if (BotActionHook_IssueMovementRequest(flankEntities[i], fx, fy, fz))
+                            {
+                                RecordTarget(flankEdicts[i], fx, fy, fz);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         float gotoX, gotoY, gotoZ;
         bool hasGoto = BotActionHook_GetGotoTarget(gotoX, gotoY, gotoZ);
 
@@ -636,31 +760,11 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             }
         }
 
-        // Send state to Python brain
-        if (s_cvarAiEnabled.GetBool() && s_stateCount > 0)
-        {
-            const char *currentMap = STRING(gpGlobals->mapname);
-            int len = BotState_Serialize(s_stateArray, s_stateCount, s_tickCount,
-                                         currentMap, s_sendBuf, sizeof(s_sendBuf));
-            if (UdpBridge_Send(s_sendBuf, len))
-            {
-                s_bridgeSendCount++;
-
-                if (s_bridgeSendCount == 1 || s_bridgeSendCount % 240 == 0)
-                {
-                    META_CONPRINTF("[SmartBots] Bridge: sent state #%d (%d bots, %d bytes)\n",
-                                   s_bridgeSendCount, s_stateCount, len);
-                }
-            }
-        }
-
-        // Clean stale Python commands (movement is handled by checkpoint hook)
-        if (s_cvarAiEnabled.GetBool() && !hasGoto)
-        {
-            BotCommand_ClearStale(s_tickCount, 66);
-        }
-
         // Share enemy intel with uncontrolled bots (look-at only, no movement)
+        // Trace bot positions at ~1Hz (every 64 ticks)
+        if (s_traceEnabled && s_tickCount % 64 == 0 && s_stateCount > 0)
+            BotTrace_Write(s_stateArray, s_stateCount, s_tickCount);
+
         ApplyTeamIntelLook();
     }
 
@@ -732,19 +836,6 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
     // Initialize bot command buffer
     BotCommand_Init();
 
-    // Initialize UDP bridge to Python brain
-    // ConVar +overrides aren't applied yet at this point, so read env var directly
-    if (s_cvarAiEnabled.GetBool())
-    {
-        const char *hostEnv = std::getenv("AI_HOST");
-        const char *host = (hostEnv && hostEnv[0]) ? hostEnv : s_cvarAiHost.GetString();
-        int port = s_cvarAiPort.GetInt();
-        if (!UdpBridge_Init(host, port))
-        {
-            META_CONPRINTF("[SmartBots] WARNING: UDP bridge init failed — AI brain will not be connected\n");
-        }
-    }
-
     // Initialize game event listener (objective tracking)
     {
         IGameEventManager2 *pGameEventMgr = nullptr;
@@ -757,6 +848,43 @@ bool SmartBotsExtension::Load(PluginId id, ISmmAPI *ismm, char *error, size_t ma
 
     // Resolve game rules for live counter-attack detection
     GameEvents_InitGameRules(s_serverBase);
+
+    // Initialize nav mesh flanking (non-fatal — continues if resolution fails)
+    if (!NavFlanking_Init(s_serverBase))
+    {
+        META_CONPRINTF("[SmartBots] WARNING: NavFlanking init failed — flanking disabled\n");
+    }
+
+    // Initialize objective scanner via IServerTools (non-fatal)
+    {
+        IServerTools *pServerTools = nullptr;
+        // GET_V_IFACE_ANY would abort on failure, so query manually
+        CreateInterfaceFn serverFactory = ismm->GetServerFactory(false);
+        if (serverFactory)
+        {
+            int ret = 0;
+            pServerTools = static_cast<IServerTools *>(
+                serverFactory(VSERVERTOOLS_INTERFACE_VERSION, &ret));
+        }
+        if (!NavObjectives_Init(pServerTools))
+        {
+            META_CONPRINTF("[SmartBots] WARNING: NavObjectives init failed — no objective data\n");
+        }
+    }
+
+    // Initialize tactical deployment (non-fatal)
+    if (!BotTactics_Init(s_serverBase))
+    {
+        META_CONPRINTF("[SmartBots] WARNING: BotTactics init failed — tactical deployment disabled\n");
+    }
+
+    // Open trace file for position logging (env DEV_MODE=1)
+    {
+        const char *devEnv = std::getenv("DEV_MODE");
+        s_traceEnabled = (devEnv && devEnv[0] == '1');
+        if (s_traceEnabled)
+            BotTrace_Open();
+    }
 
     META_CONPRINTF("[SmartBots] Extension loaded (v0.2.0) — Phase 2 active\n");
 
@@ -775,11 +903,11 @@ void SmartBotsExtension::AllPluginsLoaded()
 
 bool SmartBotsExtension::Unload(char *error, size_t maxlen)
 {
+    // Close trace file
+    BotTrace_Close();
+
     // Unregister game event listener
     GameEvents_Shutdown();
-
-    // Close UDP bridge
-    UdpBridge_Close();
 
     // Remove detour first (restore original code)
     BotActionHook_RemoveDetour();

@@ -1,8 +1,5 @@
 #include "bot_state.h"
 #include "extension.h"
-#include "game_events.h"
-
-#include <cstdio>
 
 int BotState_Collect(BotStateEntry *out, int maxBots)
 {
@@ -41,72 +38,4 @@ int BotState_Collect(BotStateEntry *out, int maxBots)
     }
 
     return count;
-}
-
-int BotState_Serialize(const BotStateEntry *bots, int count, int tick, const char *mapName, char *buf, int bufSize)
-{
-    // Build JSON manually — format is simple and fixed, no library needed.
-    int offset = 0;
-
-    offset += snprintf(buf + offset, bufSize - offset,
-        "{\"tick\":%d,\"map\":\"%s\",\"bots\":[", tick, mapName ? mapName : "");
-    if (offset >= bufSize) return bufSize - 1;
-
-    for (int i = 0; i < count; i++)
-    {
-        const BotStateEntry &b = bots[i];
-
-        if (i > 0)
-        {
-            offset += snprintf(buf + offset, bufSize - offset, ",");
-            if (offset >= bufSize) return bufSize - 1;
-        }
-
-        offset += snprintf(buf + offset, bufSize - offset,
-            "{\"id\":%d,"
-            "\"pos\":[%.1f,%.1f,%.1f],"
-            "\"ang\":[%.1f,%.1f,%.1f],"
-            "\"hp\":%d,"
-            "\"alive\":%d,"
-            "\"team\":%d,"
-            "\"bot\":%d,"
-            "\"sees\":[",
-            b.id,
-            b.pos[0], b.pos[1], b.pos[2],
-            b.ang[0], b.ang[1], b.ang[2],
-            b.health,
-            b.alive,
-            b.team,
-            b.is_bot);
-
-        if (offset >= bufSize) return bufSize - 1;
-
-        for (int j = 0; j < b.sees_count; j++)
-        {
-            if (j > 0)
-            {
-                offset += snprintf(buf + offset, bufSize - offset, ",");
-                if (offset >= bufSize) return bufSize - 1;
-            }
-            offset += snprintf(buf + offset, bufSize - offset, "%d", b.sees[j]);
-            if (offset >= bufSize) return bufSize - 1;
-        }
-
-        offset += snprintf(buf + offset, bufSize - offset, "]}");
-        if (offset >= bufSize) return bufSize - 1;
-    }
-
-    offset += snprintf(buf + offset, bufSize - offset,
-        "],\"obj\":%d,\"phase\":\"%s\",\"cap\":%d,"
-        "\"ca\":%d,\"ca_off\":%d,\"ca_dur\":%d,\"ca_dur_f\":%d}",
-        GameEvents_GetObjectivesLost(),
-        GameEvents_GetPhase(),
-        GameEvents_GetCappingCP(),
-        GameEvents_IsCounterAttack() ? 1 : 0,
-        GameEvents_CounterAttackDisabled() ? 1 : 0,
-        GameEvents_CounterAttackDuration(),
-        GameEvents_CounterAttackDurationFinale());
-    if (offset >= bufSize) return bufSize - 1;
-
-    return offset;
 }
