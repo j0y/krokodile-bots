@@ -5,13 +5,16 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 WORKDIR /app
 
 # Install dependencies first (cached layer)
-COPY pyproject.toml uv.lock ./
+COPY tactical-brain/pyproject.toml tactical-brain/uv.lock ./
 RUN uv sync --frozen --no-install-project
 
 # Copy source
-COPY src/ src/
+COPY tactical-brain/src/ src/
 
 # Install project
 RUN uv sync --frozen
+
+# Copy precomputed map data
+COPY data/ /app/data/
 
 CMD ["uv", "run", "python", "-m", "tactical"]

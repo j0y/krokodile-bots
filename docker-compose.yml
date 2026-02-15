@@ -1,6 +1,7 @@
 services:
   # --- AI mode: Metamod extension + Python tactical planner ---
   insurgency:
+    image: insurgencysamrtbots-insurgency
     build:
       context: .
       dockerfile: insurgency-server/Dockerfile
@@ -9,8 +10,6 @@ services:
     ports:
       - "27025:27025/udp"
       - "27025:27025/tcp"
-    volumes:
-      - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
     environment:
       - SERVER_HOSTNAME=${SERVER_HOSTNAME:-Insurgency Smart Bots Dev Server}
       - SERVER_PASSWORD=${SERVER_PASSWORD:-}
@@ -21,34 +20,36 @@ services:
       - TICKRATE=${TICKRATE:-64}
       - NB_DEBUG=${NB_DEBUG:-0}
       - HARD_BOTS=${HARD_BOTS:-0}
+      - DEV_MODE=${DEV_MODE:-0}
       - CONTROLLED_TEAM=${CONTROLLED_TEAM:-3}
       - AI_HOST=tactical-brain
     stdin_open: true
     tty: true
     profiles:
       - ai
+      - dev
       - prod
 
   tactical-brain:
+    image: insurgencysamrtbots-tactical-brain
     build:
-      context: ./tactical-brain
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: tactical-brain/Dockerfile
     container_name: tactical-brain
     restart: unless-stopped
-    volumes:
-      - ./data:/app/data:ro
     environment:
       - LISTEN_HOST=0.0.0.0
       - LISTEN_PORT=9000
       - DATA_DIR=/app/data
       - CONTROLLED_TEAM=3  # Security: 2, Insurgents: 3
-      - TELEMETRY=1
+      - TELEMETRY=${DEV_MODE:-0}
       - TELEMETRY_HOST=telemetry-db
       - TELEMETRY_PORT=5432
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
       - OPENROUTER_MODEL=${OPENROUTER_MODEL:-}
     profiles:
       - ai
+      - dev
       - prod
 
   telemetry-db:
@@ -69,7 +70,7 @@ services:
         -c synchronous_commit=off
         -c full_page_writes=off
     profiles:
-      - ai
+      - dev
 
   # --- Prod mode: same as ai but with persistent telemetry ---
   telemetry-db-prod:
@@ -102,8 +103,6 @@ services:
       - "27025:27025/udp"
       - "27025:27025/tcp"
     entrypoint: /home/steam/entrypoint-vanilla.sh
-    volumes:
-      - ./insurgency-server/cfg:/home/steam/insurgency-server/insurgency/cfg/custom:ro
     environment:
       - START_MAP=${START_MAP:-ministry_coop}
       - MAX_PLAYERS=${MAX_PLAYERS:-32}

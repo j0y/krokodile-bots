@@ -36,14 +36,17 @@ def main() -> None:
         from tactical.telemetry import TelemetryClient
         tele_host = os.environ.get("TELEMETRY_HOST", "localhost")
         tele_port = int(os.environ.get("TELEMETRY_PORT", "5432"))
-        telemetry = TelemetryClient(
-            session_id=session_id,
-            map_name="pending",
-            controlled_team=controlled_team,
-            strategist_type="none",
-            host=tele_host,
-            port=tele_port,
-        )
+        try:
+            telemetry = TelemetryClient(
+                session_id=session_id,
+                map_name="pending",
+                controlled_team=controlled_team,
+                strategist_type="none",
+                host=tele_host,
+                port=tele_port,
+            )
+        except Exception as exc:
+            log.warning("Telemetry unavailable (%s), continuing without it", exc)
 
     # Planner starts empty — populated on first map switch from C++ packet
     planner = Planner(controlled_team=controlled_team)

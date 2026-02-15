@@ -97,6 +97,25 @@ exec server_checkpoint.cfg
 EOF
 
 # ============================================================
+# Generate custom mapcycle (survives server-file re-downloads)
+# ============================================================
+echo "[*] Writing mapcycle_smartbots.txt..."
+cat > "${GAME_DIR}/mapcycle_smartbots.txt" << 'EOF'
+buhriz_coop checkpoint
+contact_coop checkpoint
+district_coop checkpoint
+drycanal_coop checkpoint
+embassy_coop checkpoint
+heights_coop checkpoint
+market_coop checkpoint
+ministry_coop checkpoint
+revolt_coop checkpoint
+siege_coop checkpoint
+tell_coop checkpoint
+verticality_coop checkpoint
+EOF
+
+# ============================================================
 # Custom plugins (mounted at plugins/custom/, SM auto-loads subdirs)
 # ============================================================
 if [ -d "${GAME_DIR}/addons/sourcemod/plugins/custom" ]; then
@@ -200,7 +219,16 @@ echo "    Mode: ${GAME_MODE}"
 echo "    Max Players: ${MAX_PLAYERS}"
 echo "    Tickrate: ${TICKRATE}"
 echo "    Bots: ${BOT_COUNT}"
+echo "    Dev mode: ${DEV_MODE:-0}"
 echo "=============================================="
+
+# Build dev-mode flags
+DEV_ARGS=""
+if [ "${DEV_MODE:-0}" = "1" ]; then
+    DEV_ARGS="-insecure +sv_cheats 1 +sv_lan 1"
+else
+    DEV_ARGS="+sv_lan 0"
+fi
 
 cd "${SERVER_DIR}"
 export LD_LIBRARY_PATH="${SERVER_DIR}:${SERVER_DIR}/bin:${LD_LIBRARY_PATH}"
@@ -209,12 +237,10 @@ exec ./srcds_linux \
     -console \
     -32bit \
     -port 27025 \
-    -insecure \
-    +sv_lan 0 \
-    +sv_cheats 1 \
     +map "${START_MAP}" \
     +maxplayers "${MAX_PLAYERS}" \
     -tickrate "${TICKRATE}" \
     -sv_playlist "${PLAYLIST}" \
     +smartbots_ai_host "${AI_HOST}" \
+    ${DEV_ARGS} \
     "$@"

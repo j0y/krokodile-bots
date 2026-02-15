@@ -72,6 +72,7 @@ COPY --chown=steam:steam insurgency-server/server-files/ /home/steam/insurgency-
 # ============================================================
 # 5. Copy configuration and startup scripts
 # ============================================================
+COPY --chown=steam:steam insurgency-server/cfg/ /home/steam/insurgency-server/insurgency/cfg/custom/
 COPY --chown=steam:steam insurgency-server/scripts/server.cfg /home/steam/insurgency-server/insurgency/cfg/server.cfg
 COPY --chown=steam:steam insurgency-server/scripts/betterbots.cfg /home/steam/insurgency-server/insurgency/cfg/betterbots.cfg
 COPY --chown=steam:steam insurgency-server/scripts/hardbots.cfg /home/steam/insurgency-server/insurgency/cfg/hardbots.cfg

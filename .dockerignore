@@ -1,8 +1,15 @@
 # Build artifacts
 metamod-extension/build/
+build/
 bspMeshExporter/
 navMeshParser/
 reverseEngineering/
+
+# Data files not needed by tactical-brain
+data/*.glb
+data/*_visibility.npz
+data/*_clearance.npz
+data/*.duckdb
 
 # Git
 .git/
