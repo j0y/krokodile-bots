@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 """Plot bot positions from C++ CSV trace.
 
-Reads smartbots_trace.csv (from /dev/shm/ inside the container) and overlays
-bot positions, movement targets, and look directions on the map.
-
-Copy trace from container first:
-    docker cp insurgency-server:/dev/shm/smartbots_trace.csv /tmp/smartbots_trace.csv
+Auto-fetches trace from the running container via docker exec.
 
 Usage:
-    # Plot last 30 seconds of trace
-    uv run python plot_trace.py /tmp/smartbots_trace.csv
+    # Plot last 30 seconds (auto-fetch from container)
+    uv run python plot_trace.py
 
     # Custom time window and map
-    uv run python plot_trace.py /tmp/smartbots_trace.csv --last 60 --map district_coop
+    uv run python plot_trace.py --last 60 --map district_coop
+
+    # From a local file
+    uv run python plot_trace.py /path/to/smartbots_trace.csv
 
     # Animate: one frame per second of trace
-    uv run python plot_trace.py /tmp/smartbots_trace.csv --animate --output /tmp/trace_anim.gif
+    uv run python plot_trace.py --animate --output /tmp/trace_anim.gif
 """
 
 from __future__ import annotations
@@ -359,7 +358,8 @@ def main():
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("csv", help="Path to smartbots_trace.csv")
+    parser.add_argument("csv", nargs="?", default=None,
+                        help="Path to smartbots_trace.csv (auto-fetched from container if omitted)")
     parser.add_argument("--last", type=float, default=30,
                         help="Show last N seconds of trace (default: 30)")
     parser.add_argument("--map", default="ministry_coop", help="Map name")
@@ -377,6 +377,22 @@ def main():
                         help="Zoom margin (units)")
     parser.add_argument("--dpi", type=int, default=150)
     args = parser.parse_args()
+
+    # Fetch trace from container if no path given
+    if args.csv is None:
+        import subprocess, tempfile
+        print("Fetching trace from insurgency-server container...")
+        result = subprocess.run(
+            ["docker", "exec", "insurgency-server",
+             "cat", "/dev/shm/smartbots_trace.csv"],
+            capture_output=True)
+        if result.returncode != 0 or len(result.stdout) == 0:
+            print("Failed to fetch trace from container.", file=sys.stderr)
+            sys.exit(1)
+        tmp = Path(tempfile.gettempdir()) / "smartbots_trace.csv"
+        tmp.write_bytes(result.stdout)
+        args.csv = str(tmp)
+        print(f"  Saved to {args.csv}")
 
     # Load trace CSV
     print(f"Loading {args.csv}...")
