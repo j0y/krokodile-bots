@@ -617,16 +617,16 @@ class Planner:
                     enemy_positions, enemy_spawn,
                 )
 
-                # Collect voice candidate: one per order group, best picked later.
-                # Only when strategist actually changed the orders.
-                cmd_idx = len(commands)
-                if orders_changed and not voice_candidate_chosen \
-                        and len(batch) > 1 \
-                        and self._has_nearby_teammate(bot, friendly_positions):
-                    pv = POSTURE_VOICE.get(order.posture)
-                    if pv is not None:
-                        voice_candidate_chosen = True
-                        voice_candidates.append((pv[0], pv[1], cmd_idx, order.posture, bot.id))
+                # Voice callouts disabled — causes realloc crash in C++ extension
+                # TODO: investigate C++ side before re-enabling
+                # cmd_idx = len(commands)
+                # if orders_changed and not voice_candidate_chosen \
+                #         and len(batch) > 1 \
+                #         and self._has_nearby_teammate(bot, friendly_positions):
+                #     pv = POSTURE_VOICE.get(order.posture)
+                #     if pv is not None:
+                #         voice_candidate_chosen = True
+                #         voice_candidates.append((pv[0], pv[1], cmd_idx, order.posture, bot.id))
 
                 # Wave-front flags: intermediate bots in safe areas run,
                 # bots in danger areas or at final position investigate.
