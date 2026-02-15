@@ -15,6 +15,7 @@ import enum
 import json
 import logging
 import time
+from collections import deque
 
 from tactical.areas import AreaMap
 from tactical.planner import Order, Planner
@@ -203,39 +204,71 @@ class SMStrategist(BaseStrategist):
     def _approach_corridors(self, obj_name: str) -> list[str]:
         """Discover corridor zones between enemy approach areas and the objective.
 
-        BFS from each approach area to the objective, collect intermediate
-        zones, add their neighbors, deduplicate. Returns sorted by hop
-        distance from approach (forward zones first).
+        Works on the zone-only adjacency subgraph (ignoring objective/spawn
+        nodes whose asymmetric edges break disjoint-path finding).  Does a
+        depth-limited BFS from each approach zone; the depth limit is the
+        shortest zone-graph distance to the objective zone + 1, so alternate
+        routes one hop longer than the shortest are included.
+
+        Returns zone names sorted by hop distance from approach (forward first).
         """
         approaches = self._approach_areas()
         if not approaches:
             return []
 
-        # Collect intermediate zones on each path, ranked by hop distance
-        zone_hop: dict[str, int] = {}  # zone → min hops from approach
-        for start in approaches:
-            path = self._area_map._bfs_path(start, obj_name)
-            if not path or len(path) < 3:
+        zones = self._area_map.zones  # zone-only subset
+        # Zone-only adjacency subgraph
+        zone_adj: dict[str, list[str]] = {
+            name: [n for n in self._area_map._adjacency.get(name, []) if n in zones]
+            for name in zones
+        }
+
+        # Map approach areas and objective to their containing zones
+        approach_zones: set[str] = set()
+        for a in approaches:
+            area = self._area_map.areas.get(a)
+            if area:
+                z = self._area_map.pos_to_zone(area.center)
+                if z:
+                    approach_zones.add(z)
+
+        obj_area = self._area_map.areas.get(obj_name)
+        obj_zone = self._area_map.pos_to_zone(obj_area.center) if obj_area else None
+        if not obj_zone or not approach_zones:
+            return []
+
+        # Longest zone-graph distance from any approach zone to objective zone
+        # (use max so the depth covers the farthest approach route)
+        max_dist: int | None = None
+        for az in approach_zones:
+            path = self._area_map._bfs_path(az, obj_zone)
+            if path is not None:
+                d = len(path) - 1
+                if max_dist is None or d > max_dist:
+                    max_dist = d
+        if max_dist is None:
+            return []
+
+        # Depth-limited BFS from all approach zones through zone-only graph
+        max_depth = max_dist + 1
+        zone_hop: dict[str, int] = {}
+        queue: deque[tuple[str, int]] = deque()
+        for az in approach_zones:
+            zone_hop[az] = 0
+            queue.append((az, 0))
+        while queue:
+            current, depth = queue.popleft()
+            if depth >= max_depth:
                 continue
-            intermediates = path[1:-1]  # exclude start (approach) and end (objective)
-            for hop, zone in enumerate(intermediates):
-                if zone not in zone_hop or hop < zone_hop[zone]:
-                    zone_hop[zone] = hop
+            for neighbor in zone_adj.get(current, []):
+                if neighbor not in zone_hop:
+                    zone_hop[neighbor] = depth + 1
+                    queue.append((neighbor, depth + 1))
 
-        # Add immediate neighbors of path zones (covers flanking routes)
-        neighbor_zones: dict[str, int] = {}
-        for zone, hop in list(zone_hop.items()):
-            for neighbor in self._areas_near(zone):
-                if neighbor not in zone_hop and neighbor != obj_name and neighbor not in approaches:
-                    if neighbor not in neighbor_zones or hop < neighbor_zones[neighbor]:
-                        neighbor_zones[neighbor] = hop + 1
-        zone_hop.update(neighbor_zones)
-
-        # Exclude objective and approach areas
-        exclude = {obj_name} | set(approaches)
+        # Exclude approach zones and objective zone
+        exclude = approach_zones | {obj_zone}
         corridors = {z: h for z, h in zone_hop.items() if z not in exclude}
 
-        # Sort by hop distance (forward zones first)
         return sorted(corridors, key=lambda z: corridors[z])
 
     def _orders_setup(
