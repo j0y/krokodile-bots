@@ -15,7 +15,6 @@ import enum
 import json
 import logging
 import time
-from collections import deque
 
 from tactical.areas import AreaMap
 from tactical.planner import Order, Planner
@@ -202,74 +201,8 @@ class SMStrategist(BaseStrategist):
     # ------------------------------------------------------------------
 
     def _approach_corridors(self, obj_name: str) -> list[str]:
-        """Discover corridor zones between enemy approach areas and the objective.
-
-        Works on the zone-only adjacency subgraph (ignoring objective/spawn
-        nodes whose asymmetric edges break disjoint-path finding).  Does a
-        depth-limited BFS from each approach zone; the depth limit is the
-        shortest zone-graph distance to the objective zone + 1, so alternate
-        routes one hop longer than the shortest are included.
-
-        Returns zone names sorted by hop distance from approach (forward first).
-        """
-        approaches = self._approach_areas()
-        if not approaches:
-            return []
-
-        zones = self._area_map.zones  # zone-only subset
-        # Zone-only adjacency subgraph
-        zone_adj: dict[str, list[str]] = {
-            name: [n for n in self._area_map._adjacency.get(name, []) if n in zones]
-            for name in zones
-        }
-
-        # Map approach areas and objective to their containing zones
-        approach_zones: set[str] = set()
-        for a in approaches:
-            area = self._area_map.areas.get(a)
-            if area:
-                z = self._area_map.pos_to_zone(area.center)
-                if z:
-                    approach_zones.add(z)
-
-        obj_area = self._area_map.areas.get(obj_name)
-        obj_zone = self._area_map.pos_to_zone(obj_area.center) if obj_area else None
-        if not obj_zone or not approach_zones:
-            return []
-
-        # Longest zone-graph distance from any approach zone to objective zone
-        # (use max so the depth covers the farthest approach route)
-        max_dist: int | None = None
-        for az in approach_zones:
-            path = self._area_map._bfs_path(az, obj_zone)
-            if path is not None:
-                d = len(path) - 1
-                if max_dist is None or d > max_dist:
-                    max_dist = d
-        if max_dist is None:
-            return []
-
-        # Depth-limited BFS from all approach zones through zone-only graph
-        max_depth = max_dist + 1
-        zone_hop: dict[str, int] = {}
-        queue: deque[tuple[str, int]] = deque()
-        for az in approach_zones:
-            zone_hop[az] = 0
-            queue.append((az, 0))
-        while queue:
-            current, depth = queue.popleft()
-            if depth >= max_depth:
-                continue
-            for neighbor in zone_adj.get(current, []):
-                if neighbor not in zone_hop:
-                    zone_hop[neighbor] = depth + 1
-                    queue.append((neighbor, depth + 1))
-
-        # Exclude approach zones and objective zone
-        exclude = approach_zones | {obj_zone}
-        corridors = {z: h for z, h in zone_hop.items() if z not in exclude}
-
-        return sorted(corridors, key=lambda z: corridors[z])
+        """Corridor zones between enemy approach areas and the objective."""
+        return self._area_map.approach_corridors(self._approach_areas(), obj_name)
 
     def _orders_setup(
         self,

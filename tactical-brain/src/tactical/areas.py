@@ -225,6 +225,69 @@ class AreaMap:
                     queue.append(path + [neighbor])
         return None
 
+    def approach_corridors(
+        self, approach_names: list[str], obj_name: str,
+    ) -> list[str]:
+        """Corridor zones between approach areas and an objective.
+
+        Depth-limited BFS through the zone-only adjacency subgraph.
+        Depth = longest zone-graph distance from any approach zone to
+        the objective zone + 1 (allows alternate routes one hop longer).
+
+        Returns zone names sorted by hop distance from approach (forward first).
+        """
+        # Zone-only adjacency subgraph
+        zone_adj: dict[str, list[str]] = {
+            name: [n for n in self._adjacency.get(name, []) if n in self.zones]
+            for name in self.zones
+        }
+
+        # Map approach areas and objective to their containing zones
+        approach_zones: set[str] = set()
+        for a in approach_names:
+            area = self.areas.get(a)
+            if area:
+                z = self.pos_to_zone(area.center)
+                if z:
+                    approach_zones.add(z)
+
+        obj_area = self.areas.get(obj_name)
+        obj_zone = self.pos_to_zone(obj_area.center) if obj_area else None
+        if not obj_zone or not approach_zones:
+            return []
+
+        # Longest zone-graph distance (covers the farthest approach route)
+        max_dist: int | None = None
+        for az in approach_zones:
+            path = self._bfs_path(az, obj_zone)
+            if path is not None:
+                d = len(path) - 1
+                if max_dist is None or d > max_dist:
+                    max_dist = d
+        if max_dist is None:
+            return []
+
+        # Depth-limited BFS from all approach zones
+        max_depth = max_dist + 1
+        zone_hop: dict[str, int] = {}
+        queue: deque[tuple[str, int]] = deque()
+        for az in approach_zones:
+            zone_hop[az] = 0
+            queue.append((az, 0))
+        while queue:
+            current, depth = queue.popleft()
+            if depth >= max_depth:
+                continue
+            for neighbor in zone_adj.get(current, []):
+                if neighbor not in zone_hop:
+                    zone_hop[neighbor] = depth + 1
+                    queue.append((neighbor, depth + 1))
+
+        # Exclude approach zones and objective zone
+        exclude = approach_zones | {obj_zone}
+        corridors = {z: h for z, h in zone_hop.items() if z not in exclude}
+        return sorted(corridors, key=lambda z: corridors[z])
+
     def describe(self) -> str:
         """Auto-generated map briefing for LLM system prompt."""
         # Objective sequence

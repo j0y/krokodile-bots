@@ -31,10 +31,11 @@ Rules:
 - Respond with a SINGLE LINE of compact JSON: {"orders": [{"area": "<area>", "posture": "<name>", "bots": N}, ...], "reasoning": "<1 sentence>"}
 - Each order names ONE target area. Bots automatically spread to adjacent rooms.
 - Use ONLY area names from the AREA NAMES list in the sitrep.
-- Use at most 3 orders. Total bots should match your team size.
-- If taking heavy losses, consider "sniper" posture or pulling back.
-- If stalemate, try "push" or "ambush" near the entry corridors.
-- Vary your choices — don't always pick "defend".\
+- Total bots should match your team size.
+- Distribute bots across approach corridors to create crossfire from multiple directions. Don't cluster everyone on one area.
+- Keep a small backstop (~20%) on the objective itself.
+- When enemies are spotted, push toward the hotspot while flanking from adjacent corridors.
+- If taking heavy losses, pull back tight to the objective.\
 """
 
 
@@ -57,7 +58,7 @@ class LLMStrategist(BaseStrategist):
         # Last 5 decisions for context in sitrep
         self._profile_history: list[tuple[float, str, str]] = []
 
-        # Pre-compute objective sequence and per-spawn entry corridors
+        # Pre-compute objective sequence and spawn names
         self._objectives = sorted(
             (a for a in area_map.areas.values() if a.role == "objective"),
             key=lambda a: a.order,
@@ -66,17 +67,6 @@ class LLMStrategist(BaseStrategist):
             a.name for a in area_map.areas.values()
             if a.role in ("enemy_spawn", "enemy_approach")
         ]
-        # entry_corridors[i] = rooms adjacent to spawn point after i objectives lost
-        # i=0 → original spawn, i=1 → obj_a fell, etc.
-        self._entry_corridors: list[list[str]] = []
-        for spawn_src in self._spawn_names:
-            entries = [n for n in area_map._adjacency.get(spawn_src, [])
-                       if area_map.areas[n].role == "zone"]
-            self._entry_corridors.append(sorted(entries))
-        for obj in self._objectives:
-            entries = [n for n in area_map._adjacency.get(obj.name, [])
-                       if area_map.areas[n].role == "zone"]
-            self._entry_corridors.append(sorted(entries))
 
     async def close(self) -> None:
         await super().close()
@@ -129,37 +119,32 @@ class LLMStrategist(BaseStrategist):
         valid_names: list[str] = []
 
         # Current objective
+        obj_name: str | None = None
         if objectives_lost < len(self._objectives):
             obj = self._objectives[objectives_lost]
-            lines.append(f"Defending: {obj.name}")
-            valid_names.append(obj.name)
+            obj_name = obj.name
+            lines.append(f"Defending: {obj_name}")
+            valid_names.append(obj_name)
         else:
             lines.append("All objectives lost!")
 
         # Enemy spawn location
         if objectives_lost > 0 and objectives_lost <= len(self._objectives):
-            spawn_obj = self._objectives[objectives_lost - 1]
-            lines.append(f"Enemy spawns at: {spawn_obj.name} (last captured)")
+            spawn_names = [self._objectives[objectives_lost - 1].name]
+            lines.append(f"Enemy spawns at: {spawn_names[0]} (last captured)")
         else:
-            lines.append(f"Enemy spawns at: {', '.join(self._spawn_names)}")
+            spawn_names = list(self._spawn_names)
+            lines.append(f"Enemy spawns at: {', '.join(spawn_names)}")
 
-        # Entry corridors from current enemy spawn
-        # Index into _entry_corridors: first len(_spawn_names) entries are
-        # for original spawns, then one per objective
-        entries: list[str] = []
-        if objectives_lost > 0 and objectives_lost <= len(self._objectives):
-            idx = len(self._spawn_names) + objectives_lost - 1
-            if idx < len(self._entry_corridors):
-                entries = self._entry_corridors[idx]
-        else:
-            for i in range(len(self._spawn_names)):
-                if i < len(self._entry_corridors):
-                    entries.extend(self._entry_corridors[i])
-            entries = sorted(set(entries))
-
-        if entries:
-            lines.append(f"Entry corridors (where enemies enter): {', '.join(entries)}")
-            valid_names.extend(entries)
+        # Approach corridors: zones between current spawn and objective
+        if obj_name:
+            corridors = self._area_map.approach_corridors(spawn_names, obj_name)
+            if corridors:
+                lines.append(
+                    f"Approach corridors (zones between spawn and objective): "
+                    f"{', '.join(corridors)}"
+                )
+                valid_names.extend(corridors)
 
         return "\n".join(lines), valid_names
 
