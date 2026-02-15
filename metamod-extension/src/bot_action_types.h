@@ -54,7 +54,7 @@ typedef void (*AimHeadTowards_t)(void *thisBody, const float *target,
 // Object sizes from class_data_layouts.md
 static constexpr size_t CINSBOT_APPROACH_SIZE     = 128;  // last member at +0x60, pad to 128
 static constexpr size_t CINSBOT_COMBAT_SIZE       = 136;  // 0x88
-static constexpr size_t CINSBOT_INVESTIGATE_SIZE  = 800;  // Vector ctor writes 800 bytes (CNavArea ctor is 752, but we use Vector ctor)
+static constexpr size_t CINSBOT_INVESTIGATE_SIZE  = 0x4900;  // 18688 bytes — embeds CINSPathFollower with CNavPath (from decompiled operator_new calls)
 
 // Command flags (Python → C++ via BotCommandEntry.flags)
 static constexpr int CMD_FLAG_INVESTIGATE = 1;  // Use CINSBotInvestigate instead of CINSBotApproach

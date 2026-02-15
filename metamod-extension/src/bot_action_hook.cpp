@@ -140,7 +140,7 @@ static void Hook_ActionCheckpoint_Update(
             if (cmd.flags & CMD_FLAG_INVESTIGATE)
             {
                 // CINSBotInvestigate: walks cautiously, checks threats carefully.
-                // Used when enemies are known nearby but not directly visible.
+                // 0x4900 bytes — embeds CINSPathFollower with full CNavPath.
                 action = ::operator new(CINSBOT_INVESTIGATE_SIZE);
                 memset(action, 0, CINSBOT_INVESTIGATE_SIZE);
                 s_InvestigateCtor(action, cmd.moveTarget[0], cmd.moveTarget[1], cmd.moveTarget[2]);
