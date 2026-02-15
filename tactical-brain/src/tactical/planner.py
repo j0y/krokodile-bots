@@ -84,6 +84,8 @@ class Planner:
         self._commitments: dict[int, Commitment] = {}
         # Previous orders snapshot — voice callouts only fire when strategist changes orders
         self._prev_orders_key: tuple | None = None
+        # Cache key for approach exposure precomputation
+        self._cached_approach_key: tuple = ()
 
     def compute_commands(
         self, state: GameState,
@@ -415,6 +417,12 @@ class Planner:
         approach_positions = self._approach_positions()
         enemy_spawn = self._enemy_spawn(objectives_lost)
 
+        # Precompute approach exposure (only when approach positions change)
+        approach_key = tuple(approach_positions)
+        if approach_key != self._cached_approach_key:
+            self._cached_approach_key = approach_key
+            self.influence_map.precompute_approach_exposure(approach_positions)
+
         for order in self.orders:
             if not remaining:
                 break
@@ -608,6 +616,25 @@ class Planner:
                     continue
                 target = c.target
 
+                # Holding bots: offset target toward approach so
+                # CINSBotInvestigate has somewhere to walk (patrol).
+                # Without this, investigate to current pos completes
+                # instantly and the bot stands frozen.
+                is_holding = c.hold_until > 0 and now < c.hold_until
+                if is_holding:
+                    nearest_app = self._nearest_approach(target, approach_positions)
+                    if nearest_app is not None:
+                        dx = nearest_app[0] - target[0]
+                        dy = nearest_app[1] - target[1]
+                        length = (dx * dx + dy * dy) ** 0.5
+                        if length > 1.0:
+                            scale = 400.0 / length
+                            target = (
+                                target[0] + dx * scale,
+                                target[1] + dy * scale,
+                                target[2],
+                            )
+
                 if self._check_stuck(bot, target, now):
                     continue  # release to native AI
 
@@ -628,19 +655,28 @@ class Planner:
                 #         voice_candidate_chosen = True
                 #         voice_candidates.append((pv[0], pv[1], cmd_idx, order.posture, bot.id))
 
-                # Wave-front flags: intermediate bots in safe areas run,
-                # bots in danger areas or at final position investigate.
-                if c.intermediate and self.wave_front is not None:
-                    # Look up the area center for the intermediate target
+                # Distance to target — approach (run) when far, investigate (cautious) when close.
+                # CINSBotInvestigate is designed for short-range cautious movement;
+                # using it at 1500u+ makes bots crawl instead of repositioning.
+                dx_t = bot.pos[0] - target[0]
+                dy_t = bot.pos[1] - target[1]
+                dist_to_target = (dx_t * dx_t + dy_t * dy_t) ** 0.5
+                investigate_threshold = 500.0
+
+                if dist_to_target < investigate_threshold:
+                    # Close to target — cautious approach
+                    flags = CMD_FLAG_INVESTIGATE
+                elif c.intermediate and self.wave_front is not None:
+                    # Far, intermediate — run through safe areas, cautious in danger
                     tgt_area = self.area_map.pos_to_area(target)
                     if tgt_area and tgt_area in self.area_map.areas:
                         area_center = self.area_map.areas[tgt_area].center
                         flags = CMD_FLAG_INVESTIGATE if self.wave_front.is_area_danger(area_center, now) else 0
                     else:
-                        flags = CMD_FLAG_INVESTIGATE
+                        flags = 0
                 else:
-                    # Final area or no wave front — always cautious
-                    flags = CMD_FLAG_INVESTIGATE
+                    # Far, final area — run to get there, will switch to investigate when close
+                    flags = 0
 
                 commands.append(BotCommand(
                     id=bot.id,

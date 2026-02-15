@@ -117,17 +117,18 @@ class SMStrategist(BaseStrategist):
                 self._transition(_State.HOLD, now)
         elif self._state == _State.HOLD:
             if has_contact:
-                # Only engage if contact is near objective or adjacent areas
+                # Engage if contact is in objective area, its neighbors, or any corridor
                 obj_name = self._active_objective(snapshot)
                 if obj_name:
-                    near_obj = {obj_name} | set(self._areas_near(obj_name))
+                    engage_zones = {obj_name} | set(self._areas_near(obj_name))
+                    engage_zones.update(self._approach_corridors(obj_name))
                     contact_areas: set[str] = set()
                     for e in events:
                         if e.kind == "CONTACT":
                             contact_areas.update(e.areas)
-                    if contact_areas & near_obj:
+                    if contact_areas & engage_zones:
                         self._transition(_State.ENGAGE, now)
-                    # else: enemies far from objective, stay HOLD
+                    # else: enemies outside corridor net, stay HOLD
                 else:
                     self._transition(_State.ENGAGE, now)
         elif self._state == _State.ENGAGE:
@@ -199,54 +200,104 @@ class SMStrategist(BaseStrategist):
     # expands to adjacent rooms so bots have space to spread.
     # ------------------------------------------------------------------
 
-    def _split_defend_ambush(
-        self, n: int, obj_name: str,
-    ) -> list[Order]:
-        """Standard defend/ambush split: 2/3 defend objective, 1/3 ambush approaches."""
+    def _approach_corridors(self, obj_name: str) -> list[str]:
+        """Discover corridor zones between enemy approach areas and the objective.
+
+        BFS from each approach area to the objective, collect intermediate
+        zones, add their neighbors, deduplicate. Returns sorted by hop
+        distance from approach (forward zones first).
+        """
         approaches = self._approach_areas()
-        n_defend = max(1, round(n * 0.67))
-        orders: list[Order] = [Order(areas=[obj_name], posture="defend", bots=n_defend)]
-        rest = n - n_defend
-        if rest > 0 and approaches:
-            orders.append(Order(areas=approaches, posture="ambush", bots=rest))
-        else:
-            orders[0] = Order(areas=[obj_name], posture="defend", bots=n)
-        return orders
+        if not approaches:
+            return []
+
+        # Collect intermediate zones on each path, ranked by hop distance
+        zone_hop: dict[str, int] = {}  # zone → min hops from approach
+        for start in approaches:
+            path = self._area_map._bfs_path(start, obj_name)
+            if not path or len(path) < 3:
+                continue
+            intermediates = path[1:-1]  # exclude start (approach) and end (objective)
+            for hop, zone in enumerate(intermediates):
+                if zone not in zone_hop or hop < zone_hop[zone]:
+                    zone_hop[zone] = hop
+
+        # Add immediate neighbors of path zones (covers flanking routes)
+        neighbor_zones: dict[str, int] = {}
+        for zone, hop in list(zone_hop.items()):
+            for neighbor in self._areas_near(zone):
+                if neighbor not in zone_hop and neighbor != obj_name and neighbor not in approaches:
+                    if neighbor not in neighbor_zones or hop < neighbor_zones[neighbor]:
+                        neighbor_zones[neighbor] = hop + 1
+        zone_hop.update(neighbor_zones)
+
+        # Exclude objective and approach areas
+        exclude = {obj_name} | set(approaches)
+        corridors = {z: h for z, h in zone_hop.items() if z not in exclude}
+
+        # Sort by hop distance (forward zones first)
+        return sorted(corridors, key=lambda z: corridors[z])
 
     def _orders_setup(
         self,
         snapshot: _Snapshot,
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
-        """First seconds after round start: deploy to objective + ambush approaches."""
-        n = snapshot.friendly_alive
-        obj_name = self._active_objective(snapshot)
-        if not obj_name:
-            return "setup: no objective", [
-                Order(areas=self._all_area_names(), posture="defend", bots=n),
-            ]
-        return "setup: initial deployment", self._split_defend_ambush(n, obj_name)
+        """First seconds after round start: deploy to corridors immediately."""
+        reason, orders = self._orders_hold(snapshot, enemy_positions)
+        return f"setup: {reason.split(': ', 1)[-1]}", orders
 
     def _orders_hold(
         self,
         snapshot: _Snapshot,
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
-        """Default: defend objective, ambush approaches."""
+        """Distribute bots across corridor zones for crossfire coverage."""
         n = snapshot.friendly_alive
         obj_name = self._active_objective(snapshot)
         if not obj_name:
             return "hold: no objective", [
                 Order(areas=self._all_area_names(), posture="defend", bots=n),
             ]
-        return "hold: defending objective", self._split_defend_ambush(n, obj_name)
+
+        corridors = self._approach_corridors(obj_name)
+        if not corridors:
+            # No corridors found — fall back to all on objective
+            return "hold: defending objective", [
+                Order(areas=[obj_name], posture="defend", bots=n),
+            ]
+
+        n_obj = max(1, n // 5)          # ~20% backstop
+        n_corridor = n - n_obj
+        per_zone = max(1, n_corridor // len(corridors))
+
+        orders: list[Order] = []
+        assigned = 0
+        for zone in corridors:
+            bots = min(per_zone, n_corridor - assigned)
+            if bots > 0:
+                orders.append(Order(areas=[zone], posture="defend", bots=bots))
+                assigned += bots
+
+        # Leftover to first (most forward) corridor
+        leftover = n_corridor - assigned
+        if leftover > 0 and orders:
+            first = orders[0]
+            orders[0] = Order(areas=first.areas, posture=first.posture, bots=first.bots + leftover)
+
+        orders.append(Order(areas=[obj_name], posture="defend", bots=n_obj))
+
+        zone_str = ", ".join(corridors[:3])
+        if len(corridors) > 3:
+            zone_str += f" +{len(corridors) - 3}"
+        return f"hold: corridor net [{zone_str}]", orders
 
     def _orders_engage(
         self,
         snapshot: _Snapshot,
         enemy_positions: list[tuple[float, float, float]],
     ) -> tuple[str, list[Order]]:
-        """Enemies spotted: push toward contact area, defend the rest."""
+        """Enemies spotted: push hotspot, flank from adjacent corridors, backstop objective."""
         n = snapshot.friendly_alive
         obj_name = self._active_objective(snapshot)
         now = snapshot.timestamp
@@ -263,18 +314,33 @@ class SMStrategist(BaseStrategist):
                 combined[area] = 0
 
         if combined:
-            hottest = max(combined, key=lambda a: combined[a])
-            n_push = max(1, round(n * 0.4))
-            n_defend = n - n_push
+            hotspot = max(combined, key=lambda a: combined[a])
+
+            corridors = self._approach_corridors(obj_name) if obj_name else []
+            hotspot_neighbors = [z for z in corridors if z in self._areas_near(hotspot)]
+
+            n_push = max(2, n // 3)
+            n_obj = max(1, n // 5)
+            n_flank = n - n_push - n_obj
 
             orders: list[Order] = [
-                Order(areas=[hottest], posture="push", bots=n_push),
+                Order(areas=[hotspot], posture="push", bots=n_push),
             ]
-            if obj_name and n_defend > 0:
+
+            if hotspot_neighbors and n_flank > 0:
                 orders.append(
-                    Order(areas=[obj_name], posture="defend", bots=n_defend),
+                    Order(areas=hotspot_neighbors, posture="defend", bots=n_flank),
                 )
-            return f"engage: pushing {hottest}", orders
+            elif n_flank > 0:
+                # No flanking zones available — reinforce push
+                first = orders[0]
+                orders[0] = Order(areas=first.areas, posture=first.posture, bots=first.bots + n_flank)
+
+            if obj_name:
+                orders.append(
+                    Order(areas=[obj_name], posture="defend", bots=n_obj),
+                )
+            return f"engage: push {hotspot}, flank {hotspot_neighbors}", orders
 
         return self._orders_hold(snapshot, enemy_positions)
 

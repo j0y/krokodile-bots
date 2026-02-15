@@ -121,6 +121,7 @@ class TacticalProtocol(asyncio.DatagramProtocol):
         self.planner._spotted_memory.clear()
         self.planner._stuck_tracker.clear()
         self.planner._commitments.clear()
+        self.planner._cached_approach_key = ()
 
         # Create wave front if pathfinder + influence map are available
         if md.pathfinder is not None and md.influence_map is not None:

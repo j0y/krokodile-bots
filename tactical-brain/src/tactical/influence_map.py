@@ -23,11 +23,11 @@ from scipy.spatial import KDTree
 log = logging.getLogger(__name__)
 
 WEIGHT_PROFILES: dict[str, dict[str, float]] = {
-    "defend":  {"concealment": 0.3, "sightline": 0.8, "objective": 0.5, "threat": 0.7, "spread": 0.8},
-    "push":    {"concealment": 0.0, "sightline": 0.8, "objective": 1.0, "threat": 0.3, "spread": 0.3},
-    "ambush":  {"concealment": 0.9, "sightline": 0.4, "objective": 0.2, "threat": 0.5, "spread": 0.8},
-    "sniper":  {"concealment": 0.7, "sightline": 1.0, "objective": 0.3, "threat": 0.6, "spread": 0.9},
-    "overrun": {"concealment": 0.0, "sightline": 0.5, "objective": 1.0, "threat": 0.1, "spread": 0.2},
+    "defend":  {"concealment": 0.3, "sightline": 0.8, "objective": 0.5, "threat": 0.7, "spread": 0.8, "approach_exposure": 0.6},
+    "push":    {"concealment": 0.0, "sightline": 0.8, "objective": 1.0, "threat": 0.3, "spread": 0.3, "approach_exposure": 0.1},
+    "ambush":  {"concealment": 0.9, "sightline": 0.4, "objective": 0.2, "threat": 0.5, "spread": 0.8, "approach_exposure": 0.8},
+    "sniper":  {"concealment": 0.7, "sightline": 1.0, "objective": 0.3, "threat": 0.6, "spread": 0.9, "approach_exposure": 0.5},
+    "overrun": {"concealment": 0.0, "sightline": 0.5, "objective": 1.0, "threat": 0.1, "spread": 0.2, "approach_exposure": 0.0},
 }
 
 
@@ -46,6 +46,7 @@ class InfluenceMap:
 
         self.n = len(self.points)
         self.tree = KDTree(self.points)
+        self._approach_exposure: np.ndarray | None = None
 
         log.info(
             "InfluenceMap loaded: %d points, %d adj edges, max_dist=%.0f",
@@ -132,6 +133,36 @@ class InfluenceMap:
             presence /= max_val
         return presence
 
+    def precompute_approach_exposure(
+        self, approach_positions: list[tuple[float, float, float]],
+    ) -> None:
+        """Mark grid points visible from enemy approach corridors.
+
+        Same pattern as compute_threat but cached — only needs recomputing
+        when objectives change (approach positions shift).
+        """
+        exposure = np.zeros(self.n, dtype=np.float32)
+        for apos in approach_positions:
+            aidx = self.nearest_point(apos)
+            visible = self.visible_from(aidx)
+            if len(visible) == 0:
+                continue
+            diffs = self.points[visible] - np.array(apos, dtype=np.float32)
+            dists = np.linalg.norm(diffs, axis=1)
+            decay = np.maximum(0.0, 1.0 - dists / self.max_distance)
+            exposure[visible] += decay
+
+        max_val = exposure.max()
+        if max_val > 0:
+            exposure /= max_val
+        self._approach_exposure = exposure
+        log.info(
+            "Approach exposure: %d sources, %d/%d points exposed",
+            len(approach_positions),
+            int((exposure > 0.01).sum()),
+            self.n,
+        )
+
     def compute_objective_relevance(
         self, objective_pos: tuple[float, float, float],
     ) -> np.ndarray:
@@ -145,26 +176,22 @@ class InfluenceMap:
             relevance = np.ones(self.n, dtype=np.float32)
         return relevance.astype(np.float32)
 
-    def score(
+    def _score_base(
         self,
         weights: dict[str, float],
         *,
         enemy_positions: list[tuple[float, float, float]] | None = None,
         objective_positions: list[tuple[float, float, float]] | None = None,
         objective_center: tuple[float, float, float] | None = None,
-        friendly_positions: list[tuple[float, float, float]] | None = None,
     ) -> np.ndarray:
-        """Weighted score across all N grid points.
-
-        score = concealment*W1 + sightline*W2 + objective*W3 - threat*W4 - spread*W5
-        """
+        """Base score (everything except spread): concealment + sightline + objective - threat - approach."""
         s = np.zeros(self.n, dtype=np.float32)
 
         w_concealment = weights.get("concealment", 0.0)
         w_sightline = weights.get("sightline", 0.0)
         w_objective = weights.get("objective", 0.0)
         w_threat = weights.get("threat", 0.0)
-        w_spread = weights.get("spread", 0.0)
+        w_approach = weights.get("approach_exposure", 0.0)
 
         if w_concealment != 0.0:
             s += self.concealment * w_concealment
@@ -178,9 +205,33 @@ class InfluenceMap:
         if w_threat != 0.0 and enemy_positions:
             s -= self.compute_threat(enemy_positions) * w_threat
 
+        if w_approach != 0.0 and self._approach_exposure is not None:
+            s -= self._approach_exposure * w_approach
+
+        return s
+
+    def score(
+        self,
+        weights: dict[str, float],
+        *,
+        enemy_positions: list[tuple[float, float, float]] | None = None,
+        objective_positions: list[tuple[float, float, float]] | None = None,
+        objective_center: tuple[float, float, float] | None = None,
+        friendly_positions: list[tuple[float, float, float]] | None = None,
+    ) -> np.ndarray:
+        """Weighted score across all N grid points.
+
+        score = base - spread*W5
+        """
+        s = self._score_base(
+            weights,
+            enemy_positions=enemy_positions,
+            objective_positions=objective_positions,
+            objective_center=objective_center,
+        )
+        w_spread = weights.get("spread", 0.0)
         if w_spread != 0.0 and friendly_positions:
             s -= self.compute_team_presence(friendly_positions) * w_spread
-
         return s
 
     def best_positions(
@@ -194,16 +245,50 @@ class InfluenceMap:
         objective_center: tuple[float, float, float] | None = None,
         friendly_positions: list[tuple[float, float, float]] | None = None,
     ) -> list[tuple[float, float, float]]:
-        """Top N scored positions as world coordinates."""
-        scores = self.score(
+        """Top N scored positions using greedy sequential picking.
+
+        Computes base score once, then picks one position at a time,
+        adding a virtual spread penalty from each picked point before
+        selecting the next. This prevents clustering.
+        """
+        base = self._score_base(
             weights,
             enemy_positions=enemy_positions,
             objective_positions=objective_positions,
             objective_center=objective_center,
-            friendly_positions=friendly_positions,
         )
+
+        w_spread = weights.get("spread", 0.0)
+
+        # Start with existing friendly spread baked in
+        if w_spread != 0.0 and friendly_positions:
+            scores = base - self.compute_team_presence(friendly_positions) * w_spread
+        else:
+            scores = base.copy()
+
         if mask is not None:
             scores *= mask
-        top_indices = np.argsort(scores)[-num:][::-1]
-        return [(float(self.points[i, 0]), float(self.points[i, 1]), float(self.points[i, 2]))
-                for i in top_indices]
+            # Prevent out-of-area points from ever being picked
+            scores[mask == 0] = -np.inf
+
+        spread_radius = 500.0  # same as compute_team_presence
+        result: list[tuple[float, float, float]] = []
+
+        for _ in range(min(num, self.n)):
+            best_idx = int(np.argmax(scores))
+            pos = (float(self.points[best_idx, 0]),
+                   float(self.points[best_idx, 1]),
+                   float(self.points[best_idx, 2]))
+            result.append(pos)
+
+            # Add virtual spread penalty from this picked point
+            if w_spread != 0.0:
+                diffs = self.points - self.points[best_idx]
+                dists = np.linalg.norm(diffs, axis=1)
+                decay = np.maximum(0.0, 1.0 - dists / spread_radius)
+                scores -= decay * w_spread
+
+            # Prevent re-picking this point
+            scores[best_idx] = -np.inf
+
+        return result
