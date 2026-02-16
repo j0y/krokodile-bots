@@ -190,20 +190,6 @@ void NavObjectives_Scan()
 
             obj.order = ParseOrder(targetname);
 
-            // Skip control points with garbled names (non-printable bytes).
-            // IServerTools::GetKeyValue returns garbage for some entities
-            // that are paired with obj_weapon_cache and will be added properly.
-            {
-                bool nameValid = (targetname[0] != '\0');
-                for (const char *p = targetname; *p && nameValid; p++)
-                {
-                    if (*p < 32 || *p > 126)
-                        nameValid = false;
-                }
-                if (!nameValid)
-                    goto next;
-            }
-
             // Check if this CP has a trigger_capture_zone → capture type
             obj.isCapture = false;
             for (int i = 0; i < captureNameCount; i++)
@@ -244,12 +230,17 @@ void NavObjectives_Scan()
             if (!ParseOrigin(originStr, pos))
                 goto next;
 
-            // Check if we already have a point_controlpoint with this CP name
-            // If so, update its position to the cache location (more accurate)
+            // Merge with existing point_controlpoint: match by name or proximity
             bool merged = false;
             for (int i = 0; i < s_objectiveCount; i++)
             {
-                if (cpRef[0] && strcmp(s_objectives[i].name, cpRef) == 0)
+                bool nameMatch = cpRef[0] && strcmp(s_objectives[i].name, cpRef) == 0;
+                // Same XY within 1 unit = same objective at different Z
+                float dx = s_objectives[i].pos[0] - pos[0];
+                float dy = s_objectives[i].pos[1] - pos[1];
+                bool posMatch = (dx * dx + dy * dy) < 2.0f;
+
+                if (nameMatch || posMatch)
                 {
                     s_objectives[i].pos[0] = pos[0];
                     s_objectives[i].pos[1] = pos[1];
@@ -298,6 +289,27 @@ next:
         ent = s_pServerTools->NextEntity(ent);
     }
 
+    // --- Deduplicate by XY proximity ---
+    // Some entities appear twice at the same XY (garbled CP + valid cache).
+    // Keep the one with higher order (valid name parses to non-zero).
+    for (int i = 0; i < s_objectiveCount; i++)
+    {
+        for (int j = i + 1; j < s_objectiveCount; j++)
+        {
+            float dx = s_objectives[i].pos[0] - s_objectives[j].pos[0];
+            float dy = s_objectives[i].pos[1] - s_objectives[j].pos[1];
+            if (dx * dx + dy * dy < 4.0f)  // within 2 units
+            {
+                // Keep the one with higher order (parseable name)
+                int keep = (s_objectives[i].order >= s_objectives[j].order) ? i : j;
+                int drop = (keep == i) ? j : i;
+                s_objectives[drop] = s_objectives[s_objectiveCount - 1];
+                s_objectiveCount--;
+                j--;  // re-check this index
+            }
+        }
+    }
+
     // --- Sort objectives by order ---
     std::sort(s_objectives, s_objectives + s_objectiveCount,
               [](const ObjectiveInfo &a, const ObjectiveInfo &b) {
@@ -344,7 +356,8 @@ next:
     for (int i = 0; i < s_objectiveCount; i++)
     {
         META_CONPRINTF("  [%d] '%s' order=%d %s at (%.0f, %.0f, %.0f)\n",
-                       i, s_objectives[i].name, s_objectives[i].order,
+                       i, s_objectives[i].name,
+                       s_objectives[i].order,
                        s_objectives[i].isCapture ? "capture" : "destroy",
                        s_objectives[i].pos[0], s_objectives[i].pos[1],
                        s_objectives[i].pos[2]);
