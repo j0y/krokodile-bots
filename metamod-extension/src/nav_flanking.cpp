@@ -1,6 +1,7 @@
 #include "extension.h"
 #include "nav_flanking.h"
 #include "sig_resolve.h"
+#include "nav_objectives.h"
 
 #include <cstring>
 #include <cmath>
@@ -43,10 +44,8 @@ static bool s_visDataChecked = false;
 // m_connect[4]: +84 from struct start = +88 from object
 // m_id: after CNavAreaCriticalData
 
-static const int kOff_Center     = 44;   // Vector (3 floats)
-static const int kOff_AttrFlags  = 84;   // int
-static const int kOff_Connect    = 88;   // 4x NavConnectVector (one per direction)
-static const int kOff_ID         = 136;  // unsigned int
+static const int kOff_Center     = 44;   // Vector (3 floats) — verified from binary (movss 0x2c)
+static const int kOff_Connect    = 108;  // 4x NavConnectVector (one per direction) — verified from ConnectTo disasm
 
 // NavConnectVector is CUtlVectorUltraConservative<NavConnect>
 // Single pointer to Data_t { int m_Size; NavConnect m_Elements[]; }
@@ -60,10 +59,12 @@ inline const float *NavArea_GetCenter(const void *area)
         reinterpret_cast<const char *>(area) + kOff_Center);
 }
 
-inline unsigned int NavArea_GetID(const void *area)
+// Validate that a raw pointer value looks like a plausible heap/data address.
+// On 32-bit Linux, valid pointers are typically > 0x10000 and < 0xF0000000.
+inline bool IsPlausiblePtr(const void *p)
 {
-    return *reinterpret_cast<const unsigned int *>(
-        reinterpret_cast<const char *>(area) + kOff_ID);
+    uintptr_t addr = reinterpret_cast<uintptr_t>(p);
+    return addr > 0x10000 && addr < 0xF0000000;
 }
 
 inline int NavArea_GetAdjacentCount(const void *area, int dir)
@@ -72,10 +73,13 @@ inline int NavArea_GetAdjacentCount(const void *area, int dir)
     const char *base = reinterpret_cast<const char *>(area) + kOff_Connect;
     const char *vecPtr = base + dir * kSizeofNavConnectVec;
     void *data = *reinterpret_cast<void *const *>(vecPtr);
-    if (!data)
+    if (!data || !IsPlausiblePtr(data))
         return 0;
     // Data_t starts with int m_Size
-    return *reinterpret_cast<const int *>(data);
+    int count = *reinterpret_cast<const int *>(data);
+    if (count < 0 || count > 256)
+        return 0;  // sanity cap
+    return count;
 }
 
 inline void *NavArea_GetAdjacentArea(const void *area, int dir, int index)
@@ -83,12 +87,15 @@ inline void *NavArea_GetAdjacentArea(const void *area, int dir, int index)
     const char *base = reinterpret_cast<const char *>(area) + kOff_Connect;
     const char *vecPtr = base + dir * kSizeofNavConnectVec;
     void *data = *reinterpret_cast<void *const *>(vecPtr);
-    if (!data)
+    if (!data || !IsPlausiblePtr(data))
         return nullptr;
     // Data_t: { int m_Size; NavConnect m_Elements[]; }
     // NavConnect[index] at offset 4 + index * 8
     const char *elements = reinterpret_cast<const char *>(data) + 4;
-    return *reinterpret_cast<void *const *>(elements + index * kSizeofNavConnect);
+    void *areaPtr = *reinterpret_cast<void *const *>(elements + index * kSizeofNavConnect);
+    if (!IsPlausiblePtr(areaPtr))
+        return nullptr;
+    return areaPtr;
 }
 
 // ---- Per-bot flanking path state ----
@@ -107,6 +114,25 @@ struct FlankPath {
 
 static FlankPath s_paths[MAX_EDICT];
 
+// ---- Per-bot flank assignment (team-level coordination) ----
+
+struct FlankAssignment {
+    int   targetEnemyIdx;   // index into enemy position array
+    int   sectorIndex;      // which sector around that enemy
+    int   totalSectors;     // total sectors for this enemy
+    float stagingPos[3];    // A* goal position (~stagingDist from enemy)
+    int   waveOrder;        // 0 = deploy now, 1+ = queued, -1 = holding (arrived)
+    bool  assigned;
+};
+
+static FlankAssignment s_assignments[MAX_EDICT];
+static bool s_holding[MAX_EDICT];  // true = reached staging position, holding
+
+// Staleness tracking for reassignment
+static float s_lastAssignTime = 0.0f;
+static float s_lastAssignEnemyPos[32][3];
+static int   s_lastAssignEnemyCount = 0;
+
 // ---- ConVars ----
 
 #include <convar.h>
@@ -117,6 +143,12 @@ static ConVar s_cvarFlankVisPenalty("smartbots_flank_vis_penalty", "2000", 0,
     "Extra cost (units) added to nav areas visible to the threat");
 static ConVar s_cvarFlankReplan("smartbots_flank_replan_seconds", "3.0", 0,
     "Seconds between flanking path replans");
+static ConVar s_cvarFlankStagingDist("smartbots_flank_staging_dist", "400", 0,
+    "Distance from enemy for flanking staging positions (units)");
+static ConVar s_cvarFlankAssignSeconds("smartbots_flank_assign_seconds", "5.0", 0,
+    "Interval between flank assignment recomputation (seconds)");
+static ConVar s_cvarFlankDefendRatio("smartbots_flank_defend_ratio", "0.3", 0,
+    "Fraction of bots that defend objective (rest flank)");
 
 // ---- Nav readiness check ----
 
@@ -143,8 +175,9 @@ static bool EnsureNavReady()
         return false;
 
     s_navReady = true;
-    META_CONPRINTF("[SmartBots] NavFlanking: nav mesh ready (test area ID %u)\n",
-                   NavArea_GetID(testArea));
+    const float *tc = NavArea_GetCenter(testArea);
+    META_CONPRINTF("[SmartBots] NavFlanking: nav mesh ready (test area at %.0f,%.0f,%.0f)\n",
+                   tc[0], tc[1], tc[2]);
 
     return true;
 }
@@ -249,6 +282,7 @@ static int FindFlankPath(void *startArea, void *goalArea, void *threatArea,
 
     int iterations = 0;
     bool found = false;
+    void *finalArea = nullptr;  // area we actually reached (may differ from goalArea)
 
     while (!openList.empty() && iterations < MAX_ITERATIONS)
     {
@@ -258,8 +292,20 @@ static int FindFlankPath(void *startArea, void *goalArea, void *threatArea,
 
         if (current.area == goalArea)
         {
+            finalArea = goalArea;
             found = true;
             break;
+        }
+
+        // Early termination: if within ~200u of goal, accept as reached
+        {
+            const float *cc = NavArea_GetCenter(current.area);
+            if (VecDist(cc, goalCenter) < 200.0f)
+            {
+                finalArea = current.area;
+                found = true;
+                break;
+            }
         }
 
         // Skip if we've already found a better path to this node
@@ -308,10 +354,10 @@ static int FindFlankPath(void *startArea, void *goalArea, void *threatArea,
     if (!found)
         return 0;
 
-    // Reconstruct path (goal → start), then reverse
+    // Reconstruct path (reached area → start), then reverse
     void *path[MAX_WAYPOINTS + 1];
     int pathLen = 0;
-    void *node = goalArea;
+    void *node = finalArea;
     while (node && pathLen <= MAX_WAYPOINTS)
     {
         path[pathLen++] = node;
@@ -337,6 +383,243 @@ static int FindFlankPath(void *startArea, void *goalArea, void *threatArea,
     return wpCount;
 }
 
+// ---- Team-level flank assignment ----
+
+// Distribute bots across enemies with sector angles and wave ordering.
+// Holding bots (already at staging position) are excluded from active assignment.
+static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)[3],
+                               int botCount,
+                               const float (*enemyPositions)[3], int enemyCount)
+{
+    memset(s_assignments, 0, sizeof(s_assignments));
+
+    if (botCount == 0 || enemyCount == 0)
+        return;
+
+    float stagingDist = s_cvarFlankStagingDist.GetFloat();
+
+    // Get objective position for sector orientation (sector 0 faces objective)
+    float objPos[3] = {0, 0, 0};
+    if (NavObjectives_IsReady())
+    {
+        const ObjectiveInfo *obj = NavObjectives_Get(NavObjectives_CurrentIndex());
+        if (obj)
+        {
+            objPos[0] = obj->pos[0];
+            objPos[1] = obj->pos[1];
+            objPos[2] = obj->pos[2];
+        }
+    }
+
+    // Separate bots into holding (arrived at staging) and available
+    int availIdx[32];
+    int availCount = 0;
+
+    for (int b = 0; b < botCount && b < 32; b++)
+    {
+        int edict = botEdicts[b];
+        if (edict < 1 || edict >= MAX_EDICT)
+            continue;
+        if (s_holding[edict])
+        {
+            // Holding bot: mark assigned but not moving
+            FlankAssignment &a = s_assignments[edict];
+            a.assigned = true;
+            a.waveOrder = -1;
+            a.stagingPos[0] = botPositions[b][0];
+            a.stagingPos[1] = botPositions[b][1];
+            a.stagingPos[2] = botPositions[b][2];
+        }
+        else
+        {
+            availIdx[availCount++] = b;
+        }
+    }
+
+    if (availCount == 0)
+        return;
+
+    // Sort available bots by distance to nearest enemy (closest first)
+    struct BotDist { int botIdx; float dist2; };
+    BotDist sorted[32];
+    for (int i = 0; i < availCount; i++)
+    {
+        int b = availIdx[i];
+        sorted[i].botIdx = b;
+        float best = 1e18f;
+        for (int e = 0; e < enemyCount; e++)
+        {
+            float dx = enemyPositions[e][0] - botPositions[b][0];
+            float dy = enemyPositions[e][1] - botPositions[b][1];
+            float d2 = dx * dx + dy * dy;
+            if (d2 < best) best = d2;
+        }
+        sorted[i].dist2 = best;
+    }
+    // Insertion sort (small array)
+    for (int i = 1; i < availCount; i++)
+    {
+        BotDist tmp = sorted[i];
+        int j = i - 1;
+        while (j >= 0 && sorted[j].dist2 > tmp.dist2)
+        {
+            sorted[j + 1] = sorted[j];
+            j--;
+        }
+        sorted[j + 1] = tmp;
+    }
+
+    // Round-robin available bots across enemies
+    int botsPerEnemy[32] = {};
+    int botEnemyMap[32];  // sorted index → enemy index
+    for (int i = 0; i < availCount; i++)
+    {
+        int enemyIdx = i % enemyCount;
+        botEnemyMap[i] = enemyIdx;
+        botsPerEnemy[enemyIdx]++;
+    }
+
+    // Assign sectors and compute staging positions
+    int sectorCounter[32] = {};
+
+    for (int i = 0; i < availCount; i++)
+    {
+        int b = sorted[i].botIdx;
+        int edict = botEdicts[b];
+        if (edict < 1 || edict >= MAX_EDICT)
+            continue;
+
+        int enemyIdx = botEnemyMap[i];
+        int K = botsPerEnemy[enemyIdx];
+        int sector = sectorCounter[enemyIdx]++;
+
+        FlankAssignment &a = s_assignments[edict];
+        a.targetEnemyIdx = enemyIdx;
+        a.sectorIndex = sector;
+        a.totalSectors = K;
+        a.assigned = true;
+
+        // Compute sector angle: sector 0 oriented from enemy toward objective
+        float baseDirX = objPos[0] - enemyPositions[enemyIdx][0];
+        float baseDirY = objPos[1] - enemyPositions[enemyIdx][1];
+        float baseLen = sqrtf(baseDirX * baseDirX + baseDirY * baseDirY);
+        if (baseLen > 0.001f)
+        {
+            baseDirX /= baseLen;
+            baseDirY /= baseLen;
+        }
+        else
+        {
+            baseDirX = 1.0f;
+            baseDirY = 0.0f;
+        }
+
+        float sectorAngle = (2.0f * 3.14159f * sector) / K;
+        float cosA = cosf(sectorAngle);
+        float sinA = sinf(sectorAngle);
+        float dirX = baseDirX * cosA - baseDirY * sinA;
+        float dirY = baseDirX * sinA + baseDirY * cosA;
+
+        // Staging position: stagingDist from enemy in sector direction
+        float candidate[3] = {
+            enemyPositions[enemyIdx][0] + dirX * stagingDist,
+            enemyPositions[enemyIdx][1] + dirY * stagingDist,
+            enemyPositions[enemyIdx][2]
+        };
+
+        // Snap to nav mesh
+        void *navMesh = GetNavMesh();
+        if (navMesh && s_fnGetNearestNavArea)
+        {
+            CNavArea *area = s_fnGetNearestNavArea(navMesh, candidate,
+                                                    true, 500.0f, false, false, 0);
+            if (area)
+            {
+                const float *c = NavArea_GetCenter(area);
+                a.stagingPos[0] = c[0];
+                a.stagingPos[1] = c[1];
+                a.stagingPos[2] = c[2];
+            }
+            else
+            {
+                a.stagingPos[0] = candidate[0];
+                a.stagingPos[1] = candidate[1];
+                a.stagingPos[2] = candidate[2];
+            }
+        }
+        else
+        {
+            a.stagingPos[0] = candidate[0];
+            a.stagingPos[1] = candidate[1];
+            a.stagingPos[2] = candidate[2];
+        }
+    }
+
+    // Assign wave order per enemy: first non-holding bot gets 0, rest queue
+    // For each enemy, find bots assigned to it and set waveOrder
+    for (int e = 0; e < enemyCount; e++)
+    {
+        bool hasActive = false;
+        // Iterate in sector order (sector 0 first)
+        for (int sec = 0; sec < botsPerEnemy[e]; sec++)
+        {
+            // Find the bot with this enemy+sector
+            for (int b = 0; b < botCount; b++)
+            {
+                int edict = botEdicts[b];
+                if (edict < 1 || edict >= MAX_EDICT)
+                    continue;
+                FlankAssignment &a = s_assignments[edict];
+                if (!a.assigned || a.waveOrder == -1)
+                    continue;
+                if (a.targetEnemyIdx != e || a.sectorIndex != sec)
+                    continue;
+
+                // Check if this bot is already near its staging position
+                float dx = botPositions[b][0] - a.stagingPos[0];
+                float dy = botPositions[b][1] - a.stagingPos[1];
+                if (dx * dx + dy * dy < 200.0f * 200.0f)
+                {
+                    // Already at staging — mark as holding
+                    s_holding[edict] = true;
+                    a.waveOrder = -1;
+                }
+                else if (!hasActive)
+                {
+                    a.waveOrder = 0;
+                    hasActive = true;
+                }
+                else
+                {
+                    a.waveOrder = sec;  // queued
+                }
+                break;
+            }
+        }
+    }
+
+    s_lastAssignTime = gpGlobals->curtime;
+    s_lastAssignEnemyCount = enemyCount;
+    for (int e = 0; e < enemyCount && e < 32; e++)
+    {
+        s_lastAssignEnemyPos[e][0] = enemyPositions[e][0];
+        s_lastAssignEnemyPos[e][1] = enemyPositions[e][1];
+        s_lastAssignEnemyPos[e][2] = enemyPositions[e][2];
+    }
+
+    // Log assignment summary
+    int activeCount = 0, queuedCount = 0, holdCount = 0;
+    for (int i = 1; i < MAX_EDICT; i++)
+    {
+        if (!s_assignments[i].assigned) continue;
+        if (s_assignments[i].waveOrder == 0) activeCount++;
+        else if (s_assignments[i].waveOrder == -1) holdCount++;
+        else queuedCount++;
+    }
+    META_CONPRINTF("[SmartBots] FlankAssign: %d enemies, %d active, %d queued, %d holding\n",
+                   enemyCount, activeCount, queuedCount, holdCount);
+}
+
 // ---- Status ConCommand ----
 
 static void CC_FlankStatus(const CCommand &args)
@@ -347,25 +630,33 @@ static void CC_FlankStatus(const CCommand &args)
     META_CONPRINTF("  Vis data: %s\n", s_visDataChecked ? (s_hasVisData ? "yes" : "missing") : "not checked");
     META_CONPRINTF("  Enabled: %s\n", s_cvarFlankEnabled.GetBool() ? "yes" : "no");
     META_CONPRINTF("  Vis penalty: %.0f\n", s_cvarFlankVisPenalty.GetFloat());
-    META_CONPRINTF("  Replan interval: %.1fs\n", s_cvarFlankReplan.GetFloat());
+    META_CONPRINTF("  Staging dist: %.0f\n", s_cvarFlankStagingDist.GetFloat());
+    META_CONPRINTF("  Assign interval: %.1fs\n", s_cvarFlankAssignSeconds.GetFloat());
+    META_CONPRINTF("  Defend ratio: %.0f%%\n", s_cvarFlankDefendRatio.GetFloat() * 100.0f);
+    META_CONPRINTF("  Last assign: %.1fs ago\n",
+                   s_lastAssignTime > 0 ? gpGlobals->curtime - s_lastAssignTime : -1.0f);
 
-    int activePaths = 0;
+    int activePaths = 0, assigned = 0, holdingCount = 0;
     for (int i = 1; i < MAX_EDICT; i++)
     {
-        if (s_paths[i].active)
-            activePaths++;
+        if (s_paths[i].active) activePaths++;
+        if (s_assignments[i].assigned) assigned++;
+        if (s_holding[i]) holdingCount++;
     }
-    META_CONPRINTF("  Active paths: %d\n", activePaths);
+    META_CONPRINTF("  Assigned: %d, Active paths: %d, Holding: %d\n",
+                   assigned, activePaths, holdingCount);
 
     for (int i = 1; i < MAX_EDICT; i++)
     {
-        if (s_paths[i].active)
-        {
-            FlankPath &p = s_paths[i];
-            META_CONPRINTF("  Bot %d: wp %d/%d, enemy (%.0f,%.0f,%.0f)\n",
-                           i, p.currentWaypoint, p.waypointCount,
-                           p.enemyPos[0], p.enemyPos[1], p.enemyPos[2]);
-        }
+        if (!s_assignments[i].assigned)
+            continue;
+        FlankAssignment &a = s_assignments[i];
+        const char *state = s_holding[i] ? "HOLDING" :
+                            (a.waveOrder == 0 ? "ACTIVE" : "QUEUED");
+        META_CONPRINTF("  Bot %d: enemy=%d sector=%d/%d wave=%d staging=(%.0f,%.0f,%.0f) %s\n",
+                       i, a.targetEnemyIdx, a.sectorIndex, a.totalSectors,
+                       a.waveOrder, a.stagingPos[0], a.stagingPos[1], a.stagingPos[2],
+                       state);
     }
 }
 
@@ -422,100 +713,168 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
         return;
 
     float curtime = gpGlobals->curtime;
+    float assignInterval = s_cvarFlankAssignSeconds.GetFloat();
     float replanInterval = s_cvarFlankReplan.GetFloat();
 
+    // --- Check staleness: do we need to reassign sectors? ---
+    bool needReassign = false;
+
+    // First time or no previous assignment
+    if (s_lastAssignTime == 0.0f)
+        needReassign = true;
+
+    // Timer expired
+    if (!needReassign && curtime - s_lastAssignTime >= assignInterval)
+        needReassign = true;
+
+    // Enemy count changed
+    if (!needReassign && enemyCount != s_lastAssignEnemyCount)
+    {
+        needReassign = true;
+        memset(s_holding, 0, sizeof(s_holding));  // positions invalid
+    }
+
+    // Enemy moved >300u
+    if (!needReassign)
+    {
+        for (int e = 0; e < enemyCount && e < s_lastAssignEnemyCount; e++)
+        {
+            float dx = enemyPositions[e][0] - s_lastAssignEnemyPos[e][0];
+            float dy = enemyPositions[e][1] - s_lastAssignEnemyPos[e][1];
+            if (dx * dx + dy * dy > 300.0f * 300.0f)
+            {
+                needReassign = true;
+                memset(s_holding, 0, sizeof(s_holding));
+                break;
+            }
+        }
+    }
+
+    // Check if a flanking bot died (was assigned but not in current bot list)
+    if (!needReassign)
+    {
+        for (int e = 1; e < MAX_EDICT; e++)
+        {
+            if (!s_assignments[e].assigned)
+                continue;
+            bool found = false;
+            for (int b = 0; b < botCount; b++)
+            {
+                if (botEdicts[b] == e) { found = true; break; }
+            }
+            if (!found)
+            {
+                needReassign = true;
+                s_assignments[e].assigned = false;
+                s_holding[e] = false;
+                break;
+            }
+        }
+    }
+
+    // Check if any active bot (waveOrder 0) reached staging position
+    if (!needReassign)
+    {
+        for (int b = 0; b < botCount; b++)
+        {
+            int edict = botEdicts[b];
+            if (edict < 1 || edict >= MAX_EDICT) continue;
+            FlankAssignment &a = s_assignments[edict];
+            if (!a.assigned || a.waveOrder != 0 || s_holding[edict])
+                continue;
+
+            float dx = botPositions[b][0] - a.stagingPos[0];
+            float dy = botPositions[b][1] - a.stagingPos[1];
+            if (dx * dx + dy * dy < 200.0f * 200.0f)
+            {
+                s_holding[edict] = true;
+                needReassign = true;
+                break;
+            }
+        }
+    }
+
+    if (needReassign)
+    {
+        AssignFlankTargets(botEdicts, botPositions, botCount,
+                           enemyPositions, enemyCount);
+    }
+
+    // --- Compute A* paths for active bots (waveOrder == 0, not holding) ---
     for (int b = 0; b < botCount; b++)
     {
         int edictIdx = botEdicts[b];
         if (edictIdx < 1 || edictIdx >= MAX_EDICT)
             continue;
 
+        FlankAssignment &asgn = s_assignments[edictIdx];
+        if (!asgn.assigned || asgn.waveOrder != 0 || s_holding[edictIdx])
+        {
+            // Deactivate path for non-active bots
+            s_paths[edictIdx].active = false;
+            continue;
+        }
+
         FlankPath &path = s_paths[edictIdx];
 
-        // No enemies known — deactivate path
-        if (enemyCount == 0)
-        {
-            path.active = false;
-            continue;
-        }
-
-        // Find nearest enemy to this bot
-        float bestDist2 = 1e18f;
-        int bestEnemy = -1;
-        for (int e = 0; e < enemyCount; e++)
-        {
-            float dx = enemyPositions[e][0] - botPositions[b][0];
-            float dy = enemyPositions[e][1] - botPositions[b][1];
-            float d2 = dx * dx + dy * dy;
-            if (d2 < bestDist2)
-            {
-                bestDist2 = d2;
-                bestEnemy = e;
-            }
-        }
-        if (bestEnemy < 0)
-            continue;
-
-        // Check if replan needed
+        // Check if A* replan needed
         bool needReplan = false;
         if (!path.active)
-        {
             needReplan = true;
-        }
         else if (curtime - path.replanTime >= replanInterval)
-        {
             needReplan = true;
-        }
-        else
+
+        if (needReplan)
         {
-            // Enemy moved significantly?
-            float dx = enemyPositions[bestEnemy][0] - path.enemyPos[0];
-            float dy = enemyPositions[bestEnemy][1] - path.enemyPos[1];
-            if (dx * dx + dy * dy > 200.0f * 200.0f)
-                needReplan = true;
+            // Resolve nav areas
+            CNavArea *botArea = s_fnGetNearestNavArea(
+                navMesh, botPositions[b], true, 300.0f, false, false, 0);
+            CNavArea *stagingArea = s_fnGetNearestNavArea(
+                navMesh, asgn.stagingPos, true, 500.0f, false, false, 0);
+
+            // Threat area for vis penalty (enemy's actual position)
+            CNavArea *threatArea = nullptr;
+            int enemyIdx = asgn.targetEnemyIdx;
+            if (enemyIdx >= 0 && enemyIdx < enemyCount)
+            {
+                threatArea = s_fnGetNearestNavArea(
+                    navMesh, enemyPositions[enemyIdx], true, 300.0f, false, false, 0);
+            }
+
+            if (!botArea || !stagingArea)
+            {
+                path.active = false;
+                continue;
+            }
+
+            if (botArea == stagingArea)
+            {
+                // Already at staging area
+                s_holding[edictIdx] = true;
+                path.active = false;
+                continue;
+            }
+
+            // Run A* with visibility penalty on enemy area
+            float waypoints[MAX_WAYPOINTS][3];
+            int wpCount = FindFlankPath(botArea, stagingArea, threatArea,
+                                         waypoints, MAX_WAYPOINTS);
+
+            if (wpCount == 0)
+            {
+                path.active = false;
+                continue;
+            }
+
+            memcpy(path.waypoints, waypoints, wpCount * sizeof(float[3]));
+            path.waypointCount = wpCount;
+            path.currentWaypoint = 0;
+            path.enemyPos[0] = asgn.stagingPos[0];
+            path.enemyPos[1] = asgn.stagingPos[1];
+            path.enemyPos[2] = asgn.stagingPos[2];
+            path.replanTime = curtime;
+            path.active = true;
         }
-
-        if (!needReplan)
-            continue;
-
-        // Resolve nav areas for bot and enemy
-        CNavArea *botArea = s_fnGetNearestNavArea(
-            navMesh, botPositions[b], true, 300.0f, false, false, 0);
-        CNavArea *enemyArea = s_fnGetNearestNavArea(
-            navMesh, enemyPositions[bestEnemy], true, 300.0f, false, false, 0);
-
-        if (!botArea || !enemyArea)
-        {
-            path.active = false;
-            continue;
-        }
-
-        // If bot is already at the enemy area, no flanking needed
-        if (botArea == enemyArea)
-        {
-            path.active = false;
-            continue;
-        }
-
-        // Run A* with visibility penalty
-        float waypoints[MAX_WAYPOINTS][3];
-        int wpCount = FindFlankPath(botArea, enemyArea, enemyArea, waypoints, MAX_WAYPOINTS);
-
-        if (wpCount == 0)
-        {
-            path.active = false;
-            continue;
-        }
-
-        // Store path
-        memcpy(path.waypoints, waypoints, wpCount * sizeof(float[3]));
-        path.waypointCount = wpCount;
-        path.currentWaypoint = 0;
-        path.enemyPos[0] = enemyPositions[bestEnemy][0];
-        path.enemyPos[1] = enemyPositions[bestEnemy][1];
-        path.enemyPos[2] = enemyPositions[bestEnemy][2];
-        path.replanTime = curtime;
-        path.active = true;
     }
 
     // Advance waypoints for all active paths
@@ -568,8 +927,17 @@ bool NavFlanking_IsActive(int edictIndex)
 void NavFlanking_Reset()
 {
     memset(s_paths, 0, sizeof(s_paths));
+    memset(s_assignments, 0, sizeof(s_assignments));
+    memset(s_holding, 0, sizeof(s_holding));
+    s_lastAssignTime = 0.0f;
+    s_lastAssignEnemyCount = 0;
     s_navReady = false;
     s_visDataChecked = false;
     s_hasVisData = false;
     META_CONPRINTF("[SmartBots] NavFlanking: reset\n");
+}
+
+float NavFlanking_GetDefendRatio()
+{
+    return s_cvarFlankDefendRatio.GetFloat();
 }

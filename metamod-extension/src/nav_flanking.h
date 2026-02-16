@@ -27,4 +27,7 @@ bool NavFlanking_IsActive(int edictIndex);
 // Clear all flanking state (round start / map change).
 void NavFlanking_Reset();
 
+// Get the defend ratio ConVar value (fraction of bots that defend objective).
+float NavFlanking_GetDefendRatio();
+
 #endif // _SMARTBOTS_NAV_FLANKING_H_

@@ -631,14 +631,16 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
     // the locomotion system continues executing the last path between updates.
     if (freshScan)
     {
-        // ---- Tactical deployment: spread bots around current objective ----
+        // ---- Role assignment: defenders (BotTactics) vs flankers (NavFlanking) ----
         {
-            int tacEdicts[32];
-            float tacPositions[32][3];
-            int tacCount = 0;
+            int allEdicts[32];
+            void *allEntities[32];
+            float allPositions[32][3];
+            int allCount = 0;
             int team = s_cvarTeam.GetInt();
 
-            for (int i = 0; i < s_resolvedBotCount && tacCount < 32; i++)
+            // Collect all alive team bots
+            for (int i = 0; i < s_resolvedBotCount && allCount < 32; i++)
             {
                 int idx = s_resolvedBots[i].edictIndex;
                 if (!ValidateBot(idx, s_resolvedBots[i].entity))
@@ -649,75 +651,151 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                     if (s_stateArray[j].id == idx && s_stateArray[j].alive
                         && s_stateArray[j].team == team)
                     {
-                        tacEdicts[tacCount] = idx;
-                        tacPositions[tacCount][0] = s_stateArray[j].pos[0];
-                        tacPositions[tacCount][1] = s_stateArray[j].pos[1];
-                        tacPositions[tacCount][2] = s_stateArray[j].pos[2];
-                        tacCount++;
+                        allEdicts[allCount] = idx;
+                        allEntities[allCount] = (void *)s_resolvedBots[i].entity;
+                        allPositions[allCount][0] = s_stateArray[j].pos[0];
+                        allPositions[allCount][1] = s_stateArray[j].pos[1];
+                        allPositions[allCount][2] = s_stateArray[j].pos[2];
+                        allCount++;
                         break;
                     }
                 }
             }
 
-            if (tacCount > 0)
-                BotTactics_Update(tacEdicts, tacPositions, tacCount, s_tickCount);
-        }
-
-        // ---- Nav mesh flanking: route bots around enemy sightlines ----
-        {
-            // Build arrays of flanking-eligible bots: alive, no visible enemy, no Python command
-            int flankEdicts[32];
-            void *flankEntities[32];
-            float flankPositions[32][3];
-            int flankCount = 0;
-            int team = s_cvarTeam.GetInt();
-
-            for (int i = 0; i < s_resolvedBotCount && flankCount < 32; i++)
+            if (allCount > 0)
             {
-                int idx = s_resolvedBots[i].edictIndex;
-                if (!ValidateBot(idx, s_resolvedBots[i].entity))
-                    continue;
-                if (BotActionHook_HasVisibleEnemy(idx))
-                    continue;
+                // Build intel target list: real enemies if available,
+                // otherwise use attacker spawn as a synthetic threat
+                // so flankers proactively advance toward the approach.
+                float intelPos[33][3];
+                int intelCount = 0;
 
-                // Skip bots with Python commands — planner controls them
-                BotCommandEntry cmd;
-                if (BotCommand_Get(idx, cmd))
-                    continue;
-
-                // Find this bot's position and team from state array
-                for (int j = 0; j < s_stateCount; j++)
+                if (s_intelCount > 0)
                 {
-                    if (s_stateArray[j].id == idx && s_stateArray[j].alive
-                        && s_stateArray[j].team == team)
+                    intelCount = s_intelCount;
+                    memcpy(intelPos, s_intelPos, s_intelCount * sizeof(float[3]));
+                }
+                else
+                {
+                    // No enemies visible — use attacker spawn as synthetic target
+                    float ax, ay, az;
+                    if (NavObjectives_GetAttackerSpawn(ax, ay, az))
                     {
-                        flankEdicts[flankCount] = idx;
-                        flankEntities[flankCount] = (void *)s_resolvedBots[i].entity;
-                        flankPositions[flankCount][0] = s_stateArray[j].pos[0];
-                        flankPositions[flankCount][1] = s_stateArray[j].pos[1];
-                        flankPositions[flankCount][2] = s_stateArray[j].pos[2];
-                        flankCount++;
-                        break;
+                        intelPos[0][0] = ax;
+                        intelPos[0][1] = ay;
+                        intelPos[0][2] = az;
+                        intelCount = 1;
                     }
                 }
-            }
 
-            if (flankCount > 0 && s_intelCount > 0)
-            {
-                NavFlanking_Update(flankEdicts, flankEntities, flankPositions, flankCount,
-                                   s_intelPos, s_intelCount);
+                int defCount = allCount;    // default: all defend
+                int flankStart = allCount;  // default: no flankers
 
-                // Issue movement requests for bots with active flanking paths
-                for (int i = 0; i < flankCount; i++)
+                if (intelCount > 0)
                 {
-                    float fx, fy, fz;
-                    if (NavFlanking_GetTarget(flankEdicts[i], fx, fy, fz))
+                    // Sort by distance to current objective (closest = defenders)
+                    float objX = 0, objY = 0;
+                    if (NavObjectives_IsReady())
                     {
-                        if (TargetChanged(flankEdicts[i], fx, fy, fz))
+                        const ObjectiveInfo *obj = NavObjectives_Get(NavObjectives_CurrentIndex());
+                        if (obj) { objX = obj->pos[0]; objY = obj->pos[1]; }
+                    }
+
+                    // Compute distances and sort indices
+                    float dist2[32];
+                    int indices[32];
+                    for (int i = 0; i < allCount; i++)
+                    {
+                        float dx = allPositions[i][0] - objX;
+                        float dy = allPositions[i][1] - objY;
+                        dist2[i] = dx * dx + dy * dy;
+                        indices[i] = i;
+                    }
+                    // Insertion sort by distance (closest first)
+                    for (int i = 1; i < allCount; i++)
+                    {
+                        int tmp = indices[i];
+                        float tmpD = dist2[tmp];
+                        int j = i - 1;
+                        while (j >= 0 && dist2[indices[j]] > tmpD)
                         {
-                            if (BotActionHook_IssueMovementRequest(flankEntities[i], fx, fy, fz))
+                            indices[j + 1] = indices[j];
+                            j--;
+                        }
+                        indices[j + 1] = tmp;
+                    }
+
+                    // Split: ~30% defenders (closest to obj), rest flankers
+                    float ratio = NavFlanking_GetDefendRatio();
+                    defCount = (int)(allCount * ratio + 0.5f);
+                    if (defCount < 1) defCount = 1;
+                    if (defCount > allCount) defCount = allCount;
+                    flankStart = defCount;
+
+                    // Reorder arrays by sorted indices
+                    int tmpEdicts[32];
+                    void *tmpEntities[32];
+                    float tmpPositions[32][3];
+                    for (int i = 0; i < allCount; i++)
+                    {
+                        int src = indices[i];
+                        tmpEdicts[i] = allEdicts[src];
+                        tmpEntities[i] = allEntities[src];
+                        tmpPositions[i][0] = allPositions[src][0];
+                        tmpPositions[i][1] = allPositions[src][1];
+                        tmpPositions[i][2] = allPositions[src][2];
+                    }
+                    memcpy(allEdicts, tmpEdicts, allCount * sizeof(int));
+                    memcpy(allEntities, tmpEntities, allCount * sizeof(void *));
+                    memcpy(allPositions, tmpPositions, allCount * sizeof(float[3]));
+                }
+
+                // Defenders → BotTactics (spread around objective)
+                if (defCount > 0)
+                    BotTactics_Update(allEdicts, allPositions, defCount, s_tickCount);
+
+                // Flankers → NavFlanking (only those without visible enemy)
+                if (flankStart < allCount && intelCount > 0)
+                {
+                    int flankEdicts[32];
+                    void *flankEntities[32];
+                    float flankPositions[32][3];
+                    int flankCount = 0;
+
+                    for (int i = flankStart; i < allCount && flankCount < 32; i++)
+                    {
+                        if (BotActionHook_HasVisibleEnemy(allEdicts[i]))
+                            continue;
+
+                        flankEdicts[flankCount] = allEdicts[i];
+                        flankEntities[flankCount] = allEntities[i];
+                        flankPositions[flankCount][0] = allPositions[i][0];
+                        flankPositions[flankCount][1] = allPositions[i][1];
+                        flankPositions[flankCount][2] = allPositions[i][2];
+                        flankCount++;
+                    }
+
+                    if (flankCount > 0)
+                    {
+                        NavFlanking_Update(flankEdicts, flankEntities, flankPositions,
+                                           flankCount,
+                                           reinterpret_cast<const float(*)[3]>(intelPos),
+                                           intelCount);
+
+                        // Issue movement requests for bots with active flanking paths
+                        for (int i = 0; i < flankCount; i++)
+                        {
+                            float fx, fy, fz;
+                            if (NavFlanking_GetTarget(flankEdicts[i], fx, fy, fz))
                             {
-                                RecordTarget(flankEdicts[i], fx, fy, fz);
+                                if (TargetChanged(flankEdicts[i], fx, fy, fz))
+                                {
+                                    if (BotActionHook_IssueMovementRequest(
+                                            flankEntities[i], fx, fy, fz))
+                                    {
+                                        RecordTarget(flankEdicts[i], fx, fy, fz);
+                                    }
+                                }
                             }
                         }
                     }

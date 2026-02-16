@@ -190,6 +190,20 @@ void NavObjectives_Scan()
 
             obj.order = ParseOrder(targetname);
 
+            // Skip control points with garbled names (non-printable bytes).
+            // IServerTools::GetKeyValue returns garbage for some entities
+            // that are paired with obj_weapon_cache and will be added properly.
+            {
+                bool nameValid = (targetname[0] != '\0');
+                for (const char *p = targetname; *p && nameValid; p++)
+                {
+                    if (*p < 32 || *p > 126)
+                        nameValid = false;
+                }
+                if (!nameValid)
+                    goto next;
+            }
+
             // Check if this CP has a trigger_capture_zone → capture type
             obj.isCapture = false;
             for (int i = 0; i < captureNameCount; i++)
