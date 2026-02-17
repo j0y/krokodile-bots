@@ -1,0 +1,5 @@
+"Metamod Plugin"
+{
+	"alias"		"navspawning"
+	"file"		"addons/navspawning/bin/linux/navspawning"
+}

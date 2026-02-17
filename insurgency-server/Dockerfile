@@ -1,5 +1,5 @@
 # ============================================================
-# Stage 1: Build Metamod extension (32-bit)
+# Stage 1: Build Metamod extensions (32-bit)
 # ============================================================
 FROM debian:bullseye-slim AS ext-builder
 
@@ -12,8 +12,16 @@ RUN dpkg --add-architecture i386 && \
         make \
     && rm -rf /var/lib/apt/lists/*
 
-COPY metamod-extension/ /build/
-RUN cd /build && \
+COPY metamod-extension/ /build/metamod-extension/
+COPY metamod-nav-spawning/ /build/metamod-nav-spawning/
+
+# Build smartbots extension
+RUN cd /build/metamod-extension && \
+    cmake -B build -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build build
+
+# Build navspawning extension
+RUN cd /build/metamod-nav-spawning && \
     cmake -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build
 
@@ -84,15 +92,26 @@ RUN chmod +x /home/steam/entrypoint.sh /home/steam/entrypoint-vanilla.sh
 USER steam
 
 # ============================================================
-# 6. Install Metamod extension
+# 6. Install Metamod extensions
 # ============================================================
-RUN mkdir -p /home/steam/insurgency-server/insurgency/addons/smartbots/bin/linux
+RUN mkdir -p /home/steam/insurgency-server/insurgency/addons/smartbots/bin/linux \
+             /home/steam/insurgency-server/insurgency/addons/navspawning/bin/linux
+
+# smartbots extension
 COPY --from=ext-builder --chown=steam:steam \
-    /build/build/smartbots.so \
+    /build/metamod-extension/build/smartbots.so \
     /home/steam/insurgency-server/insurgency/addons/smartbots/bin/linux/smartbots.so
 COPY --chown=steam:steam \
     metamod-extension/smartbots.vdf \
     /home/steam/insurgency-server/insurgency/addons/metamod/smartbots.vdf
+
+# navspawning extension
+COPY --from=ext-builder --chown=steam:steam \
+    /build/metamod-nav-spawning/build/navspawning.so \
+    /home/steam/insurgency-server/insurgency/addons/navspawning/bin/linux/navspawning.so
+COPY --chown=steam:steam \
+    metamod-nav-spawning/navspawning.vdf \
+    /home/steam/insurgency-server/insurgency/addons/metamod/navspawning.vdf
 
 # ============================================================
 # Ports

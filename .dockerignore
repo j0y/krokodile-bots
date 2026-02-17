@@ -1,5 +1,6 @@
 # Build artifacts
 metamod-extension/build/
+metamod-nav-spawning/build/
 build/
 bspMeshExporter/
 navMeshParser/
