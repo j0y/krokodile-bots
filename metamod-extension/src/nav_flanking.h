@@ -20,10 +20,10 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
                         int botCount,
                         const float (*enemyPositions)[3], int enemyCount);
 
-// Get the next movement waypoint for a bot. Returns false if no active path.
+// Get the scored target position for a bot. Returns false if no active target.
 bool NavFlanking_GetTarget(int edictIndex, float &x, float &y, float &z);
 
-// Check if a bot has an active flanking path.
+// Check if a bot has an active position target.
 bool NavFlanking_IsActive(int edictIndex);
 
 // Clear all flanking state (round start / map change).

@@ -309,17 +309,12 @@ static int CollectCandidateAreas(void *startArea, float maxDist,
     if (!startArea || maxAreas <= 0)
         return 0;
 
-    // BFS with flat visited array
     void *queue[MAX_BFS_AREAS];
-    bool visited[MAX_BFS_AREAS];
-    memset(visited, 0, sizeof(visited));
-
     int head = 0, tail = 0, count = 0;
     const float *startCenter = NavArea_GetCenter(startArea);
 
     queue[tail++] = startArea;
     outAreas[count++] = startArea;
-    visited[0] = true;
 
     while (head < tail && count < maxAreas)
     {
@@ -614,11 +609,7 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
 
         // Phase 2.2: Check if bot reached its target position
         if (target.valid)
-        {
-            float dx = botPositions[b][0] - target.pos[0];
-            float dy = botPositions[b][1] - target.pos[1];
-            target.reached = (dx * dx + dy * dy < reachedDist * reachedDist);
-        }
+            target.reached = (VecDist(botPositions[b], target.pos) < reachedDist);
 
         // Find closest enemy to this bot
         float closestEnemyDist = 1e18f;
@@ -757,6 +748,10 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
 
         if (foundBest)
         {
+            // Check if position actually changed (>50u from old target)
+            bool posChanged = !target.valid ||
+                VecDist(bestPos, target.pos) > 50.0f;
+
             target.pos[0] = bestPos[0];
             target.pos[1] = bestPos[1];
             target.pos[2] = bestPos[2];
@@ -770,8 +765,8 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
             target.valid = true;
             target.reached = false;
 
-            // Phase 3.5: Vocal callouts when picking a flanking position
-            if (s_cvarVoiceCallouts.GetBool() && hasObj &&
+            // Phase 3.5: Vocal callouts only when picking a new position
+            if (posChanged && s_cvarVoiceCallouts.GetBool() && hasObj &&
                 curtime - target.lastVoiceTime >= s_cvarVoiceCooldown.GetFloat())
             {
                 // Compute flanking offset to decide which callout
