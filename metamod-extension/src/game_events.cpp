@@ -85,7 +85,9 @@ public:
             return;
         }
         m_objectivesLost++;
-        META_CONPRINTF("[SmartBots] Objective lost [%s] (total lost: %d)\n",
+        memset(s_deathZones, 0, sizeof(s_deathZones));
+        s_deathZoneHead = 0;
+        META_CONPRINTF("[SmartBots] Objective lost [%s] (total lost: %d, death zones cleared)\n",
                        source, m_objectivesLost);
     }
 
