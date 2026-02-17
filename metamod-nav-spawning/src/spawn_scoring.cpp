@@ -133,11 +133,6 @@ struct CachedPlayer {
 static CachedPlayer s_players[MAX_PLAYERS];
 static int s_playerCount = 0;
 
-// ---- Objective cache ----
-
-static float s_objectivePos[3] = {0, 0, 0};
-static bool s_hasObjective = false;
-
 // ---- Controlled team (read from CONTROLLED_TEAM env, default 3) ----
 
 static int s_controlledTeam = 3;  // team whose bots get relocated
@@ -488,14 +483,6 @@ void SpawnScoring_UpdatePlayerNavAreas()
                 navMesh, s_players[i].pos, true, 300.0f, false, false, 0);
         }
     }
-}
-
-void SpawnScoring_SetObjective(float x, float y, float z)
-{
-    s_objectivePos[0] = x;
-    s_objectivePos[1] = y;
-    s_objectivePos[2] = z;
-    s_hasObjective = true;
 }
 
 void SpawnScoring_SetCounterAttack(bool active)

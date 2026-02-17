@@ -20,9 +20,6 @@ void SpawnScoring_UpdatePlayers(const float (*positions)[3], const int *teams, i
 // Update cached player nav areas (called from GameFrame after UpdatePlayers).
 void SpawnScoring_UpdatePlayerNavAreas();
 
-// Set the current objective position (called when objective changes).
-void SpawnScoring_SetObjective(float x, float y, float z);
-
 // Set counter-attack state (changes scoring bias).
 void SpawnScoring_SetCounterAttack(bool active);
 
