@@ -3,6 +3,7 @@
 #include "bot_voice.h"
 #include "sig_resolve.h"
 #include "nav_objectives.h"
+#include "game_events.h"
 
 #include <cstring>
 #include <cmath>
@@ -167,6 +168,11 @@ static BotTarget s_targets[MAX_EDICT];
 // Track time since enemies were last known (for advance-when-safe)
 static float s_lastEnemySeenTime = 0.0f;
 
+// Death zone data (refreshed each NavFlanking_Update cycle)
+static float s_dzPos[16][3];
+static float s_dzTimes[16];
+static int   s_dzCount = 0;
+
 // ---- ConVars ----
 
 #include <convar.h>
@@ -207,6 +213,12 @@ static ConVar s_cvarVoiceCallouts("smartbots_pos_voice_callouts", "1", 0,
     "Enable vocal callouts when bots pick flanking positions");
 static ConVar s_cvarVoiceCooldown("smartbots_pos_voice_cooldown", "8.0", 0,
     "Minimum seconds between voice callouts per bot");
+static ConVar s_cvarDeathZoneWeight("smartbots_pos_deathzone_weight", "60", 0,
+    "Weight for death zone avoidance — avoid positions where teammates died (0-100)");
+static ConVar s_cvarDeathZoneRadius("smartbots_pos_deathzone_radius", "600", 0,
+    "Radius of death zone penalty (units)");
+static ConVar s_cvarDeathZoneMaxAge("smartbots_pos_deathzone_age", "45.0", 0,
+    "How long death zones remain active (seconds)");
 
 // ---- Helpers ----
 
@@ -459,12 +471,38 @@ lof_done:
         }
     }
 
-    float score = coverFactor  * wCover
-                + lofFactor    * wLof
-                + distFactor   * wDist
-                + spreadFactor * wSpread
-                + indoorFactor * wIndoor
-                + flankFactor  * wFlank;
+    // 7. Death zone penalty: avoid positions where teammates recently died
+    float wDeathZone = s_cvarDeathZoneWeight.GetFloat();
+    float dzRadius = s_cvarDeathZoneRadius.GetFloat();
+    float dzMaxAge = s_cvarDeathZoneMaxAge.GetFloat();
+    float deathZoneFactor = 1.0f;
+    if (wDeathZone > 0.0f && s_dzCount > 0)
+    {
+        float curtime = gpGlobals->curtime;
+        float totalPenalty = 0.0f;
+        for (int d = 0; d < s_dzCount; d++)
+        {
+            float dist = VecDist(pos, s_dzPos[d]);
+            if (dist < dzRadius)
+            {
+                float distPenalty = 1.0f - dist / dzRadius;          // 1.0 at center, 0.0 at edge
+                float age = curtime - s_dzTimes[d];
+                float ageFade = 1.0f - age / dzMaxAge;               // 1.0 when fresh, 0.0 when old
+                if (ageFade < 0.0f) ageFade = 0.0f;
+                totalPenalty += distPenalty * ageFade;                 // stacks per death
+            }
+        }
+        deathZoneFactor = 1.0f - totalPenalty;
+        if (deathZoneFactor < 0.0f) deathZoneFactor = 0.0f;
+    }
+
+    float score = coverFactor      * wCover
+                + lofFactor        * wLof
+                + distFactor       * wDist
+                + spreadFactor     * wSpread
+                + indoorFactor     * wIndoor
+                + flankFactor      * wFlank
+                + deathZoneFactor  * wDeathZone;
 
     return score;
 }
@@ -478,10 +516,14 @@ static void CC_FlankStatus(const CCommand &args)
     META_CONPRINTF("  Nav ready: %s\n", s_navReady ? "yes" : "no");
     META_CONPRINTF("  Vis data: %s\n", s_visDataChecked ? (s_hasVisData ? "yes" : "missing") : "not checked");
     META_CONPRINTF("  Enabled: %s\n", s_cvarFlankEnabled.GetBool() ? "yes" : "no");
-    META_CONPRINTF("  Weights: cover=%.0f lof=%.0f dist=%.0f spread=%.0f indoor=%.0f flank=%.0f\n",
+    META_CONPRINTF("  Weights: cover=%.0f lof=%.0f dist=%.0f spread=%.0f indoor=%.0f flank=%.0f dz=%.0f\n",
                    s_cvarCoverWeight.GetFloat(), s_cvarLofWeight.GetFloat(),
                    s_cvarDistWeight.GetFloat(), s_cvarSpreadWeight.GetFloat(),
-                   s_cvarIndoorWeight.GetFloat(), s_cvarFlankWeight.GetFloat());
+                   s_cvarIndoorWeight.GetFloat(), s_cvarFlankWeight.GetFloat(),
+                   s_cvarDeathZoneWeight.GetFloat());
+    META_CONPRINTF("  Death zones: %d active (radius=%.0f, age=%.0fs)\n",
+                   s_dzCount, s_cvarDeathZoneRadius.GetFloat(),
+                   s_cvarDeathZoneMaxAge.GetFloat());
     META_CONPRINTF("  Ideal dist: %.0f  Eval: %.1fs (reached: %.1fs)\n",
                    s_cvarIdealDist.GetFloat(), s_cvarEvalInterval.GetFloat(),
                    s_cvarReachedEvalInterval.GetFloat());
@@ -568,6 +610,10 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
     float reachedEvalInterval = s_cvarReachedEvalInterval.GetFloat();
     float reachedDist = s_cvarReachedDist.GetFloat();
 
+    // Refresh death zone cache for this update cycle
+    float dzMaxAge = s_cvarDeathZoneMaxAge.GetFloat();
+    s_dzCount = GameEvents_GetDeathZones(dzMaxAge, s_dzPos, s_dzTimes, 16);
+
     // Phase 3.4: Advance when safe — adjust ideal distance based on time without enemies
     if (enemyCount > 0)
         s_lastEnemySeenTime = curtime;
@@ -646,6 +692,21 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
         // Phase 2.3: Force re-eval if bot took damage
         else if (botHealths && botHealths[b] < target.lastHealth)
             needEval = true;
+        // Force re-eval if a fresh death zone appeared near the bot's current target
+        if (!needEval && target.valid && s_dzCount > 0)
+        {
+            float dzCheckRadius = s_cvarDeathZoneRadius.GetFloat();
+            for (int d = 0; d < s_dzCount; d++)
+            {
+                // Death zone is newer than bot's last eval and near target
+                if (s_dzTimes[d] > target.evalTime &&
+                    VecDist(target.pos, s_dzPos[d]) < dzCheckRadius)
+                {
+                    needEval = true;
+                    break;
+                }
+            }
+        }
 
         if (!needEval)
             continue;

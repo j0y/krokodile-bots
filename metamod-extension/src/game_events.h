@@ -36,4 +36,9 @@ int GameEvents_CounterAttackDurationFinale();
 void GameEvents_InitGameRules(uintptr_t serverBase);
 bool GameEvents_IsCounterAttack();
 
+// Death zones: positions where friendly bots recently died.
+// Returns count of death zones younger than maxAge seconds.
+// outPositions: [x,y,z] per zone, outTimes: gpGlobals->curtime when death occurred.
+int GameEvents_GetDeathZones(float maxAge, float (*outPositions)[3], float *outTimes, int maxCount);
+
 #endif // _SMARTBOTS_GAME_EVENTS_H_

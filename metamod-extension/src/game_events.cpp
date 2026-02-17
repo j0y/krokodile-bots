@@ -5,6 +5,19 @@
 
 extern ISmmAPI *g_SMAPI;   // from PLUGIN_EXPOSE macro
 
+// ---- Death zone tracking ----
+
+static const int MAX_DEATH_ZONES = 16;
+
+struct DeathZoneEntry {
+    float pos[3];
+    float time;
+    bool  active;
+};
+
+static DeathZoneEntry s_deathZones[MAX_DEATH_ZONES];
+static int s_deathZoneHead = 0;  // ring buffer write index
+
 class SmartBotsEventListener : public IGameEventListener2
 {
 public:
@@ -37,6 +50,7 @@ public:
             "object_destroyed",
             "round_level_advanced",
             "game_end",
+            "player_death",
         };
 
         for (const char *ev : events)
@@ -88,6 +102,8 @@ public:
             m_objectivesLost = 0;
             m_phase = "preround";
             m_cappingCP = -1;
+            memset(s_deathZones, 0, sizeof(s_deathZones));
+            s_deathZoneHead = 0;
             META_CONPRINTF("[SmartBots] Round start — preround\n");
         }
         else if (strcmp(name, "game_end") == 0)
@@ -145,6 +161,26 @@ public:
             {
                 m_cappingCP = area;
                 META_CONPRINTF("[SmartBots] Capture started (cp=%d, by team %d)\n", area, team);
+            }
+        }
+        else if (strcmp(name, "player_death") == 0)
+        {
+            int team = event->GetInt("team");
+            if (team == m_controlledTeam)
+            {
+                float x = event->GetFloat("x");
+                float y = event->GetFloat("y");
+                float z = event->GetFloat("z");
+
+                DeathZoneEntry &dz = s_deathZones[s_deathZoneHead];
+                dz.pos[0] = x;
+                dz.pos[1] = y;
+                dz.pos[2] = z;
+                dz.time = gpGlobals->curtime;
+                dz.active = true;
+                s_deathZoneHead = (s_deathZoneHead + 1) % MAX_DEATH_ZONES;
+
+                META_CONPRINTF("[SmartBots] Death zone recorded at (%.0f, %.0f, %.0f)\n", x, y, z);
             }
         }
         else if (strcmp(name, "controlpoint_endtouch") == 0)
@@ -268,4 +304,26 @@ bool GameEvents_IsCounterAttack()
     if (!rules)
         return false;
     return s_fnIsCA(rules);
+}
+
+// ---- Death zone API ----
+
+int GameEvents_GetDeathZones(float maxAge, float (*outPositions)[3], float *outTimes, int maxCount)
+{
+    float curtime = gpGlobals->curtime;
+    int count = 0;
+    for (int i = 0; i < MAX_DEATH_ZONES && count < maxCount; i++)
+    {
+        if (!s_deathZones[i].active)
+            continue;
+        float age = curtime - s_deathZones[i].time;
+        if (age > maxAge || age < 0.0f)
+            continue;
+        outPositions[count][0] = s_deathZones[i].pos[0];
+        outPositions[count][1] = s_deathZones[i].pos[1];
+        outPositions[count][2] = s_deathZones[i].pos[2];
+        outTimes[count] = s_deathZones[i].time;
+        count++;
+    }
+    return count;
 }
