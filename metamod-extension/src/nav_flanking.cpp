@@ -171,7 +171,9 @@ static float s_lastEnemySeenTime = 0.0f;
 // Death zone data (refreshed each NavFlanking_Update cycle)
 static float s_dzPos[16][3];
 static float s_dzTimes[16];
+static int   s_dzHeat[16];    // how many deaths clustered near this one (grows radius)
 static int   s_dzCount = 0;
+static bool  s_dzFresh = false; // any death zone < 15s old (active combat)
 
 // ---- ConVars ----
 
@@ -472,8 +474,9 @@ lof_done:
     }
 
     // 7. Death zone penalty: avoid positions where teammates recently died
+    //    Radius grows with clustered kills — 2 deaths = 1.5x radius, 3 = 2x, etc.
     float wDeathZone = s_cvarDeathZoneWeight.GetFloat();
-    float dzRadius = s_cvarDeathZoneRadius.GetFloat();
+    float dzBaseRadius = s_cvarDeathZoneRadius.GetFloat();
     float dzMaxAge = s_cvarDeathZoneMaxAge.GetFloat();
     float deathZoneFactor = 1.0f;
     if (wDeathZone > 0.0f && s_dzCount > 0)
@@ -482,10 +485,11 @@ lof_done:
         float totalPenalty = 0.0f;
         for (int d = 0; d < s_dzCount; d++)
         {
+            float effectiveRadius = dzBaseRadius * (1.0f + 0.5f * (s_dzHeat[d] - 1));
             float dist = VecDist(pos, s_dzPos[d]);
-            if (dist < dzRadius)
+            if (dist < effectiveRadius)
             {
-                float distPenalty = 1.0f - dist / dzRadius;          // 1.0 at center, 0.0 at edge
+                float distPenalty = 1.0f - dist / effectiveRadius;    // 1.0 at center, 0.0 at edge
                 float age = curtime - s_dzTimes[d];
                 float ageFade = 1.0f - age / dzMaxAge;               // 1.0 when fresh, 0.0 when old
                 if (ageFade < 0.0f) ageFade = 0.0f;
@@ -521,9 +525,18 @@ static void CC_FlankStatus(const CCommand &args)
                    s_cvarDistWeight.GetFloat(), s_cvarSpreadWeight.GetFloat(),
                    s_cvarIndoorWeight.GetFloat(), s_cvarFlankWeight.GetFloat(),
                    s_cvarDeathZoneWeight.GetFloat());
-    META_CONPRINTF("  Death zones: %d active (radius=%.0f, age=%.0fs)\n",
+    META_CONPRINTF("  Death zones: %d active (radius=%.0f, age=%.0fs) %s\n",
                    s_dzCount, s_cvarDeathZoneRadius.GetFloat(),
-                   s_cvarDeathZoneMaxAge.GetFloat());
+                   s_cvarDeathZoneMaxAge.GetFloat(),
+                   s_dzFresh ? "COMBAT ACTIVE" : "");
+    for (int d = 0; d < s_dzCount; d++)
+    {
+        float age = gpGlobals->curtime - s_dzTimes[d];
+        float effR = s_cvarDeathZoneRadius.GetFloat() * (1.0f + 0.5f * (s_dzHeat[d] - 1));
+        META_CONPRINTF("    DZ%d: (%.0f,%.0f,%.0f) age=%.0fs heat=%d radius=%.0f\n",
+                       d, s_dzPos[d][0], s_dzPos[d][1], s_dzPos[d][2],
+                       age, s_dzHeat[d], effR);
+    }
     META_CONPRINTF("  Ideal dist: %.0f  Eval: %.1fs (reached: %.1fs)\n",
                    s_cvarIdealDist.GetFloat(), s_cvarEvalInterval.GetFloat(),
                    s_cvarReachedEvalInterval.GetFloat());
@@ -612,7 +625,23 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
 
     // Refresh death zone cache for this update cycle
     float dzMaxAge = s_cvarDeathZoneMaxAge.GetFloat();
+    float dzBaseRadius = s_cvarDeathZoneRadius.GetFloat();
     s_dzCount = GameEvents_GetDeathZones(dzMaxAge, s_dzPos, s_dzTimes, 16);
+
+    // Compute heat per death zone: how many other deaths are clustered nearby
+    // More deaths in same area → larger effective radius
+    s_dzFresh = false;
+    for (int d = 0; d < s_dzCount; d++)
+    {
+        s_dzHeat[d] = 1; // count self
+        for (int d2 = 0; d2 < s_dzCount; d2++)
+        {
+            if (d2 != d && VecDist(s_dzPos[d], s_dzPos[d2]) < dzBaseRadius)
+                s_dzHeat[d]++;
+        }
+        if (curtime - s_dzTimes[d] < 15.0f)
+            s_dzFresh = true;
+    }
 
     // Phase 3.4: Advance when safe — adjust ideal distance based on time without enemies
     if (enemyCount > 0)
@@ -689,7 +718,7 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
             needEval = true;
         else if (VecDist(threatPos, target.lastEnemyPos) > 400.0f)
             needEval = true;
-        // Phase 2.3: Force re-eval if bot took damage
+        // Force re-eval if bot took damage (even during hold)
         else if (botHealths && botHealths[b] < target.lastHealth)
             needEval = true;
         // Force re-eval if a fresh death zone appeared near the bot's current target
@@ -903,4 +932,9 @@ void NavFlanking_Reset()
 float NavFlanking_GetDefendRatio()
 {
     return s_cvarFlankDefendRatio.GetFloat();
+}
+
+bool NavFlanking_IsCombatActive()
+{
+    return s_dzFresh;
 }

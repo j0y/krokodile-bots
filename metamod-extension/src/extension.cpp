@@ -1,6 +1,7 @@
 #include "extension.h"
 #include "sig_resolve.h"
 #include "bot_action_hook.h"
+#include "bot_action_types.h"
 #include "bot_state.h"
 #include "bot_command.h"
 #include "game_events.h"
@@ -789,7 +790,12 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                                            reinterpret_cast<const float(*)[3]>(intelPos),
                                            intelCount);
 
-                        // Issue movement requests for bots with active flanking paths
+                        // Issue movement commands for bots with active positions.
+                        // After contact (death zones active): investigate (cautious walk).
+                        // Before contact: approach (run to position quickly).
+                        bool cautious = NavFlanking_IsCombatActive();
+                        int cmdFlags = cautious ? CMD_FLAG_INVESTIGATE : 0;
+
                         for (int i = 0; i < flankCount; i++)
                         {
                             float fx, fy, fz;
@@ -797,12 +803,18 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                             {
                                 if (TargetChanged(flankEdicts[i], fx, fy, fz))
                                 {
-                                    if (BotActionHook_IssueMovementRequest(
-                                            flankEntities[i], fx, fy, fz))
-                                    {
-                                        RecordTarget(flankEdicts[i], fx, fy, fz);
-                                    }
+                                    BotCommand_Set(flankEdicts[i],
+                                                   fx, fy, fz,
+                                                   0, 0, 0,
+                                                   cmdFlags, s_tickCount);
+                                    RecordTarget(flankEdicts[i], fx, fy, fz);
                                 }
+                            }
+                            else
+                            {
+                                // No target — clear command so bot resumes normal AI
+                                BotCommand_Clear(flankEdicts[i]);
+                                s_lastTargetValid[flankEdicts[i]] = false;
                             }
                         }
                     }

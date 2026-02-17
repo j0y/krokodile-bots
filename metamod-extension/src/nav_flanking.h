@@ -32,4 +32,8 @@ void NavFlanking_Reset();
 // Get the defend ratio ConVar value (fraction of bots that defend objective).
 float NavFlanking_GetDefendRatio();
 
+// Returns true when recent friendly deaths indicate active combat.
+// Bots should use cautious movement (investigate) instead of sprinting.
+bool NavFlanking_IsCombatActive();
+
 #endif // _SMARTBOTS_NAV_FLANKING_H_
