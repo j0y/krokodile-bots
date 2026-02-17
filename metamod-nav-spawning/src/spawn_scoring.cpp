@@ -109,11 +109,13 @@ inline bool NavArea_IsIndoor(const void *area)
 
 static ConVar s_cvarEnabled("navspawn_enabled", "0", 0,
     "Enable nav mesh spawning for defender bots");
-static ConVar s_cvarRadius("navspawn_radius", "2500", 0,
-    "BFS search radius around objective (units)");
+static ConVar s_cvarIdealDist("navspawn_ideal_dist", "2000", 0,
+    "Ideal distance from players (peak of scoring curve)");
+static ConVar s_cvarDistFalloff("navspawn_dist_falloff", "1500", 0,
+    "How quickly score drops from ideal distance");
 static ConVar s_cvarMinPlayerDist("navspawn_min_player_dist", "800", 0,
     "Minimum distance from human players");
-static ConVar s_cvarMaxPlayerDist("navspawn_max_player_dist", "3000", 0,
+static ConVar s_cvarMaxPlayerDist("navspawn_max_player_dist", "4000", 0,
     "Maximum distance from human players");
 static ConVar s_cvarDebug("navspawn_debug", "0", 0,
     "Log spawn decisions to console");
@@ -146,7 +148,7 @@ static bool s_isCounterAttack = false;
 
 // ---- BFS + scoring ----
 
-static const int MAX_BFS_AREAS = 512;
+static const int MAX_BFS_AREAS = 2048;
 
 struct ScoredArea {
     void *area;
@@ -171,46 +173,32 @@ static float VecDist2D(const float *a, const float *b)
     return sqrtf(dx * dx + dy * dy);
 }
 
-// BFS outward from objective, collect and score nav areas
+// Multi-source BFS from attacker player positions, score by enemy distance bell curve
 static bool PickSpawnPosition(float outPos[3])
 {
-    if (!s_hasObjective)
+    if (s_playerCount == 0)
         return false;
 
     void *navMesh = s_ppTheNavMesh ? *s_ppTheNavMesh : nullptr;
     if (!navMesh || !s_fnGetNearestNavArea)
         return false;
 
-    CNavArea *seedArea = s_fnGetNearestNavArea(navMesh, s_objectivePos,
-                                                true, 1000.0f, false, false, 0);
-    if (!seedArea)
-        return false;
-
-    float radius = s_cvarRadius.GetFloat();
+    float idealDist = s_cvarIdealDist.GetFloat();
+    float distFalloff = s_cvarDistFalloff.GetFloat();
     float minPlayerDist = s_cvarMinPlayerDist.GetFloat();
     float maxPlayerDist = s_cvarMaxPlayerDist.GetFloat();
 
-    // During counter-attack: increase min distance, push bots farther
+    // During counter-attack: shift ideal distance out by 1.5x
     if (s_isCounterAttack)
-    {
-        minPlayerDist *= 1.5f;
-    }
+        idealDist *= 1.5f;
 
-    // BFS: collect areas within radius of objective
+    // Collect attacker player nav areas as BFS seeds
+    int attackerTeam = (s_controlledTeam == 3) ? 2 : 3;
+
     void *bfsQueue[MAX_BFS_AREAS];
-    bool visited[MAX_BFS_AREAS];  // index-based visited set won't work with opaque pointers
-    memset(visited, 0, sizeof(visited));
-
-    // Use a simple visited set via pointer array
     void *visitedAreas[MAX_BFS_AREAS];
     int visitedCount = 0;
-
     int queueHead = 0, queueTail = 0;
-    bfsQueue[queueTail++] = seedArea;
-    visitedAreas[visitedCount++] = seedArea;
-
-    ScoredArea candidates[MAX_BFS_AREAS];
-    int candidateCount = 0;
 
     auto isVisited = [&](void *area) -> bool {
         for (int i = 0; i < visitedCount; i++)
@@ -218,50 +206,68 @@ static bool PickSpawnPosition(float outPos[3])
         return false;
     };
 
-    while (queueHead < queueTail && candidateCount < MAX_BFS_AREAS)
+    // Seed BFS from all attacker players' nav areas (multi-source)
+    int seedCount = 0;
+    for (int p = 0; p < s_playerCount; p++)
+    {
+        if (s_players[p].team != attackerTeam)
+            continue;
+        void *playerNav = s_players[p].navArea;
+        if (!playerNav || isVisited(playerNav))
+            continue;
+        if (queueTail >= MAX_BFS_AREAS)
+            break;
+
+        visitedAreas[visitedCount++] = playerNav;
+        bfsQueue[queueTail++] = playerNav;
+        seedCount++;
+    }
+
+    if (seedCount == 0)
+        return false;
+
+    ScoredArea candidates[MAX_BFS_AREAS];
+    int candidateCount = 0;
+
+    while (queueHead < queueTail && visitedCount < MAX_BFS_AREAS)
     {
         void *current = bfsQueue[queueHead++];
         const float *center = NavArea_GetCenter(current);
 
-        // Check radius from objective
-        float distToObj = VecDist2D(center, s_objectivePos);
-        if (distToObj > radius)
+        // Compute minimum distance to any attacker player
+        float minDist = 1e9f;
+        for (int p = 0; p < s_playerCount; p++)
+        {
+            if (s_players[p].team != attackerTeam)
+                continue;
+            float dist = VecDist2D(center, s_players[p].pos);
+            if (dist < minDist)
+                minDist = dist;
+        }
+
+        // Prune expansion past maxPlayerDist
+        if (minDist > maxPlayerDist)
             continue;
 
-        // Skip blocked areas
+        // Skip blocked areas (but still expand through them)
         if (s_fnIsBlocked && s_fnIsBlocked(current, 0, false))
             goto expand;
 
-        // Check player distances
-        {
-            bool tooClose = false;
-            bool anyPlayerInRange = (s_playerCount == 0); // if no players, allow all
-
-            for (int p = 0; p < s_playerCount; p++)
-            {
-                float dist = VecDist2D(center, s_players[p].pos);
-
-                // Too close to any human player
-                if (dist < minPlayerDist)
-                {
-                    tooClose = true;
-                    break;
-                }
-
-                // At least one player must be within max range
-                if (dist <= maxPlayerDist)
-                    anyPlayerInRange = true;
-            }
-
-            if (tooClose || !anyPlayerInRange)
-                goto expand;
-        }
+        // Only score areas within [minPlayerDist, maxPlayerDist]
+        if (minDist < minPlayerDist)
+            goto expand;
 
         // Score this area
         {
-            float score = 100.0f;
+            // Distance bell curve: peak at idealDist, falloff over distFalloff
+            float distDelta = fabsf(minDist - idealDist);
+            float distFactor = 1.0f - distDelta / distFalloff;
+            if (distFactor < 0.1f)
+                distFactor = 0.1f;
 
-            // Visibility penalty: if visible from any human player's nav area
+            float score = 100.0f * distFactor;
+
+            // Visibility penalty: 0.1x if visible from any player's nav area
             if (s_fnIsPotentiallyVisible)
             {
                 for (int p = 0; p < s_playerCount; p++)
@@ -276,23 +282,11 @@ static bool PickSpawnPosition(float outPos[3])
                 }
             }
 
-            // Indoor bonus
+            // Indoor bonus: 1.5x
             if (NavArea_IsIndoor(current))
                 score *= 1.5f;
 
-            // Objective proximity bonus (closer = slightly better, unless counter-attack)
-            if (s_isCounterAttack)
-            {
-                // During counter-attack: prefer farther from objective
-                score *= (1.0f + distToObj / radius);
-            }
-            else
-            {
-                // Normal: slight bonus for closer areas
-                score *= (1.0f + (1.0f - distToObj / radius) * 0.3f);
-            }
-
-            // Random jitter
+            // Random jitter: 0.85x-1.15x
             score *= RandomFloat(0.85f, 1.15f);
 
             candidates[candidateCount].area = current;
@@ -338,11 +332,23 @@ expand:
 
     if (s_cvarDebug.GetBool())
     {
+        // Compute distance from best spawn to nearest player for logging
+        float bestMinDist = 1e9f;
+        for (int p = 0; p < s_playerCount; p++)
+        {
+            if (s_players[p].team != attackerTeam)
+                continue;
+            float d = VecDist2D(outPos, s_players[p].pos);
+            if (d < bestMinDist)
+                bestMinDist = d;
+        }
+
         META_CONPRINTF("[NavSpawn] Picked spawn: (%.0f, %.0f, %.0f) score=%.1f "
-                       "(%d candidates, %d visited)\n",
+                       "dist=%.0f (%d candidates, %d visited, %d seeds)\n",
                        outPos[0], outPos[1], outPos[2],
                        candidates[bestIdx].score,
-                       candidateCount, visitedCount);
+                       bestMinDist,
+                       candidateCount, visitedCount, seedCount);
     }
 
     return true;
