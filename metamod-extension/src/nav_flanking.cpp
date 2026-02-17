@@ -147,7 +147,9 @@ static ConVar s_cvarFlankStagingDist("smartbots_flank_staging_dist", "400", 0,
     "Distance from enemy for flanking staging positions (units)");
 static ConVar s_cvarFlankAssignSeconds("smartbots_flank_assign_seconds", "5.0", 0,
     "Interval between flank assignment recomputation (seconds)");
-static ConVar s_cvarFlankDefendRatio("smartbots_flank_defend_ratio", "0.3", 0,
+static ConVar s_cvarFlankLayerSpacing("smartbots_layer_spacing", "300", 0,
+    "Distance between each bot's layered staging position (units)");
+static ConVar s_cvarFlankDefendRatio("smartbots_flank_defend_ratio", "0.15", 0,
     "Fraction of bots that defend objective (rest flank)");
 
 // ---- Nav readiness check ----
@@ -385,8 +387,8 @@ static int FindFlankPath(void *startArea, void *goalArea, void *threatArea,
 
 // ---- Team-level flank assignment ----
 
-// Distribute bots across enemies with sector angles and wave ordering.
-// Holding bots (already at staging position) are excluded from active assignment.
+// Distribute bots across enemies with layered staging distances.
+// All bots move simultaneously — each gets a unique sector angle AND distance.
 static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)[3],
                                int botCount,
                                const float (*enemyPositions)[3], int enemyCount)
@@ -411,7 +413,7 @@ static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)
         }
     }
 
-    // Separate bots into holding (arrived at staging) and available
+    // All bots are available for assignment (including previously holding bots)
     int availIdx[32];
     int availCount = 0;
 
@@ -420,20 +422,7 @@ static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)
         int edict = botEdicts[b];
         if (edict < 1 || edict >= MAX_EDICT)
             continue;
-        if (s_holding[edict])
-        {
-            // Holding bot: mark assigned but not moving
-            FlankAssignment &a = s_assignments[edict];
-            a.assigned = true;
-            a.waveOrder = -1;
-            a.stagingPos[0] = botPositions[b][0];
-            a.stagingPos[1] = botPositions[b][1];
-            a.stagingPos[2] = botPositions[b][2];
-        }
-        else
-        {
-            availIdx[availCount++] = b;
-        }
+        availIdx[availCount++] = b;
     }
 
     if (availCount == 0)
@@ -520,10 +509,12 @@ static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)
         float dirX = baseDirX * cosA - baseDirY * sinA;
         float dirY = baseDirX * sinA + baseDirY * cosA;
 
-        // Staging position: stagingDist from enemy in sector direction
+        // Layered staging: each bot stops at a different distance from enemy
+        float layerSpacing = s_cvarFlankLayerSpacing.GetFloat();
+        float botStagingDist = stagingDist + sector * layerSpacing;
         float candidate[3] = {
-            enemyPositions[enemyIdx][0] + dirX * stagingDist,
-            enemyPositions[enemyIdx][1] + dirY * stagingDist,
+            enemyPositions[enemyIdx][0] + dirX * botStagingDist,
+            enemyPositions[enemyIdx][1] + dirY * botStagingDist,
             enemyPositions[enemyIdx][2]
         };
 
@@ -555,46 +546,25 @@ static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)
         }
     }
 
-    // Assign wave order per enemy: first non-holding bot gets 0, rest queue
-    // For each enemy, find bots assigned to it and set waveOrder
-    for (int e = 0; e < enemyCount; e++)
+    // All bots move simultaneously — no queueing
+    for (int b = 0; b < botCount; b++)
     {
-        bool hasActive = false;
-        // Iterate in sector order (sector 0 first)
-        for (int sec = 0; sec < botsPerEnemy[e]; sec++)
-        {
-            // Find the bot with this enemy+sector
-            for (int b = 0; b < botCount; b++)
-            {
-                int edict = botEdicts[b];
-                if (edict < 1 || edict >= MAX_EDICT)
-                    continue;
-                FlankAssignment &a = s_assignments[edict];
-                if (!a.assigned || a.waveOrder == -1)
-                    continue;
-                if (a.targetEnemyIdx != e || a.sectorIndex != sec)
-                    continue;
+        int edict = botEdicts[b];
+        if (edict < 1 || edict >= MAX_EDICT) continue;
+        FlankAssignment &a = s_assignments[edict];
+        if (!a.assigned) continue;
 
-                // Check if this bot is already near its staging position
-                float dx = botPositions[b][0] - a.stagingPos[0];
-                float dy = botPositions[b][1] - a.stagingPos[1];
-                if (dx * dx + dy * dy < 200.0f * 200.0f)
-                {
-                    // Already at staging — mark as holding
-                    s_holding[edict] = true;
-                    a.waveOrder = -1;
-                }
-                else if (!hasActive)
-                {
-                    a.waveOrder = 0;
-                    hasActive = true;
-                }
-                else
-                {
-                    a.waveOrder = sec;  // queued
-                }
-                break;
-            }
+        // Check if already at staging position
+        float dx = botPositions[b][0] - a.stagingPos[0];
+        float dy = botPositions[b][1] - a.stagingPos[1];
+        if (dx * dx + dy * dy < 200.0f * 200.0f)
+        {
+            s_holding[edict] = true;
+            a.waveOrder = -1;
+        }
+        else
+        {
+            a.waveOrder = 0;  // ACTIVE — all bots move
         }
     }
 
@@ -608,16 +578,15 @@ static void AssignFlankTargets(const int *botEdicts, const float (*botPositions)
     }
 
     // Log assignment summary
-    int activeCount = 0, queuedCount = 0, holdCount = 0;
+    int activeCount = 0, holdCount = 0;
     for (int i = 1; i < MAX_EDICT; i++)
     {
         if (!s_assignments[i].assigned) continue;
         if (s_assignments[i].waveOrder == 0) activeCount++;
         else if (s_assignments[i].waveOrder == -1) holdCount++;
-        else queuedCount++;
     }
-    META_CONPRINTF("[SmartBots] FlankAssign: %d enemies, %d active, %d queued, %d holding\n",
-                   enemyCount, activeCount, queuedCount, holdCount);
+    META_CONPRINTF("[SmartBots] FlankAssign: %d enemies, %d active, %d holding (layer spacing %.0f)\n",
+                   enemyCount, activeCount, holdCount, s_cvarFlankLayerSpacing.GetFloat());
 }
 
 // ---- Status ConCommand ----
@@ -630,7 +599,8 @@ static void CC_FlankStatus(const CCommand &args)
     META_CONPRINTF("  Vis data: %s\n", s_visDataChecked ? (s_hasVisData ? "yes" : "missing") : "not checked");
     META_CONPRINTF("  Enabled: %s\n", s_cvarFlankEnabled.GetBool() ? "yes" : "no");
     META_CONPRINTF("  Vis penalty: %.0f\n", s_cvarFlankVisPenalty.GetFloat());
-    META_CONPRINTF("  Staging dist: %.0f\n", s_cvarFlankStagingDist.GetFloat());
+    META_CONPRINTF("  Staging dist: %.0f (layer spacing: %.0f)\n",
+                   s_cvarFlankStagingDist.GetFloat(), s_cvarFlankLayerSpacing.GetFloat());
     META_CONPRINTF("  Assign interval: %.1fs\n", s_cvarFlankAssignSeconds.GetFloat());
     META_CONPRINTF("  Defend ratio: %.0f%%\n", s_cvarFlankDefendRatio.GetFloat() * 100.0f);
     META_CONPRINTF("  Last assign: %.1fs ago\n",
@@ -653,9 +623,11 @@ static void CC_FlankStatus(const CCommand &args)
         FlankAssignment &a = s_assignments[i];
         const char *state = s_holding[i] ? "HOLDING" :
                             (a.waveOrder == 0 ? "ACTIVE" : "QUEUED");
-        META_CONPRINTF("  Bot %d: enemy=%d sector=%d/%d wave=%d staging=(%.0f,%.0f,%.0f) %s\n",
+        float effectiveDist = s_cvarFlankStagingDist.GetFloat() +
+                              a.sectorIndex * s_cvarFlankLayerSpacing.GetFloat();
+        META_CONPRINTF("  Bot %d: enemy=%d sector=%d/%d dist=%.0f staging=(%.0f,%.0f,%.0f) %s\n",
                        i, a.targetEnemyIdx, a.sectorIndex, a.totalSectors,
-                       a.waveOrder, a.stagingPos[0], a.stagingPos[1], a.stagingPos[2],
+                       effectiveDist, a.stagingPos[0], a.stagingPos[1], a.stagingPos[2],
                        state);
     }
 }
@@ -772,25 +744,22 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
         }
     }
 
-    // Check if any active bot (waveOrder 0) reached staging position
-    if (!needReassign)
+    // Mark active bots that reached staging as holding (no reassignment needed)
+    for (int b = 0; b < botCount; b++)
     {
-        for (int b = 0; b < botCount; b++)
-        {
-            int edict = botEdicts[b];
-            if (edict < 1 || edict >= MAX_EDICT) continue;
-            FlankAssignment &a = s_assignments[edict];
-            if (!a.assigned || a.waveOrder != 0 || s_holding[edict])
-                continue;
+        int edict = botEdicts[b];
+        if (edict < 1 || edict >= MAX_EDICT) continue;
+        FlankAssignment &a = s_assignments[edict];
+        if (!a.assigned || a.waveOrder != 0 || s_holding[edict])
+            continue;
 
-            float dx = botPositions[b][0] - a.stagingPos[0];
-            float dy = botPositions[b][1] - a.stagingPos[1];
-            if (dx * dx + dy * dy < 200.0f * 200.0f)
-            {
-                s_holding[edict] = true;
-                needReassign = true;
-                break;
-            }
+        float dx = botPositions[b][0] - a.stagingPos[0];
+        float dy = botPositions[b][1] - a.stagingPos[1];
+        if (dx * dx + dy * dy < 200.0f * 200.0f)
+        {
+            s_holding[edict] = true;
+            a.waveOrder = -1;
+            s_paths[edict].active = false;
         }
     }
 
