@@ -636,6 +636,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
             int allEdicts[32];
             void *allEntities[32];
             float allPositions[32][3];
+            int allHealths[32];
             int allCount = 0;
             int team = s_cvarTeam.GetInt();
 
@@ -656,6 +657,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                         allPositions[allCount][0] = s_stateArray[j].pos[0];
                         allPositions[allCount][1] = s_stateArray[j].pos[1];
                         allPositions[allCount][2] = s_stateArray[j].pos[2];
+                        allHealths[allCount] = s_stateArray[j].health;
                         allCount++;
                         break;
                     }
@@ -736,6 +738,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                     int tmpEdicts[32];
                     void *tmpEntities[32];
                     float tmpPositions[32][3];
+                    int tmpHealths[32];
                     for (int i = 0; i < allCount; i++)
                     {
                         int src = indices[i];
@@ -744,10 +747,12 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                         tmpPositions[i][0] = allPositions[src][0];
                         tmpPositions[i][1] = allPositions[src][1];
                         tmpPositions[i][2] = allPositions[src][2];
+                        tmpHealths[i] = allHealths[src];
                     }
                     memcpy(allEdicts, tmpEdicts, allCount * sizeof(int));
                     memcpy(allEntities, tmpEntities, allCount * sizeof(void *));
                     memcpy(allPositions, tmpPositions, allCount * sizeof(float[3]));
+                    memcpy(allHealths, tmpHealths, allCount * sizeof(int));
                 }
 
                 // Defenders → BotTactics (spread around objective)
@@ -760,6 +765,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                     int flankEdicts[32];
                     void *flankEntities[32];
                     float flankPositions[32][3];
+                    int flankHealths[32];
                     int flankCount = 0;
 
                     for (int i = flankStart; i < allCount && flankCount < 32; i++)
@@ -772,13 +778,14 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                         flankPositions[flankCount][0] = allPositions[i][0];
                         flankPositions[flankCount][1] = allPositions[i][1];
                         flankPositions[flankCount][2] = allPositions[i][2];
+                        flankHealths[flankCount] = allHealths[i];
                         flankCount++;
                     }
 
                     if (flankCount > 0)
                     {
                         NavFlanking_Update(flankEdicts, flankEntities, flankPositions,
-                                           flankCount,
+                                           flankHealths, flankCount,
                                            reinterpret_cast<const float(*)[3]>(intelPos),
                                            intelCount);
 
