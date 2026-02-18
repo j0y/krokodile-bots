@@ -387,7 +387,35 @@ No attacking during retreat.
 ## CINSBotRetreat — Generic Retreat
 
 Base retreat action using `CINSRetreatPath` to move away from threats.
-No attacking. Three constructor variants for different callers.
+Three constructor variants for different callers. ShouldAttack returns 2
+(attack permitted) but the Update loop never calls FireWeaponAtEnemy — so
+the bot effectively does not shoot while in this action.
+
+### Object Layout (0x48F8 bytes, embeds CINSPathFollower + CINSRetreatPath)
+
+| Offset | Type | Field | Notes |
+|--------|------|-------|-------|
+| 0x00–0x37 | | Action base | Standard Action\<CINSNextBot\> fields |
+| 0x38 | CINSRetreatPath | m_retreatPath | Vtable for CINSRetreatPath at +0x38 |
+| 0x3C–0x4813 | CINSPathFollower | m_pathFollower | Full path follower (embedded) |
+| 0x4814 | float | m_desiredSpeed | Set to 69.0 in OnStart |
+| 0x48A8 | CountdownTimer | timer_0 | Path update re-check |
+| 0x48B4 | int | m_threatEntityHandle | EHANDLE to stored threat entity |
+| 0x48C4 | CountdownTimer | timer_1 | Path update interval (ConVar-driven) |
+| 0x48D0 | byte | m_mode | 0 = Done on end, 1 = ChangeTo CINSBotReload |
+| 0x48D4 | float | m_retreatDuration | Duration param, capped to max 5.0s |
+| 0x48D8 | CountdownTimer | timer_2 | Total retreat duration countdown |
+| 0x48E4 | CountdownTimer | timer_3 | No-threat wait timeout |
+| 0x48F0 | byte | m_noThreatFlag | Set to 1 when no threat found |
+| 0x48F4 | int | m_storedEntityIndex | Entity index passed via constructor |
+
+### Constructor Variants
+
+| Signature | Address | Notes |
+|-----------|---------|-------|
+| `CINSBotRetreat(bool doReload, float duration)` | 0x0072C190 | Sets mode from bool, duration from float |
+| `CINSBotRetreat(float duration)` | 0x0072C420 | Mode=0 (Done), duration from param, default 5.0s |
+| `CINSBotRetreat(int entityIndex)` | 0x0072C6A0 | Mode=0, duration=5.0, stores entity index at +0x48F4 |
 
 ### Key Timers
 
@@ -400,19 +428,28 @@ No attacking. Three constructor variants for different callers.
 ### OnStart (0x0072BBD0)
 
 ```
-1. Get stored threat entity or GetPrimaryKnownThreat()
-2. if no threat:
-     Set no-threat flag, start timer_3(0.5s)
-3. if threat exists:
+1. duration = min(m_retreatDuration, 5.0)   // capped to 5 seconds max
+   timer_2.Start(duration)
+
+2. locomotion.ClearMovementRequests()
+   m_desiredSpeed = 69.0
+
+3. Get stored threat entity (via EHANDLE) or GetPrimaryKnownThreat()
+4. if no threat:
+     Set m_noThreatFlag = 1
+     timer_3.Start(0.5s)
+     return Continue
+5. if threat exists:
      CINSRetreatPath::RefreshPath(threat.position)
      PathFollower.Update()
-     locomotion.ClearMovementRequests()
-     locomotion.SetSpeed(69.0)
 
-4. if threat is detonator within damage radius:
-     Speak alarm concept (0x68)
+6. ResetIdleStatus()
 
-5. return Continue
+7. if threat is CBaseDetonator with damage > 0:
+     if distance(bot, detonator) < GetDetonateDamageRadius():
+       SpeakConceptIfAllowed(0x68)  // alarm callout
+
+8. return Continue
 ```
 
 ### Update (0x0072B780)
@@ -442,7 +479,7 @@ No attacking. Three constructor variants for different callers.
 | Virtual | Return | Effect |
 |---------|--------|--------|
 | ShouldHurry | 1 | Always hurries |
-| ShouldAttack | 2 | No attacking (returns 2 = no) |
+| ShouldAttack | 2 | Attack permitted but Update never fires (effectively no shooting) |
 | GetName | "Retreating!" | |
 
 ---
