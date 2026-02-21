@@ -613,9 +613,7 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         }
     }
 
-    // Drain pending deaths queued by event handler and spread to nav mesh.
-    // Must be done here (not inside FireGameEvent) to avoid writing nav areas
-    // while the engine may be iterating them.
+    // Drain pending deaths and run diagnostic dump on nearest nav area
     {
         float deathPos[16][3];
         int deathCount = GameEvents_DrainPendingDeaths(deathPos, 16);

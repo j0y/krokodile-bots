@@ -40,6 +40,11 @@ Constructor: `0x00760920`
 Each CountdownTimer is 12 bytes: `{ vtable*, float duration, float endTime }`.
 IntervalTimer is 8 bytes: `{ vtable*, float timestamp }`.
 
+**WARNING**: IntervalTimer has a vtable pointer at offset +0x0. Writing a float
+to the base of an IntervalTimer (e.g., at +0x21C or +0x224 in CINSNavArea)
+corrupts the vtable and causes a crash when the engine next calls a virtual
+method on that timer. Always write to the timestamp at +0x4 within the timer.
+
 ### INSBotMovementRequest (0x24 = 36 bytes)
 
 ```
@@ -265,10 +270,14 @@ spawn scoring, hiding spot evaluation, and per-team pathing data.
 +0x1F8  float  m_lastCoverUpdateCurtime
 +0x1FC  CountdownTimer m_perTeamTimer[0] (12 bytes)
 +0x208  CountdownTimer m_perTeamTimer[1] (12 bytes)
-+0x214  float  m_deathIntensity[0] — death intensity, team 0
-+0x218  float  m_deathIntensity[1] — death intensity, team 1
-+0x21C  IntervalTimer  m_deathTimer[0] — per-team death timer (8 bytes)
-+0x224  IntervalTimer  m_deathTimer[1] — per-team death timer (8 bytes)
++0x214  float  m_deathIntensity[0] — death intensity, team 0 (Security)
++0x218  float  m_deathIntensity[1] — death intensity, team 1 (Insurgents)
++0x21C  IntervalTimer  m_deathTimer[0] — per-team death timer (8 bytes):
+        +0x21C  void*  vtable pointer (DO NOT OVERWRITE — causes crash)
+        +0x220  float  timestamp (gpGlobals->curtime when death occurred)
++0x224  IntervalTimer  m_deathTimer[1] — per-team death timer (8 bytes):
+        +0x224  void*  vtable pointer (DO NOT OVERWRITE — causes crash)
+        +0x228  float  timestamp (gpGlobals->curtime when death occurred)
 +0x22C  int    m_tickCounter — tick-based update throttle, compared to global threshold
         (also triggers 30× path cost when >= global death-danger threshold)
 +0x230  CUtlVector<CINSPathingBotInfo> m_pathingBots[0] — team 0 (0x14 bytes)
@@ -824,6 +833,30 @@ Currently in `nav_flanking.cpp`:
 | `smartbots_flank_assign_seconds` | 5.0 | Sector assignment interval |
 | `smartbots_flank_defend_ratio` | 0.3 | Fraction of bots that defend (rest flank) |
 
+### Death Intensity Spreading (Active)
+
+When a controlled-team bot dies, the extension spreads death intensity to
+nearby nav areas via `NavFlanking_SpreadDeathToNavMesh()`:
+
+1. Finds the nearest nav area to the death position
+2. BFS collects all areas within 512 units
+3. Writes accumulative intensity with distance falloff to `+0x218` (m_deathIntensity[1])
+4. Updates timer timestamp at `+0x228` (m_deathTimer[1].timestamp)
+
+Intensity accumulates with repeated deaths (capped at 5.0), creating
+exponentially growing killzones. The engine's path cost functors
+(`CINSNextBotPathCost` Branch B) then multiply path cost by
+`deathIntensity * 6.5`, causing bots to naturally route around killzones.
+
+Engine ConVars that interact:
+- `nb_nav_death_build_rate` — engine's own per-death intensity increment (additive with ours)
+- `nb_nav_death_decay_rate` — decay rate per second (applies to both engine and our writes)
+- `ins_nav_enable_pathfinding_updates` — must be `1` for death intensity to affect pathfinding
+
+**player_death event team mapping**: The event uses 0-based team indices
+(`team=0` = Security, `team=1` = Insurgent), NOT the engine's standard
+team numbers (2 = Security, 3 = Insurgent). Convert: `event_team == engine_team - 2`.
+
 ### Not Yet Used
 
 Engine pathfinding capabilities available but not leveraged:
@@ -831,7 +864,6 @@ Engine pathfinding capabilities available but not leveraged:
 | Function/Feature | What it gives | Use case |
 |------------------|---------------|----------|
 | `GetCombatIntensity()` per area | 0+ pressure level per area | Weight flanking routes away from active combat |
-| `GetDeathIntensity()` per area | Per-team death hotspot data | Avoid areas where teammates died recently |
 | `GetSpawnScore()` | Spawn quality rating | Choose better rally points |
 | `ScoreHidingSpot()` / `CollectSpotsWithScoreAbove()` | Cover positions with scores | Select cover waypoints along flank routes |
 | `IsPotentiallyVisibleToTeam()` | Team-based area visibility | More accurate than single-area vis checks |

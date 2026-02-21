@@ -36,7 +36,7 @@ From: [jaredballou/insurgency-data](https://github.com/jaredballou/insurgency-da
 
 | Event | Parameters | Notes |
 |-------|-----------|-------|
-| `player_death` | `deathflags` (short), `attacker` (short), `customkill` (short), `lives` (short), `attackerteam` (short), `damagebits` (long), `weapon` (string), `weaponid` (short), `userid` (short), `priority` (short), `team` (short), `x`/`y`/`z` (float), `assister` (short) | Has death position! |
+| `player_death` | `deathflags` (short), `attacker` (short), `customkill` (short), `lives` (short), `attackerteam` (short), `damagebits` (long), `weapon` (string), `weaponid` (short), `userid` (short), `priority` (short), `team` (short), `x`/`y`/`z` (float), `assister` (short) | Has death position! **`team` uses 0-based indexing: 0=Security, 1=Insurgent** (NOT engine team numbers 2/3). Convert: `event_team == engine_team - 2`. |
 | `player_hurt` | `priority` (short), `attacker` (short), `dmg_health` (short), `health` (byte), `damagebits` (long), `hitgroup` (short), `weapon` (string), `weaponid` (short), `userid` (short) | |
 | `player_spawn` | `teamnum` (short), `userid` (short) | From gameevents.res |
 | `player_suppressed` | `attacker` (short), `victim` (short) | |

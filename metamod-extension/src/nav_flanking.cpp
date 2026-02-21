@@ -973,10 +973,12 @@ void NavFlanking_SpreadDeathToNavMesh(const float *deathPos, float radius)
     void *areas[MAX_BFS_AREAS];
     int count = CollectCandidateAreas(startArea, radius, areas, MAX_BFS_AREAS);
 
-    // Write death intensity to each area for insurgent team (index 1 → offset +0x218)
-    // Also update the death timer so the engine's decay starts from now
+    // CINSNavArea death field layout (verified via memory dump):
+    //   +0x218: float m_deathIntensity[1]  (Insurgent team)
+    //   +0x224: void* IntervalTimer vtable  (DO NOT WRITE)
+    //   +0x228: float IntervalTimer timestamp
     static const int kOff_DeathIntensity_Team1 = 0x218;
-    static const int kOff_DeathTimer_Team1     = 0x224;
+    static const int kOff_DeathTimestamp_Team1 = 0x228;  // timestamp field, NOT vtable at +0x224
     float curtime = gpGlobals->curtime;
 
     int written = 0;
@@ -992,14 +994,16 @@ void NavFlanking_SpreadDeathToNavMesh(const float *deathPos, float radius)
         float intensity = 1.0f - (dist / radius);
         if (intensity < 0.1f) intensity = 0.1f;
 
-        // Write death intensity (cap at 1.0, don't reduce existing values)
+        // Accumulate death intensity (exponential growth with repeated deaths)
         float *pIntensity = reinterpret_cast<float *>(areaPtr + kOff_DeathIntensity_Team1);
-        if (intensity > *pIntensity)
-            *pIntensity = intensity;
+        float cur = *pIntensity;
+        float newVal = cur + intensity;
+        if (newVal > 5.0f) newVal = 5.0f;  // cap to prevent overflow
+        *pIntensity = newVal;
 
         // Update death timer timestamp so engine decay starts from now
-        float *pTimer = reinterpret_cast<float *>(areaPtr + kOff_DeathTimer_Team1);
-        *pTimer = curtime;
+        float *pTimestamp = reinterpret_cast<float *>(areaPtr + kOff_DeathTimestamp_Team1);
+        *pTimestamp = curtime;
 
         written++;
     }
