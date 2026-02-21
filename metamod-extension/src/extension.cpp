@@ -795,12 +795,13 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
                     if (flankCount > 0)
                     {
+                        bool isCounterAttack = GameEvents_IsCounterAttack();
+
                         NavFlanking_Update(flankEdicts, flankEntities, flankPositions,
                                            flankHealths, flankCount,
                                            reinterpret_cast<const float(*)[3]>(intelPos),
                                            intelCount);
 
-                        // Issue movement commands for bots with active positions.
                         // After contact (death zones active): investigate (cautious walk).
                         // Before contact: approach (run to position quickly).
                         bool cautious = NavFlanking_IsCombatActive();
@@ -826,12 +827,17 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
                                 continue;
                             }
 
-                            // Tier filtering: only aggressive bots get commands
-                            // Tier 0 (AGR): always gets commands
-                            // Tier 1 (MOD): only before first contact
-                            // Tier 2 (PAS): never — pure native AI with death-aware pathfinding
+                            // Tier filtering: who gets flank commands
+                            // Normal:         AGR always, MOD before first contact, PAS never
+                            // Counter-attack: AGR only (a few flankers to surprise players,
+                            //                 rest rush with native AI)
                             int tier = edict % 3;
-                            bool shouldCommand = (tier == 0) || (tier == 1 && !cautious);
+                            bool shouldCommand;
+                            if (isCounterAttack)
+                                shouldCommand = (tier == 0);
+                            else
+                                shouldCommand = (tier == 0) || (tier == 1 && !cautious);
+
                             if (!shouldCommand)
                             {
                                 BotCommand_Clear(edict);
