@@ -613,12 +613,35 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         }
     }
 
-    // Drain pending deaths and run diagnostic dump on nearest nav area
+    // Drain pending deaths and spread to nav mesh with adaptive radius.
+    // More clustered deaths → wider killzone, forcing increasingly wide flanks.
     {
         float deathPos[16][3];
         int deathCount = GameEvents_DrainPendingDeaths(deathPos, 16);
-        for (int i = 0; i < deathCount; i++)
-            NavFlanking_SpreadDeathToNavMesh(deathPos[i], 512.0f);
+        if (deathCount > 0)
+        {
+            // Get existing death zones to measure clustering
+            float dzPos[16][3];
+            float dzTimes[16];
+            int dzCount = GameEvents_GetDeathZones(120.0f, dzPos, dzTimes, 16);
+
+            for (int i = 0; i < deathCount; i++)
+            {
+                // Count nearby recent deaths within cluster distance
+                int nearby = 0;
+                for (int j = 0; j < dzCount; j++)
+                {
+                    float dx = deathPos[i][0] - dzPos[j][0];
+                    float dy = deathPos[i][1] - dzPos[j][1];
+                    if (dx * dx + dy * dy < 500.0f * 500.0f)
+                        nearby++;
+                }
+
+                float radius = 512.0f + nearby * 256.0f;
+                if (radius > 2048.0f) radius = 2048.0f;
+                NavFlanking_SpreadDeathToNavMesh(deathPos[i], radius);
+            }
+        }
     }
 
     // Refresh bot list + state at 8Hz (every 8 ticks).
