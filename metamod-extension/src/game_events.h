@@ -36,6 +36,10 @@ int GameEvents_CounterAttackDurationFinale();
 void GameEvents_InitGameRules(uintptr_t serverBase);
 bool GameEvents_IsCounterAttack();
 
+// Drain pending deaths queued by event handler (for deferred nav mesh spreading).
+// Returns count of deaths. Call from GameFrame.
+int GameEvents_DrainPendingDeaths(float (*outPositions)[3], int maxCount);
+
 // Death zones: positions where friendly bots recently died.
 // Returns count of death zones younger than maxAge seconds.
 // outPositions: [x,y,z] per zone, outTimes: gpGlobals->curtime when death occurred.

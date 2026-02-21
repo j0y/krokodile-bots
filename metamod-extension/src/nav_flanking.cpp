@@ -211,7 +211,7 @@ static ConVar s_cvarAdvanceDistMin("smartbots_pos_advance_dist_min", "200", 0,
     "Minimum ideal distance when advancing (units)");
 static ConVar s_cvarHidingSpots("smartbots_pos_hiding_spots", "1", 0,
     "Use nav mesh hiding spots as additional candidate positions");
-static ConVar s_cvarVoiceCallouts("smartbots_pos_voice_callouts", "1", 0,
+static ConVar s_cvarVoiceCallouts("smartbots_pos_voice_callouts", "0", 0,
     "Enable vocal callouts when bots pick flanking positions");
 static ConVar s_cvarVoiceCooldown("smartbots_pos_voice_cooldown", "8.0", 0,
     "Minimum seconds between voice callouts per bot");
@@ -560,8 +560,9 @@ static void CC_FlankStatus(const CCommand &args)
             continue;
         BotTarget &t = s_targets[i];
         float age = gpGlobals->curtime - t.evalTime;
-        META_CONPRINTF("  Bot %d: target=(%.0f,%.0f,%.0f) score=%.1f age=%.1fs hp=%d %s\n",
-                       i, t.pos[0], t.pos[1], t.pos[2], t.score, age,
+        const char *tierName = (i % 3 == 0) ? "AGR" : (i % 3 == 1) ? "MOD" : "PAS";
+        META_CONPRINTF("  Bot %d [%s]: target=(%.0f,%.0f,%.0f) score=%.1f age=%.1fs hp=%d %s\n",
+                       i, tierName, t.pos[0], t.pos[1], t.pos[2], t.score, age,
                        t.lastHealth, t.reached ? "REACHED" : "moving");
     }
 }
@@ -740,6 +741,14 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
         if (!needEval)
             continue;
 
+        // Per-bot aggression tier based on edict index (stable across re-evals):
+        //   tier 0 — aggressive: 1.0x ideal dist, pushes close
+        //   tier 1 — moderate:   1.3x ideal dist, mid-range
+        //   tier 2 — passive:    1.6x ideal dist, holds back but still in the fight
+        int aggressionTier = edict % 3;
+        float tierMultiplier = 1.0f + aggressionTier * 0.3f;
+        float botIdealDist = idealDist * tierMultiplier;
+
         // Resolve bot and threat nav areas
         CNavArea *botArea = s_fnGetNearestNavArea(
             navMesh, botPositions[b], true, 300.0f, false, false, 0);
@@ -799,7 +808,7 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
                                      threatArea, threatPos,
                                      hasObj ? objPos : nullptr,
                                      allyPos, allyCount,
-                                     idealDist);
+                                     botIdealDist);
             if (s > bestScore)
             {
                 bestScore = s;
@@ -823,7 +832,7 @@ void NavFlanking_Update(const int *botEdicts, void *const *botEntities,
                                              threatArea, threatPos,
                                              hasObj ? objPos : nullptr,
                                              allyPos, allyCount,
-                                             idealDist);
+                                             botIdealDist);
                     if (s > bestScore)
                     {
                         bestScore = s;
@@ -919,6 +928,13 @@ bool NavFlanking_IsActive(int edictIndex)
     return s_targets[edictIndex].valid;
 }
 
+bool NavFlanking_HasReachedTarget(int edictIndex)
+{
+    if (edictIndex < 1 || edictIndex >= MAX_EDICT)
+        return false;
+    return s_targets[edictIndex].valid && s_targets[edictIndex].reached;
+}
+
 void NavFlanking_Reset()
 {
     memset(s_targets, 0, sizeof(s_targets));
@@ -937,4 +953,57 @@ float NavFlanking_GetDefendRatio()
 bool NavFlanking_IsCombatActive()
 {
     return s_dzFresh;
+}
+
+void NavFlanking_SpreadDeathToNavMesh(const float *deathPos, float radius)
+{
+    if (!s_navReady || !s_navInitialized)
+        return;
+
+    void *navMesh = GetNavMesh();
+    if (!navMesh)
+        return;
+
+    CNavArea *startArea = s_fnGetNearestNavArea(
+        navMesh, deathPos, true, 300.0f, false, false, 0);
+    if (!startArea)
+        return;
+
+    // BFS collect all areas within radius
+    void *areas[MAX_BFS_AREAS];
+    int count = CollectCandidateAreas(startArea, radius, areas, MAX_BFS_AREAS);
+
+    // Write death intensity to each area for insurgent team (index 1 → offset +0x218)
+    // Also update the death timer so the engine's decay starts from now
+    static const int kOff_DeathIntensity_Team1 = 0x218;
+    static const int kOff_DeathTimer_Team1     = 0x224;
+    float curtime = gpGlobals->curtime;
+
+    int written = 0;
+    for (int i = 0; i < count; i++)
+    {
+        char *areaPtr = reinterpret_cast<char *>(areas[i]);
+
+        // Distance-based falloff: full intensity at center, fading at edges
+        const float *ac = NavArea_GetCenter(areas[i]);
+        float dx = ac[0] - deathPos[0];
+        float dy = ac[1] - deathPos[1];
+        float dist = sqrtf(dx * dx + dy * dy);
+        float intensity = 1.0f - (dist / radius);
+        if (intensity < 0.1f) intensity = 0.1f;
+
+        // Write death intensity (cap at 1.0, don't reduce existing values)
+        float *pIntensity = reinterpret_cast<float *>(areaPtr + kOff_DeathIntensity_Team1);
+        if (intensity > *pIntensity)
+            *pIntensity = intensity;
+
+        // Update death timer timestamp so engine decay starts from now
+        float *pTimer = reinterpret_cast<float *>(areaPtr + kOff_DeathTimer_Team1);
+        *pTimer = curtime;
+
+        written++;
+    }
+
+    META_CONPRINTF("[SmartBots] Death spread: %d nav areas within %.0fu of death at (%.0f,%.0f,%.0f)\n",
+                   written, radius, deathPos[0], deathPos[1], deathPos[2]);
 }

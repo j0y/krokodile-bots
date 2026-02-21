@@ -36,4 +36,12 @@ float NavFlanking_GetDefendRatio();
 // Bots should use cautious movement (investigate) instead of sprinting.
 bool NavFlanking_IsCombatActive();
 
+// Returns true if the bot has reached its current scored position.
+bool NavFlanking_HasReachedTarget(int edictIndex);
+
+// Spread death intensity to all nav areas within radius of a death position.
+// This amplifies the engine's per-area death tracking so the pathfinder
+// avoids a wider zone around killzones, forcing bots to flank.
+void NavFlanking_SpreadDeathToNavMesh(const float *deathPos, float radius);
+
 #endif // _SMARTBOTS_NAV_FLANKING_H_

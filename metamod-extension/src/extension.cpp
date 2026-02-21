@@ -613,6 +613,16 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
         }
     }
 
+    // Drain pending deaths queued by event handler and spread to nav mesh.
+    // Must be done here (not inside FireGameEvent) to avoid writing nav areas
+    // while the engine may be iterating them.
+    {
+        float deathPos[16][3];
+        int deathCount = GameEvents_DrainPendingDeaths(deathPos, 16);
+        for (int i = 0; i < deathCount; i++)
+            NavFlanking_SpreadDeathToNavMesh(deathPos[i], 512.0f);
+    }
+
     // Refresh bot list + state at 8Hz (every 8 ticks).
     // IPlayerInfo calls are expensive (trigger UTIL_GetListenServerHost),
     // so we avoid doing this every tick.
@@ -798,23 +808,53 @@ void SmartBotsExtension::Hook_GameFrame(bool simulating)
 
                         for (int i = 0; i < flankCount; i++)
                         {
-                            float fx, fy, fz;
-                            if (NavFlanking_GetTarget(flankEdicts[i], fx, fy, fz))
+                            int edict = flankEdicts[i];
+
+                            // Age safety net: expire commands older than ~15s
+                            BotCommandEntry existingCmd;
+                            if (BotCommand_Get(edict, existingCmd))
                             {
-                                if (TargetChanged(flankEdicts[i], fx, fy, fz))
+                                int age = gpGlobals->tickcount - existingCmd.tick;
+                                if (age > 990)
+                                    BotCommand_Clear(edict);
+                            }
+
+                            // Reached target → clear command so native AI resumes
+                            if (NavFlanking_HasReachedTarget(edict))
+                            {
+                                BotCommand_Clear(edict);
+                                continue;
+                            }
+
+                            // Tier filtering: only aggressive bots get commands
+                            // Tier 0 (AGR): always gets commands
+                            // Tier 1 (MOD): only before first contact
+                            // Tier 2 (PAS): never — pure native AI with death-aware pathfinding
+                            int tier = edict % 3;
+                            bool shouldCommand = (tier == 0) || (tier == 1 && !cautious);
+                            if (!shouldCommand)
+                            {
+                                BotCommand_Clear(edict);
+                                continue;
+                            }
+
+                            float fx, fy, fz;
+                            if (NavFlanking_GetTarget(edict, fx, fy, fz))
+                            {
+                                if (TargetChanged(edict, fx, fy, fz))
                                 {
-                                    BotCommand_Set(flankEdicts[i],
+                                    BotCommand_Set(edict,
                                                    fx, fy, fz,
                                                    0, 0, 0,
-                                                   cmdFlags, s_tickCount);
-                                    RecordTarget(flankEdicts[i], fx, fy, fz);
+                                                   cmdFlags, gpGlobals->tickcount);
+                                    RecordTarget(edict, fx, fy, fz);
                                 }
                             }
                             else
                             {
                                 // No target — clear command so bot resumes normal AI
-                                BotCommand_Clear(flankEdicts[i]);
-                                s_lastTargetValid[flankEdicts[i]] = false;
+                                BotCommand_Clear(edict);
+                                s_lastTargetValid[edict] = false;
                             }
                         }
                     }

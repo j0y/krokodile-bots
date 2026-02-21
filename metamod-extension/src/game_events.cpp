@@ -18,6 +18,10 @@ struct DeathZoneEntry {
 static DeathZoneEntry s_deathZones[MAX_DEATH_ZONES];
 static int s_deathZoneHead = 0;  // ring buffer write index
 
+// Pending deaths — queued in event handler, processed in GameFrame
+static float s_pendingDeaths[MAX_DEATH_ZONES][3];
+static int   s_pendingDeathCount = 0;
+
 class SmartBotsEventListener : public IGameEventListener2
 {
 public:
@@ -183,6 +187,16 @@ public:
                 s_deathZoneHead = (s_deathZoneHead + 1) % MAX_DEATH_ZONES;
 
                 META_CONPRINTF("[SmartBots] Death zone recorded at (%.0f, %.0f, %.0f)\n", x, y, z);
+
+                // Queue for deferred nav mesh spreading (unsafe to write nav areas
+                // from inside event handler — engine may be iterating nav areas)
+                if (s_pendingDeathCount < MAX_DEATH_ZONES)
+                {
+                    s_pendingDeaths[s_pendingDeathCount][0] = x;
+                    s_pendingDeaths[s_pendingDeathCount][1] = y;
+                    s_pendingDeaths[s_pendingDeathCount][2] = z;
+                    s_pendingDeathCount++;
+                }
             }
         }
         else if (strcmp(name, "controlpoint_endtouch") == 0)
@@ -306,6 +320,23 @@ bool GameEvents_IsCounterAttack()
     if (!rules)
         return false;
     return s_fnIsCA(rules);
+}
+
+// ---- Pending death drain (called from GameFrame) ----
+
+int GameEvents_DrainPendingDeaths(float (*outPositions)[3], int maxCount)
+{
+    int count = s_pendingDeathCount;
+    if (count > maxCount)
+        count = maxCount;
+    for (int i = 0; i < count; i++)
+    {
+        outPositions[i][0] = s_pendingDeaths[i][0];
+        outPositions[i][1] = s_pendingDeaths[i][1];
+        outPositions[i][2] = s_pendingDeaths[i][2];
+    }
+    s_pendingDeathCount = 0;
+    return count;
 }
 
 // ---- Death zone API ----

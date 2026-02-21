@@ -4,6 +4,7 @@
 #include "bot_voice.h"
 #include "sig_resolve.h"
 #include "detour.h"
+#include "extension.h"
 
 #include <ISmmPlugin.h>
 #include <cstdlib>
@@ -128,7 +129,7 @@ static void Hook_ActionCheckpoint_Update(
         return;
     }
 
-    // Check for Python command
+    // Check for command
     if (edictIdx > 0)
     {
         BotCommandEntry cmd;
