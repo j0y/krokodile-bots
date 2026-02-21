@@ -174,11 +174,6 @@ public:
             // player_death 'team' field uses 0-based indexing (0=Security, 1=Insurgent)
             // while engine teams are 2-based (2=Security, 3=Insurgent)
             int team = event->GetInt("team");
-            float x = event->GetFloat("x");
-            float y = event->GetFloat("y");
-            float z = event->GetFloat("z");
-            META_CONPRINTF("[SmartBots] player_death: team=%d (controlled=%d) pos=(%.0f,%.0f,%.0f)\n",
-                           team, m_controlledTeam, x, y, z);
             if (team == m_controlledTeam - 2)
             {
                 float x = event->GetFloat("x");
