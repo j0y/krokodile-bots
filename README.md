@@ -1,69 +1,71 @@
 # Insurgency 2014 Smart Bots
 
-Three-layer AI for Insurgency 2014 bots: C++ Metamod extension controls bots via native action classes, Python tactical planner scores positions using precomputed visibility data, future LLM strategist for high-level decisions.
+Custom AI for Insurgency (2014) cooperative mode. A C++ Metamod:Source extension that replaces default bot behavior with tactically competent defenders — no external services, no Python, everything runs in-process.
 
 ```
-┌────────────────────┐  UDP :9000  ┌────────────────────┐
-│  Insurgency Server │ ──────────► │  Tactical Brain    │
-│  Metamod extension │ ◄────────── │  Python (asyncio)  │
-│  (C++ bot control) │  commands   │  influence scoring  │
-└────────────────────┘             └────────────────────┘
+┌─────────────────────────────────────────────┐
+│           Insurgency Server Process          │
+│                                             │
+│  Metamod extension (66 Hz GameFrame)        │
+│  ├── Death zone tracking (nav mesh)         │
+│  ├── Defender bots → fan around objective   │
+│  └── Flanker bots  → death-zone-aware paths │
+│                                             │
+│  Engine handles: pathfinding, aim, firing   │
+└─────────────────────────────────────────────┘
 ```
+
+## How It Works
+
+Each server tick (~66 Hz) the extension runs a game frame loop:
+
+1. **Threat detection** — uses the engine's native `IVision` interface to check each bot for visible/known enemies. If a bot sees a threat, the engine's combat AI takes full control.
+
+2. **Death zones** — player deaths are recorded on the nav mesh with a decaying intensity. Bots learn to avoid areas where teammates recently died.
+
+3. **Role split** — bots are divided by proximity to the current objective:
+   - **Defenders (~30%)** — positioned in a fan pattern around the objective (forward, flanks, rear). Slots are assigned greedily; forward positions fill first.
+   - **Flankers (~70%)** — routed along paths that avoid death zones and approach from the enemy's direction.
+
+4. **Command execution** — movement targets are written via `BotCommand_Set()` and picked up by a detour on `CINSBotActionCheckpoint::Update`, which suspends the default checkpoint action and issues an Approach or Investigate action instead.
 
 ## Quick Start
 
 ```bash
-# 1. Download server files (one-time, ~10GB)
-cd insurgency-server && ./download-server.sh && cd ..
+# Dev server (extension + game server, rebuilds extension image)
+docker compose --profile dev up --build
 
-# 2. Precompute spatial data (all coop maps, ~30 min)
-cd bspMeshExporter
-uv run python -m bsp_mesh_exporter extract --batch \
-    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --output-dir ../data/
-uv run python -m bsp_mesh_exporter objectives --batch \
-    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --output-dir ../data/
-uv run python -m bsp_mesh_exporter zones --batch \
-    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --output-dir ../data/
-uv run python -m bsp_mesh_exporter vismatrix --batch \
-    --maps-dir ../insurgency-server/server-files/insurgency/maps/ \
-    --mesh-dir ../data/ --output-dir ../data/
-uv run python -m bsp_mesh_exporter influence --batch \
-    --vismatrix-dir ../data/ --output-dir ../data/
-cd ..
+# Vanilla server (unmodified AI, for comparison)
+docker compose --profile vanilla up
 
-# 3. Segment nav mesh into tactical areas (needs objectives + .nav)
-cd navMeshParser
-python3 cluster_nav.py --batch \
-    --nav-dir ../insurgency-server/server-files/insurgency/maps \
-    --data-dir ../data
-cd ..
-
-# 4. Run game server + tactical brain
-docker compose --profile ai up --build
-
-# 5. Connect in-game to port 27025
+# Connect in-game to port 27025
 ```
 
 ## Project Structure
 
 ```
-├── docker-compose.yml        # Orchestrates services
-├── insurgency-server/        # Game server + Metamod extension (multi-stage Docker build)
-├── metamod-extension/        # C++ Metamod:Source plugin (bot control via native actions)
-├── tactical-brain/           # Python tactical planner (influence map scoring)
-├── bspMeshExporter/          # Offline spatial data pipeline (BSP mesh, vismatrix, influence)
-├── navMeshParser/            # Nav mesh parser (30/30 maps)
-└── reverseEngineering/       # Analysis docs and design specs
+├── docker-compose.yml         # Orchestrates game server
+├── insurgency-server/         # Game server (Dockerfile w/ multi-stage ext build, configs)
+├── metamod-extension/         # C++ Metamod:Source plugin — all AI logic
+│   └── src/
+│       ├── extension.cpp          # Main loop, plugin lifecycle
+│       ├── bot_action_hook.cpp    # Detours: combat suppression + checkpoint override
+│       ├── bot_tactics.cpp        # Defender fan positioning
+│       ├── nav_flanking.cpp       # Flanker path selection
+│       ├── bot_trace.cpp          # Visibility traces
+│       ├── nav_objectives.cpp     # Objective nav data
+│       ├── game_events.cpp        # Round/objective tracking
+│       └── sig_resolve.cpp        # Symbol lookup
+└── reverseEngineering/        # Decompiled server code, analysis docs
 ```
 
-## How It Works
+## Building
 
-1. **Metamod extension** hooks into bot behavior, sends bot state (position, health, team) over UDP each tick
-2. **Tactical brain** loads precomputed visibility matrix (~21K grid points per map) and scores positions using weight profiles (defend, push, ambush, sniper, overrun)
-3. Best positions are assigned to bots based on concealment, sightline to objective, threat from enemies, objective proximity, and team spread
-4. Extension receives target positions and uses native bot action classes (approach, combat) — engine handles pathfinding, aim, firing
+```bash
+# Host build — generates compile_commands.json for IDE, 32-bit .so
+cmake -B build metamod-extension/
+# Requires g++-multilib (32-bit Linux target)
 
-Docker profiles: `ai` (extension + tactical brain), `vanilla` (original AI).
+# Docker build bakes the .so into the image — must rebuild after C++ changes
+docker compose --profile dev up --build
+```
