@@ -76,6 +76,8 @@ mp_timer_postround 3
 // ---------------------------------------------------------------
 // sv_pure 0 required for SourceMod/MetaMod
 sv_pure 0
+$([ "${DEV_MODE:-0}" = "1" ] && echo "sm_ammobox_cooldown 0
+sm_healthbox_cooldown 0" || echo "")
 
 // ---------------------------------------------------------------
 // Custom mode overrides (copied from cfg/custom/)

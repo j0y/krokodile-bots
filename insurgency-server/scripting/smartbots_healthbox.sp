@@ -2,7 +2,7 @@
  * smartbots_healthbox.sp -- Player-droppable health boxes for Insurgency 2014
  *
  * Players type !healthbox (or /healthbox) to toss a prop forward.
- * Other players press Use (E) on it to restore HP (default 40),
+ * Other players press USE on it to restore HP (default 40),
  * capped at max health.
  *
  * Single-use: box disappears after one pickup.
@@ -42,10 +42,10 @@ static ConVar g_cvHealAmount;
 static float g_lastDropTime[MAXPLAYERS + 1];
 
 // ---------------------------------------------------------------------------
-// Model (placeholder — change to a medkit model as needed)
+// Model
 // ---------------------------------------------------------------------------
 
-#define HEALTHBOX_MODEL "models/static_props/wcache_ins_01.mdl"
+#define HEALTHBOX_MODEL "models/static_props/wcache_box_02.mdl"
 
 // ---------------------------------------------------------------------------
 // Plugin lifecycle
@@ -137,7 +137,7 @@ public Action Cmd_HealthBox(int client, int args)
 	TeleportEntity(entity, spawnPos, NULL_VECTOR, vel);
 
 	// Red tint to distinguish from ammo boxes
-	SetEntityRenderColor(entity, 255, 200, 200, 255);
+	SetEntityRenderColor(entity, 200, 255, 200, 255);
 
 	// Hook Use key
 	SDKHook(entity, SDKHook_Use, OnHealthBoxUse);
@@ -150,7 +150,7 @@ public Action Cmd_HealthBox(int client, int args)
 	// Record cooldown
 	g_lastDropTime[client] = now;
 
-	PrintToChat(client, "[HealthBox] Health box tossed! Teammates can press E to pick it up.");
+	PrintToChat(client, "[HealthBox] Health box tossed! Teammates can press USE to pick it up.");
 
 	return Plugin_Handled;
 }

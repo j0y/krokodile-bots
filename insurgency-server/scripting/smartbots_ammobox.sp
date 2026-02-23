@@ -2,7 +2,7 @@
  * smartbots_ammobox.sp -- Player-droppable ammo boxes for Insurgency 2014
  *
  * Players type !ammobox (or /ammobox) to drop a weapon cache prop at their
- * feet.  Other players press Use (E) on it to receive +1 spare magazine for
+ * feet.  Other players press USE on it to receive +1 spare magazine for
  * their primary and secondary weapons (capped at loadout max).
  *
  * Single-use: box disappears after one pickup.
@@ -44,7 +44,7 @@ static float g_lastDropTime[MAXPLAYERS + 1];
 // Model
 // ---------------------------------------------------------------------------
 
-#define AMMOBOX_MODEL "models/static_props/wcache_ins_01.mdl"
+#define AMMOBOX_MODEL "models/static_props/wcache_box_01.mdl"
 
 // ---------------------------------------------------------------------------
 // Plugin lifecycle
@@ -57,8 +57,69 @@ public void OnPluginStart()
 	g_cvLifetime = CreateConVar("sm_ammobox_lifetime", "120", "Seconds before unclaimed box despawns");
 
 	RegConsoleCmd("sm_ammobox", Cmd_AmmoBox, "Drop an ammo box at your feet");
+	RegAdminCmd("sm_ammobox_scan", Cmd_AmmoScan, ADMFLAG_ROOT, "Scan player memory for internal ammo counter");
 
 	PrintToServer("[AmmoBox] Plugin loaded (v1.0.0)");
+}
+
+// ---------------------------------------------------------------------------
+// Debug scan: dump all int-sized values near m_iAmmo[ammoType] on the player
+// that equal the current magazine count.  Run before and after a reload to
+// identify which offset is the internal counter (the one that decrements
+// while m_iAmmo gets reset).
+// ---------------------------------------------------------------------------
+
+public Action Cmd_AmmoScan(int client, int args)
+{
+	int target = (client == 0) ? 1 : client;   // default: first connected player
+
+	// Find the base offset of the m_iAmmo array via SendProp
+	int ammoBase = FindSendPropInfo("CINSPlayer", "m_iAmmo");
+	if (ammoBase <= 0)
+		ammoBase = FindSendPropInfo("CBasePlayer", "m_iAmmo");
+
+	int weapon = GetPlayerWeaponSlot(target, 0);
+	if (weapon == -1)
+	{
+		ReplyToCommand(client, "[Scan] No primary weapon on player %d", target);
+		return Plugin_Handled;
+	}
+
+	int ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
+	if (ammoType < 0)
+	{
+		ReplyToCommand(client, "[Scan] ammoType < 0");
+		return Plugin_Handled;
+	}
+
+	int ammoOffset = ammoBase + ammoType * 4;   // offset of m_iAmmo[ammoType]
+	int curMags    = GetEntProp(target, Prop_Data, "m_iAmmo", _, ammoType);
+
+	PrintToServer("[Scan] player=%d ammoType=%d ammoBase=%d ammoOffset=%d curMags=%d",
+		target, ammoType, ammoBase, ammoOffset, curMags);
+
+	// Scan ±600 bytes in 4-byte steps from ammoOffset on the PLAYER entity
+	for (int delta = -600; delta <= 600; delta += 4)
+	{
+		int off = ammoOffset + delta;
+		if (off < 0)
+			continue;
+		int val = GetEntData(target, off);
+		if (val == curMags)
+			PrintToServer("[Scan]  player+%d = %d  (delta %+d from m_iAmmo[%d])",
+				off, val, delta, ammoType);
+	}
+
+	// Also scan the weapon entity ±600 bytes from its start
+	PrintToServer("[Scan] --- weapon entity scan (mags=%d) ---", curMags);
+	for (int off = 0; off < 1200; off += 4)
+	{
+		int val = GetEntData(weapon, off);
+		if (val == curMags)
+			PrintToServer("[Scan]  weapon+%d = %d", off, val);
+	}
+
+	return Plugin_Handled;
 }
 
 public void OnMapStart()
@@ -134,8 +195,8 @@ public Action Cmd_AmmoBox(int client, int args)
 	DispatchSpawn(entity);
 	TeleportEntity(entity, spawnPos, NULL_VECTOR, vel);
 
-	// Make it glow slightly (set render color to a slightly tinted white)
-	SetEntityRenderColor(entity, 200, 255, 200, 255);
+	// Red tint to distinguish from health boxes
+	SetEntityRenderColor(entity, 255, 200, 200, 255);
 
 	// Hook Use key
 	SDKHook(entity, SDKHook_Use, OnAmmoBoxUse);
@@ -148,7 +209,7 @@ public Action Cmd_AmmoBox(int client, int args)
 	// Record cooldown
 	g_lastDropTime[client] = now;
 
-	PrintToChat(client, "[AmmoBox] Ammo box dropped! Teammates can press E to pick it up.");
+	PrintToChat(client, "[AmmoBox] Ammo box dropped! Teammates can press USE to pick it up.");
 
 	return Plugin_Handled;
 }
@@ -173,7 +234,7 @@ public Action OnAmmoBoxUse(int entity, int activator, int caller, UseType type, 
 
 	if (!gaveSomething)
 	{
-		PrintHintText(activator, "Ammo full -- nothing to pick up.");
+		PrintHintText(activator, "Ammo full.");
 		return Plugin_Handled;
 	}
 
@@ -190,8 +251,15 @@ public Action OnAmmoBoxUse(int entity, int activator, int caller, UseType type, 
 }
 
 // ---------------------------------------------------------------------------
-// Give one magazine worth of spare ammo for a weapon slot
+// Give one magazine worth of spare ammo for a weapon slot.
+//
+// Insurgency stores reserve ammo in m_iAmmoBelt on the weapon entity
+// (DT_LocalActiveINSWeaponBallistic) rather than in the base-engine
+// m_iAmmo[] on the player.  We write to both fields so the HUD and the
+// reload logic stay in sync.
 // ---------------------------------------------------------------------------
+
+static int s_magsOffset = -2;  // offset for CINSWeapon "mags" (looked up once)
 
 static bool GiveMagazine(int client, int slot)
 {
@@ -199,64 +267,43 @@ static bool GiveMagazine(int client, int slot)
 	if (weapon == -1)
 		return false;
 
-	// Get ammo type for this weapon
-	int ammoType = GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType");
+	// ---- ammo type on the player side ----
+	int ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
 	if (ammoType < 0)
 		return false;
 
-	// Get clip capacity (= one magazine worth of bullets)
-	int clipSize = GetEntProp(weapon, Prop_Data, "m_iClip1");
-	if (clipSize <= 0)
-		clipSize = 30; // fallback for edge cases
-
-	// For magazine-based weapons, clip size is the current loaded rounds.
-	// We need the max clip. Try m_iPrimaryAmmoCount as max spare ammo indicator.
-	// Actually m_iClip1 is current clip contents, not capacity.
-	// Use GetEntProp with Prop_Send to get max clip from weapon definition.
-	// Insurgency weapons: Ins_GetMaxClip1 reads from weapon def handle.
-	// Safest: try to read via Prop_Data m_iMaxClip1 if it exists.
-	int maxClip = -1;
-
-	// Check if the weapon has a net class with max clip info
-	char netClass[64];
-	if (GetEntityNetClass(weapon, netClass, sizeof(netClass)))
+	// ---- "mags" offset on the weapon (Insurgency-specific reserve counter) ----
+	if (s_magsOffset == -2)
 	{
-		int offset = FindSendPropInfo(netClass, "m_iMaxClip1");
-		if (offset > 0)
-			maxClip = GetEntData(weapon, offset);
+		s_magsOffset = FindSendPropInfo("CINSWeapon", "mags");
+		if (s_magsOffset <= 0)
+			s_magsOffset = FindSendPropInfo("CINSWeaponBallistic", "mags");
+		PrintToServer("[AmmoBox] mags offset=%d", s_magsOffset);
 	}
 
-	if (maxClip <= 0)
-	{
-		// Fallback: use current clip as best estimate of capacity
-		// This is imperfect if player has partial clip, but acceptable
-		maxClip = clipSize;
-		if (maxClip <= 0)
-			maxClip = 30;
-	}
+	int beforeAmmo    = GetEntProp(client, Prop_Data, "m_iAmmo", _, ammoType);
+	int beforeAmmoS   = GetEntProp(client, Prop_Send, "m_iAmmo", _, ammoType);
+	int beforeWepCnt  = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount");
 
-	// Current spare ammo
-	int currentAmmo = GetEntProp(client, Prop_Send, "m_iAmmo", _, ammoType);
+	PrintToServer("[AmmoBox] slot=%d ammoType=%d  player:m_iAmmo(Data)=%d m_iAmmo(Send)=%d  weapon:m_iPrimaryAmmoCount=%d",
+		slot, ammoType, beforeAmmo, beforeAmmoS, beforeWepCnt);
 
-	// Read max spare ammo from weapon data if available
-	int maxAmmo = -1;
-	if (HasEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount"))
-		maxAmmo = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount");
-
-	// If we couldn't get max ammo from the weapon, use a generous cap
-	if (maxAmmo <= 0)
-		maxAmmo = maxClip * 10;
-
-	// Already at or above max?
-	if (currentAmmo >= maxAmmo)
+	if (beforeAmmo >= 8)
 		return false;
 
-	// Add one magazine, cap at max
-	int newAmmo = currentAmmo + maxClip;
-	if (newAmmo > maxAmmo)
-		newAmmo = maxAmmo;
+	// Write +1 to the player's ammo array (both Prop_Data and Prop_Send)
+	SetEntProp(client, Prop_Data, "m_iAmmo", beforeAmmo + 1, _, ammoType);
+	SetEntProp(client, Prop_Send, "m_iAmmo", beforeAmmo + 1, _, ammoType);
 
-	SetEntProp(client, Prop_Send, "m_iAmmo", newAmmo, _, ammoType);
+	// Write +1 to weapon's m_iPrimaryAmmoCount (candidate for internal counter)
+	if (beforeWepCnt >= 0)
+		SetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount", beforeWepCnt + 1);
+
+	int afterAmmo   = GetEntProp(client, Prop_Data, "m_iAmmo", _, ammoType);
+	int afterAmmoS  = GetEntProp(client, Prop_Send, "m_iAmmo", _, ammoType);
+	int afterWepCnt = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount");
+	PrintToServer("[AmmoBox] after: m_iAmmo(Data)=%d m_iAmmo(Send)=%d weapon:m_iPrimaryAmmoCount=%d",
+		afterAmmo, afterAmmoS, afterWepCnt);
 
 	return true;
 }
