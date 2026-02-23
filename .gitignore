@@ -4,3 +4,4 @@ metamod-extension/build/
 data/*
 !data/.gitkeep
 build
+reference

@@ -1,5 +1,5 @@
 services:
-  # --- Dev mode: game server with Metamod extension ---
+  # --- Dev mode: game server with SmartBots (C++ ext + SM plugins) ---
   insurgency:
     image: insurgencysamrtbots-insurgency
     build:

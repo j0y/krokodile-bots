@@ -1,0 +1,266 @@
+"Games"
+{
+	"insurgency"
+	{
+		"Addresses"
+		{
+			"TheNavMesh"
+			{
+				"linux"
+				{
+					"signature"	"TheNavMesh"
+				}
+			}
+			"g_pGameRules"
+			{
+				"linux"
+				{
+					"signature"	"g_pGameRules"
+				}
+			}
+		}
+
+		"Signatures"
+		{
+			// ----- Global addresses -----
+
+			// CNavMesh *TheNavMesh — global pointer (BSS segment)
+			// Expected offset from server base: 0x00c99800
+			"TheNavMesh"
+			{
+				"library"	"server"
+				"linux"		"@TheNavMesh"
+			}
+
+			// CGameRules *g_pGameRules — global pointer
+			// Expected offset: 0x00c0c3d8
+			"g_pGameRules"
+			{
+				"library"	"server"
+				"linux"		"@g_pGameRules"
+			}
+
+			// ----- DHook detour targets -----
+
+			// void CINSBotCombat::Update(ActionResult *sret, void *this, CINSNextBot *actor, float interval)
+			// x86-32 sret ABI: ActionResult returned via hidden first stack param
+			// Expected offset: 0x00706550
+			"CINSBotCombat::Update"
+			{
+				"library"	"server"
+				"linux"		"@_ZN13CINSBotCombat6UpdateEP11CINSNextBotf"
+			}
+
+			// void CINSBotActionCheckpoint::Update(ActionResult *sret, void *this, CINSNextBot *actor, float interval)
+			// Expected offset: 0x00726a50
+			"CINSBotActionCheckpoint::Update"
+			{
+				"library"	"server"
+				"linux"		"@_ZN23CINSBotActionCheckpoint6UpdateEP11CINSNextBotf"
+			}
+
+			// ----- SDKCall targets -----
+
+			// void CINSBotLocomotion::Approach(const Vector &goal, float weight)
+			"CINSBotLocomotion::Approach"
+			{
+				"library"	"server"
+				"linux"		"@_ZN17CINSBotLocomotion8ApproachERK6Vectorf"
+			}
+
+			// CNavMesh::GetNearestNavArea(const Vector&, bool, float, bool, bool, NearestNavAreaGroundCheck_t) const
+			// Expected offset: 0x004f20d0
+			"CNavMesh::GetNearestNavArea"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavMesh17GetNearestNavAreaERK6Vectorbfbb27NearestNavAreaGroundCheck_t"
+			}
+
+			// CNavArea::IsPotentiallyVisible(const CNavArea*) const
+			// Expected offset: 0x004ae260
+			"CNavArea::IsPotentiallyVisible"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavArea20IsPotentiallyVisibleEPKS_"
+			}
+
+			// CNavArea::IsBlocked(int, bool) const
+			// Expected offset: 0x004adc40
+			"CNavArea::IsBlocked"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavArea9IsBlockedEib"
+			}
+
+			// CINSRules::IsCounterAttack() const
+			// Expected offset: 0x0022e150
+			"CINSRules::IsCounterAttack"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK9CINSRules15IsCounterAttackEv"
+			}
+		}
+
+		"Offsets"
+		{
+			// ----- CNavArea field offsets (32-bit, verified from binary) -----
+
+			"CNavArea::m_center"
+			{
+				"linux"		"44"
+				"windows"	"44"
+			}
+			"CNavArea::m_connect"
+			{
+				"linux"		"108"
+				"windows"	"108"
+			}
+			"CINSNavArea::m_insFlags"
+			{
+				"linux"		"352"
+				"windows"	"352"
+			}
+			"CINSNavArea::m_deathIntensity"
+			{
+				"linux"		"536"
+				"windows"	"536"
+			}
+			"CINSNavArea::m_deathTimestamp"
+			{
+				"linux"		"552"
+				"windows"	"552"
+			}
+			"CINSNavArea::m_hidingSpots"
+			{
+				"linux"		"208"
+				"windows"	"208"
+			}
+
+			// ----- VTable indices (byte_offset / 4 on 32-bit) -----
+
+			// CINSNextBot::GetLocomotionInterface() const — vtable byte 0x96c
+			"GetLocomotionInterface"
+			{
+				"linux"		"603"
+				"windows"	"603"
+			}
+			// CINSNextBot::GetBodyInterface() const — vtable byte 0x970
+			"GetBodyInterface"
+			{
+				"linux"		"604"
+				"windows"	"604"
+			}
+			// CINSNextBot::GetVisionInterface() const — vtable byte 0x974
+			"GetVisionInterface"
+			{
+				"linux"		"605"
+				"windows"	"605"
+			}
+			// IBody::AimHeadTowards(const Vector&, int, float, INextBotReply*, const char*) — vtable byte 0xd4
+			"IBody::AimHeadTowards"
+			{
+				"linux"		"53"
+				"windows"	"53"
+			}
+			// IVision::IsAbleToSee(CBaseEntity*, int checkFOV, Vector* visibleSpot) — vtable byte 260
+			"IVision::IsAbleToSee_Entity"
+			{
+				"linux"		"65"
+				"windows"	"65"
+			}
+			// IVision::GetPrimaryKnownThreat(int onlyVisible) — vtable byte 0xd0
+			"IVision::GetPrimaryKnownThreat"
+			{
+				"linux"		"52"
+				"windows"	"52"
+			}
+			// CBaseEntity::SpeakConceptIfAllowed(...) — vtable byte 0x800
+			"SpeakConceptIfAllowed"
+			{
+				"linux"		"512"
+				"windows"	"512"
+			}
+		}
+
+		"Functions"
+		{
+			// ----- DHook detour definitions -----
+			// Using cdecl because on Linux x86-32 GCC, thiscall puts this on stack.
+			// With sret ABI, the hidden sret pointer precedes this on the stack.
+			// We declare ALL stack params explicitly: sret, this, actor, interval.
+
+			"CINSBotCombat_Update"
+			{
+				"signature"	"CINSBotCombat::Update"
+				"callconv"	"cdecl"
+				"return"	"void"
+				"arguments"
+				{
+					"sret"
+					{
+						"type"	"int"
+					}
+					"thisptr"
+					{
+						"type"	"int"
+					}
+					"actor"
+					{
+						"type"	"int"
+					}
+					"interval"
+					{
+						"type"	"float"
+					}
+				}
+			}
+
+			"CINSBotActionCheckpoint_Update"
+			{
+				"signature"	"CINSBotActionCheckpoint::Update"
+				"callconv"	"cdecl"
+				"return"	"void"
+				"arguments"
+				{
+					"sret"
+					{
+						"type"	"int"
+					}
+					"thisptr"
+					{
+						"type"	"int"
+					}
+					"actor"
+					{
+						"type"	"int"
+					}
+					"interval"
+					{
+						"type"	"float"
+					}
+				}
+			}
+
+			// ----- SDKCall function definitions -----
+
+			"CINSBotLocomotion::Approach"
+			{
+				"signature"	"CINSBotLocomotion::Approach"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"address"
+				"arguments"
+				{
+					"goal"
+					{
+						"type"	"vectorptr"
+					}
+					"weight"
+					{
+						"type"	"float"
+					}
+				}
+			}
+		}
+	}
+}

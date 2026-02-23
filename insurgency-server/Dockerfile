@@ -1,5 +1,5 @@
 # ============================================================
-# Stage 1: Build Metamod extensions (32-bit)
+# Stage 1a: Build SmartBots C++ Metamod extension (32-bit)
 # ============================================================
 FROM debian:bullseye-slim AS ext-builder
 
@@ -13,17 +13,59 @@ RUN dpkg --add-architecture i386 && \
     && rm -rf /var/lib/apt/lists/*
 
 COPY metamod-extension/ /build/metamod-extension/
-COPY metamod-nav-spawning/ /build/metamod-nav-spawning/
 
-# Build smartbots extension
 RUN cd /build/metamod-extension && \
     cmake -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build
 
-# Build navspawning extension
-RUN cd /build/metamod-nav-spawning && \
-    cmake -B build -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build build
+# ============================================================
+# Stage 1b: Compile SourcePawn plugins with spcomp
+# ============================================================
+FROM debian:bullseye-slim AS sp-builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        lib32stdc++6 \
+        lib32z1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download SourceMod 1.11 (stable) for spcomp + include files
+RUN mkdir -p /opt/sourcemod && \
+    curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz" \
+    | tar xz -C /opt/sourcemod --strip-components=1
+
+# Download DHooks extension (includes dhooks.inc)
+RUN curl -sqL "https://github.com/peace-maker/DHooks2/releases/download/v2.2.0-detours17/dhooks-2.2.0-detours17-sm110.tar.gz" \
+    | tar xz -C /opt/sourcemod
+
+# Copy plugin sources
+COPY insurgency-server/scripting/ /build/scripting/
+
+# Compile SourceMod plugins (smartbots core stays as C++ extension)
+RUN /opt/sourcemod/addons/sourcemod/scripting/spcomp \
+        -i/opt/sourcemod/addons/sourcemod/scripting/include \
+        -i/build/scripting \
+        -o/build/smartbots_deathzones.smx \
+        /build/scripting/smartbots_deathzones.sp && \
+    /opt/sourcemod/addons/sourcemod/scripting/spcomp \
+        -i/opt/sourcemod/addons/sourcemod/scripting/include \
+        -i/build/scripting \
+        -o/build/smartbots_navspawn.smx \
+        /build/scripting/smartbots_navspawn.sp && \
+    /opt/sourcemod/addons/sourcemod/scripting/spcomp \
+        -i/opt/sourcemod/addons/sourcemod/scripting/include \
+        -i/build/scripting \
+        -o/build/smartbots_ammobox.smx \
+        /build/scripting/smartbots_ammobox.sp && \
+    /opt/sourcemod/addons/sourcemod/scripting/spcomp \
+        -i/opt/sourcemod/addons/sourcemod/scripting/include \
+        -i/build/scripting \
+        -o/build/smartbots_healthbox.smx \
+        /build/scripting/smartbots_healthbox.sp
 
 # ============================================================
 # Stage 2: Game server
@@ -31,7 +73,7 @@ RUN cd /build/metamod-nav-spawning && \
 FROM debian:bullseye-slim
 
 LABEL maintainer="insurgency-smart-bots"
-LABEL description="Insurgency 2014 Dedicated Server with Metamod extension"
+LABEL description="Insurgency 2014 Dedicated Server with SmartBots (C++ extension + SourceMod plugins)"
 
 # Prevent interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
@@ -92,12 +134,10 @@ RUN chmod +x /home/steam/entrypoint.sh /home/steam/entrypoint-vanilla.sh
 USER steam
 
 # ============================================================
-# 6. Install Metamod extensions
+# 6. Install SmartBots Metamod extension (core bot AI)
 # ============================================================
-RUN mkdir -p /home/steam/insurgency-server/insurgency/addons/smartbots/bin/linux \
-             /home/steam/insurgency-server/insurgency/addons/navspawning/bin/linux
+RUN mkdir -p /home/steam/insurgency-server/insurgency/addons/smartbots/bin/linux
 
-# smartbots extension
 COPY --from=ext-builder --chown=steam:steam \
     /build/metamod-extension/build/smartbots.so \
     /home/steam/insurgency-server/insurgency/addons/smartbots/bin/linux/smartbots.so
@@ -105,13 +145,28 @@ COPY --chown=steam:steam \
     metamod-extension/smartbots.vdf \
     /home/steam/insurgency-server/insurgency/addons/metamod/smartbots.vdf
 
-# navspawning extension
-COPY --from=ext-builder --chown=steam:steam \
-    /build/metamod-nav-spawning/build/navspawning.so \
-    /home/steam/insurgency-server/insurgency/addons/navspawning/bin/linux/navspawning.so
+# ============================================================
+# 7. Install SourceMod plugins + gamedata
+# ============================================================
+
+# Compiled plugins
+COPY --from=sp-builder --chown=steam:steam \
+    /build/smartbots_deathzones.smx \
+    /home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/smartbots_deathzones.smx
+COPY --from=sp-builder --chown=steam:steam \
+    /build/smartbots_navspawn.smx \
+    /home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/smartbots_navspawn.smx
+COPY --from=sp-builder --chown=steam:steam \
+    /build/smartbots_ammobox.smx \
+    /home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/smartbots_ammobox.smx
+COPY --from=sp-builder --chown=steam:steam \
+    /build/smartbots_healthbox.smx \
+    /home/steam/insurgency-server/insurgency/addons/sourcemod/plugins/smartbots_healthbox.smx
+
+# Gamedata files (used by SourceMod plugins)
 COPY --chown=steam:steam \
-    metamod-nav-spawning/navspawning.vdf \
-    /home/steam/insurgency-server/insurgency/addons/metamod/navspawning.vdf
+    insurgency-server/gamedata/ \
+    /home/steam/insurgency-server/insurgency/addons/sourcemod/gamedata/
 
 # ============================================================
 # Ports

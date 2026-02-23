@@ -1,0 +1,86 @@
+"Games"
+{
+	"insurgency"
+	{
+		"Addresses"
+		{
+			"TheNavMesh"
+			{
+				"linux"
+				{
+					"signature"	"TheNavMesh"
+				}
+			}
+		}
+
+		"Signatures"
+		{
+			// TheNavMesh global pointer (CNavMesh*)
+			// Expected offset from server base: 0x00c99800
+			"TheNavMesh"
+			{
+				"library"	"server"
+				"linux"		"@TheNavMesh"
+			}
+
+			// CNavMesh::GetNearestNavArea(const Vector&, bool anyZ, float maxDist, bool checkLOS, bool checkGround, NearestNavAreaGroundCheck_t) const
+			// Expected offset: 0x004f20d0
+			"CNavMesh::GetNearestNavArea"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavMesh17GetNearestNavAreaERK6Vectorbfbb27NearestNavAreaGroundCheck_t"
+			}
+
+			// CNavArea::IsBlocked(int teamID, bool ignoreNavBlockers) const
+			// Expected offset: 0x004adc40
+			"CNavArea::IsBlocked"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavArea9IsBlockedEib"
+			}
+		}
+
+		"Offsets"
+		{
+			// CNavArea field offsets (32-bit Linux, verified from binary disassembly)
+
+			// CNavArea::m_center — Vector (3 floats) at +44 from object start
+			"CNavArea::m_center"
+			{
+				"linux"		"44"
+				"windows"	"44"
+			}
+
+			// CNavArea::m_connect[4] — 4x CUtlVectorUltraConservative<NavConnect>
+			// Each is a single pointer (4 bytes), one per cardinal direction
+			"CNavArea::m_connect"
+			{
+				"linux"		"108"
+				"windows"	"108"
+			}
+
+			// CINSNavArea::m_insFlags — uint32 (bit 0x80 = INDOOR)
+			"CINSNavArea::m_insFlags"
+			{
+				"linux"		"352"
+				"windows"	"352"
+			}
+
+			// CINSNavArea::m_deathIntensity[1] — float (Insurgent team death intensity)
+			// Written by SpreadDeathToNavMesh, read by engine bot AI
+			"CINSNavArea::m_deathIntensity"
+			{
+				"linux"		"536"
+				"windows"	"536"
+			}
+
+			// CINSNavArea death IntervalTimer timestamp — float
+			// At +0x228 (NOT +0x224 which is the IntervalTimer vtable pointer)
+			"CINSNavArea::m_deathTimestamp"
+			{
+				"linux"		"552"
+				"windows"	"552"
+			}
+		}
+	}
+}

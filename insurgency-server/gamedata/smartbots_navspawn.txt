@@ -1,0 +1,90 @@
+"Games"
+{
+	"insurgency"
+	{
+		"Addresses"
+		{
+			"TheNavMesh"
+			{
+				"linux"
+				{
+					"signature"	"TheNavMesh"
+				}
+			}
+		}
+
+		"Signatures"
+		{
+			// CNavMesh *TheNavMesh — global pointer
+			"TheNavMesh"
+			{
+				"library"	"server"
+				"linux"		"@TheNavMesh"
+			}
+
+			// CINSNextBot::Spawn() — virtual override of CBaseEntity::Spawn
+			"CINSNextBot::Spawn"
+			{
+				"library"	"server"
+				"linux"		"@_ZN11CINSNextBot5SpawnEv"
+			}
+
+			// CNavMesh::GetNearestNavArea(const Vector&, bool, float, bool, bool, NearestNavAreaGroundCheck_t) const
+			"CNavMesh::GetNearestNavArea"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavMesh17GetNearestNavAreaERK6Vectorbfbb27NearestNavAreaGroundCheck_t"
+			}
+
+			// CNavArea::IsPotentiallyVisible(const CNavArea*) const
+			"CNavArea::IsPotentiallyVisible"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavArea20IsPotentiallyVisibleEPKS_"
+			}
+
+			// CNavArea::IsBlocked(int, bool) const
+			"CNavArea::IsBlocked"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK8CNavArea9IsBlockedEib"
+			}
+		}
+
+		"Offsets"
+		{
+			// CNavArea::m_center — Vector (3 floats) at +44
+			"CNavArea::m_center"
+			{
+				"linux"		"44"
+				"windows"	"44"
+			}
+
+			// CNavArea::m_connect[4] — 4x CUtlVectorUltraConservative<NavConnect>
+			"CNavArea::m_connect"
+			{
+				"linux"		"108"
+				"windows"	"108"
+			}
+
+			// CINSNavArea::m_insFlags — uint32 (bit 0x80 = INDOOR)
+			"CINSNavArea::m_insFlags"
+			{
+				"linux"		"352"
+				"windows"	"352"
+			}
+		}
+
+		"Functions"
+		{
+			// DHook detour for CINSNextBot::Spawn — post-hook to teleport after native spawn
+			"CINSNextBot_Spawn"
+			{
+				"signature"	"CINSNextBot::Spawn"
+				"callconv"	"thiscall"
+				"return"	"void"
+				"this"		"entity"
+			}
+		}
+	}
+}
