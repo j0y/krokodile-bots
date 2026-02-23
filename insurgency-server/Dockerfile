@@ -34,12 +34,9 @@ RUN dpkg --add-architecture i386 && \
     && rm -rf /var/lib/apt/lists/*
 
 # Download SourceMod 1.11 (stable) for spcomp + include files
+# DHooks (with detours) is bundled in SM 1.11 — no separate download needed
 RUN mkdir -p /opt/sourcemod && \
     curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6968-linux.tar.gz" \
-    | tar xz -C /opt/sourcemod --strip-components=1
-
-# Download DHooks extension (includes dhooks.inc)
-RUN curl -sqL "https://github.com/peace-maker/DHooks2/releases/download/v2.2.0-detours17/dhooks-2.2.0-detours17-sm110.tar.gz" \
     | tar xz -C /opt/sourcemod
 
 # Copy plugin sources
@@ -49,21 +46,25 @@ COPY insurgency-server/scripting/ /build/scripting/
 RUN /opt/sourcemod/addons/sourcemod/scripting/spcomp \
         -i/opt/sourcemod/addons/sourcemod/scripting/include \
         -i/build/scripting \
+        -i/build/scripting/include \
         -o/build/smartbots_deathzones.smx \
         /build/scripting/smartbots_deathzones.sp && \
     /opt/sourcemod/addons/sourcemod/scripting/spcomp \
         -i/opt/sourcemod/addons/sourcemod/scripting/include \
         -i/build/scripting \
+        -i/build/scripting/include \
         -o/build/smartbots_navspawn.smx \
         /build/scripting/smartbots_navspawn.sp && \
     /opt/sourcemod/addons/sourcemod/scripting/spcomp \
         -i/opt/sourcemod/addons/sourcemod/scripting/include \
         -i/build/scripting \
+        -i/build/scripting/include \
         -o/build/smartbots_ammobox.smx \
         /build/scripting/smartbots_ammobox.sp && \
     /opt/sourcemod/addons/sourcemod/scripting/spcomp \
         -i/opt/sourcemod/addons/sourcemod/scripting/include \
         -i/build/scripting \
+        -i/build/scripting/include \
         -o/build/smartbots_healthbox.smx \
         /build/scripting/smartbots_healthbox.sp
 
