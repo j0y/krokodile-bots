@@ -74,7 +74,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
     *(undefined4 *)((int)param_2 + 0x2c) = 0;
     *(void **)(param_1 + 4) = pvVar3;
     *(undefined4 *)param_1 = 2 /* SuspendFor */;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x247357 /* "Escorting " */ /* "Escorting " */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x247357 /* "Escorting " */ /* "Escorting " */ /* "Escorting " */;
     return param_1;
   }
   piVar4 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x974 /* CINSNextBot::GetVisionInterface */))(in_stack_0000000c);
@@ -93,7 +93,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar3;
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2456bc /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2456bc /* "Attacking nearby threats" */ /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
       return param_1;
     }
   }
@@ -110,19 +110,19 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(CNavArea **)(param_1 + 4) = pCVar6;
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24724d /* "I have an investigation!" */ /* "I have an investigation!" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24724d /* "I have an investigation!" */ /* "I have an investigation!" */ /* "I have an investigation!" */;
       return param_1;
     }
     iVar5 = CBaseEntity::GetTeamNumber(this_04);
     if (1 < iVar5 - 2U) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2456d5 /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2456d5 /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */;
       return param_1;
     }
     pCVar7 = (CINSNextBot *)TheINSNextBots();
     this_00 = (CINSBotCaptureCP *)CINSNextBotManager::GetDesiredPushTypeObjective(pCVar7);
-    iVar1 = *(int *)(**(int **)(unaff_EBX + 0x46be1b /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x490 + (int)this_00 * 4);
+    iVar1 = *(int *)(**(int **)(unaff_EBX + 0x46be1b /* &g_pObjectiveResource */ /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x490 + (int)this_00 * 4);
     if ((iVar5 == 2) + 2 == iVar1) {
       iVar5 = TheINSNextBots();
       CINSNextBotManager::GenerateCPGrenadeTargets((CINSNextBotManager *)this_00,iVar5,(int)this_00)
@@ -135,7 +135,7 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar3;
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x2473eb /* "Attacking enemy controlled point" */ /* "Attacking enemy controlled point" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x2473eb /* "Attacking enemy controlled point" */ /* "Attacking enemy controlled point" */ /* "Attacking enemy controlled point" */;
       return param_1;
     }
     if (1 < iVar1 - 2U) {
@@ -147,12 +147,12 @@ CINSBotActionPush::Update(CINSBotActionPush *this,CINSNextBot *param_1,float par
       *(undefined4 *)((int)param_2 + 0x2c) = 0;
       *(void **)(param_1 + 4) = pvVar3;
       *(undefined4 *)param_1 = 2 /* SuspendFor */;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24740f /* "Capturing neutral controlled point" */ /* "Capturing neutral controlled point" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24740f /* "Capturing neutral controlled point" */ /* "Capturing neutral controlled point" */ /* "Capturing neutral controlled point" */;
       return param_1;
     }
-    iVar5 = CINSNavMesh::GetRandomControlPointArea(**(int **)(unaff_EBX + 0x46b7b7 /* &TheNavMesh */ /* &TheNavMesh */));
+    iVar5 = CINSNavMesh::GetRandomControlPointArea(**(int **)(unaff_EBX + 0x46b7b7 /* &TheNavMesh */ /* &TheNavMesh */ /* &TheNavMesh */));
     if (iVar5 == 0) {
-      Warning(unaff_EBX + 0x2474cb /* "NAVMESH ERROR: Unable to find any navmesh areas for CP %i, navmesh probably o..." */ /* "NAVMESH ERROR: Unable to find any navmesh areas for CP %i, navmesh probably o..." */,this_00);
+      Warning(unaff_EBX + 0x2474cb /* "NAVMESH ERROR: Unable to find any navmesh areas for CP %i, navmesh probably o..." */ /* "NAVMESH ERROR: Unable to find any navmesh areas for CP %i, navmesh probably o..." */ /* "NAVMESH ERROR: Unable to find any navmesh areas for CP %i, navmesh probably o..." */,this_00);
     }
     else {
       CNavArea::GetRandomPoint();
@@ -196,7 +196,7 @@ int CINSBotActionPush::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x1f6fa6 /* "Push" */ /* "Push" */;
+  return extraout_ECX + 0x1f6fa6 /* "Push" */ /* "Push" */ /* "Push" */;
 }
 
 
@@ -264,9 +264,9 @@ void __thiscall CINSBotActionPush::~CINSBotActionPush(CINSBotActionPush *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x45ec13 /* vtable for CINSBotActionPush+0x8 */ /* vtable for CINSBotActionPush+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x45eda7 /* vtable for CINSBotActionPush+0x19c */ /* vtable for CINSBotActionPush+0x19c */;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46bd63 /* &_DYNAMIC */ /* &_DYNAMIC */));
+  *in_stack_00000004 = extraout_ECX + 0x45ec13 /* vtable for CINSBotActionPush+0x8 */ /* vtable for CINSBotActionPush+0x8 */ /* vtable for CINSBotActionPush+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x45eda7 /* vtable for CINSBotActionPush+0x19c */ /* vtable for CINSBotActionPush+0x19c */ /* vtable for CINSBotActionPush+0x19c */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x46bd63 /* &_DYNAMIC */ /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -303,8 +303,8 @@ void __thiscall CINSBotActionPush::~CINSBotActionPush(CINSBotActionPush *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x45ebca /* vtable for CINSBotActionPush+0x8 */ /* vtable for CINSBotActionPush+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x45ed5e /* vtable for CINSBotActionPush+0x19c */ /* vtable for CINSBotActionPush+0x19c */;
+  *in_stack_00000004 = unaff_EBX + 0x45ebca /* vtable for CINSBotActionPush+0x8 */ /* vtable for CINSBotActionPush+0x8 */ /* vtable for CINSBotActionPush+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x45ed5e /* vtable for CINSBotActionPush+0x19c */ /* vtable for CINSBotActionPush+0x19c */ /* vtable for CINSBotActionPush+0x19c */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

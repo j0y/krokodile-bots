@@ -194,8 +194,8 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -207,11 +207,11 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a2c45 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a2c45 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */ /* "OnContact" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,&UNK_0027c0b1 + unaff_EBX,dVar9,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */));
+                     (INextBot *)(unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */ /* "OnContact" */));
           uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -226,8 +226,8 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
           pCVar10 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a33a5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -237,9 +237,9 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a2c45 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a2c45 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27be40 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27be40 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -249,8 +249,8 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */);
-            iVar4 = unaff_EBX + 0x27be4f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */ /* "OnContact" */);
+            iVar4 = unaff_EBX + 0x27be4f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -258,17 +258,17 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x255e20 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x255e20 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x27be1a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x27be1a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x27be10 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x27be10 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x27be26 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x27be26 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -276,18 +276,19 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27be2b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27be2b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x255e20 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x255e20 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             pCVar11 = (CGameTrace *)(unaff_EBX + 0x255def /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar7 = &local_20;
@@ -302,14 +303,15 @@ Action<CINSNextBot>::OnContact(Action<CINSNextBot> *this,CBaseEntity *param_1,CG
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a34c5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a34c5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a34c5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a34c5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            pCVar11 = (CGameTrace *)(unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */);
+            pCVar11 = (CGameTrace *)(unaff_EBX + 0x27c03f /* "OnContact" */ /* "OnContact" */ /* "OnContact" */);
             pCVar10 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a2c45 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a2c45 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27c07d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -423,8 +425,8 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
       if (piVar8 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -437,12 +439,13 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27c551 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a30e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a30e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */));
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -455,8 +458,8 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
           pPVar12 = (Path *)0x1;
           cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,1);
           if (((cVar1 != '\0') ||
-              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
+              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a3845 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -466,7 +469,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a30e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a30e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
                       (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,
                        CINSRules_Survival::AwardTeamSupply + unaff_EBX,dVar11,pIVar5,iVar4 + 0x11);
@@ -478,8 +481,8 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */);
-            iVar4 = unaff_EBX + 0x27c2ef /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */);
+            iVar4 = unaff_EBX + 0x27c2ef /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -487,7 +490,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x2562c0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x2562c0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
@@ -495,7 +498,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
             }
             puVar6 = &UNK_0027c2ba + unaff_EBX;
             if (local_44 != 2) {
-              puVar6 = (undefined *)(unaff_EBX + 0x27c2b0 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar6 = (undefined *)(unaff_EBX + 0x27c2b0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar6 = &UNK_0027c2c6 + unaff_EBX;
               }
@@ -513,6 +516,7 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x25628f /* "%s
 " */ /* "%s
+" */ /* "%s
 " */;
             puVar9 = &local_20;
             pPVar12 = (Path *)0x1;
@@ -526,13 +530,14 @@ void __thiscall Action<CINSNextBot>::OnMoveToSuccess(Action<CINSNextBot> *this,P
         }
         else {
           if ((*(int *)(pPVar10 + 0x2c) == 3) &&
-             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3965 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a3965 /* &developer */ /* &developer */)), iVar7 != 0)) {
+             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3965 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a3965 /* &developer */ /* &developer */ /* &developer */)), iVar7 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*(int *)pPVar10 + 0xb8))(pPVar10);
-            iVar4 = unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */;
-            pPVar12 = (Path *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a30e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            iVar4 = unaff_EBX + 0x27c4cf /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */ /* "OnMoveToSuccess" */;
+            pPVar12 = (Path *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a30e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                               >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27c51d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -648,8 +653,8 @@ Action<CINSNextBot>::OnMoveToFailure
       if (piVar11 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar9 = (undefined1 *)param_1[7];
         }
         else {
@@ -660,13 +665,14 @@ Action<CINSNextBot>::OnMoveToFailure
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a3595 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a3595 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */),param_1[7] + 0x2060,0x80,&local_34,
+                    ((INextBot *)(unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */ /* "OnMoveToFailure" */),param_1[7] + 0x2060,0x80,&local_34,
                      unaff_EBX + 0x27ca01 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar10,uVar4,iVar5 + 0x11,uVar3,
-                     (INextBot *)(unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */));
+                     (INextBot *)(unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */ /* "OnMoveToFailure" */));
           uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
           puVar9 = (undefined1 *)param_1[7];
         }
@@ -681,8 +687,8 @@ Action<CINSNextBot>::OnMoveToFailure
           piVar11 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
-              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
+              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a3cf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar5 = param_1[2];
             pIVar6 = (INextBot *)
@@ -691,9 +697,9 @@ Action<CINSNextBot>::OnMoveToFailure
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a3595 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a3595 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar6,param_1[7] + 0x2060,1,&local_30,unaff_EBX + 0x27c790 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar10,pIVar6,
+                      (pIVar6,param_1[7] + 0x2060,1,&local_30,unaff_EBX + 0x27c790 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar10,pIVar6,
                        iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar8 + 0xc0))(piVar8);
@@ -703,8 +709,8 @@ Action<CINSNextBot>::OnMoveToFailure
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */);
-            iVar5 = unaff_EBX + 0x27c79f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */ /* "OnMoveToFailure" */);
+            iVar5 = unaff_EBX + 0x27c79f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -712,17 +718,17 @@ Action<CINSNextBot>::OnMoveToFailure
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x256770 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x256770 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar9,iVar5,uVar12);
             }
-            iVar5 = unaff_EBX + 0x27c76a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27c76a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27c760 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27c760 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27c776 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27c776 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -730,18 +736,19 @@ Action<CINSNextBot>::OnMoveToFailure
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,param_1[7] + 0x2060,1,&local_24,unaff_EBX + 0x27c77b /* "%s %s " */ /* "%s %s " */,iVar5,local_5c)
+                      (local_5c,param_1[7] + 0x2060,1,&local_24,unaff_EBX + 0x27c77b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5,local_5c)
             ;
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
-            iVar5 = unaff_EBX + 0x256770 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar5 = unaff_EBX + 0x256770 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar5 = local_3c;
             }
             local_1d = 0xff;
             in_stack_ffffff74 = CONCAT44(local_5c,iVar5);
             iVar5 = unaff_EBX + 0x25673f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar9 = &local_20;
@@ -759,10 +766,11 @@ Action<CINSNextBot>::OnMoveToFailure
              (iVar7 = (**(code **)(**(int **)(&DAT_004a3e15 + unaff_EBX) + 0x40))
                                 (*(int **)(&DAT_004a3e15 + unaff_EBX)), iVar7 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar8 + 0xb8))(piVar8);
-            iVar5 = unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */;
-            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a3595 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            iVar5 = unaff_EBX + 0x27c96f /* "OnMoveToFailure" */ /* "OnMoveToFailure" */ /* "OnMoveToFailure" */;
+            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a3595 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27c9cd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -874,8 +882,8 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
       if (piVar10 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -888,12 +896,13 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27cdf7 /* "OnStuck" */ /* "OnStuck" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
+                    ((INextBot *)(unaff_EBX + 0x27cdf7 /* "OnStuck" */ /* "OnStuck" */ /* "OnStuck" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
                      ,unaff_EBX + 0x27ce91 /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
                      (double)*(float *)(**(int **)(&DAT_004a3a25 + unaff_EBX) + 0xc),uVar4,
-                     iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x27cdf7 /* "OnStuck" */ /* "OnStuck" */));
+                     iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x27cdf7 /* "OnStuck" */ /* "OnStuck" */ /* "OnStuck" */));
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
       }
@@ -905,8 +914,8 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
           piVar10 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a4185 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -917,7 +926,7 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
             local_2d = 0xff;
             dVar9 = (double)*(float *)(**(int **)(&DAT_004a3a25 + unaff_EBX) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27cc20 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27cc20 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -927,8 +936,8 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x27cdf7 /* "OnStuck" */ /* "OnStuck" */);
-            iVar5 = unaff_EBX + 0x27cc2f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x27cdf7 /* "OnStuck" */ /* "OnStuck" */ /* "OnStuck" */);
+            iVar5 = unaff_EBX + 0x27cc2f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -942,11 +951,11 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar11);
             }
-            iVar5 = unaff_EBX + 0x27cbfa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27cbfa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27cbf0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27cbf0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27cc06 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27cc06 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -954,7 +963,7 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27cc0b /* "%s %s " */ /* "%s %s " */,iVar5
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27cc0b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5
                        ,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -972,13 +981,14 @@ void __thiscall Action<CINSNextBot>::OnStuck(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a42a5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a42a5 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a42a5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a42a5 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
             piVar10 = (int *)((ulonglong)
                               (double)*(float *)(**(int **)(&DAT_004a3a25 + unaff_EBX) + 0xc) >>
                              0x20);
             DevMsg((char *)(unaff_EBX + 0x27ce5d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -1090,8 +1100,8 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
       if (piVar10 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -1104,12 +1114,13 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27d27d /* "OnUnStuck" */ /* "OnUnStuck" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
+                    ((INextBot *)(unaff_EBX + 0x27d27d /* "OnUnStuck" */ /* "OnUnStuck" */ /* "OnUnStuck" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
                      ,unaff_EBX + 0x27d321 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a3eb5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x27d27d /* "OnUnStuck" */ /* "OnUnStuck" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a3eb5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x27d27d /* "OnUnStuck" */ /* "OnUnStuck" */ /* "OnUnStuck" */));
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
       }
@@ -1121,8 +1132,8 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
           piVar10 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a4615 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -1131,9 +1142,9 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a3eb5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a3eb5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27d0b0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27d0b0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -1143,8 +1154,8 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x27d27d /* "OnUnStuck" */ /* "OnUnStuck" */);
-            iVar5 = unaff_EBX + 0x27d0bf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x27d27d /* "OnUnStuck" */ /* "OnUnStuck" */ /* "OnUnStuck" */);
+            iVar5 = unaff_EBX + 0x27d0bf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -1158,11 +1169,11 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar11);
             }
-            iVar5 = unaff_EBX + 0x27d08a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27d08a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27d080 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27d080 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27d096 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27d096 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -1170,7 +1181,7 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27d09b /* "%s %s " */ /* "%s %s " */,iVar5
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27d09b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5
                        ,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -1188,12 +1199,13 @@ void __thiscall Action<CINSNextBot>::OnUnStuck(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4735 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a4735 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4735 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a4735 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a3eb5 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a3eb5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27d2ed /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -1306,8 +1318,8 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -1320,12 +1332,13 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */ /* "OnInjured" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27eec1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a5a55 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a5a55 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */ /* "OnInjured" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -1338,8 +1351,8 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
           pCVar11 = (CTakeDamageInfo *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a61b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -1349,9 +1362,9 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a5a55 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a5a55 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27ec50 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27ec50 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -1361,8 +1374,8 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */);
-            iVar4 = unaff_EBX + 0x27ec5f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */ /* "OnInjured" */);
+            iVar4 = unaff_EBX + 0x27ec5f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -1370,15 +1383,15 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x258c30 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x258c30 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            puVar6 = (undefined *)(unaff_EBX + 0x27ec2a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            puVar6 = (undefined *)(unaff_EBX + 0x27ec2a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_44 != 2) {
-              puVar6 = (undefined *)(unaff_EBX + 0x27ec20 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar6 = (undefined *)(unaff_EBX + 0x27ec20 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar6 = &UNK_0027ec36 + unaff_EBX;
               }
@@ -1388,7 +1401,7 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27ec3b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27ec3b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        puVar6,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -1407,14 +1420,15 @@ void __thiscall Action<CINSNextBot>::OnInjured(Action<CINSNextBot> *this,CTakeDa
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a62d5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a62d5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a62d5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a62d5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            puVar6 = (undefined *)(unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */);
+            puVar6 = (undefined *)(unaff_EBX + 0x27edd5 /* "OnInjured" */ /* "OnInjured" */ /* "OnInjured" */);
             pCVar11 = (CTakeDamageInfo *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a5a55 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a5a55 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27ee8d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -1527,8 +1541,8 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -1541,12 +1555,13 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */ /* "OnKilled" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27f361 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a5ef5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a5ef5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */ /* "OnKilled" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -1559,8 +1574,8 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
           pCVar11 = (CTakeDamageInfo *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a6655 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -1570,9 +1585,9 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a5ef5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a5ef5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27f0f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27f0f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -1582,8 +1597,8 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */);
-            iVar4 = unaff_EBX + 0x27f0ff /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */ /* "OnKilled" */);
+            iVar4 = unaff_EBX + 0x27f0ff /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -1591,17 +1606,17 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x2590d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x2590d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x27f0ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x27f0ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x27f0c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x27f0c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x27f0d6 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x27f0d6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -1609,13 +1624,14 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27f0db /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27f0db /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x25909f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -1630,14 +1646,15 @@ void __thiscall Action<CINSNextBot>::OnKilled(Action<CINSNextBot> *this,CTakeDam
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a6775 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a6775 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a6775 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a6775 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */;
+            iVar4 = unaff_EBX + 0x27774d /* "OnKilled" */ /* "OnKilled" */ /* "OnKilled" */;
             pCVar11 = (CTakeDamageInfo *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a5ef5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a5ef5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27f32d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -1756,8 +1773,8 @@ Action<CINSNextBot>::OnOtherKilled
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -1769,13 +1786,14 @@ Action<CINSNextBot>::OnOtherKilled
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a63a5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a63a5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */ /* "OnOtherKilled" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27f811 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar9,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */));
+                     (INextBot *)(unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */ /* "OnOtherKilled" */));
           uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -1790,8 +1808,8 @@ Action<CINSNextBot>::OnOtherKilled
           pCVar10 = (CBaseCombatCharacter *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a6b05 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -1801,9 +1819,9 @@ Action<CINSNextBot>::OnOtherKilled
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a63a5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a63a5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27f5a0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27f5a0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -1813,8 +1831,8 @@ Action<CINSNextBot>::OnOtherKilled
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */);
-            iVar4 = unaff_EBX + 0x27f5af /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */ /* "OnOtherKilled" */);
+            iVar4 = unaff_EBX + 0x27f5af /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -1822,17 +1840,17 @@ Action<CINSNextBot>::OnOtherKilled
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x259580 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x259580 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x27f57a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x27f57a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x27f570 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x27f570 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x27f586 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x27f586 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -1840,18 +1858,19 @@ Action<CINSNextBot>::OnOtherKilled
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27f58b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27f58b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x259580 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x259580 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             pCVar11 = (CTakeDamageInfo *)(unaff_EBX + 0x25954f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar7 = &local_20;
@@ -1866,14 +1885,15 @@ Action<CINSNextBot>::OnOtherKilled
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6c25 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a6c25 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6c25 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a6c25 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            pCVar11 = (CTakeDamageInfo *)(unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */);
+            pCVar11 = (CTakeDamageInfo *)(unaff_EBX + 0x27f717 /* "OnOtherKilled" */ /* "OnOtherKilled" */ /* "OnOtherKilled" */);
             pCVar10 = (CBaseCombatCharacter *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a63a5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a63a5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27f7dd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -1986,8 +2006,8 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -2002,7 +2022,7 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
           INextBot::DebugConColorMsg
                     ((INextBot *)(&UNK_0027fbaf + unaff_EBX),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,&UNK_0027fcb1 + unaff_EBX,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a6845 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a6845 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
                      uVar2,(INextBot *)(&UNK_0027fbaf + unaff_EBX));
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -2016,8 +2036,8 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
           pCVar10 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a6fa5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -2027,9 +2047,9 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a6845 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a6845 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27fa40 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27fa40 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -2040,7 +2060,7 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
             uVar12 = CONCAT44(uVar2,&UNK_0027fbaf + unaff_EBX);
-            iVar4 = unaff_EBX + 0x27fa4f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            iVar4 = unaff_EBX + 0x27fa4f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -2055,11 +2075,11 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x27fa1a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x27fa1a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x27fa10 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x27fa10 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x27fa26 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x27fa26 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -2067,13 +2087,14 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27fa2b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27fa2b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             puVar11 = (undefined *)(unaff_EBX + 0x2599ef /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar7 = &local_20;
@@ -2088,14 +2109,15 @@ void __thiscall Action<CINSNextBot>::OnSight(Action<CINSNextBot> *this,CBaseEnti
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a70c5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a70c5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a70c5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a70c5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
             puVar11 = &UNK_0027fbaf + unaff_EBX;
             pCVar10 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a6845 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a6845 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27fc7d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -2209,8 +2231,8 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
       if (piVar8 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -2223,12 +2245,13 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */ /* "OnLostSight" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x280151 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a6ce5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a6ce5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */ /* "OnLostSight" */));
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -2241,8 +2264,8 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
           pCVar12 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar8 + 0x980 /* CINSNextBot::IsDebugging */))(piVar8,1);
           if (((cVar1 != '\0') ||
-              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
+              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a7445 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -2252,9 +2275,9 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a6ce5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a6ce5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27fee0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27fee0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar11,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar11 >> 0x20);
             (**(code **)(*(int *)pCVar10 + 0xc0))(pCVar10);
@@ -2264,8 +2287,8 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */);
-            iVar4 = unaff_EBX + 0x27feef /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */ /* "OnLostSight" */);
+            iVar4 = unaff_EBX + 0x27feef /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -2273,15 +2296,15 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x259ec0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x259ec0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar9,iVar4,uVar13);
             }
-            puVar6 = (undefined *)(unaff_EBX + 0x27feba /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            puVar6 = (undefined *)(unaff_EBX + 0x27feba /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_44 != 2) {
-              puVar6 = (undefined *)(unaff_EBX + 0x27feb0 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar6 = (undefined *)(unaff_EBX + 0x27feb0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar6 = &UNK_0027fec6 + unaff_EBX;
               }
@@ -2291,13 +2314,14 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27fecb /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27fecb /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        puVar6,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x259e8f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar9 = &local_20;
@@ -2312,14 +2336,15 @@ void __thiscall Action<CINSNextBot>::OnLostSight(Action<CINSNextBot> *this,CBase
         }
         else {
           if ((*(int *)(pCVar10 + 0x2c) == 3) &&
-             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7565 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a7565 /* &developer */ /* &developer */)), iVar7 != 0)) {
+             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7565 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a7565 /* &developer */ /* &developer */ /* &developer */)), iVar7 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*(int *)pCVar10 + 0xb8))(pCVar10);
-            iVar4 = unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */;
+            iVar4 = unaff_EBX + 0x280043 /* "OnLostSight" */ /* "OnLostSight" */ /* "OnLostSight" */;
             pCVar12 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a6ce5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a6ce5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x28011d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -2435,8 +2460,8 @@ Action<CINSNextBot>::OnSound
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -2449,12 +2474,13 @@ Action<CINSNextBot>::OnSound
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */ /* "OnSound" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x280611 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a71a5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a71a5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */ /* "OnSound" */));
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -2469,8 +2495,8 @@ Action<CINSNextBot>::OnSound
           pCVar10 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a7905 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -2480,9 +2506,9 @@ Action<CINSNextBot>::OnSound
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a71a5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a71a5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2803a0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2803a0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -2492,8 +2518,8 @@ Action<CINSNextBot>::OnSound
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */);
-            iVar4 = unaff_EBX + 0x2803af /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */ /* "OnSound" */);
+            iVar4 = unaff_EBX + 0x2803af /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -2501,17 +2527,17 @@ Action<CINSNextBot>::OnSound
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25a380 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25a380 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x28037a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x28037a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x280370 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x280370 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x280386 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x280386 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -2519,18 +2545,19 @@ Action<CINSNextBot>::OnSound
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28038b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28038b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x25a380 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25a380 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             uVar12 = CONCAT44(local_5c,iVar4);
             pVVar11 = (Vector *)(unaff_EBX + 0x25a34f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar7 = &local_20;
@@ -2545,14 +2572,15 @@ Action<CINSNextBot>::OnSound
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7a25 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a7a25 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a7a25 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a7a25 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            pVVar11 = (Vector *)(unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */);
+            pVVar11 = (Vector *)(unaff_EBX + 0x2804fb /* "OnSound" */ /* "OnSound" */ /* "OnSound" */);
             pCVar10 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a71a5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a71a5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x2805dd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -2684,13 +2712,14 @@ Action<CINSNextBot>::OnWeaponFired
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7b45 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7b45 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */ /* "OnWeaponFired" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x280fb1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar10,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */));
+                     (INextBot *)(unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */ /* "OnWeaponFired" */));
           uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -2716,9 +2745,9 @@ Action<CINSNextBot>::OnWeaponFired
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7b45 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7b45 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x280d40 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x280d40 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -2728,8 +2757,8 @@ Action<CINSNextBot>::OnWeaponFired
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */);
-            iVar4 = unaff_EBX + 0x280d4f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */ /* "OnWeaponFired" */);
+            iVar4 = unaff_EBX + 0x280d4f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -2737,15 +2766,15 @@ Action<CINSNextBot>::OnWeaponFired
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25ad20 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25ad20 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar13);
             }
-            puVar6 = (undefined *)(unaff_EBX + 0x280d1a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            puVar6 = (undefined *)(unaff_EBX + 0x280d1a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_44 != 2) {
-              puVar6 = (undefined *)(unaff_EBX + 0x280d10 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar6 = (undefined *)(unaff_EBX + 0x280d10 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar6 = &UNK_00280d26 + unaff_EBX;
               }
@@ -2760,13 +2789,14 @@ Action<CINSNextBot>::OnWeaponFired
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
-            iVar4 = unaff_EBX + 0x25ad20 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25ad20 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             local_1d = 0xff;
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             pCVar12 = (CBaseCombatWeapon *)(unaff_EBX + 0x25acef /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar8 = &local_20;
@@ -2781,14 +2811,15 @@ Action<CINSNextBot>::OnWeaponFired
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a83c5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a83c5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a83c5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a83c5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            pCVar12 = (CBaseCombatWeapon *)(unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */);
+            pCVar12 = (CBaseCombatWeapon *)(unaff_EBX + 0x283fdd /* "OnWeaponFired" */ /* "OnWeaponFired" */ /* "OnWeaponFired" */);
             pCVar11 = (CBaseCombatCharacter *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a7b45 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a7b45 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x280f7d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -2906,8 +2937,8 @@ Action<CINSNextBot>::OnPickUp
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -2919,13 +2950,14 @@ Action<CINSNextBot>::OnPickUp
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8935 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8935 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */ /* "OnPickUp" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x281da1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar9,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */));
+                     (INextBot *)(unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */ /* "OnPickUp" */));
           uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -2940,8 +2972,8 @@ Action<CINSNextBot>::OnPickUp
           pCVar10 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a9095 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -2951,9 +2983,9 @@ Action<CINSNextBot>::OnPickUp
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8935 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8935 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x281b30 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x281b30 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -2963,8 +2995,8 @@ Action<CINSNextBot>::OnPickUp
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */);
-            iVar4 = unaff_EBX + 0x281b3f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */ /* "OnPickUp" */);
+            iVar4 = unaff_EBX + 0x281b3f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -2972,17 +3004,17 @@ Action<CINSNextBot>::OnPickUp
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25bb10 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25bb10 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x281b0a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x281b0a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x281b00 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x281b00 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x281b16 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x281b16 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -2990,12 +3022,12 @@ Action<CINSNextBot>::OnPickUp
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x281b1b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x281b1b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
-            iVar4 = unaff_EBX + 0x25bb10 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25bb10 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
@@ -3014,14 +3046,15 @@ Action<CINSNextBot>::OnPickUp
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a91b5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a91b5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a91b5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a91b5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            pCVar11 = (CBaseCombatCharacter *)(unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */);
+            pCVar11 = (CBaseCombatCharacter *)(unaff_EBX + 0x281c64 /* "OnPickUp" */ /* "OnPickUp" */ /* "OnPickUp" */);
             pCVar10 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a8935 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a8935 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x281d6d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -3134,8 +3167,8 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -3148,12 +3181,13 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */ /* "OnDrop" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x282241 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a8dd5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a8dd5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */ /* "OnDrop" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -3166,8 +3200,8 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
           pCVar11 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a9535 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -3177,7 +3211,7 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8dd5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8dd5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
                       (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,
                        CEntityFactory<CLogicTraining>::Create + unaff_EBX,dVar10,pIVar5,iVar4 + 0x11
@@ -3190,8 +3224,8 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */);
-            iVar4 = unaff_EBX + 0x281fdf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */ /* "OnDrop" */);
+            iVar4 = unaff_EBX + 0x281fdf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -3199,17 +3233,17 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25bfb0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25bfb0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x281faa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x281faa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x281fa0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x281fa0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x281fb6 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x281fb6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -3217,13 +3251,14 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x281fbb /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x281fbb /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x25bf7f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -3238,12 +3273,12 @@ void __thiscall Action<CINSNextBot>::OnDrop(Action<CINSNextBot> *this,CBaseEntit
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9655 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a9655 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9655 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a9655 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */;
+            iVar4 = unaff_EBX + 0x2820fd /* "OnDrop" */ /* "OnDrop" */ /* "OnDrop" */;
             pCVar11 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a8dd5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a8dd5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg(&UNK_0028220d + unaff_EBX);
           }
@@ -3376,8 +3411,8 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -3390,12 +3425,13 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x2834e1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4aa075 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4aa075 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */));
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -3408,8 +3444,8 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
           pCVar10 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4aa7d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -3419,9 +3455,9 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa075 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa075 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x283270 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x283270 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -3431,8 +3467,8 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */);
-            iVar4 = unaff_EBX + 0x28327f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */);
+            iVar4 = unaff_EBX + 0x28327f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -3448,11 +3484,11 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x28324a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x28324a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x283240 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x283240 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x283256 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x283256 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -3460,7 +3496,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28325b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28325b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -3479,14 +3515,15 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,CBaseEntity *pa
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa8f5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4aa8f5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa8f5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4aa8f5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            puVar11 = (undefined *)(unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */);
+            puVar11 = (undefined *)(unaff_EBX + 0x28336d /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */);
             pCVar10 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4aa075 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4aa075 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x2834ad /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -3583,8 +3620,8 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -3599,11 +3636,12 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
           dVar9 = (double)*(float *)(**(int **)(CEntityFactory<CLogicBranchList>::GetEntitySize +
                                                unaff_EBX + 5) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x283041 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar9,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */));
+                     (INextBot *)(unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */));
           uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -3618,8 +3656,8 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
           pVVar10 = (Vector *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4aa335 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -3632,7 +3670,7 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
             dVar9 = (double)*(float *)(**(int **)(CEntityFactory<CLogicBranchList>::GetEntitySize +
                                                  unaff_EBX + 5) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x282dd0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x282dd0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pVVar8 + 0xc0))(pVVar8);
@@ -3642,8 +3680,8 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */);
-            iVar4 = unaff_EBX + 0x282ddf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */);
+            iVar4 = unaff_EBX + 0x282ddf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -3651,17 +3689,17 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25cdb0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25cdb0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x282daa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x282daa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x282da0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x282da0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x282db6 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x282db6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -3669,13 +3707,13 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x282dbb /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x282dbb /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x25cdb0 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25cdb0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
@@ -3693,10 +3731,10 @@ Action<CINSNextBot>::OnCommandApproach(Action<CINSNextBot> *this,Vector *param_1
         }
         else {
           if ((*(int *)(pVVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa455 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4aa455 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aa455 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4aa455 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pVVar8 + 0xb8))(pVVar8);
-            puVar11 = (undefined *)(unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */);
+            puVar11 = (undefined *)(unaff_EBX + 0x282ecd /* "OnCommandApproach" */ /* "OnCommandApproach" */ /* "OnCommandApproach" */);
             pVVar10 = (Vector *)
                       ((ulonglong)
                        (double)*(float *)(**(int **)(CEntityFactory<CLogicBranchList>::GetEntitySize
@@ -3812,8 +3850,8 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
       if (piVar10 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -3826,12 +3864,13 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */ /* "OnCommandString" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x284781 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ab315 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ab315 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */ /* "OnCommandString" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -3844,8 +3883,8 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
           piVar10 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
-              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) &&
+              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4aba75 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar5 = *(int *)(param_1 + 8);
             pIVar6 = (INextBot *)
@@ -3855,9 +3894,9 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ab315 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ab315 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x284510 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x284510 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar7 + 0xc0))(piVar7);
@@ -3867,8 +3906,8 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */);
-            iVar5 = unaff_EBX + 0x28451f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */ /* "OnCommandString" */);
+            iVar5 = unaff_EBX + 0x28451f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -3876,17 +3915,17 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25e4f0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25e4f0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar12);
             }
-            iVar5 = unaff_EBX + 0x2844ea /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x2844ea /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x2844e0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x2844e0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x2844f6 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x2844f6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -3894,7 +3933,7 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2844fb /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2844fb /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar5,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -3913,13 +3952,14 @@ void __thiscall Action<CINSNextBot>::OnCommandString(Action<CINSNextBot> *this,c
         }
         else {
           if ((piVar7[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4abb95 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4abb95 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4abb95 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4abb95 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar7 + 0xb8))(piVar7);
-            puVar11 = (undefined *)(unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */);
-            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ab315 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            puVar11 = (undefined *)(unaff_EBX + 0x2845cd /* "OnCommandString" */ /* "OnCommandString" */ /* "OnCommandString" */);
+            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ab315 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x28474d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -4086,8 +4126,8 @@ Action<CINSNextBot>::ApplyResult
     } while (*(CINSNextBot **)(pCVar6 + 0x18) != (CINSNextBot *)0x0);
     cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
     if ((cVar2 != '\0') ||
-       (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                          (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+       (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                          (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
       pIVar1 = (INextBot *)(param_2 + 0x2060);
       uVar3 = (**(code **)(*(int *)(param_2 + 0x2060) + 0x144))(pIVar1);
       local_58 = 0xff;
@@ -4095,8 +4135,8 @@ Action<CINSNextBot>::ApplyResult
       local_56 = 0x96;
       local_55 = 0xff;
       INextBot::DebugConColorMsg
-                (pIVar1,pIVar1,1,&local_58,unaff_EBX + 0x22d720 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
-                 (double)*(float *)(**(int **)(unaff_EBX + 0x454525 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,param_3 + 0x11);
+                (pIVar1,pIVar1,1,&local_58,unaff_EBX + 0x22d720 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                 (double)*(float *)(**(int **)(unaff_EBX + 0x454525 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,param_3 + 0x11);
       uVar3 = (**(code **)(*(int *)param_1 + 0xb8))(param_1);
       local_54 = 0xff;
       local_53 = 0xff;
@@ -4104,7 +4144,7 @@ Action<CINSNextBot>::ApplyResult
       local_51 = 0xff;
       INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_54,uVar3);
       local_50 = 0xff;
-      iVar5 = unaff_EBX + 0x230b0e /* " caused " */ /* " caused " */;
+      iVar5 = unaff_EBX + 0x230b0e /* " caused " */ /* " caused " */ /* " caused " */;
       local_4f = 0;
       puVar10 = &local_50;
       local_4e = 0xff;
@@ -4118,7 +4158,7 @@ Action<CINSNextBot>::ApplyResult
       local_49 = 0xff;
       INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_4c,uVar3);
       local_48 = 0xff;
-      iVar5 = unaff_EBX + 0x230b17 /* " to SUSPEND_FOR " */ /* " to SUSPEND_FOR " */;
+      iVar5 = unaff_EBX + 0x230b17 /* " to SUSPEND_FOR " */ /* " to SUSPEND_FOR " */ /* " to SUSPEND_FOR " */;
       local_47 = 0;
       puVar10 = &local_48;
       local_46 = 0xff;
@@ -4136,7 +4176,7 @@ Action<CINSNextBot>::ApplyResult
         local_3b = 0xff;
         local_3a = 0xff;
         local_39 = 0xff;
-        INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_3c,unaff_EBX + 0x23c759 /* rodata:0x0909000A */ /* rodata:0x0909000A */);
+        INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_3c,unaff_EBX + 0x23c759 /* rodata:0x0909000A */ /* rodata:0x0909000A */ /* rodata:0x0909000A */);
       }
       else {
         local_40 = 0x96;
@@ -4144,6 +4184,7 @@ Action<CINSNextBot>::ApplyResult
         local_3e = 0x96;
         local_3d = 0xff;
         INextBot::DebugConColorMsg(param_6,pIVar1,1,&local_40,unaff_EBX + 0x230b06 /* "  (%s)
+" */ /* "  (%s)
 " */ /* "  (%s)
 " */,param_6);
       }
@@ -4167,18 +4208,18 @@ Action<CINSNextBot>::ApplyResult
     InvokeOnEnd(param_1,(CINSNextBot *)param_1,param_2,(Action *)param_3);
     cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1,pAVar4,pBVar9);
     if ((cVar2 != '\0') ||
-       (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                          (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+       (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                          (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
       pIVar1 = (INextBot *)(param_2 + 0x2060);
       uVar3 = (**(code **)(*(int *)(param_2 + 0x2060) + 0x144))(pIVar1);
       local_38 = 0xff;
       local_37 = 0xff;
       local_36 = 0x96;
       local_35 = 0xff;
-      dVar7 = (double)*(float *)(**(int **)(unaff_EBX + 0x454525 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+      dVar7 = (double)*(float *)(**(int **)(unaff_EBX + 0x454525 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
       uVar8 = 1;
       pAVar4 = param_3 + 0x11;
-      iVar5 = unaff_EBX + 0x22d720 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */;
+      iVar5 = unaff_EBX + 0x22d720 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */;
       puVar10 = &local_38;
       INextBot::DebugConColorMsg();
       (**(code **)(*(int *)param_1 + 0xb8))(param_1,uVar8,puVar10,iVar5,dVar7,uVar3,pAVar4);
@@ -4193,14 +4234,14 @@ Action<CINSNextBot>::ApplyResult
         local_27 = 0xff;
         local_26 = 0;
         local_25 = 0xff;
-        INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_28,unaff_EBX + 0x230b37 /* " DONE." */ /* " DONE." */);
+        INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_28,unaff_EBX + 0x230b37 /* " DONE." */ /* " DONE." */ /* " DONE." */);
       }
       else {
         local_30 = 0;
         local_2f = 0xff;
         local_2e = 0;
         local_2d = 0xff;
-        INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_30,unaff_EBX + 0x230b28 /* " DONE, RESUME " */ /* " DONE, RESUME " */);
+        INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_30,unaff_EBX + 0x230b28 /* " DONE, RESUME " */ /* " DONE, RESUME " */ /* " DONE, RESUME " */);
         (**(code **)(*(int *)pBVar11 + 0xb8))(pBVar11);
         local_2c = 0xff;
         local_2b = 0xff;
@@ -4221,6 +4262,7 @@ Action<CINSNextBot>::ApplyResult
         local_22 = 0x96;
         local_21 = 0xff;
         INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_24,unaff_EBX + 0x230b06 /* "  (%s)
+" */ /* "  (%s)
 " */ /* "  (%s)
 " */,param_6);
       }
@@ -4252,17 +4294,17 @@ Action<CINSNextBot>::ApplyResult
     if (param_5 != (Behavior *)0x0) {
       cVar2 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
       if ((cVar2 != '\0') ||
-         (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                            (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+         (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                            (*(int **)(unaff_EBX + 0x454c85 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
         uVar3 = (**(code **)(*(int *)(param_2 + 0x2060) + 0x144))(param_2 + 0x2060);
         local_78 = 0xff;
         local_77 = 0xff;
         local_76 = 0x96;
         local_75 = 0xff;
-        dVar7 = (double)*(float *)(**(int **)(unaff_EBX + 0x454525 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+        dVar7 = (double)*(float *)(**(int **)(unaff_EBX + 0x454525 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
         uVar8 = 1;
         pAVar4 = param_3 + 0x11;
-        iVar5 = unaff_EBX + 0x22d720 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */;
+        iVar5 = unaff_EBX + 0x22d720 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */;
         puVar10 = &local_78;
         INextBot::DebugConColorMsg();
         if (param_1 == (Action<CINSNextBot> *)param_5) {
@@ -4364,12 +4406,12 @@ Action<CINSNextBot>::BuildDecoratedName(Action<CINSNextBot> *this,char *param_1,
   pcVar1 = (char *)(**(code **)(*in_stack_0000000c + 0xb8))();
   V_strncat((char *)param_2,pcVar1,0x100,-1);
   if (in_stack_0000000c[4] != 0) {
-    V_strncat((char *)param_2,(char *)(unaff_EBX + 0x2319ff /* "( " */ /* "( " */),0x100,-1);
+    V_strncat((char *)param_2,(char *)(unaff_EBX + 0x2319ff /* "( " */ /* "( " */ /* "( " */),0x100,-1);
     BuildDecoratedName(this_00,param_1,param_2);
-    V_strncat((char *)param_2,(char *)(unaff_EBX + 0x23ebe4 /* " )" */ /* " )" */),0x100,-1);
+    V_strncat((char *)param_2,(char *)(unaff_EBX + 0x23ebe4 /* " )" */ /* " )" */ /* " )" */),0x100,-1);
   }
   if (in_stack_0000000c[5] != 0) {
-    V_strncat((char *)param_2,(char *)(unaff_EBX + 0x231a02 /* "<<" */ /* "<<" */),0x100,-1);
+    V_strncat((char *)param_2,(char *)(unaff_EBX + 0x231a02 /* "<<" */ /* "<<" */ /* "<<" */),0x100,-1);
     BuildDecoratedName(this_01,param_1,param_2);
   }
   return param_2;
@@ -4392,12 +4434,12 @@ void __thiscall Action<CINSNextBot>::DebugString(Action<CINSNextBot> *this)
   Action<CINSNextBot> *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *(undefined1 *)(unaff_EBX + 0x59d377 /* Action<CINSNextBot>::DebugString */ /* Action<CINSNextBot>::DebugString */) = 0;
+  *(undefined1 *)(unaff_EBX + 0x59d377 /* Action<CINSNextBot>::DebugString */ /* Action<CINSNextBot>::DebugString */ /* Action<CINSNextBot>::DebugString */) = 0;
   pAVar1 = in_stack_00000004;
   do {
     pAVar1 = *(Action<CINSNextBot> **)(pAVar1 + 0xc);
   } while (pAVar1 != (Action<CINSNextBot> *)0x0);
-  BuildDecoratedName(in_stack_00000004,(char *)in_stack_00000004,(Action *)(unaff_EBX + 0x59d377 /* Action<CINSNextBot>::DebugString */ /* Action<CINSNextBot>::DebugString */));
+  BuildDecoratedName(in_stack_00000004,(char *)in_stack_00000004,(Action *)(unaff_EBX + 0x59d377 /* Action<CINSNextBot>::DebugString */ /* Action<CINSNextBot>::DebugString */ /* Action<CINSNextBot>::DebugString */));
   return;
 }
 
@@ -4454,7 +4496,7 @@ code * __thiscall Action<CINSNextBot>::GetFullName(Action<CINSNextBot> *this)
     if (iVar3 != 0) {
       do {
         V_strncat((char *)(::__tcf_0 + unaff_EBX + 5),local_11c[iVar3],0x100,-1);
-        V_strncat((char *)(::__tcf_0 + unaff_EBX + 5),(char *)(unaff_EBX + 0x298fcc /* CBitBuffer::s_nMaskTable+0xc7 */ /* CBitBuffer::s_nMaskTable+0xc7 */),0x100,-1);
+        V_strncat((char *)(::__tcf_0 + unaff_EBX + 5),(char *)(unaff_EBX + 0x298fcc /* CBitBuffer::s_nMaskTable+0xc7 */ /* CBitBuffer::s_nMaskTable+0xc7 */ /* CBitBuffer::s_nMaskTable+0xc7 */),0x100,-1);
         iVar3 = iVar3 + -1;
       } while (iVar3 != 0);
     }
@@ -4516,10 +4558,10 @@ Action<CINSNextBot>::InvokeOnEnd
                           (*(int **)(&DAT_00456645 + unaff_EBX)), this_00 = extraout_ECX_01,
        iVar6 != 0)) {
       uVar4 = (**(code **)(*(int *)(param_2 + 0x2060) + 0x144))(param_2 + 0x2060);
-      dVar7 = (double)*(float *)(**(int **)(unaff_EBX + 0x455ee5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+      dVar7 = (double)*(float *)(**(int **)(unaff_EBX + 0x455ee5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
       pAVar5 = param_3 + 0x11;
       INextBot::DebugConColorMsg();
-      iVar6 = unaff_EBX + 0x2323af /* " ENDING " */ /* " ENDING " */;
+      iVar6 = unaff_EBX + 0x2323af /* " ENDING " */ /* " ENDING " */ /* " ENDING " */;
       puVar9 = &local_28;
       local_28 = 0xff;
       local_27 = 0;
@@ -4606,8 +4648,8 @@ Action<CINSNextBot>::InvokeOnResume(CINSNextBot *param_1,Behavior *param_2,Actio
   __i686_get_pc_thunk_bx();
   cVar2 = (**(code **)(*(int *)param_3 + 0x980 /* CINSNextBot::IsDebugging */))(param_3,1);
   if ((cVar2 != '\0') ||
-     (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x453b55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                        (*(int **)(unaff_EBX + 0x453b55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) {
+     (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x453b55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                        (*(int **)(unaff_EBX + 0x453b55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) {
     pIVar1 = (INextBot *)(param_3 + 0x2060);
     uVar3 = (**(code **)(*(int *)(param_3 + 0x2060) + 0x144))(pIVar1);
     local_2c = 0xff;
@@ -4615,8 +4657,8 @@ Action<CINSNextBot>::InvokeOnResume(CINSNextBot *param_1,Behavior *param_2,Actio
     local_2a = 0x96;
     local_29 = 0xff;
     INextBot::DebugConColorMsg
-              (pIVar1,pIVar1,1,&local_2c,unaff_EBX + 0x22c5f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
-               (double)*(float *)(**(int **)(unaff_EBX + 0x4533f5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,
+              (pIVar1,pIVar1,1,&local_2c,unaff_EBX + 0x22c5f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+               (double)*(float *)(**(int **)(unaff_EBX + 0x4533f5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,
                in_stack_00000010 + 0x11);
     local_28 = 0xff;
     local_27 = 0;
@@ -4633,7 +4675,7 @@ Action<CINSNextBot>::InvokeOnResume(CINSNextBot *param_1,Behavior *param_2,Actio
     local_1f = 0xff;
     local_1e = 0xff;
     local_1d = 0xff;
-    INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_20,unaff_EBX + 0x23b629 /* rodata:0x0909000A */ /* rodata:0x0909000A */);
+    INextBot::DebugConColorMsg(pIVar1,pIVar1,1,&local_20,unaff_EBX + 0x23b629 /* rodata:0x0909000A */ /* rodata:0x0909000A */ /* rodata:0x0909000A */);
   }
   if ((param_2[0x31] != (Behavior)0x0) && (2 < *(int *)(param_2 + 0x20) - 1U)) {
     param_2[0x31] = (Behavior)0x0;
@@ -4705,7 +4747,7 @@ Action<CINSNextBot>::InvokeOnStart
   __i686_get_pc_thunk_bx();
   cVar1 = (**(code **)(*(int *)param_3 + 0x980 /* CINSNextBot::IsDebugging */))(param_3,1);
   if (cVar1 == '\0') {
-    iVar3 = (**(code **)(**(int **)(unaff_EBX + 0x453da5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))(*(int **)(unaff_EBX + 0x453da5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */));
+    iVar3 = (**(code **)(**(int **)(unaff_EBX + 0x453da5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))(*(int **)(unaff_EBX + 0x453da5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */));
     piVar4 = *(int **)(&DAT_00453645 + unaff_EBX);
     if (iVar3 == 0) goto LAB_0075339e;
   }
@@ -4716,9 +4758,9 @@ Action<CINSNextBot>::InvokeOnStart
   local_2a = 0x96;
   local_29 = 0xff;
   INextBot::DebugConColorMsg
-            (pIVar2,param_3 + 0x2060,1,&local_2c,unaff_EBX + 0x22c840 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+            (pIVar2,param_3 + 0x2060,1,&local_2c,unaff_EBX + 0x22c840 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
              (double)*(float *)(*piVar4 + 0xc),pIVar2,param_4 + 0x11);
-  iVar3 = unaff_EBX + 0x22fc7b /* " STARTING " */ /* " STARTING " */;
+  iVar3 = unaff_EBX + 0x22fc7b /* " STARTING " */ /* " STARTING " */ /* " STARTING " */;
   local_28 = 0;
   puVar6 = &local_28;
   local_27 = 0xff;
@@ -4764,7 +4806,7 @@ LAB_0075339e:
   if (iVar3 != 0) {
     *(Behavior **)(iVar3 + 0xc) = param_2;
     uVar5 = ApplyResult(*(undefined4 *)(param_2 + 0x10),param_3,param_4,1,
-                        *(undefined4 *)(param_2 + 0x10),unaff_EBX + 0x22fc86 /* "Starting child Action" */ /* "Starting child Action" */);
+                        *(undefined4 *)(param_2 + 0x10),unaff_EBX + 0x22fc86 /* "Starting child Action" */ /* "Starting child Action" */ /* "Starting child Action" */);
     *(undefined4 *)(param_2 + 0x10) = uVar5;
   }
   (**(code **)(*(int *)param_2 + 0xc4))(param_1,param_2,param_3,in_stack_00000014);
@@ -4819,8 +4861,8 @@ Action<CINSNextBot>::InvokeOnSuspend
   __i686_get_pc_thunk_bx();
   cVar3 = (**(code **)(*(int *)param_2 + 0x980 /* CINSNextBot::IsDebugging */))(param_2,1);
   if ((cVar3 != '\0') ||
-     (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454ea5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                        (*(int **)(unaff_EBX + 0x454ea5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+     (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x454ea5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                        (*(int **)(unaff_EBX + 0x454ea5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
     pIVar1 = (INextBot *)(param_2 + 0x2060);
     uVar4 = (**(code **)(*(int *)(param_2 + 0x2060) + 0x144))(pIVar1);
     local_2c = 0xff;
@@ -4828,8 +4870,8 @@ Action<CINSNextBot>::InvokeOnSuspend
     local_2a = 0x96;
     local_29 = 0xff;
     INextBot::DebugConColorMsg
-              (pIVar1,pIVar1,1,&local_2c,unaff_EBX + 0x22d940 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
-               (double)*(float *)(**(int **)(unaff_EBX + 0x454745 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,param_3 + 0x11);
+              (pIVar1,pIVar1,1,&local_2c,unaff_EBX + 0x22d940 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+               (double)*(float *)(**(int **)(unaff_EBX + 0x454745 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,param_3 + 0x11);
     puVar7 = &UNK_00230d06 + unaff_EBX;
     puVar6 = &local_28;
     local_28 = 0xff;
@@ -4910,7 +4952,7 @@ LAB_00752ddc:
     if (param_2[0x30] == (Behavior)0x0) {
       *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(Behavior **)(param_1 + 4) = param_2;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x23013b /* "Starting Action" */ /* "Starting Action" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x23013b /* "Starting Action" */ /* "Starting Action" */ /* "Starting Action" */;
     }
     else {
       iVar5 = *(int *)(param_2 + 0x20);
@@ -4993,7 +5035,7 @@ LAB_00752ddc:
     } while ((*(int *)(iVar5 + 0x20) != 3) && (*(int *)(iVar5 + 0x20) != 1));
   }
   *(undefined4 *)param_1 = 3 /* Done */;
-  *(int *)(param_1 + 8) = unaff_EBX + 0x23012e /* "Out of scope" */ /* "Out of scope" */;
+  *(int *)(param_1 + 8) = unaff_EBX + 0x23012e /* "Out of scope" */ /* "Out of scope" */ /* "Out of scope" */;
   *(undefined4 *)(param_1 + 4) = 0;
   return param_1;
 }
@@ -5147,8 +5189,8 @@ Action<CINSNextBot>::OnActorEmoted
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -5160,11 +5202,11 @@ Action<CINSNextBot>::OnActorEmoted
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a9285 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a9285 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */ /* "OnActorEmoted" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,&UNK_002826f1 + unaff_EBX,dVar10,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */));
+                     (INextBot *)(unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */ /* "OnActorEmoted" */));
           uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -5179,8 +5221,8 @@ Action<CINSNextBot>::OnActorEmoted
           pCVar11 = (CBaseCombatCharacter *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a99e5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -5190,9 +5232,9 @@ Action<CINSNextBot>::OnActorEmoted
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a9285 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a9285 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x282480 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x282480 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -5202,8 +5244,8 @@ Action<CINSNextBot>::OnActorEmoted
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */);
-            iVar4 = unaff_EBX + 0x28248f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */ /* "OnActorEmoted" */);
+            iVar4 = unaff_EBX + 0x28248f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -5211,17 +5253,17 @@ Action<CINSNextBot>::OnActorEmoted
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25c460 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25c460 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x28245a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x28245a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x282450 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x282450 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x282466 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x282466 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -5235,12 +5277,13 @@ Action<CINSNextBot>::OnActorEmoted
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x25c460 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25c460 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             iVar4 = unaff_EBX + 0x25c42f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -5255,14 +5298,15 @@ Action<CINSNextBot>::OnActorEmoted
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9b05 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a9b05 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a9b05 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a9b05 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */;
+            iVar4 = unaff_EBX + 0x28259f /* "OnActorEmoted" */ /* "OnActorEmoted" */ /* "OnActorEmoted" */;
             pCVar11 = (CBaseCombatCharacter *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a9285 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a9285 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x2826bd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -5376,8 +5420,8 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
       if (piVar11 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -5390,12 +5434,13 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27dc51 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a47e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a47e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */));
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -5408,8 +5453,8 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
           piVar11 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
-              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
+              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a4f45 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar5 = *(int *)(param_1 + 8);
             pIVar6 = (INextBot *)
@@ -5419,9 +5464,9 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a47e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a47e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27d9e0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27d9e0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar8 + 0xc0))(piVar8);
@@ -5431,8 +5476,8 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */);
-            iVar5 = unaff_EBX + 0x27d9ef /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */);
+            iVar5 = unaff_EBX + 0x27d9ef /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -5440,17 +5485,17 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x2579c0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x2579c0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar9,iVar5,uVar12);
             }
-            iVar5 = unaff_EBX + 0x27d9ba /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27d9ba /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27d9b0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27d9b0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27d9c6 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27d9c6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -5458,13 +5503,14 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27d9cb /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27d9cb /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar5,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar5 = unaff_EBX + 0x25798f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar9 = &local_20;
@@ -5479,13 +5525,14 @@ Action<CINSNextBot>::OnAnimationActivityComplete(Action<CINSNextBot> *this,int p
         }
         else {
           if ((piVar8[0xb] == 3) &&
-             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a5065 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a5065 /* &developer */ /* &developer */)), iVar7 != 0)) {
+             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a5065 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a5065 /* &developer */ /* &developer */ /* &developer */)), iVar7 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar8 + 0xb8))(piVar8);
-            iVar5 = unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */;
-            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a47e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            iVar5 = unaff_EBX + 0x27db80 /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */ /* "OnAnimationActivityComplete" */;
+            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a47e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27dc1d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -5613,12 +5660,13 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27e0f1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a4c85 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a4c85 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */));
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -5642,9 +5690,9 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a4c85 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a4c85 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27de80 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27de80 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar8 + 0xc0))(piVar8);
@@ -5654,8 +5702,8 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */);
-            iVar5 = unaff_EBX + 0x27de8f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */);
+            iVar5 = unaff_EBX + 0x27de8f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -5663,17 +5711,17 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x257e60 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x257e60 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar9,iVar5,uVar12);
             }
-            iVar5 = unaff_EBX + 0x27de5a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27de5a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27de50 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27de50 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27de66 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27de66 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -5681,13 +5729,14 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27de6b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27de6b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar5,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar5 = unaff_EBX + 0x257e2f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar9 = &local_20;
@@ -5702,13 +5751,14 @@ Action<CINSNextBot>::OnAnimationActivityInterrupted(Action<CINSNextBot> *this,in
         }
         else {
           if ((piVar8[0xb] == 3) &&
-             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a5505 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a5505 /* &developer */ /* &developer */)), iVar7 != 0)) {
+             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a5505 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a5505 /* &developer */ /* &developer */ /* &developer */)), iVar7 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar8 + 0xb8))(piVar8);
-            iVar5 = unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */;
-            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a4c85 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            iVar5 = unaff_EBX + 0x27e115 /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */ /* "OnAnimationActivityInterrupted" */;
+            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a4c85 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27e0bd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -5822,8 +5872,8 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -5836,12 +5886,13 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */ /* "OnAnimationEvent" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27e591 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a5125 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a5125 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */ /* "OnAnimationEvent" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -5854,8 +5905,8 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
           paVar11 = (animevent_t *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a5885 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -5865,9 +5916,9 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a5125 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a5125 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27e320 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27e320 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)paVar9 + 0xc0))(paVar9);
@@ -5877,8 +5928,8 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */);
-            iVar4 = unaff_EBX + 0x27e32f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */ /* "OnAnimationEvent" */);
+            iVar4 = unaff_EBX + 0x27e32f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -5886,17 +5937,17 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x258300 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x258300 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x27e2fa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x27e2fa /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x27e2f0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x27e2f0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x27e306 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x27e306 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -5904,13 +5955,14 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27e30b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27e30b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x2582cf /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -5925,14 +5977,15 @@ Action<CINSNextBot>::OnAnimationEvent(Action<CINSNextBot> *this,animevent_t *par
         }
         else {
           if ((*(int *)(paVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a59a5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a59a5 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a59a5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a59a5 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)paVar9 + 0xb8))(paVar9);
-            iVar4 = unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */;
+            iVar4 = unaff_EBX + 0x27e4af /* "OnAnimationEvent" */ /* "OnAnimationEvent" */ /* "OnAnimationEvent" */;
             paVar11 = (animevent_t *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a5125 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a5125 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27e55d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -6045,8 +6098,8 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -6059,12 +6112,13 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */ /* "OnBlinded" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x2850c1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4abc55 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4abc55 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */ /* "OnBlinded" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -6077,8 +6131,8 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
           pCVar11 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4ac3b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -6088,9 +6142,9 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4abc55 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4abc55 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x284e50 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x284e50 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -6100,8 +6154,8 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */);
-            iVar4 = unaff_EBX + 0x284e5f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */ /* "OnBlinded" */);
+            iVar4 = unaff_EBX + 0x284e5f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -6109,17 +6163,17 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25ee30 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25ee30 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x284e2a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x284e2a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x284e20 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x284e20 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x284e36 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x284e36 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -6127,13 +6181,14 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x284e3b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x284e3b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x25edff /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -6148,14 +6203,15 @@ void __thiscall Action<CINSNextBot>::OnBlinded(Action<CINSNextBot> *this,CBaseEn
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac4d5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ac4d5 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac4d5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ac4d5 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */;
+            iVar4 = unaff_EBX + 0x284efa /* "OnBlinded" */ /* "OnBlinded" */ /* "OnBlinded" */;
             pCVar11 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4abc55 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4abc55 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x28508d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -6288,8 +6344,9 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
                     ((INextBot *)(&UNK_00282a2f + unaff_EBX),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x282b91 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a9725 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a9725 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
                      uVar2,(INextBot *)(&UNK_00282a2f + unaff_EBX));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -6315,7 +6372,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a9725 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a9725 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
                       (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,
                        CINSRules_Vendetta::~CINSRules_Vendetta + unaff_EBX,dVar10,pIVar5,
@@ -6337,7 +6394,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25c900 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25c900 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
@@ -6347,7 +6404,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
             if (local_44 != 2) {
               pcVar6 = CINSRules_Vendetta::GetReinforcementTimerStyleForTeam + unaff_EBX;
               if (local_44 == 3) {
-                pcVar6 = (code *)(unaff_EBX + 0x282906 /* "DONE" */ /* "DONE" */);
+                pcVar6 = (code *)(unaff_EBX + 0x282906 /* "DONE" */ /* "DONE" */ /* "DONE" */);
               }
             }
             local_24 = 0xff;
@@ -6363,6 +6420,7 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
             local_1d = 0xff;
             puVar12 = (undefined *)(unaff_EBX + 0x25c8cf /* "%s
 " */ /* "%s
+" */ /* "%s
 " */);
             puVar8 = &local_20;
             pCVar11 = (CBaseEntity *)0x1;
@@ -6376,14 +6434,15 @@ void __thiscall Action<CINSNextBot>::OnCommandAttack(Action<CINSNextBot> *this,C
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9fa5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a9fa5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a9fa5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a9fa5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
             puVar12 = &UNK_00282a2f + unaff_EBX;
             pCVar11 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a9725 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a9725 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x282b5d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -6513,8 +6572,9 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
                     ((INextBot *)(&UNK_00283cbd + unaff_EBX),*(int *)((int)param_1 + 0x1c) + 0x2060,
                      0x80,&local_34,unaff_EBX + 0x283e51 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4aa9e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4aa9e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
                      uVar3,(INextBot *)(&UNK_00283cbd + unaff_EBX));
           puVar8 = *(undefined1 **)((int)param_1 + 0x1c);
         }
@@ -6539,10 +6599,10 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa9e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa9e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
                       (pIVar6,*(int *)((int)param_1 + 0x1c) + 0x2060,1,&local_30,
-                       unaff_EBX + 0x283be0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,pIVar6,iVar5 + 0x11);
+                       unaff_EBX + 0x283be0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar7 + 0xc0))(piVar7);
             local_2c = 0xff;
@@ -6560,17 +6620,17 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25dbc0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25dbc0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,puVar11,uVar12);
             }
-            iVar5 = unaff_EBX + 0x283bba /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x283bba /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x283bb0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x283bb0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x283bc6 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x283bc6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -6579,12 +6639,13 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
             local_21 = 0xff;
             INextBot::DebugConColorMsg
                       (local_5c,*(int *)((int)param_1 + 0x1c) + 0x2060,1,&local_24,
-                       unaff_EBX + 0x283bcb /* "%s %s " */ /* "%s %s " */,iVar5,local_5c);
+                       unaff_EBX + 0x283bcb /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             puVar11 = (undefined *)(unaff_EBX + 0x25db8f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar8 = &local_20;
@@ -6599,13 +6660,14 @@ void __thiscall Action<CINSNextBot>::OnCommandPause(Action<CINSNextBot> *this,fl
         }
         else {
           if ((piVar7[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ab265 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ab265 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ab265 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ab265 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar7 + 0xb8))(piVar7);
             puVar11 = &UNK_00283cbd + unaff_EBX;
-            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4aa9e5 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4aa9e5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x283e1d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -6731,12 +6793,13 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x28413d /* "OnCommandResume" */ /* "OnCommandResume" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
+                    ((INextBot *)(unaff_EBX + 0x28413d /* "OnCommandResume" */ /* "OnCommandResume" */ /* "OnCommandResume" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
                      ,unaff_EBX + 0x2842e1 /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
                      (double)*(float *)(**(int **)(&DAT_004aae75 + unaff_EBX) + 0xc),uVar4,
-                     iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x28413d /* "OnCommandResume" */ /* "OnCommandResume" */));
+                     iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x28413d /* "OnCommandResume" */ /* "OnCommandResume" */ /* "OnCommandResume" */));
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
       }
@@ -6760,7 +6823,7 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
             local_2d = 0xff;
             dVar9 = (double)*(float *)(**(int **)(&DAT_004aae75 + unaff_EBX) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x284070 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x284070 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -6770,8 +6833,8 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x28413d /* "OnCommandResume" */ /* "OnCommandResume" */);
-            iVar5 = unaff_EBX + 0x28407f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x28413d /* "OnCommandResume" */ /* "OnCommandResume" */ /* "OnCommandResume" */);
+            iVar5 = unaff_EBX + 0x28407f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -6779,17 +6842,17 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25e050 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25e050 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar11);
             }
-            iVar5 = unaff_EBX + 0x28404a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x28404a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x284040 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x284040 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x284056 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x284056 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -6797,7 +6860,7 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x28405b /* "%s %s " */ /* "%s %s " */,iVar5
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x28405b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5
                        ,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -6815,13 +6878,14 @@ void __thiscall Action<CINSNextBot>::OnCommandResume(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ab6f5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ab6f5 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ab6f5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ab6f5 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
             piVar10 = (int *)((ulonglong)
                               (double)*(float *)(**(int **)(&DAT_004aae75 + unaff_EBX) + 0xc) >>
                              0x20);
             DevMsg((char *)(unaff_EBX + 0x2842ad /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -6938,8 +7002,8 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -6951,13 +7015,14 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa535 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa535 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */ /* "OnCommandRetreat" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x2839a1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar9,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */));
+                     (INextBot *)(unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */ /* "OnCommandRetreat" */));
           uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -6972,8 +7037,8 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
           pCVar10 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4aac95 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -6983,9 +7048,9 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa535 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4aa535 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x283730 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x283730 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -6995,7 +7060,7 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */);
+            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */ /* "OnCommandRetreat" */);
             puVar12 = &UNK_0028373f + unaff_EBX;
             puVar7 = &local_28;
             local_27 = 0xff;
@@ -7004,17 +7069,17 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25d710 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25d710 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,puVar12,uVar13);
             }
-            iVar4 = unaff_EBX + 0x28370a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x28370a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x283700 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x283700 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x283716 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x283716 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -7027,13 +7092,14 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
-            iVar4 = unaff_EBX + 0x25d710 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25d710 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             local_1d = 0xff;
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             fVar11 = (float)(unaff_EBX + 0x25d6df /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar7 = &local_20;
@@ -7051,11 +7117,12 @@ Action<CINSNextBot>::OnCommandRetreat(Action<CINSNextBot> *this,CBaseEntity *par
              (iVar4 = (**(code **)(**(int **)(&LAB_004aadb5 + unaff_EBX) + 0x40))
                                 (*(int **)(&LAB_004aadb5 + unaff_EBX)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            fVar11 = (float)(unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */);
+            fVar11 = (float)(unaff_EBX + 0x28381c /* "OnCommandRetreat" */ /* "OnCommandRetreat" */ /* "OnCommandRetreat" */);
             pCVar10 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4aa535 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4aa535 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x28396d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -7174,8 +7241,8 @@ Action<CINSNextBot>::OnHeardFootsteps
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -7187,13 +7254,14 @@ Action<CINSNextBot>::OnHeardFootsteps
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ad865 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ad865 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x286cd1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar10,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */));
+                     (INextBot *)(unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */));
           uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -7208,8 +7276,8 @@ Action<CINSNextBot>::OnHeardFootsteps
           pCVar11 = (CBaseCombatCharacter *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4adfc5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -7219,9 +7287,9 @@ Action<CINSNextBot>::OnHeardFootsteps
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ad865 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ad865 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x286a60 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x286a60 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -7231,8 +7299,8 @@ Action<CINSNextBot>::OnHeardFootsteps
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */);
-            iVar4 = unaff_EBX + 0x286a6f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */);
+            iVar4 = unaff_EBX + 0x286a6f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -7240,17 +7308,17 @@ Action<CINSNextBot>::OnHeardFootsteps
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x260a40 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x260a40 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar13);
             }
-            iVar4 = unaff_EBX + 0x286a3a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x286a3a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x286a30 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x286a30 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x286a46 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x286a46 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -7258,13 +7326,13 @@ Action<CINSNextBot>::OnHeardFootsteps
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x286a4b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x286a4b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x260a40 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x260a40 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
@@ -7278,21 +7346,22 @@ Action<CINSNextBot>::OnHeardFootsteps
         if (local_38 < *(int *)(pCVar8 + 0x2c)) {
           if (local_40 != (int *)0x0) {
             (**(code **)(*local_40 + 4))(local_40,pCVar11,puVar7,pVVar12,in_stack_ffffff74);
-            piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
-            if (piVar6 != *(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) goto LAB_006f9457;
+            piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
+            if (piVar6 != *(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) goto LAB_006f9457;
             goto LAB_006f9480;
           }
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae0e5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ae0e5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae0e5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ae0e5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            pVVar12 = (Vector *)(unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */);
+            pVVar12 = (Vector *)(unaff_EBX + 0x286ab3 /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */ /* "OnHeardFootsteps" */);
             pCVar11 = (CBaseCombatCharacter *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ad865 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ad865 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x286c9d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -7310,19 +7379,19 @@ Action<CINSNextBot>::OnHeardFootsteps
       pCVar11 = pCVar8 + 0x14;
       pCVar8 = *(CBaseCombatCharacter **)pCVar11;
     } while (*(CBaseCombatCharacter **)pCVar11 != (CBaseCombatCharacter *)0x0);
-    piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
-    if (piVar6 == *(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) {
+    piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
+    if (piVar6 == *(int **)(unaff_EBX + 0x4ad6cd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) {
 LAB_006f9480:
-      if (*(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */) <= (float)((uint)piVar6 ^ piVar6[0xb]) &&
-          (float)((uint)piVar6 ^ piVar6[0xb]) != *(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */ /* 0.0f */) <= (float)((uint)piVar6 ^ piVar6[0xb]) &&
+          (float)((uint)piVar6 ^ piVar6[0xb]) != *(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
         return;
       }
     }
     else {
 LAB_006f9457:
       fVar9 = (float10)(**(code **)(*piVar6 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar6);
-      if (*(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */) <= (float)fVar9 &&
-          (float)fVar9 != *(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */ /* 0.0f */) <= (float)fVar9 &&
+          (float)fVar9 != *(float *)(unaff_EBX + 0x1bfacd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
         return;
       }
     }
@@ -7423,8 +7492,8 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
       if (piVar10 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -7437,12 +7506,13 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x246f18 /* "OnIgnite" */ /* "OnIgnite" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
+                    ((INextBot *)(unaff_EBX + 0x246f18 /* "OnIgnite" */ /* "OnIgnite" */ /* "OnIgnite" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
                      ,unaff_EBX + 0x27ea21 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a55b5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x246f18 /* "OnIgnite" */ /* "OnIgnite" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a55b5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x246f18 /* "OnIgnite" */ /* "OnIgnite" */ /* "OnIgnite" */));
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
       }
@@ -7454,8 +7524,8 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
           piVar10 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a5d15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -7464,9 +7534,9 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a55b5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a55b5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27e7b0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27e7b0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -7476,8 +7546,8 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x246f18 /* "OnIgnite" */ /* "OnIgnite" */);
-            iVar5 = unaff_EBX + 0x27e7bf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar11 = CONCAT44(uVar3,unaff_EBX + 0x246f18 /* "OnIgnite" */ /* "OnIgnite" */ /* "OnIgnite" */);
+            iVar5 = unaff_EBX + 0x27e7bf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -7485,17 +7555,17 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x258790 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x258790 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar11);
             }
-            iVar5 = unaff_EBX + 0x27e78a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27e78a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27e780 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27e780 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27e796 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27e796 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -7503,7 +7573,7 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27e79b /* "%s %s " */ /* "%s %s " */,iVar5
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27e79b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5
                        ,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -7521,12 +7591,13 @@ void __thiscall Action<CINSNextBot>::OnIgnite(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5e35 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a5e35 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a5e35 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a5e35 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a55b5 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a55b5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27e9ed /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -7653,12 +7724,13 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */ /* "OnLandOnGround" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27bc01 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a2795 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a2795 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */ /* "OnLandOnGround" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -7682,9 +7754,9 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a2795 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a2795 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27b990 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x27b990 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -7694,8 +7766,8 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */);
-            iVar4 = unaff_EBX + 0x27b99f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */ /* "OnLandOnGround" */);
+            iVar4 = unaff_EBX + 0x27b99f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -7703,17 +7775,17 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x255970 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x255970 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x27b96a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x27b96a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x27b960 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x27b960 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x27b976 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x27b976 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -7721,13 +7793,14 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27b97b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x27b97b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x25593f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -7746,11 +7819,12 @@ void __thiscall Action<CINSNextBot>::OnLandOnGround(Action<CINSNextBot> *this,CB
                                   ))(*(int **)(CEntityFactory<CLight>::Create + unaff_EBX + 5)),
              iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */;
+            iVar4 = unaff_EBX + 0x27bb99 /* "OnLandOnGround" */ /* "OnLandOnGround" */ /* "OnLandOnGround" */;
             pCVar11 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a2795 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a2795 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x27bbcd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -7864,8 +7938,8 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -7878,12 +7952,13 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */ /* "OnLeaveGround" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x287b61 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ae6f5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ae6f5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */ /* "OnLeaveGround" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -7896,8 +7971,8 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
           pCVar11 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4aee55 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -7907,9 +7982,9 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ae6f5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ae6f5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2878f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2878f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -7919,7 +7994,7 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */);
+            uVar13 = CONCAT44(uVar2,unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */ /* "OnLeaveGround" */);
             puVar12 = &UNK_002878ff + unaff_EBX;
             puVar8 = &local_28;
             local_27 = 0xff;
@@ -7934,11 +8009,11 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,puVar12,uVar13);
             }
-            iVar4 = unaff_EBX + 0x2878ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x2878ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x2878c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x2878c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x2878d6 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x2878d6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -7946,13 +8021,14 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2878db /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2878db /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x26189f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -7967,14 +8043,15 @@ void __thiscall Action<CINSNextBot>::OnLeaveGround(Action<CINSNextBot> *this,CBa
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4aef75 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4aef75 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4aef75 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4aef75 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */;
+            iVar4 = unaff_EBX + 0x2878e2 /* "OnLeaveGround" */ /* "OnLeaveGround" */ /* "OnLeaveGround" */;
             pCVar11 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ae6f5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ae6f5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x287b2d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -8087,8 +8164,8 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
       if (piVar11 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar9 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -8101,12 +8178,13 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x2865b4 /* "OnLose" */ /* "OnLose" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
+                    ((INextBot *)(unaff_EBX + 0x2865b4 /* "OnLose" */ /* "OnLose" */ /* "OnLose" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
                      ,unaff_EBX + 0x2867c1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ad355 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x2865b4 /* "OnLose" */ /* "OnLose" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ad355 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x2865b4 /* "OnLose" */ /* "OnLose" */ /* "OnLose" */));
           puVar9 = (undefined1 *)in_stack_00000004[7];
         }
       }
@@ -8118,8 +8196,8 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
           piVar11 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4adab5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -8128,9 +8206,9 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ad355 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ad355 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x286550 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar10,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x286550 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar10,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -8140,8 +8218,8 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x2865b4 /* "OnLose" */ /* "OnLose" */);
-            iVar5 = unaff_EBX + 0x28655f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x2865b4 /* "OnLose" */ /* "OnLose" */ /* "OnLose" */);
+            iVar5 = unaff_EBX + 0x28655f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -8149,7 +8227,7 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x260530 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x260530 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
@@ -8157,9 +8235,9 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
             }
             puVar8 = &UNK_0028652a + unaff_EBX;
             if (local_44 != 2) {
-              puVar8 = (undefined *)(unaff_EBX + 0x286520 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar8 = (undefined *)(unaff_EBX + 0x286520 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
-                puVar8 = (undefined *)(unaff_EBX + 0x286536 /* "DONE" */ /* "DONE" */);
+                puVar8 = (undefined *)(unaff_EBX + 0x286536 /* "DONE" */ /* "DONE" */ /* "DONE" */);
               }
             }
             local_24 = 0xff;
@@ -8167,7 +8245,7 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x28653b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x28653b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        puVar8,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -8185,12 +8263,13 @@ void __thiscall Action<CINSNextBot>::OnLose(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adbd5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4adbd5 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4adbd5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4adbd5 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ad355 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ad355 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x28678d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -8303,8 +8382,8 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
       if (piVar11 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar9 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -8317,12 +8396,13 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x2817bd /* "OnModelChanged" */ /* "OnModelChanged" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
+                    ((INextBot *)(unaff_EBX + 0x2817bd /* "OnModelChanged" */ /* "OnModelChanged" */ /* "OnModelChanged" */),in_stack_00000004[7] + 0x2060,0x80,&local_34
                      ,unaff_EBX + 0x2818f1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a8485 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
-                     uVar3,(INextBot *)(unaff_EBX + 0x2817bd /* "OnModelChanged" */ /* "OnModelChanged" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a8485 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     uVar3,(INextBot *)(unaff_EBX + 0x2817bd /* "OnModelChanged" */ /* "OnModelChanged" */ /* "OnModelChanged" */));
           puVar9 = (undefined1 *)in_stack_00000004[7];
         }
       }
@@ -8334,8 +8414,8 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
           piVar11 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a8be5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -8344,9 +8424,9 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8485 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a8485 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x281680 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar10,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x281680 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar10,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -8356,8 +8436,8 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x2817bd /* "OnModelChanged" */ /* "OnModelChanged" */);
-            iVar5 = unaff_EBX + 0x28168f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x2817bd /* "OnModelChanged" */ /* "OnModelChanged" */ /* "OnModelChanged" */);
+            iVar5 = unaff_EBX + 0x28168f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -8365,7 +8445,7 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25b660 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25b660 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
@@ -8373,9 +8453,9 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
             }
             puVar8 = &UNK_0028165a + unaff_EBX;
             if (local_44 != 2) {
-              puVar8 = (undefined *)(unaff_EBX + 0x281650 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar8 = (undefined *)(unaff_EBX + 0x281650 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
-                puVar8 = (undefined *)(unaff_EBX + 0x281666 /* "DONE" */ /* "DONE" */);
+                puVar8 = (undefined *)(unaff_EBX + 0x281666 /* "DONE" */ /* "DONE" */ /* "DONE" */);
               }
             }
             local_24 = 0xff;
@@ -8383,7 +8463,7 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x28166b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x28166b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        puVar8,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -8401,12 +8481,13 @@ void __thiscall Action<CINSNextBot>::OnModelChanged(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8d05 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a8d05 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a8d05 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a8d05 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a8485 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a8485 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x2818bd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -8522,8 +8603,8 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
       if (piVar6 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -8535,13 +8616,14 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7ff5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7ff5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x281461 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,dVar9,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */));
+                     (INextBot *)(unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */));
           uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
           puVar7 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -8556,8 +8638,8 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
           pCVar10 = (CNavArea *)0x1;
           cVar1 = (**(code **)(*piVar6 + 0x980 /* CINSNextBot::IsDebugging */))(piVar6,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a8755 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -8567,9 +8649,9 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7ff5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a7ff5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2811f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2811f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar9,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*(int *)pCVar8 + 0xc0))(pCVar8);
@@ -8579,8 +8661,8 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */);
-            iVar4 = unaff_EBX + 0x2811ff /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */);
+            iVar4 = unaff_EBX + 0x2811ff /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar7 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -8588,17 +8670,17 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25b1d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25b1d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar7,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x2811ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x2811ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x2811c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x2811c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x2811d6 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x2811d6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -8606,18 +8688,19 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2811db /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2811db /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x25b1d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x25b1d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             pCVar11 = (CNavArea *)(unaff_EBX + 0x25b19f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar7 = &local_20;
@@ -8632,12 +8715,12 @@ Action<CINSNextBot>::OnNavAreaChanged(Action<CINSNextBot> *this,CNavArea *param_
         }
         else {
           if ((*(int *)(pCVar8 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8875 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a8875 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4a8875 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a8875 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar7 = (undefined1 *)(**(code **)(*(int *)pCVar8 + 0xb8))(pCVar8);
-            pCVar11 = (CNavArea *)(unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */);
+            pCVar11 = (CNavArea *)(unaff_EBX + 0x27ba7b /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */ /* "OnNavAreaChanged" */);
             pCVar10 = (CNavArea *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a7ff5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a7ff5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg(&UNK_0028142d + unaff_EBX);
           }
@@ -8751,8 +8834,8 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
       if (piVar12 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar12 + 0x980 /* CINSNextBot::IsDebugging */))(piVar12,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar9 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -8768,8 +8851,9 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
                     ((INextBot *)(&UNK_0028747a + unaff_EBX),in_stack_00000004[7] + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x2876c1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ae255 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ae255 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
                      uVar3,(INextBot *)(&UNK_0028747a + unaff_EBX));
           puVar9 = (undefined1 *)in_stack_00000004[7];
         }
@@ -8782,8 +8866,8 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
           piVar12 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ae9b5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -8792,7 +8876,7 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ae255 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ae255 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
                       (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,&UNK_00287450 + unaff_EBX,
                        dVar11,pIVar7,iVar5 + 0x11);
@@ -8813,15 +8897,15 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x261430 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x261430 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar9,puVar8,uVar13);
             }
-            puVar8 = (undefined *)(unaff_EBX + 0x28742a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            puVar8 = (undefined *)(unaff_EBX + 0x28742a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_44 != 2) {
-              puVar8 = (undefined *)(unaff_EBX + 0x287420 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar8 = (undefined *)(unaff_EBX + 0x287420 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar8 = &UNK_00287436 + unaff_EBX;
               }
@@ -8845,19 +8929,20 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
         if (local_38 < piVar6[0xb]) {
           if (local_40 != (int *)0x0) {
             (**(code **)(*local_40 + 4))(local_40,piVar12,puVar9);
-            piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
-            if (piVar6 == *(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) goto LAB_006f8870;
+            piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
+            if (piVar6 == *(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) goto LAB_006f8870;
             goto LAB_006f8847;
           }
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aead5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4aead5 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4aead5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4aead5 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar12 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ae255 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar12 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ae255 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x28768d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -8875,19 +8960,19 @@ void __thiscall Action<CINSNextBot>::OnOrderReceived(Action<CINSNextBot> *this)
       piVar12 = piVar6 + 5;
       piVar6 = (int *)*piVar12;
     } while ((int *)*piVar12 != (int *)0x0);
-    piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
-    if (piVar6 == *(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) {
+    piVar6 = (int *)(*(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
+    if (piVar6 == *(int **)(unaff_EBX + 0x4ae0bd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) {
 LAB_006f8870:
-      if (*(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */) <= (float)((uint)piVar6 ^ piVar6[0xb]) &&
-          (float)((uint)piVar6 ^ piVar6[0xb]) != *(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */ /* 0.0f */) <= (float)((uint)piVar6 ^ piVar6[0xb]) &&
+          (float)((uint)piVar6 ^ piVar6[0xb]) != *(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
         return;
       }
     }
     else {
 LAB_006f8847:
       fVar10 = (float10)(**(code **)(*piVar6 + 0x3c))(piVar6);
-      if (*(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */) <= (float)fVar10 &&
-          (float)fVar10 != *(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */ /* 0.0f */) <= (float)fVar10 &&
+          (float)fVar10 != *(float *)(unaff_EBX + 0x1c04bd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
         return;
       }
     }
@@ -9005,8 +9090,9 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
                     ((INextBot *)(&UNK_0027d6fc + unaff_EBX),in_stack_00000004[7] + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x27d7b1 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a4345 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4a4345 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
                      uVar3,(INextBot *)(&UNK_0027d6fc + unaff_EBX));
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
@@ -9029,9 +9115,9 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a4345 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4a4345 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27d540 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x27d540 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -9042,7 +9128,7 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
             uVar11 = CONCAT44(uVar3,&UNK_0027d6fc + unaff_EBX);
-            iVar5 = unaff_EBX + 0x27d54f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            iVar5 = unaff_EBX + 0x27d54f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -9050,17 +9136,17 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x257520 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x257520 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar11);
             }
-            iVar5 = unaff_EBX + 0x27d51a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x27d51a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x27d510 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x27d510 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x27d526 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x27d526 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -9068,7 +9154,7 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27d52b /* "%s %s " */ /* "%s %s " */,iVar5
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x27d52b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5
                        ,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -9086,12 +9172,13 @@ void __thiscall Action<CINSNextBot>::OnPostureChanged(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4bc5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a4bc5 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4a4bc5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a4bc5 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a4345 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4a4345 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x27d77d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -9212,8 +9299,8 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -9225,11 +9312,11 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
           local_33 = 100;
           local_32 = 100;
           local_31 = 0xff;
-          dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4add75 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+          dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4add75 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,&UNK_002871e1 + unaff_EBX,dVar11,uVar3,iVar4 + 0x11,uVar2,
-                     (INextBot *)(unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */));
+                     (INextBot *)(unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */));
           uVar2 = (undefined4)((ulonglong)dVar11 >> 0x20);
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -9244,8 +9331,8 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
           pCVar12 = (CBaseCombatCharacter *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
+              (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4ae4d5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -9255,7 +9342,7 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4add75 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar11 = (double)*(float *)(**(int **)(unaff_EBX + 0x4add75 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
                       (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,
                        &UNK_00286f70 + unaff_EBX,dVar11,pIVar5,iVar4 + 0x11);
@@ -9267,7 +9354,7 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar14 = CONCAT44(uVar2,unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */);
+            uVar14 = CONCAT44(uVar2,unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */);
             puVar6 = &UNK_00286f7f + unaff_EBX;
             puVar8 = &local_28;
             local_27 = 0xff;
@@ -9276,7 +9363,7 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x260f50 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x260f50 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
@@ -9284,7 +9371,7 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
             }
             puVar6 = &UNK_00286f4a + unaff_EBX;
             if (local_44 != 2) {
-              puVar6 = (undefined *)(unaff_EBX + 0x286f40 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar6 = (undefined *)(unaff_EBX + 0x286f40 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar6 = &UNK_00286f56 + unaff_EBX;
               }
@@ -9300,12 +9387,13 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar4 = unaff_EBX + 0x260f50 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar4 = unaff_EBX + 0x260f50 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_3c != 0) {
               iVar4 = local_3c;
             }
             in_stack_ffffff74 = CONCAT44(local_5c,iVar4);
             pVVar13 = (Vector *)(unaff_EBX + 0x260f1f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar8 = &local_20;
@@ -9316,19 +9404,19 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
         if (local_38 < *(int *)(pCVar9 + 0x2c)) {
           if (local_40 != (int *)0x0) {
             (**(code **)(*local_40 + 4))(local_40,pCVar12,puVar8,pVVar13,in_stack_ffffff74);
-            piVar7 = (int *)(*(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
-            if (piVar7 != *(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) goto LAB_006f8f47;
+            piVar7 = (int *)(*(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
+            if (piVar7 != *(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) goto LAB_006f8f47;
             goto LAB_006f8f70;
           }
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae5f5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ae5f5 /* &developer */ /* &developer */)), iVar4 != 0)) {
+             (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4ae5f5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ae5f5 /* &developer */ /* &developer */ /* &developer */)), iVar4 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            pVVar13 = (Vector *)(unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */);
+            pVVar13 = (Vector *)(unaff_EBX + 0x286faa /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */ /* "OnSeeSomethingSuspicious" */);
             pCVar12 = (CBaseCombatCharacter *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4add75 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4add75 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg(&UNK_002871ad + unaff_EBX);
           }
@@ -9346,19 +9434,19 @@ Action<CINSNextBot>::OnSeeSomethingSuspicious
       pCVar12 = pCVar9 + 0x14;
       pCVar9 = *(CBaseCombatCharacter **)pCVar12;
     } while (*(CBaseCombatCharacter **)pCVar12 != (CBaseCombatCharacter *)0x0);
-    piVar7 = (int *)(*(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
-    if (piVar7 == *(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) {
+    piVar7 = (int *)(*(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */))[7];
+    if (piVar7 == *(int **)(unaff_EBX + 0x4adbdd /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */ /* &ins_bot_ignore_human_triggers */)) {
 LAB_006f8f70:
-      if (*(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */) <= (float)((uint)piVar7 ^ piVar7[0xb]) &&
-          (float)((uint)piVar7 ^ piVar7[0xb]) != *(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */ /* 0.0f */) <= (float)((uint)piVar7 ^ piVar7[0xb]) &&
+          (float)((uint)piVar7 ^ piVar7[0xb]) != *(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
         return;
       }
     }
     else {
 LAB_006f8f47:
       fVar10 = (float10)(**(code **)(*piVar7 + 0x3c /* CINSPlayer::TestHitboxes */))(piVar7);
-      if (*(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */) <= (float)fVar10 &&
-          (float)fVar10 != *(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */ /* 0.0f */) <= (float)fVar10 &&
+          (float)fVar10 != *(float *)(unaff_EBX + 0x1bffdd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
         return;
       }
     }
@@ -9460,8 +9548,8 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
       if (piVar7 != (int *)0x0) {
         cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,0x80);
         if ((cVar1 == '\0') &&
-           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
+           (iVar4 = (**(code **)(**(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar4 == 0)) {
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -9474,12 +9562,13 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */ /* "OnShoved" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x284c21 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ab7b5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
-                     uVar2,(INextBot *)(unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */));
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ab7b5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar3,iVar4 + 0x11,
+                     uVar2,(INextBot *)(unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */ /* "OnShoved" */));
           puVar8 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -9492,8 +9581,8 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
           pCVar11 = (CBaseEntity *)0x1;
           cVar1 = (**(code **)(*piVar7 + 0x980 /* CINSNextBot::IsDebugging */))(piVar7,1);
           if (((cVar1 != '\0') ||
-              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
+              (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4abf15 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar4 = *(int *)(param_1 + 8);
             pIVar5 = (INextBot *)
@@ -9503,9 +9592,9 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ab7b5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ab7b5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2849b0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar5,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2849b0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar5,iVar4 + 0x11);
             uVar2 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*(int *)pCVar9 + 0xc0))(pCVar9);
@@ -9515,8 +9604,8 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */);
-            iVar4 = unaff_EBX + 0x2849bf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar2,unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */ /* "OnShoved" */);
+            iVar4 = unaff_EBX + 0x2849bf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -9524,17 +9613,17 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
             uVar2 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25e990 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25e990 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar2,puVar8,iVar4,uVar12);
             }
-            iVar4 = unaff_EBX + 0x28498a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar4 = unaff_EBX + 0x28498a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar4 = unaff_EBX + 0x284980 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar4 = unaff_EBX + 0x284980 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar4 = unaff_EBX + 0x284996 /* "DONE" */ /* "DONE" */;
+                iVar4 = unaff_EBX + 0x284996 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -9542,13 +9631,14 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28499b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28499b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar4,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar4 = unaff_EBX + 0x25e95f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar8 = &local_20;
@@ -9563,14 +9653,15 @@ void __thiscall Action<CINSNextBot>::OnShoved(Action<CINSNextBot> *this,CBaseEnt
         }
         else {
           if ((*(int *)(pCVar9 + 0x2c) == 3) &&
-             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac035 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ac035 /* &developer */ /* &developer */)), iVar6 != 0)) {
+             (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4ac035 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ac035 /* &developer */ /* &developer */ /* &developer */)), iVar6 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*(int *)pCVar9 + 0xb8))(pCVar9);
-            iVar4 = unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */;
+            iVar4 = unaff_EBX + 0x284a64 /* "OnShoved" */ /* "OnShoved" */ /* "OnShoved" */;
             pCVar11 = (CBaseEntity *)
-                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ab7b5 /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
+                      ((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ab7b5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc) >> 0x20
                       );
             DevMsg((char *)(unaff_EBX + 0x284bed /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -9691,8 +9782,8 @@ Action<CINSNextBot>::OnSpokeConcept
       if (piVar12 != (int *)0x0) {
         cVar3 = (**(code **)(*piVar12 + 0x980 /* CINSNextBot::IsDebugging */))(piVar12,0x80);
         if ((cVar3 == '\0') &&
-           (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 == 0)) {
+           (iVar6 = (**(code **)(**(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar6 == 0)) {
           puVar5 = (undefined1 *)param_1[7];
         }
         else {
@@ -9707,10 +9798,11 @@ Action<CINSNextBot>::OnSpokeConcept
                     ((INextBot *)(iVar6 + 0x11),param_1[7] + 0x2060,0x80,&local_34,
                      unaff_EBX + 0x280b01 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
                      (double)*(float *)(**(int **)(CTimerEntity::InputFireTimer + unaff_EBX + 5) +
                                        0xc),uVar4,(INextBot *)(iVar6 + 0x11),uVar8,
-                     unaff_EBX + 0x2809dc /* "OnSpokeConcept" */ /* "OnSpokeConcept" */);
+                     unaff_EBX + 0x2809dc /* "OnSpokeConcept" */ /* "OnSpokeConcept" */ /* "OnSpokeConcept" */);
           puVar5 = (undefined1 *)param_1[7];
         }
       }
@@ -9726,8 +9818,8 @@ Action<CINSNextBot>::OnSpokeConcept
           piVar12 = (int *)0x1;
           cVar3 = (**(code **)(*piVar2 + 0x980 /* CINSNextBot::IsDebugging */))(piVar2,1);
           if (((cVar3 != '\0') ||
-              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
+              (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4a7df5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar7 != 0)) &&
              (local_54 + -1 < (INextBot *)0x3)) {
             iVar7 = param_1[2] + 0x11;
             uVar8 = (**(code **)(*(int *)(param_1[7] + 0x2060) + 0x144))(param_1[7] + 0x2060);
@@ -9737,7 +9829,7 @@ Action<CINSNextBot>::OnSpokeConcept
             local_2d = 0xff;
             dVar11 = (double)*(float *)(**(int **)(CTimerEntity::InputFireTimer + unaff_EBX + 5) +
                                        0xc);
-            iVar6 = unaff_EBX + 0x280890 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */;
+            iVar6 = unaff_EBX + 0x280890 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */;
             puVar5 = &local_30;
             uVar4 = 1;
             INextBot::DebugConColorMsg();
@@ -9749,8 +9841,8 @@ Action<CINSNextBot>::OnSpokeConcept
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar8,unaff_EBX + 0x2809dc /* "OnSpokeConcept" */ /* "OnSpokeConcept" */);
-            iVar6 = unaff_EBX + 0x28089f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar13 = CONCAT44(uVar8,unaff_EBX + 0x2809dc /* "OnSpokeConcept" */ /* "OnSpokeConcept" */ /* "OnSpokeConcept" */);
+            iVar6 = unaff_EBX + 0x28089f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar5 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -9758,16 +9850,16 @@ Action<CINSNextBot>::OnSpokeConcept
             uVar8 = 1;
             INextBot::DebugConColorMsg();
             if (local_50 == (int *)0x0) {
-              local_6c = unaff_EBX + 0x25a870 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+              local_6c = unaff_EBX + 0x25a870 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             }
             else {
               local_6c = (**(code **)(*local_50 + 0xb8))(local_50,uVar8,puVar5,iVar6,uVar13);
             }
-            pcVar9 = (code *)(unaff_EBX + 0x28086a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            pcVar9 = (code *)(unaff_EBX + 0x28086a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_54 != (INextBot *)0x2) {
               pcVar9 = CLogicTraining::InputSetSavePoint + unaff_EBX;
               if (local_54 == (INextBot *)0x3) {
-                pcVar9 = (code *)(unaff_EBX + 0x280876 /* "DONE" */ /* "DONE" */);
+                pcVar9 = (code *)(unaff_EBX + 0x280876 /* "DONE" */ /* "DONE" */ /* "DONE" */);
               }
             }
             local_24 = 0xff;
@@ -9775,18 +9867,19 @@ Action<CINSNextBot>::OnSpokeConcept
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_54,param_1[7] + 0x2060,1,&local_24,unaff_EBX + 0x28087b /* "%s %s " */ /* "%s %s " */,pcVar9,local_6c
+                      (local_54,param_1[7] + 0x2060,1,&local_24,unaff_EBX + 0x28087b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,pcVar9,local_6c
                       );
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
-            iVar6 = unaff_EBX + 0x25a870 /* rodata:0x73250900 */ /* rodata:0x73250900 */;
+            iVar6 = unaff_EBX + 0x25a870 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */;
             if (local_4c != 0) {
               iVar6 = local_4c;
             }
             uVar13 = CONCAT44(local_6c,iVar6);
             iVar6 = unaff_EBX + 0x25a83f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar5 = &local_20;
@@ -9801,14 +9894,15 @@ Action<CINSNextBot>::OnSpokeConcept
         }
         else {
           if ((piVar10[0xb] == 3) &&
-             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7f15 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4a7f15 /* &developer */ /* &developer */)), iVar7 != 0)) {
+             (iVar7 = (**(code **)(**(int **)(unaff_EBX + 0x4a7f15 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4a7f15 /* &developer */ /* &developer */ /* &developer */)), iVar7 != 0)) {
             puVar5 = (undefined1 *)(**(code **)(*piVar10 + 0xb8))(piVar10);
-            iVar6 = unaff_EBX + 0x2809dc /* "OnSpokeConcept" */ /* "OnSpokeConcept" */;
+            iVar6 = unaff_EBX + 0x2809dc /* "OnSpokeConcept" */ /* "OnSpokeConcept" */ /* "OnSpokeConcept" */;
             piVar12 = (int *)((ulonglong)
                               (double)*(float *)(**(int **)(CTimerEntity::InputFireTimer +
                                                            unaff_EBX + 5) + 0xc) >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x280acd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -9925,8 +10019,8 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
       if (piVar11 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar11 + 0x980 /* CINSNextBot::IsDebugging */))(piVar11,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
         else {
@@ -9942,8 +10036,9 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
                     ((INextBot *)(&UNK_00285811 + unaff_EBX),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x285a01 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ac595 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4ac595 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
                      uVar3,(INextBot *)(&UNK_00285811 + unaff_EBX));
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -9957,8 +10052,8 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
           piVar11 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if (((cVar2 != '\0') ||
-              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                 (*(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) &&
+              (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                 (*(int **)(unaff_EBX + 0x4accf5 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) &&
              (local_44 - 1U < 3)) {
             iVar5 = *(int *)(param_1 + 8);
             pIVar6 = (INextBot *)
@@ -9968,9 +10063,9 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ac595 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar10 = (double)*(float *)(**(int **)(unaff_EBX + 0x4ac595 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x285790 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x285790 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar8 + 0xc0))(piVar8);
@@ -9981,7 +10076,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
             uVar12 = CONCAT44(uVar3,&UNK_00285811 + unaff_EBX);
-            iVar5 = unaff_EBX + 0x28579f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            iVar5 = unaff_EBX + 0x28579f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -9989,15 +10084,15 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25f770 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25f770 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar9,iVar5,uVar12);
             }
-            puVar7 = (undefined *)(unaff_EBX + 0x28576a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            puVar7 = (undefined *)(unaff_EBX + 0x28576a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_44 != 2) {
-              puVar7 = (undefined *)(unaff_EBX + 0x285760 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar7 = (undefined *)(unaff_EBX + 0x285760 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar7 = &UNK_00285776 + unaff_EBX;
               }
@@ -10007,13 +10102,14 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28577b /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x28577b /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        puVar7,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             puVar7 = (undefined *)(unaff_EBX + 0x25f73f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */);
             puVar9 = &local_20;
@@ -10028,13 +10124,14 @@ void __thiscall Action<CINSNextBot>::OnTerritoryCaptured(Action<CINSNextBot> *th
         }
         else {
           if ((piVar8[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ace15 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ace15 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ace15 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ace15 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar8 + 0xb8))(piVar8);
             puVar7 = &UNK_00285811 + unaff_EBX;
-            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ac595 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar11 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4ac595 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x2859cd /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -10163,12 +10260,13 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */ /* "OnTerritoryContested" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x285561 /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
                      (double)*(float *)(**(int **)(&LAB_004ac0f5 + unaff_EBX) + 0xc),uVar4,
-                     iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */));
+                     iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */ /* "OnTerritoryContested" */));
           puVar9 = *(undefined1 **)(param_1 + 0x1c);
         }
       }
@@ -10195,7 +10293,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
             local_2d = 0xff;
             dVar10 = (double)*(float *)(**(int **)(&LAB_004ac0f5 + unaff_EBX) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2852f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x2852f0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar10,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar10 >> 0x20);
             (**(code **)(*piVar8 + 0xc0))(piVar8);
@@ -10205,8 +10303,8 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */);
-            iVar5 = unaff_EBX + 0x2852ff /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar12 = CONCAT44(uVar3,unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */ /* "OnTerritoryContested" */);
+            iVar5 = unaff_EBX + 0x2852ff /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar9 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -10214,17 +10312,17 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25f2d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25f2d0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar9,iVar5,uVar12);
             }
-            iVar5 = unaff_EBX + 0x2852ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x2852ca /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x2852c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x2852c0 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x2852d6 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x2852d6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -10232,13 +10330,14 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2852db /* "%s %s " */ /* "%s %s " */,
+                      (local_5c,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_24,unaff_EBX + 0x2852db /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,
                        iVar5,local_5c);
             local_20 = 0;
             local_1f = 0xff;
             local_1e = 0;
             local_1d = 0xff;
             iVar5 = unaff_EBX + 0x25f29f /* "%s
+" */ /* "%s
 " */ /* "%s
 " */;
             puVar9 = &local_20;
@@ -10256,11 +10355,12 @@ void __thiscall Action<CINSNextBot>::OnTerritoryContested(Action<CINSNextBot> *t
              (iVar7 = (**(code **)(**(int **)(&LAB_004ac975 + unaff_EBX) + 0x40))
                                 (*(int **)(&LAB_004ac975 + unaff_EBX)), iVar7 != 0)) {
             puVar9 = (undefined1 *)(**(code **)(*piVar8 + 0xb8))(piVar8);
-            iVar5 = unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */;
+            iVar5 = unaff_EBX + 0x285385 /* "OnTerritoryContested" */ /* "OnTerritoryContested" */ /* "OnTerritoryContested" */;
             piVar11 = (int *)((ulonglong)
                               (double)*(float *)(**(int **)(&LAB_004ac0f5 + unaff_EBX) + 0xc) >>
                              0x20);
             DevMsg((char *)(unaff_EBX + 0x28552d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -10388,12 +10488,13 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
           local_32 = 100;
           local_31 = 0xff;
           INextBot::DebugConColorMsg
-                    ((INextBot *)(unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
+                    ((INextBot *)(unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */ /* "OnTerritoryLost" */),*(int *)(param_1 + 0x1c) + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x285ea1 /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
                      (double)*(float *)(**(int **)(CLogicEventListener::Spawn + unaff_EBX + 5) + 0xc
-                                       ),uVar4,iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */)
+                                       ),uVar4,iVar5 + 0x11,uVar3,(INextBot *)(unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */ /* "OnTerritoryLost" */)
                     );
           puVar10 = *(undefined1 **)(param_1 + 0x1c);
         }
@@ -10421,7 +10522,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
             dVar11 = (double)*(float *)(**(int **)(CLogicEventListener::Spawn + unaff_EBX + 5) + 0xc
                                        );
             INextBot::DebugConColorMsg
-                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x285c30 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
+                      (pIVar6,*(int *)(param_1 + 0x1c) + 0x2060,1,&local_30,unaff_EBX + 0x285c30 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,
                        dVar11,pIVar6,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar11 >> 0x20);
             (**(code **)(*piVar9 + 0xc0))(piVar9);
@@ -10431,8 +10532,8 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
             local_29 = 0xff;
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
-            uVar13 = CONCAT44(uVar3,unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */);
-            iVar5 = unaff_EBX + 0x285c3f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            uVar13 = CONCAT44(uVar3,unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */ /* "OnTerritoryLost" */);
+            iVar5 = unaff_EBX + 0x285c3f /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar10 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -10440,15 +10541,15 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x25fc10 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x25fc10 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar10,iVar5,uVar13);
             }
-            puVar7 = (undefined *)(unaff_EBX + 0x285c0a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
+            puVar7 = (undefined *)(unaff_EBX + 0x285c0a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */);
             if (local_44 != 2) {
-              puVar7 = (undefined *)(unaff_EBX + 0x285c00 /* "CHANGE_TO" */ /* "CHANGE_TO" */);
+              puVar7 = (undefined *)(unaff_EBX + 0x285c00 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */);
               if (local_44 == 3) {
                 puVar7 = &UNK_00285c16 + unaff_EBX;
               }
@@ -10466,6 +10567,7 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
             local_1d = 0xff;
             iVar5 = unaff_EBX + 0x25fbdf /* "%s
 " */ /* "%s
+" */ /* "%s
 " */;
             puVar10 = &local_20;
             piVar12 = (int *)0x1;
@@ -10479,14 +10581,15 @@ void __thiscall Action<CINSNextBot>::OnTerritoryLost(Action<CINSNextBot> *this,i
         }
         else {
           if ((piVar9[0xb] == 3) &&
-             (iVar8 = (**(code **)(**(int **)(unaff_EBX + 0x4ad2b5 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ad2b5 /* &developer */ /* &developer */)), iVar8 != 0)) {
+             (iVar8 = (**(code **)(**(int **)(unaff_EBX + 0x4ad2b5 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ad2b5 /* &developer */ /* &developer */ /* &developer */)), iVar8 != 0)) {
             puVar10 = (undefined1 *)(**(code **)(*piVar9 + 0xb8))(piVar9);
-            iVar5 = unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */;
+            iVar5 = unaff_EBX + 0x285ca1 /* "OnTerritoryLost" */ /* "OnTerritoryLost" */ /* "OnTerritoryLost" */;
             piVar12 = (int *)((ulonglong)
                               (double)*(float *)(**(int **)(CLogicEventListener::Spawn +
                                                            unaff_EBX + 5) + 0xc) >> 0x20);
             DevMsg((char *)(unaff_EBX + 0x285e6d /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
           }
@@ -10598,8 +10701,8 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
       if (piVar10 != (int *)0x0) {
         cVar2 = (**(code **)(*piVar10 + 0x980 /* CINSNextBot::IsDebugging */))(piVar10,0x80);
         if ((cVar2 == '\0') &&
-           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                              (*(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
+           (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                              (*(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 == 0)) {
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
         else {
@@ -10615,8 +10718,9 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
                     ((INextBot *)(&UNK_0028612b + unaff_EBX),in_stack_00000004[7] + 0x2060,0x80,
                      &local_34,unaff_EBX + 0x286331 /* "%3.2f: %s:%s: %s received EVENT %s
 " */ /* "%3.2f: %s:%s: %s received EVENT %s
+" */ /* "%3.2f: %s:%s: %s received EVENT %s
 " */,
-                     (double)*(float *)(**(int **)(unaff_EBX + 0x4acec5 /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
+                     (double)*(float *)(**(int **)(unaff_EBX + 0x4acec5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc),uVar4,iVar5 + 0x11,
                      uVar3,(INextBot *)(&UNK_0028612b + unaff_EBX));
           puVar8 = (undefined1 *)in_stack_00000004[7];
         }
@@ -10629,8 +10733,8 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
           piVar10 = (int *)0x1;
           cVar2 = (**(code **)(*piVar1 + 0x980 /* CINSNextBot::IsDebugging */))(piVar1,1);
           if ((cVar2 != '\0') ||
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ad625 /* &NextBotDebugHistory */ /* &NextBotDebugHistory */ /* &NextBotDebugHistory */)), iVar5 != 0)) {
             iVar5 = in_stack_00000004[2];
             pIVar7 = (INextBot *)
                      (**(code **)(*(int *)(in_stack_00000004[7] + 0x2060) + 0x144))
@@ -10639,9 +10743,9 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
             local_2f = 0xff;
             local_2e = 0;
             local_2d = 0xff;
-            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4acec5 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+            dVar9 = (double)*(float *)(**(int **)(unaff_EBX + 0x4acec5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             INextBot::DebugConColorMsg
-                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x2860c0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
+                      (pIVar7,in_stack_00000004[7] + 0x2060,1,&local_30,unaff_EBX + 0x2860c0 /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */ /* "%3.2f: %s:%s: " */,dVar9,
                        pIVar7,iVar5 + 0x11);
             uVar3 = (undefined4)((ulonglong)dVar9 >> 0x20);
             (**(code **)(*piVar6 + 0xc0))(piVar6);
@@ -10652,7 +10756,7 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
             INextBot::DebugConColorMsg();
             local_28 = 0xff;
             uVar11 = CONCAT44(uVar3,&UNK_0028612b + unaff_EBX);
-            iVar5 = unaff_EBX + 0x2860cf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
+            iVar5 = unaff_EBX + 0x2860cf /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */ /* "reponded to EVENT %s with " */;
             puVar8 = &local_28;
             local_27 = 0xff;
             local_26 = 0;
@@ -10660,17 +10764,17 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
             uVar3 = 1;
             INextBot::DebugConColorMsg();
             if (local_40 == (int *)0x0) {
-              local_5c = (INextBot *)(unaff_EBX + 0x2600a0 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+              local_5c = (INextBot *)(unaff_EBX + 0x2600a0 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
             }
             else {
               local_5c = (INextBot *)
                          (**(code **)(*local_40 + 0xb8))(local_40,uVar3,puVar8,iVar5,uVar11);
             }
-            iVar5 = unaff_EBX + 0x28609a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
+            iVar5 = unaff_EBX + 0x28609a /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */ /* "SUSPEND_FOR" */;
             if (local_44 != 2) {
-              iVar5 = unaff_EBX + 0x286090 /* "CHANGE_TO" */ /* "CHANGE_TO" */;
+              iVar5 = unaff_EBX + 0x286090 /* "CHANGE_TO" */ /* "CHANGE_TO" */ /* "CHANGE_TO" */;
               if (local_44 == 3) {
-                iVar5 = unaff_EBX + 0x2860a6 /* "DONE" */ /* "DONE" */;
+                iVar5 = unaff_EBX + 0x2860a6 /* "DONE" */ /* "DONE" */ /* "DONE" */;
               }
             }
             local_24 = 0xff;
@@ -10678,7 +10782,7 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
             local_22 = 0;
             local_21 = 0xff;
             INextBot::DebugConColorMsg
-                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x2860ab /* "%s %s " */ /* "%s %s " */,iVar5
+                      (local_5c,in_stack_00000004[7] + 0x2060,1,&local_24,unaff_EBX + 0x2860ab /* "%s %s " */ /* "%s %s " */ /* "%s %s " */,iVar5
                        ,local_5c);
             local_20 = 0;
             local_1f = 0xff;
@@ -10696,10 +10800,10 @@ void __thiscall Action<CINSNextBot>::OnWin(Action<CINSNextBot> *this)
         }
         else {
           if ((piVar6[0xb] == 3) &&
-             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad745 /* &developer */ /* &developer */) + 0x40))
-                                (*(int **)(unaff_EBX + 0x4ad745 /* &developer */ /* &developer */)), iVar5 != 0)) {
+             (iVar5 = (**(code **)(**(int **)(unaff_EBX + 0x4ad745 /* &developer */ /* &developer */ /* &developer */) + 0x40))
+                                (*(int **)(unaff_EBX + 0x4ad745 /* &developer */ /* &developer */ /* &developer */)), iVar5 != 0)) {
             puVar8 = (undefined1 *)(**(code **)(*piVar6 + 0xb8))(piVar6);
-            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4acec5 /* &gpGlobals */ /* &gpGlobals */) + 0xc)
+            piVar10 = (int *)((ulonglong)(double)*(float *)(**(int **)(unaff_EBX + 0x4acec5 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc)
                              >> 0x20);
             DevMsg(&UNK_002862fd + unaff_EBX);
           }
@@ -10807,7 +10911,7 @@ void Action<CINSNextBot>::PrintStateToConsole(void)
   }
   else {
     iVar5 = 0;
-    pcVar1 = (char *)(unaff_EBX + 0x227f39 /* "%s" */ /* "%s" */);
+    pcVar1 = (char *)(unaff_EBX + 0x227f39 /* "%s" */ /* "%s" */ /* "%s" */);
     pcVar4 = &local_13c;
     do {
       while( true ) {
@@ -10845,10 +10949,12 @@ void Action<CINSNextBot>::PrintStateToConsole(void)
     } while (cVar3 != '\0');
   }
 LAB_007515be:
-  local_144 = (char *)(unaff_EBX + 0x227f39 /* "%s" */ /* "%s" */);
+  local_144 = (char *)(unaff_EBX + 0x227f39 /* "%s" */ /* "%s" */ /* "%s" */);
   *pcVar4 = '\0';
   DevMsg(local_144);
   DevMsg((char *)(unaff_EBX + 0x23d618 /* "
+
+" */ /* "
 
 " */ /* "
 
@@ -10889,6 +10995,7 @@ void __cdecl Action<CINSNextBot>::StorePendingEventResult(EventDesiredResult *pa
         if (iVar2 != 0) {
           (**(code **)(*(int *)param_1 + 0xb8))(param_1);
           DevMsg((char *)(unaff_EBX + 0x251694 /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
+" */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */ /* "%3.2f: WARNING: %s::%s() RESULT_CRITICAL collision
 " */));
         }
@@ -10941,8 +11048,8 @@ void __thiscall Action<CINSNextBot>::~Action(Action<CINSNextBot> *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x49d22d /* vtable for Action<CINSNextBot>+0x8 */ /* vtable for Action<CINSNextBot>+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x49d3bd /* vtable for Action<CINSNextBot>+0x198 */ /* vtable for Action<CINSNextBot>+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x49d22d /* vtable for Action<CINSNextBot>+0x8 */ /* vtable for Action<CINSNextBot>+0x8 */ /* vtable for Action<CINSNextBot>+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x49d3bd /* vtable for Action<CINSNextBot>+0x198 */ /* vtable for Action<CINSNextBot>+0x198 */ /* vtable for Action<CINSNextBot>+0x198 */;
   iVar1 = in_stack_00000004[3];
   if ((iVar1 != 0) && (*(int **)(iVar1 + 0x10) == in_stack_00000004)) {
     *(int *)(iVar1 + 0x10) = in_stack_00000004[5];
@@ -10964,8 +11071,8 @@ void __thiscall Action<CINSNextBot>::~Action(Action<CINSNextBot> *this)
   if (piVar3 != (int *)0x0) {
     (**(code **)(*piVar3 + 4))(piVar3);
   }
-  in_stack_00000004[1] = unaff_EBX + 0x431acd /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */;
-  *in_stack_00000004 = unaff_EBX + 0x431a0d /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x431acd /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */;
+  *in_stack_00000004 = unaff_EBX + 0x431a0d /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */;
   return;
 }
 

@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name        = "SmartBots AmmoBox",
 	author      = "krokodile",
 	description = "Player-droppable ammo boxes for Insurgency 2014",
-	version     = "1.0.0",
+	version     = "1.1.0",
 	url         = ""
 };
 
@@ -47,6 +47,13 @@ static float g_lastDropTime[MAXPLAYERS + 1];
 #define AMMOBOX_MODEL "models/static_props/wcache_box_01.mdl"
 
 // ---------------------------------------------------------------------------
+// SDKCall handles (initialized from gamedata in OnPluginStart)
+// ---------------------------------------------------------------------------
+
+static Handle g_hGiveAmmo;
+static Handle g_hGetMaxClip1;
+
+// ---------------------------------------------------------------------------
 // Plugin lifecycle
 // ---------------------------------------------------------------------------
 
@@ -59,7 +66,35 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_ammobox", Cmd_AmmoBox, "Drop an ammo box at your feet");
 	RegAdminCmd("sm_ammobox_scan", Cmd_AmmoScan, ADMFLAG_ROOT, "Scan player memory for internal ammo counter");
 
-	PrintToServer("[AmmoBox] Plugin loaded (v1.0.0)");
+	// ---- Gamedata: set up SDKCalls for the game's native ammo functions ----
+	Handle hConf = LoadGameConfigFile("smartbots");
+	if (hConf == null)
+		SetFailState("[AmmoBox] Failed to load smartbots gamedata");
+
+	// CINSPlayer::GiveAmmo(int ammoType, int count, int roundsPerMag, bool silent, int maxMags)
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetFromConf(hConf, SDKConf_Signature, "CINSPlayer::GiveAmmo");
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // ammoType
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // count
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // roundsPerMag
+	PrepSDKCall_AddParameter(SDKType_Bool, SDKPass_Plain);          // silent
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // maxMags
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
+	g_hGiveAmmo = EndPrepSDKCall();
+	if (g_hGiveAmmo == null)
+		SetFailState("[AmmoBox] Failed to prep CINSPlayer::GiveAmmo SDKCall");
+
+	// CBaseCombatWeapon::GetMaxClip1() — virtual, returns max rounds per magazine
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(hConf, SDKConf_Virtual, "GetMaxClip1");
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_ByValue);
+	g_hGetMaxClip1 = EndPrepSDKCall();
+	if (g_hGetMaxClip1 == null)
+		SetFailState("[AmmoBox] Failed to prep GetMaxClip1 SDKCall");
+
+	delete hConf;
+
+	PrintToServer("[AmmoBox] Plugin loaded (v1.1.0)");
 }
 
 // ---------------------------------------------------------------------------
@@ -253,13 +288,12 @@ public Action OnAmmoBoxUse(int entity, int activator, int caller, UseType type, 
 // ---------------------------------------------------------------------------
 // Give one magazine worth of spare ammo for a weapon slot.
 //
-// Insurgency stores reserve ammo in m_iAmmoBelt on the weapon entity
-// (DT_LocalActiveINSWeaponBallistic) rather than in the base-engine
-// m_iAmmo[] on the player.  We write to both fields so the HUD and the
-// reload logic stay in sync.
+// Uses CINSPlayer::GiveAmmo() — the game's native function. For magazine-
+// based weapons (flag 0x4), it internally calls GetMagazines() → AddMags(),
+// which updates the CINSWeaponMagazines vector and syncs m_iAmmo[] via
+// UpdateCounter(). For non-magazine weapons, it falls back to the base
+// engine's CBaseCombatCharacter::GiveAmmo().
 // ---------------------------------------------------------------------------
-
-static int s_magsOffset = -2;  // offset for CINSWeapon "mags" (looked up once)
 
 static bool GiveMagazine(int client, int slot)
 {
@@ -267,45 +301,18 @@ static bool GiveMagazine(int client, int slot)
 	if (weapon == -1)
 		return false;
 
-	// ---- ammo type on the player side ----
 	int ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
 	if (ammoType < 0)
 		return false;
 
-	// ---- "mags" offset on the weapon (Insurgency-specific reserve counter) ----
-	if (s_magsOffset == -2)
-	{
-		s_magsOffset = FindSendPropInfo("CINSWeapon", "mags");
-		if (s_magsOffset <= 0)
-			s_magsOffset = FindSendPropInfo("CINSWeaponBallistic", "mags");
-		PrintToServer("[AmmoBox] mags offset=%d", s_magsOffset);
-	}
+	int maxClip = SDKCall(g_hGetMaxClip1, weapon);
 
-	int beforeAmmo    = GetEntProp(client, Prop_Data, "m_iAmmo", _, ammoType);
-	int beforeAmmoS   = GetEntProp(client, Prop_Send, "m_iAmmo", _, ammoType);
-	int beforeWepCnt  = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount");
+	// GiveAmmo(ammoType, count=1, roundsPerMag=maxClip, silent=false, maxMags=-1)
+	// maxMags=-1 uses the game's default max for this ammo type.
+	// Returns 0 if already at max magazines.
+	int added = SDKCall(g_hGiveAmmo, client, ammoType, 1, maxClip, false, -1);
 
-	PrintToServer("[AmmoBox] slot=%d ammoType=%d  player:m_iAmmo(Data)=%d m_iAmmo(Send)=%d  weapon:m_iPrimaryAmmoCount=%d",
-		slot, ammoType, beforeAmmo, beforeAmmoS, beforeWepCnt);
-
-	if (beforeAmmo >= 8)
-		return false;
-
-	// Write +1 to the player's ammo array (both Prop_Data and Prop_Send)
-	SetEntProp(client, Prop_Data, "m_iAmmo", beforeAmmo + 1, _, ammoType);
-	SetEntProp(client, Prop_Send, "m_iAmmo", beforeAmmo + 1, _, ammoType);
-
-	// Write +1 to weapon's m_iPrimaryAmmoCount (candidate for internal counter)
-	if (beforeWepCnt >= 0)
-		SetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount", beforeWepCnt + 1);
-
-	int afterAmmo   = GetEntProp(client, Prop_Data, "m_iAmmo", _, ammoType);
-	int afterAmmoS  = GetEntProp(client, Prop_Send, "m_iAmmo", _, ammoType);
-	int afterWepCnt = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoCount");
-	PrintToServer("[AmmoBox] after: m_iAmmo(Data)=%d m_iAmmo(Send)=%d weapon:m_iPrimaryAmmoCount=%d",
-		afterAmmo, afterAmmoS, afterWepCnt);
-
-	return true;
+	return added > 0;
 }
 
 // ---------------------------------------------------------------------------

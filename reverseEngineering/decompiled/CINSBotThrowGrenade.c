@@ -23,9 +23,9 @@ CINSBotThrowGrenade::CINSBotThrowGrenade
   __i686_get_pc_thunk_bx();
   param_2[8] = 0;
   param_2[9] = 0;
-  *param_2 = unaff_EBX + 0x463fad /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
-  param_2[1] = unaff_EBX + 0x464145 /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */;
-  param_2[0x14] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
+  *param_2 = unaff_EBX + 0x463fad /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
+  param_2[1] = unaff_EBX + 0x464145 /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */;
+  param_2[0x14] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   param_2[10] = 0;
   param_2[3] = 0;
   param_2[4] = 0;
@@ -38,12 +38,12 @@ CINSBotThrowGrenade::CINSBotThrowGrenade
   param_2[0xb] = 0;
   param_2[0xd] = 0;
   param_2[0x15] = 0;
-  (*(code *)(unaff_EBX + -0x5045ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x14,param_2 + 0x15);
+  (*(code *)(unaff_EBX + -0x5045ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x14,param_2 + 0x15);
   param_2[0x16] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
   (**(code **)(param_2[0x14] + 4))(param_2 + 0x14,param_2 + 0x16); /* timer_0.NetworkStateChanged() */
   param_2[0x18] = 0;
-  param_2[0x17] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
-  (*(code *)(unaff_EBX + -0x5045ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x17,param_2 + 0x18);
+  param_2[0x17] = unaff_EBX + 0x3f349d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
+  (*(code *)(unaff_EBX + -0x5045ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(param_2 + 0x17,param_2 + 0x18);
   param_2[0x19] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
   (**(code **)(param_2[0x17] + 4))(param_2 + 0x17,param_2 + 0x19); /* timer_1.NetworkStateChanged() */
   param_2[0x11] = param_3;
@@ -85,9 +85,9 @@ void __thiscall CINSBotThrowGrenade::CINSBotThrowGrenade(CINSBotThrowGrenade *th
   __i686_get_pc_thunk_bx();
   in_stack_00000004[8] = 0;
   in_stack_00000004[9] = 0;
-  *in_stack_00000004 = unaff_EBX + 0x462d4d /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x462ee5 /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */;
-  in_stack_00000004[0x14] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
+  *in_stack_00000004 = unaff_EBX + 0x462d4d /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x462ee5 /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */ /* vtable for CINSBotThrowGrenade+0x1a0 */;
+  in_stack_00000004[0x14] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_0 */
   in_stack_00000004[10] = 0;
   in_stack_00000004[3] = 0;
   in_stack_00000004[4] = 0;
@@ -100,12 +100,12 @@ void __thiscall CINSBotThrowGrenade::CINSBotThrowGrenade(CINSBotThrowGrenade *th
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0x15] = 0;
-  (*(code *)(unaff_EBX + -0x50580b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x15);
+  (*(code *)(unaff_EBX + -0x50580b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x15);
   in_stack_00000004[0x16] = -0x40800000 /* -1.0f */; /* timer_0.m_timestamp = -1 (not running) */
   (**(code **)(in_stack_00000004[0x14] + 4))(in_stack_00000004 + 0x14,in_stack_00000004 + 0x16); /* timer_0.NetworkStateChanged() */
   in_stack_00000004[0x18] = 0;
-  in_stack_00000004[0x17] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
-  (*(code *)(unaff_EBX + -0x50580b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x18);
+  in_stack_00000004[0x17] = unaff_EBX + 0x3f223d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */; /* CountdownTimer timer_1 */
+  (*(code *)(unaff_EBX + -0x50580b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x18);
   in_stack_00000004[0x19] = -0x40800000 /* -1.0f */; /* timer_1.m_timestamp = -1 (not running) */
   (**(code **)(in_stack_00000004[0x17] + 4))(in_stack_00000004 + 0x17,in_stack_00000004 + 0x19); /* timer_1.NetworkStateChanged() */
   pCVar1 = (CINSNextBot *)in_stack_00000004[7];
@@ -165,7 +165,7 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
   if (*(int *)(in_stack_0000000c + 0x2280) == 3) {
     *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x24da71 /* "Nothing to throw at" */ /* "Nothing to throw at" */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x24da71 /* "Nothing to throw at" */ /* "Nothing to throw at" */ /* "Nothing to throw at" */;
     return param_1;
   }
   uVar5 = 0;
@@ -173,7 +173,7 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
   if (fVar1 != 0.0) {
     *(undefined4 *)(in_stack_0000000c + 0x2280) = 1;
     fVar3 = (float10)CountdownTimer::Now();
-    fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x184a31 /* 3.0f */ /* 3.0f */);
+    fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x184a31 /* 3.0f */ /* 3.0f */ /* 3.0f */);
     if (*(float *)(in_stack_0000000c + 0xb378) != fVar4) {
       (**(code **)(*(int *)(in_stack_0000000c + 0xb370) + 4))
                 (in_stack_0000000c + 0xb370,in_stack_0000000c + 0xb378,uVar5);
@@ -185,7 +185,7 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
       *(undefined4 *)(in_stack_0000000c + 0xb374) = 0x40400000 /* 3.0f */;
     }
     fVar3 = (float10)CountdownTimer::Now();
-    fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x184a31 /* 3.0f */ /* 3.0f */);
+    fVar4 = (float)fVar3 + *(float *)(unaff_EBX + 0x184a31 /* 3.0f */ /* 3.0f */ /* 3.0f */);
     this_01 = extraout_ECX;
     if (*(float *)(in_stack_0000000c + 0xb384) != fVar4) {
       (**(code **)(*(int *)(in_stack_0000000c + 0xb37c) + 4))
@@ -202,14 +202,14 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
     uVar5 = 0x40a00000 /* 5.0f */;
     CINSNextBot::ChooseBestWeapon(this_01,in_stack_0000000c,fVar1);
     piVar2 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c,fVar1,uVar5);
-    fVar1 = *(float *)(unaff_EBX + 0x1f2889 /* 1024.0f */ /* 1024.0f */);
+    fVar1 = *(float *)(unaff_EBX + 0x1f2889 /* 1024.0f */ /* 1024.0f */ /* 1024.0f */);
     local_24 = *(float *)(param_2 + 0x3c) * fVar1 + *(float *)(param_2 + 0x48);
     local_20 = *(float *)(param_2 + 0x40) * fVar1 + *(float *)(param_2 + 0x4c);
     local_28 = fVar1 * *(float *)(param_2 + 0x38) + *(float *)(param_2 + 0x44);
     (**(code **)(*piVar2 + 0xd4 /* PlayerBody::AimHeadTowards */))
-              (piVar2,&local_28,5,0x40a00000 /* 5.0f */,unaff_EBX + 0x4d8d1d /* grenadeThrowReply */ /* grenadeThrowReply */,&UNK_0024dae5 + unaff_EBX);
+              (piVar2,&local_28,5,0x40a00000 /* 5.0f */,unaff_EBX + 0x4d8d1d /* grenadeThrowReply */ /* grenadeThrowReply */ /* grenadeThrowReply */,&UNK_0024dae5 + unaff_EBX);
     fVar3 = (float10)CountdownTimer::Now();
-    fVar1 = (float)fVar3 + *(float *)(unaff_EBX + 0x1f0221 /* 5.0f */ /* 5.0f */);
+    fVar1 = (float)fVar3 + *(float *)(unaff_EBX + 0x1f0221 /* 5.0f */ /* 5.0f */ /* 5.0f */);
     if (*(float *)(in_stack_0000000c + 0xb390) != fVar1) {
       (**(code **)(*(int *)(in_stack_0000000c + 0xb388) + 4))
                 (in_stack_0000000c + 0xb388,in_stack_0000000c + 0xb390);
@@ -221,13 +221,13 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
       *(undefined4 *)(in_stack_0000000c + 0xb38c) = 0x40a00000 /* 5.0f */;
     }
     *(undefined4 *)(in_stack_0000000c + 0xb344) = 0x41200000 /* 10.0f */;
-    *(undefined4 *)(param_2 + 0x68) = *(undefined4 *)(**(int **)(unaff_EBX + 0x472355 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+    *(undefined4 *)(param_2 + 0x68) = *(undefined4 *)(**(int **)(unaff_EBX + 0x472355 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
     if (*(int *)(param_2 + 100) != -0x40800000 /* -1.0f */) {
       (**(code **)(*(int *)(param_2 + 0x5c) + 4))(param_2 + 0x5c,param_2 + 100); /* timer_1.NetworkStateChanged() */
       *(undefined4 *)(param_2 + 100) = 0xbf800000 /* -1.0f */;
     }
     fVar3 = (float10)CountdownTimer::Now();
-    fVar1 = (float)fVar3 + *(float *)(unaff_EBX + 0x1f0221 /* 5.0f */ /* 5.0f */);
+    fVar1 = (float)fVar3 + *(float *)(unaff_EBX + 0x1f0221 /* 5.0f */ /* 5.0f */ /* 5.0f */);
     if (*(float *)(param_2 + 0x58) != fVar1) {
       (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58); /* timer_0.NetworkStateChanged() */
       *(float *)(param_2 + 0x58) = fVar1; /* timer_0.Start(5.0f) */
@@ -244,6 +244,7 @@ CINSBotThrowGrenade::OnStart(CINSBotThrowGrenade *this,CINSNextBot *param_1,Acti
   *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
   *(int *)(param_1 + 8) = unaff_EBX + 0x24caad /* "No grenade...
+" */ /* "No grenade...
 " */ /* "No grenade...
 " */;
   return param_1;
@@ -294,6 +295,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
     *(undefined4 *)(param_1 + 4) = 0;
     *(int *)(param_1 + 8) = unaff_EBX + 0x24c6fa /* "No grenade...
 " */ /* "No grenade...
+" */ /* "No grenade...
 " */;
   }
   else {
@@ -309,7 +311,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
         if (*(int *)(in_stack_0000000c + 0x2280) == 3) {
           *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x24d6e8 /* "Error aiming grenade." */ /* "Error aiming grenade." */;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x24d6e8 /* "Error aiming grenade." */ /* "Error aiming grenade." */ /* "Error aiming grenade." */;
         }
         else {
           if (*(float *)((int)param_2 + 100) <= 0.0) {
@@ -327,7 +329,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
                fVar6 = pfVar4[1] - *(float *)((int)param_2 + 0x48),
                fVar7 = pfVar4[2] - *(float *)((int)param_2 + 0x4c),
                SQRT(fVar6 * fVar6 + fVar8 * fVar8 + fVar7 * fVar7) <
-               *(float *)(unaff_EBX + 0x1f22a2 /* 40.0f */ /* 40.0f */))) {
+               *(float *)(unaff_EBX + 0x1f22a2 /* 40.0f */ /* 40.0f */ /* 40.0f */))) {
               (**(code **)(*(int *)this_00 + 200))(this_00,(int)param_2 + 0x44,0x3f800000 /* 1.0f */);
               this_00 = extraout_ECX;
             }
@@ -361,7 +363,7 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
               (**(code **)(*piVar9 + 0x160 /* PlayerBody::ForceLookAtExpire */))(piVar9);
               *(undefined4 *)param_1 = 3 /* Done */;
               *(undefined4 *)(param_1 + 4) = 0;
-              *(int *)(param_1 + 8) = unaff_EBX + 0x24c770 /* "Finished throw." */ /* "Finished throw." */;
+              *(int *)(param_1 + 8) = unaff_EBX + 0x24c770 /* "Finished throw." */ /* "Finished throw." */ /* "Finished throw." */;
               return param_1;
             }
           }
@@ -373,13 +375,13 @@ CINSBotThrowGrenade::Update(CINSBotThrowGrenade *this,CINSNextBot *param_1,float
       else {
         *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24d6d2 /* "Idle in throw grenade" */ /* "Idle in throw grenade" */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24d6d2 /* "Idle in throw grenade" */ /* "Idle in throw grenade" */ /* "Idle in throw grenade" */;
       }
     }
     else {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x24b993 /* "Timeout" */ /* "Timeout" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x24b993 /* "Timeout" */ /* "Timeout" */ /* "Timeout" */;
     }
   }
   return param_1;
@@ -421,7 +423,7 @@ int CINSBotThrowGrenade::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x24be96 /* "Throwing Grenade" */ /* "Throwing Grenade" */;
+  return extraout_ECX + 0x24be96 /* "Throwing Grenade" */ /* "Throwing Grenade" */ /* "Throwing Grenade" */;
 }
 
 
@@ -505,17 +507,17 @@ CINSBotThrowGrenade::AimForGrenadeToss
   
   uStack_14 = 0x7352eb;
   __i686_get_pc_thunk_bx();
-  iVar3 = *(int *)(unaff_EBX + 0x471689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
+  iVar3 = *(int *)(unaff_EBX + 0x471689 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
   this = *(CBasePlayer **)(iVar3 + 0x100c);
   local_1d = this != (CBasePlayer *)0x0;
   if (((bool)local_1d) &&
      (iVar6 = *(int *)(iVar3 + 0x19b8), iVar5 = ThreadGetCurrentId(), this = extraout_ECX,
      iVar6 == iVar5)) {
     piVar7 = *(int **)(iVar3 + 0x1014);
-    if (*piVar7 != unaff_EBX + 0x24cd8d /* "CINSBotThrowGrenade::AimVectorForGrenade" */ /* "CINSBotThrowGrenade::AimVectorForGrenade" */) {
+    if (*piVar7 != unaff_EBX + 0x24cd8d /* "CINSBotThrowGrenade::AimVectorForGrenade" */ /* "CINSBotThrowGrenade::AimVectorForGrenade" */ /* "CINSBotThrowGrenade::AimVectorForGrenade" */) {
       piVar7 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar7,unaff_EBX + 0x24cd8d /* "CINSBotThrowGrenade::AimVectorForGrenade" */ /* "CINSBotThrowGrenade::AimVectorForGrenade" */,(char *)0x0,
-                                 unaff_EBX + 0x24b97b /* "INSNextBot" */ /* "INSNextBot" */);
+                                ((char *)piVar7,unaff_EBX + 0x24cd8d /* "CINSBotThrowGrenade::AimVectorForGrenade" */ /* "CINSBotThrowGrenade::AimVectorForGrenade" */ /* "CINSBotThrowGrenade::AimVectorForGrenade" */,(char *)0x0,
+                                 unaff_EBX + 0x24b97b /* "INSNextBot" */ /* "INSNextBot" */ /* "INSNextBot" */);
       *(int **)(iVar3 + 0x1014) = piVar7;
     }
     puVar1 = (uint *)(*(int *)(iVar3 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -533,9 +535,9 @@ LAB_007356b0:
     (**(code **)(*(int *)param_1 + 0x20c /* CINSNextBot::EyePosition */))(&local_5c,param_1);
     param_2 = param_2 - local_5c;
     param_3 = param_3 - local_58;
-    piVar7 = (int *)(*(int **)(unaff_EBX + 0x471c5d /* &sv_gravity */ /* &sv_gravity */))[7];
+    piVar7 = (int *)(*(int **)(unaff_EBX + 0x471c5d /* &sv_gravity */ /* &sv_gravity */ /* &sv_gravity */))[7];
     fVar10 = SQRT(param_3 * param_3 + param_2 * param_2);
-    if (piVar7 == *(int **)(unaff_EBX + 0x471c5d /* &sv_gravity */ /* &sv_gravity */)) {
+    if (piVar7 == *(int **)(unaff_EBX + 0x471c5d /* &sv_gravity */ /* &sv_gravity */ /* &sv_gravity */)) {
       fVar11 = (float)((uint)piVar7 ^ piVar7[0xb]);
     }
     else {
@@ -543,14 +545,14 @@ LAB_007356b0:
       fVar11 = (float)fVar9;
     }
     if (fVar10 == 0.0) goto LAB_007356b0;
-    fVar11 = (float)((uint)(fVar11 * *(float *)(unaff_EBX + 0x1f1afd /* 0.85f */ /* 0.85f */)) ^
-                    *(uint *)(unaff_EBX + 0x1ef915 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */));
+    fVar11 = (float)((uint)(fVar11 * *(float *)(unaff_EBX + 0x1f1afd /* 0.85f */ /* 0.85f */ /* 0.85f */)) ^
+                    *(uint *)(unaff_EBX + 0x1ef915 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */));
     fVar12 = fVar11 * fVar10;
-    fVar10 = ((param_4 - local_54) * *(float *)(unaff_EBX + 0x24ce4d /* CSWTCH.864+0xc */ /* CSWTCH.864+0xc */) - fVar10 * fVar12) * fVar11 +
-             *(float *)(unaff_EBX + 0x213c75 /* rodata:0x5368D4A5 */ /* rodata:0x5368D4A5 */);
+    fVar10 = ((param_4 - local_54) * *(float *)(unaff_EBX + 0x24ce4d /* CSWTCH.864+0xc */ /* CSWTCH.864+0xc */ /* CSWTCH.864+0xc */) - fVar10 * fVar12) * fVar11 +
+             *(float *)(unaff_EBX + 0x213c75 /* rodata:0x5368D4A5 */ /* rodata:0x5368D4A5 */ /* rodata:0x5368D4A5 */);
     if (fVar10 <= 0.0) goto LAB_007356b0;
     fVar10 = SQRT(fVar10);
-    fVar11 = *(float *)(unaff_EBX + 0x1f83bd /* rodata:0x49742400 */ /* rodata:0x49742400 */);
+    fVar11 = *(float *)(unaff_EBX + 0x1f83bd /* rodata:0x49742400 */ /* rodata:0x49742400 */ /* rodata:0x49742400 */);
     fVar13 = atanf((fVar10 + fVar11) / fVar12);
     fVar12 = atanf((fVar10 - fVar11) / fVar12);
     local_44 = 0.0;
@@ -562,8 +564,8 @@ LAB_007356b0:
     local_2c = local_4c;
     local_28 = local_48;
     local_24 = local_44;
-    sincos((double)(float)((uint)fVar13 ^ *(uint *)(unaff_EBX + 0x1ef915 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */)),&local_64,&local_6c);
-    dVar2 = *(double *)(unaff_EBX + 0x20e1fd /* 0.0f */ /* 0.0f */);
+    sincos((double)(float)((uint)fVar13 ^ *(uint *)(unaff_EBX + 0x1ef915 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */)),&local_64,&local_6c);
+    dVar2 = *(double *)(unaff_EBX + 0x20e1fd /* 0.0f */ /* 0.0f */ /* 0.0f */);
     local_4c = fVar10 * (float)(local_6c * dVar2);
     local_48 = (float)(local_6c * dVar2) * fVar11;
     local_44 = (float)(local_64 * dVar2);
@@ -689,15 +691,15 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
   
   uStack_14 = 0x73583b;
   __i686_get_pc_thunk_bx();
-  iVar4 = *(int *)(unaff_EBX + 0x471139 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
+  iVar4 = *(int *)(unaff_EBX + 0x471139 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
   local_1d = *(int *)(iVar4 + 0x100c) != 0;
   if (((bool)local_1d) &&
      (iVar10 = *(int *)(iVar4 + 0x19b8), iVar8 = ThreadGetCurrentId(), iVar10 == iVar8)) {
     piVar9 = *(int **)(iVar4 + 0x1014);
-    if (*piVar9 != unaff_EBX + 0x24c869 /* "CINSBotThrowGrenade::CanThrowGrenade" */ /* "CINSBotThrowGrenade::CanThrowGrenade" */) {
+    if (*piVar9 != unaff_EBX + 0x24c869 /* "CINSBotThrowGrenade::CanThrowGrenade" */ /* "CINSBotThrowGrenade::CanThrowGrenade" */ /* "CINSBotThrowGrenade::CanThrowGrenade" */) {
       piVar9 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar9,unaff_EBX + 0x24c869 /* "CINSBotThrowGrenade::CanThrowGrenade" */ /* "CINSBotThrowGrenade::CanThrowGrenade" */,(char *)0x0,
-                                 unaff_EBX + 0x24b42b /* "INSNextBot" */ /* "INSNextBot" */);
+                                ((char *)piVar9,unaff_EBX + 0x24c869 /* "CINSBotThrowGrenade::CanThrowGrenade" */ /* "CINSBotThrowGrenade::CanThrowGrenade" */ /* "CINSBotThrowGrenade::CanThrowGrenade" */,(char *)0x0,
+                                 unaff_EBX + 0x24b42b /* "INSNextBot" */ /* "INSNextBot" */ /* "INSNextBot" */);
       *(int **)(iVar4 + 0x1014) = piVar9;
     }
     puVar5 = (uint *)(*(int *)(iVar4 + 0x10a0) + piVar9[0x1c] * 8 + 4);
@@ -718,7 +720,7 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
        ((iVar10 = (**(code **)(*piVar9 + 0x5f0 /* CINSPlayer::RemoveAllItems */))(piVar9), iVar10 == 2 ||
         (((iVar10 == 5 || (iVar10 == 4)) || (iVar10 == 3)))))) {
       this_01 = this_00;
-      if (**(int **)(unaff_EBX + 0x4710bd /* &g_pGameRules */ /* &g_pGameRules */) != 0) {
+      if (**(int **)(unaff_EBX + 0x4710bd /* &g_pGameRules */ /* &g_pGameRules */ /* &g_pGameRules */) != 0) {
         cVar7 = CINSRules::IsTraining(this_00);
         uVar12 = 0;
         this_01 = (CINSRules *)extraout_ECX;
@@ -731,7 +733,7 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
         (**(code **)(*(int *)param_1 + 0x20c /* CINSNextBot::EyePosition */))(&local_38,param_1);
         local_13c = 1;
         if (iVar10 - 3U < 3) {
-          local_13c = *(uint *)(unaff_EBX + 0x24c8f1 /* CSWTCH.864 */ /* CSWTCH.864 */ + (iVar10 - 3U) * 4);
+          local_13c = *(uint *)(unaff_EBX + 0x24c8f1 /* CSWTCH.864 */ /* CSWTCH.864 */ /* CSWTCH.864 */ + (iVar10 - 3U) * 4);
         }
         if (0 < piVar9[3]) {
           local_10c = 0;
@@ -745,18 +747,18 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
               fVar3 = (float)puVar5[8];
               fVar17 = fVar1 - local_38;
               fVar14 = fVar2 - local_34;
-              piVar6 = *(int **)(unaff_EBX + 0x5b7621 /* ins_bot_max_grenade_range+0x1c */ /* ins_bot_max_grenade_range+0x1c */);
+              piVar6 = *(int **)(unaff_EBX + 0x5b7621 /* ins_bot_max_grenade_range+0x1c */ /* ins_bot_max_grenade_range+0x1c */ /* ins_bot_max_grenade_range+0x1c */);
               fVar16 = fVar15 - local_30;
-              if (piVar6 == (int *)(unaff_EBX + 0x5b7605 /* ins_bot_max_grenade_range */ /* ins_bot_max_grenade_range */U)) {
-                fVar11 = (float)((uint)piVar6 ^ *(uint *)(unaff_EBX + 0x5b7631 /* ins_bot_max_grenade_range+0x2c */ /* ins_bot_max_grenade_range+0x2c */));
+              if (piVar6 == (int *)(unaff_EBX + 0x5b7605 /* ins_bot_max_grenade_range */ /* ins_bot_max_grenade_range */ /* ins_bot_max_grenade_range */U)) {
+                fVar11 = (float)((uint)piVar6 ^ *(uint *)(unaff_EBX + 0x5b7631 /* ins_bot_max_grenade_range+0x2c */ /* ins_bot_max_grenade_range+0x2c */ /* ins_bot_max_grenade_range+0x2c */));
               }
               else {
                 fVar13 = (float10)(**(code **)(*piVar6 + 0x3c))(piVar6);
                 fVar11 = (float)fVar13;
               }
               if (SQRT(fVar14 * fVar14 + fVar17 * fVar17 + fVar16 * fVar16) <= fVar11 + fVar3) {
-                this_03 = (CTraceFilterSimple *)(unaff_EBX + 0x1f2af9 /* 12.0f */ /* 12.0f */);
-                local_144 = *(float *)(unaff_EBX + 0x1832d9 /* 1.0f */ /* 1.0f */);
+                this_03 = (CTraceFilterSimple *)(unaff_EBX + 0x1f2af9 /* 12.0f */ /* 12.0f */ /* 12.0f */);
+                local_144 = *(float *)(unaff_EBX + 0x1832d9 /* 1.0f */ /* 1.0f */ /* 1.0f */);
                 local_b0 = 0;
                 local_148 = 0.0;
                 fVar15 = *(float *)this_03 + fVar15;
@@ -779,7 +781,7 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
                     local_84 = 0;
                     local_8c = fVar16 - fVar1;
                     local_88 = fVar14 - fVar2;
-                    local_48[0] = *(int *)(unaff_EBX + 0x470d2d /* &vtable for CTraceFilterNoNPCsOrPlayer */ /* &vtable for CTraceFilterNoNPCsOrPlayer */) + 8;
+                    local_48[0] = *(int *)(unaff_EBX + 0x470d2d /* &vtable for CTraceFilterNoNPCsOrPlayer */ /* &vtable for CTraceFilterNoNPCsOrPlayer */ /* &vtable for CTraceFilterNoNPCsOrPlayer */) + 8;
                     local_64 = 0;
                     local_68 = 0;
                     local_6c = 0;
@@ -790,14 +792,14 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
                     local_9c = fVar1;
                     local_98 = fVar2;
                     local_94 = fVar15;
-                    (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x470f3d /* &enginetrace */ /* &enginetrace */) + 0x14))
-                              ((int *)**(undefined4 **)(unaff_EBX + 0x470f3d /* &enginetrace */ /* &enginetrace */),&local_9c,0x42006089,
+                    (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x470f3d /* &enginetrace */ /* &enginetrace */ /* &enginetrace */) + 0x14))
+                              ((int *)**(undefined4 **)(unaff_EBX + 0x470f3d /* &enginetrace */ /* &enginetrace */ /* &enginetrace */),&local_9c,0x42006089,
                                local_48,local_fc);
-                    iVar10 = (**(code **)(**(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */) + 0x40))
-                                       (*(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */));
+                    iVar10 = (**(code **)(**(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */ /* &r_visualizetraces */) + 0x40))
+                                       (*(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */ /* &r_visualizetraces */));
                     if (iVar10 != 0) {
-                      iVar10 = (**(code **)(**(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */) + 0x40))
-                                         (*(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */));
+                      iVar10 = (**(code **)(**(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */ /* &r_visualizetraces */) + 0x40))
+                                         (*(int **)(unaff_EBX + 0x471205 /* &r_visualizetraces */ /* &r_visualizetraces */ /* &r_visualizetraces */));
                       fVar14 = 0.5;
                       if (iVar10 != 0) {
                         fVar14 = -1.0;
@@ -813,12 +815,12 @@ undefined4 __cdecl CINSBotThrowGrenade::CanIThrowGrenade(CINSNextBot *param_1,Ve
                       goto LAB_007358ae;
                     }
                     local_124 = local_124 + -1;
-                    local_120 = local_120 + *(float *)(unaff_EBX + 0x1eef1d /* 0.5f */ /* 0.5f */);
+                    local_120 = local_120 + *(float *)(unaff_EBX + 0x1eef1d /* 0.5f */ /* 0.5f */ /* 0.5f */);
                     this_03 = extraout_ECX_00;
                   } while (local_124 != 0);
                   local_140 = local_140 + 0x1e;
                   if (local_140 == 0x168) break;
-                  sincosf((float)local_140 * *(float *)(unaff_EBX + 0x1eff95 /* rodata:0x3C8EFA35 */ /* rodata:0x3C8EFA35 */),&local_100,&local_104)
+                  sincosf((float)local_140 * *(float *)(unaff_EBX + 0x1eff95 /* rodata:0x3C8EFA35 */ /* rodata:0x3C8EFA35 */ /* rodata:0x3C8EFA35 */),&local_100,&local_104)
                   ;
                   local_148 = local_100;
                   local_144 = local_104;
@@ -939,31 +941,31 @@ CINSBotThrowGrenade::TraceTrajectory
   
   uStack_14 = 0x734e5b;
   __i686_get_pc_thunk_bx();
-  local_1d = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
+  local_1d = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0;
   this = extraout_ECX;
   if (((bool)local_1d) &&
-     (iVar8 = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar4 = ThreadGetCurrentId(),
+     (iVar8 = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar4 = ThreadGetCurrentId(),
      this = extraout_ECX_00, iVar8 == iVar4)) {
-    piVar5 = *(int **)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
-    if (*piVar5 != unaff_EBX + 0x24d1f5 /* "CINSBotThrowGrenade::TraceTrajectory" */ /* "CINSBotThrowGrenade::TraceTrajectory" */) {
+    piVar5 = *(int **)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+    if (*piVar5 != unaff_EBX + 0x24d1f5 /* "CINSBotThrowGrenade::TraceTrajectory" */ /* "CINSBotThrowGrenade::TraceTrajectory" */ /* "CINSBotThrowGrenade::TraceTrajectory" */) {
       piVar5 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar5,unaff_EBX + 0x24d1f5 /* "CINSBotThrowGrenade::TraceTrajectory" */ /* "CINSBotThrowGrenade::TraceTrajectory" */,(char *)0x0,
-                                 unaff_EBX + 0x24be0b /* "INSNextBot" */ /* "INSNextBot" */);
-      *(int **)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar5;
+                                ((char *)piVar5,unaff_EBX + 0x24d1f5 /* "CINSBotThrowGrenade::TraceTrajectory" */ /* "CINSBotThrowGrenade::TraceTrajectory" */ /* "CINSBotThrowGrenade::TraceTrajectory" */,(char *)0x0,
+                                 unaff_EBX + 0x24be0b /* "INSNextBot" */ /* "INSNextBot" */ /* "INSNextBot" */);
+      *(int **)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = piVar5;
     }
-    puVar1 = (uint *)(piVar5[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
+    puVar1 = (uint *)(piVar5[0x1c] * 8 + *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x10a0) + 4);
     *puVar1 = *puVar1 | 4;
     CVProfNode::EnterScope();
-    this = *(CTraceFilterSimple **)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
+    this = *(CTraceFilterSimple **)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
     this[0x1010] = (CTraceFilterSimple)0x0;
   }
   local_a0 = 0;
   CTraceFilterSimple::CTraceFilterSimple
             (this,(IHandleEntity *)local_3c,param_1,(_func_bool_IHandleEntity_ptr_int *)0x0);
   iVar8 = 0;
-  dVar2 = *(double *)(unaff_EBX + 0x183ce5 /* 0.0f */ /* 0.0f */);
-  local_3c[0] = *(int *)(unaff_EBX + 0x47170d /* &vtable for CTraceFilterNoNPCsOrPlayer */ /* &vtable for CTraceFilterNoNPCsOrPlayer */) + 8;
-  piVar5 = *(int **)(unaff_EBX + 0x471be5 /* &r_visualizetraces */ /* &r_visualizetraces */);
+  dVar2 = *(double *)(unaff_EBX + 0x183ce5 /* 0.0f */ /* 0.0f */ /* 0.0f */);
+  local_3c[0] = *(int *)(unaff_EBX + 0x47170d /* &vtable for CTraceFilterNoNPCsOrPlayer */ /* &vtable for CTraceFilterNoNPCsOrPlayer */ /* &vtable for CTraceFilterNoNPCsOrPlayer */) + 8;
+  piVar5 = *(int **)(unaff_EBX + 0x471be5 /* &r_visualizetraces */ /* &r_visualizetraces */ /* &r_visualizetraces */);
   fVar6 = param_4;
   fVar12 = param_3;
   fVar13 = param_2;
@@ -973,7 +975,7 @@ CINSBotThrowGrenade::TraceTrajectory
     local_4c = 0;
     local_5c = 0x40400000 /* 3.0f */;
     local_58 = 0x40400000 /* 3.0f */;
-    fVar11 = (float)iVar8 * *(float *)(unaff_EBX + 0x1efd89 /* 0.2f */ /* 0.2f */);
+    fVar11 = (float)iVar8 * *(float *)(unaff_EBX + 0x1efd89 /* 0.2f */ /* 0.2f */ /* 0.2f */);
     local_54 = 0x40400000 /* 3.0f */;
     local_6c = 0x80000000;
     local_68 = 0x80000000;
@@ -989,8 +991,8 @@ CINSBotThrowGrenade::TraceTrajectory
     local_8c = fVar13;
     local_88 = fVar12;
     local_84 = fVar6;
-    (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47191d /* &enginetrace */ /* &enginetrace */) + 0x14))
-              ((int *)**(undefined4 **)(unaff_EBX + 0x47191d /* &enginetrace */ /* &enginetrace */),&local_8c,0x42006089,local_3c,local_ec
+    (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47191d /* &enginetrace */ /* &enginetrace */ /* &enginetrace */) + 0x14))
+              ((int *)**(undefined4 **)(unaff_EBX + 0x47191d /* &enginetrace */ /* &enginetrace */ /* &enginetrace */),&local_8c,0x42006089,local_3c,local_ec
               );
     iVar4 = (**(code **)(*piVar5 + 0x40))(piVar5);
     if (iVar4 != 0) {
@@ -1001,7 +1003,7 @@ CINSBotThrowGrenade::TraceTrajectory
       }
       DebugDrawLine(local_ec,(Vector *)&local_e0,0xff,0xff,0,true,fVar6);
     }
-    if (local_c0 < *(float *)(unaff_EBX + 0x183cb9 /* 1.0f */ /* 1.0f */)) break;
+    if (local_c0 < *(float *)(unaff_EBX + 0x183cb9 /* 1.0f */ /* 1.0f */ /* 1.0f */)) break;
     fVar6 = fVar11;
     fVar12 = fVar10;
     fVar13 = fVar9;
@@ -1009,18 +1011,18 @@ CINSBotThrowGrenade::TraceTrajectory
       bVar7 = false;
 LAB_00735152:
       if ((local_1d != '\0') &&
-         (((*(char *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
-           (*(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)) &&
-          (iVar8 = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar4 = ThreadGetCurrentId(),
+         (((*(char *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) == '\0' ||
+           (*(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x100c) != 0)) &&
+          (iVar8 = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x19b8), iVar4 = ThreadGetCurrentId(),
           iVar8 == iVar4)))) {
         cVar3 = CVProfNode::ExitScope();
-        iVar8 = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
+        iVar8 = *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014);
         if (cVar3 != '\0') {
           iVar8 = *(int *)(iVar8 + 100);
-          *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar8;
+          *(int *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1014) = iVar8;
         }
-        *(bool *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
-             iVar8 == *(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
+        *(bool *)(*(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1010) =
+             iVar8 == *(int *)(unaff_EBX + 0x471b19 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 0x1018;
         return bVar7;
       }
       return bVar7;
@@ -1028,7 +1030,7 @@ LAB_00735152:
   }
   bVar7 = SQRT((local_dc - param_6) * (local_dc - param_6) +
                (local_e0 - param_5) * (local_e0 - param_5) +
-               (local_d8 - param_7) * (local_d8 - param_7)) < *(float *)(unaff_EBX + 0x1f0961 /* 45.0f */ /* 45.0f */);
+               (local_d8 - param_7) * (local_d8 - param_7)) < *(float *)(unaff_EBX + 0x1f0961 /* 45.0f */ /* 45.0f */ /* 45.0f */);
   goto LAB_00735152;
 }
 
@@ -1064,7 +1066,7 @@ void __thiscall CINSBotThrowGrenade::~CINSBotThrowGrenade(CINSBotThrowGrenade *t
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x4648a3 /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
+  *in_stack_00000004 = extraout_ECX + 0x4648a3 /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */ /* vtable for CINSBotThrowGrenade+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_00464a3b + extraout_ECX);
   Action<CINSNextBot>::~Action
             ((Action<CINSNextBot> *)(CBreakableSurface::DropPane + extraout_ECX + 3));

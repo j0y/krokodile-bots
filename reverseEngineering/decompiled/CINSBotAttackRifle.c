@@ -24,7 +24,7 @@ void __thiscall CINSBotAttackRifle::CINSBotAttackRifle(CINSBotAttackRifle *this)
   in_stack_00000004[8] = 0;
   in_stack_00000004[9] = 0;
   *in_stack_00000004 = &UNK_0048459d + unaff_EBX;
-  in_stack_00000004[1] = unaff_EBX + 0x484745 /* vtable for CINSBotAttackRifle+0x1b0 */ /* vtable for CINSBotAttackRifle+0x1b0 */;
+  in_stack_00000004[1] = unaff_EBX + 0x484745 /* vtable for CINSBotAttackRifle+0x1b0 */ /* vtable for CINSBotAttackRifle+0x1b0 */ /* vtable for CINSBotAttackRifle+0x1b0 */;
   puVar1 = in_stack_00000004 + 0xe;
   in_stack_00000004[0xe] = &UNK_00416b2d + unaff_EBX;
   in_stack_00000004[10] = 0;
@@ -39,13 +39,13 @@ void __thiscall CINSBotAttackRifle::CINSBotAttackRifle(CINSBotAttackRifle *this)
   in_stack_00000004[0xb] = 0;
   in_stack_00000004[0xd] = 0;
   in_stack_00000004[0xf] = 0;
-  (*(code *)(unaff_EBX + -0x4e0f1b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(puVar1,in_stack_00000004 + 0xf);
+  (*(code *)(unaff_EBX + -0x4e0f1b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(puVar1,in_stack_00000004 + 0xf);
   in_stack_00000004[0x10] = 0xbf800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0xe] + 4))(puVar1,in_stack_00000004 + 0x10);
   puVar2 = in_stack_00000004 + 0x11;
   in_stack_00000004[0x12] = 0;
   in_stack_00000004[0x11] = &UNK_00416b2d + unaff_EBX;
-  (*(code *)(unaff_EBX + -0x4e0f1b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(puVar2,in_stack_00000004 + 0x12);
+  (*(code *)(unaff_EBX + -0x4e0f1b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */))(puVar2,in_stack_00000004 + 0x12);
   in_stack_00000004[0x13] = 0xbf800000 /* -1.0f */;
   (**(code **)(in_stack_00000004[0x11] + 4))(puVar2,in_stack_00000004 + 0x13);
   if (in_stack_00000004[0x10] != -0x40800000 /* -1.0f */) {
@@ -207,7 +207,7 @@ CINSBotAttackRifle::InitialContainedAction(CINSBotAttackRifle *this,CINSNextBot 
     }
   }
   CINSNextBot::GetAttackCover(true);
-  pfVar2 = *(float **)(unaff_EBX + 0x495922 /* &vec3_origin */ /* &vec3_origin */);
+  pfVar2 = *(float **)(unaff_EBX + 0x495922 /* &vec3_origin */ /* &vec3_origin */ /* &vec3_origin */);
   if (((*pfVar2 == local_1c) && (pfVar2[1] == local_18)) && (pfVar2[2] == local_14)) {
     fVar1 = *(float *)(in_stack_00000008 + 0xb340);
     fVar6 = (float10)CINSNextBot::GetDesiredAttackRange(this_00,in_stack_00000008);
@@ -313,20 +313,20 @@ CINSBotAttackRifle::Update(CINSBotAttackRifle *this,CINSNextBot *param_1,float p
         cVar2 = (*pcVar1)(piVar5,iVar3,0,0);
         if (cVar2 != '\0') {
           (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-          iVar3 = unaff_EBX + 0x26f356 /* "CProne from aiming threat" */ /* "CProne from aiming threat" */;
+          iVar3 = unaff_EBX + 0x26f356 /* "CProne from aiming threat" */ /* "CProne from aiming threat" */ /* "CProne from aiming threat" */;
           goto LAB_00711366;
         }
       }
       (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
       uVar12 = 0x3f0ccccd /* 0.55f */;
       uVar11 = 7;
-      iVar3 = unaff_EBX + 0x26f341 /* "Crouch for stability" */ /* "Crouch for stability" */;
+      iVar3 = unaff_EBX + 0x26f341 /* "Crouch for stability" */ /* "Crouch for stability" */ /* "Crouch for stability" */;
       uVar10 = 3;
       CINSBotBody::SetPosture();
     }
     else {
       (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-      iVar3 = unaff_EBX + 0x26f32a /* "Prone From Suppression" */ /* "Prone From Suppression" */;
+      iVar3 = unaff_EBX + 0x26f32a /* "Prone From Suppression" */ /* "Prone From Suppression" */ /* "Prone From Suppression" */;
 LAB_00711366:
       uVar12 = 0x3f0ccccd /* 0.55f */;
       uVar11 = 7;
@@ -338,7 +338,7 @@ LAB_00711366:
     (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
     uVar12 = 0x3f0ccccd /* 0.55f */;
     uVar11 = 7;
-    iVar3 = unaff_EBX + 0x26ef80 /* "Walking At Target" */ /* "Walking At Target" */;
+    iVar3 = unaff_EBX + 0x26ef80 /* "Walking At Target" */ /* "Walking At Target" */ /* "Walking At Target" */;
     uVar10 = 0xc;
     CINSBotBody::SetPosture();
   }
@@ -360,7 +360,7 @@ LAB_00711278:
         fVar7 = *(float *)(in_stack_0000000c + 0xb340);
         uVar10 = 0;
         fVar9 = (float10)CINSNextBot::GetDesiredAttackRange(pCVar4,in_stack_0000000c);
-        if (((fVar7 <= (float)fVar9 * *(float *)(unaff_EBX + 0x212952 /* 0.75f */ /* 0.75f */)) ||
+        if (((fVar7 <= (float)fVar9 * *(float *)(unaff_EBX + 0x212952 /* 0.75f */ /* 0.75f */ /* 0.75f */)) ||
             (uVar6 = CINSPlayer::GetPlayerFlags((CINSPlayer *)pCVar4), (uVar6 & 2) == 0)) ||
            (cVar2 = CINSWeapon::InBipodTransition(), cVar2 != '\0')) goto LAB_00711278;
       }
@@ -421,7 +421,7 @@ int CINSBotAttackRifle::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x26ed56 /* "CINSBotAttackRifle" */ /* "CINSBotAttackRifle" */;
+  return extraout_ECX + 0x26ed56 /* "CINSBotAttackRifle" */ /* "CINSBotAttackRifle" */ /* "CINSBotAttackRifle" */;
 }
 
 
@@ -1097,9 +1097,9 @@ void __thiscall CINSBotAttackRifle::~CINSBotAttackRifle(CINSBotAttackRifle *this
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x484403 /* vtable for CINSBotAttackRifle+0x8 */ /* vtable for CINSBotAttackRifle+0x8 */;
+  *in_stack_00000004 = extraout_ECX + 0x484403 /* vtable for CINSBotAttackRifle+0x8 */ /* vtable for CINSBotAttackRifle+0x8 */ /* vtable for CINSBotAttackRifle+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_004845ab + extraout_ECX);
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x495953 /* &_DYNAMIC */ /* &_DYNAMIC */));
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x495953 /* &_DYNAMIC */ /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -1136,8 +1136,8 @@ void __thiscall CINSBotAttackRifle::~CINSBotAttackRifle(CINSBotAttackRifle *this
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x4843ba /* vtable for CINSBotAttackRifle+0x8 */ /* vtable for CINSBotAttackRifle+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x484562 /* vtable for CINSBotAttackRifle+0x1b0 */ /* vtable for CINSBotAttackRifle+0x1b0 */;
+  *in_stack_00000004 = unaff_EBX + 0x4843ba /* vtable for CINSBotAttackRifle+0x8 */ /* vtable for CINSBotAttackRifle+0x8 */ /* vtable for CINSBotAttackRifle+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x484562 /* vtable for CINSBotAttackRifle+0x1b0 */ /* vtable for CINSBotAttackRifle+0x1b0 */ /* vtable for CINSBotAttackRifle+0x1b0 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

@@ -41,15 +41,15 @@ CINSNextBotChasePathCost::operator()
   float local_34;
   
   __i686_get_pc_thunk_bx();
-  iVar4 = *(int *)(unaff_EBX + 0x4b1739 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
+  iVar4 = *(int *)(unaff_EBX + 0x4b1739 /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */);
   bVar10 = *(int *)(iVar4 + 0x100c) != 0;
   if ((bVar10) && (iVar8 = *(int *)(iVar4 + 0x19b8), iVar6 = ThreadGetCurrentId(), iVar8 == iVar6))
   {
     piVar7 = *(int **)(iVar4 + 0x1014);
-    if (*piVar7 != unaff_EBX + 0x28a3f5 /* "CINSNextBotChasePathCost::operator()" */ /* "CINSNextBotChasePathCost::operator()" */) {
+    if (*piVar7 != unaff_EBX + 0x28a3f5 /* "CINSNextBotChasePathCost::operator()" */ /* "CINSNextBotChasePathCost::operator()" */ /* "CINSNextBotChasePathCost::operator()" */) {
       piVar7 = (int *)CVProfNode::GetSubNode
-                                ((char *)piVar7,unaff_EBX + 0x28a3f5 /* "CINSNextBotChasePathCost::operator()" */ /* "CINSNextBotChasePathCost::operator()" */,(char *)0x0,
-                                 unaff_EBX + 0x28ba2e /* "NextBot" */ /* "NextBot" */);
+                                ((char *)piVar7,unaff_EBX + 0x28a3f5 /* "CINSNextBotChasePathCost::operator()" */ /* "CINSNextBotChasePathCost::operator()" */ /* "CINSNextBotChasePathCost::operator()" */,(char *)0x0,
+                                 unaff_EBX + 0x28ba2e /* "NextBot" */ /* "NextBot" */ /* "NextBot" */);
       *(int **)(iVar4 + 0x1014) = piVar7;
     }
     puVar1 = (uint *)(*(int *)(iVar4 + 0x10a0) + piVar7[0x1c] * 8 + 4);
@@ -65,10 +65,10 @@ CINSNextBotChasePathCost::operator()
   cVar5 = (**(code **)(*piVar7 + 0x174))(piVar7,param_2);
   if (cVar5 == '\0') {
 LAB_006f5528:
-    local_34 = *(float *)(unaff_EBX + 0x1c38d5 /* -1.0f */ /* -1.0f */);
+    local_34 = *(float *)(unaff_EBX + 0x1c38d5 /* -1.0f */ /* -1.0f */ /* -1.0f */);
   }
   else {
-    local_34 = *(float *)(unaff_EBX + 0x233f71 /* FLT_MAX */ /* FLT_MAX */);
+    local_34 = *(float *)(unaff_EBX + 0x233f71 /* FLT_MAX */ /* FLT_MAX */ /* FLT_MAX */);
     fVar13 = *(float *)(param_1 + 0xc);
     fVar2 = *(float *)(param_1 + 0x10);
     fVar3 = *(float *)(param_1 + 0x14);
@@ -128,15 +128,15 @@ LAB_006f5528:
       local_34 = local_34 - fVar13;
     }
     else {
-      fVar13 = (fVar13 - local_34) * *(float *)(unaff_EBX + 0x22fdf1 /* 0.001f */ /* 0.001f */);
-      local_34 = *(float *)(unaff_EBX + 0x1c38d9 /* 1.0f */ /* 1.0f */);
+      fVar13 = (fVar13 - local_34) * *(float *)(unaff_EBX + 0x22fdf1 /* 0.001f */ /* 0.001f */ /* 0.001f */);
+      local_34 = *(float *)(unaff_EBX + 0x1c38d9 /* 1.0f */ /* 1.0f */ /* 1.0f */);
       if (local_34 <= fVar13) {
         fVar13 = local_34;
       }
-      if (fVar13 <= *(float *)(unaff_EBX + 0x1c38cd /* 0.0f */ /* 0.0f */)) {
-        fVar13 = *(float *)(unaff_EBX + 0x1c38cd /* 0.0f */ /* 0.0f */);
+      if (fVar13 <= *(float *)(unaff_EBX + 0x1c38cd /* 0.0f */ /* 0.0f */ /* 0.0f */)) {
+        fVar13 = *(float *)(unaff_EBX + 0x1c38cd /* 0.0f */ /* 0.0f */ /* 0.0f */);
       }
-      local_34 = local_34 + fVar13 * *(float *)(unaff_EBX + 0x28a7f1 /* -0.9f */ /* -0.9f */);
+      local_34 = local_34 + fVar13 * *(float *)(unaff_EBX + 0x28a7f1 /* -0.9f */ /* -0.9f */ /* -0.9f */);
     }
     pCVar16 = param_2;
     fVar11 = (float10)CNavArea::ComputeAdjacentConnectionHeightChange(this,(CNavArea *)param_3);
@@ -145,13 +145,13 @@ LAB_006f5528:
       piVar7 = (int *)(**(code **)(**(int **)(param_1 + 4) + 0xd0))(*(int **)(param_1 + 4),pCVar16);
       cVar5 = (**(code **)(*piVar7 + 0x144))(piVar7);
       if ((cVar5 == '\0') || (*(float *)(param_1 + 0x1c) <= fVar13)) goto LAB_006f5528;
-      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41 /* 3.0f */ /* 3.0f */);
+      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41 /* 3.0f */ /* 3.0f */ /* 3.0f */);
     }
-    else if (fVar13 <= (float)((uint)*(float *)(param_1 + 0x18) ^ *(uint *)(unaff_EBX + 0x22f9c5 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */)))
+    else if (fVar13 <= (float)((uint)*(float *)(param_1 + 0x18) ^ *(uint *)(unaff_EBX + 0x22f9c5 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */)))
     {
-      if (fVar13 <= (float)(*(uint *)(param_1 + 0x20) ^ *(uint *)(unaff_EBX + 0x22f9c5 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */)))
+      if (fVar13 <= (float)(*(uint *)(param_1 + 0x20) ^ *(uint *)(unaff_EBX + 0x22f9c5 /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */ /* SIGN_BIT_MASK */)))
       goto LAB_006f5528;
-      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41 /* 3.0f */ /* 3.0f */);
+      local_34 = local_34 * *(float *)(unaff_EBX + 0x1c3d41 /* 3.0f */ /* 3.0f */ /* 3.0f */);
     }
     (**(code **)(**(int **)(param_1 + 4) + 200))(*(int **)(param_1 + 4));
     iVar8 = CBaseEntity::GetTeamNumber(this_00);
@@ -169,7 +169,7 @@ LAB_006f5528:
     }
     local_34 = (float)iVar6 + local_34;
     if (((byte)param_2[0x68] & 0x80) != 0) {
-      local_34 = local_34 * *(float *)(unaff_EBX + 0x22ef75 /* 10.0f */ /* 10.0f */);
+      local_34 = local_34 * *(float *)(unaff_EBX + 0x22ef75 /* 10.0f */ /* 10.0f */ /* 10.0f */);
     }
   }
 joined_r0x006f5534:

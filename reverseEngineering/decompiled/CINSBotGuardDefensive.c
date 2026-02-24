@@ -29,9 +29,9 @@ CINSBotGuardDefensive::CINSBotGuardDefensive(CINSBotGuardDefensive *this,int par
   __i686_get_pc_thunk_bx();
   *(undefined4 *)(param_1 + 8) = 0;
   *(undefined4 *)(param_1 + 0x20) = 0;
-  *(int *)param_1 = unaff_EBX + 0x4755ed /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */;
-  *(int *)(param_1 + 4) = unaff_EBX + 0x47577d /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */;
-  puVar3 = *(undefined4 **)(unaff_EBX + 0x484851 /* &vec3_origin */ /* &vec3_origin */);
+  *(int *)param_1 = unaff_EBX + 0x4755ed /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */;
+  *(int *)(param_1 + 4) = unaff_EBX + 0x47577d /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */;
+  puVar3 = *(undefined4 **)(unaff_EBX + 0x484851 /* &vec3_origin */ /* &vec3_origin */ /* &vec3_origin */);
   *(undefined4 *)(param_1 + 0x24) = 0;
   *(undefined4 *)(param_1 + 0x28) = 0;
   *(undefined4 *)(param_1 + 0xc) = 0;
@@ -48,14 +48,14 @@ CINSBotGuardDefensive::CINSBotGuardDefensive(CINSBotGuardDefensive *this,int par
   *(undefined4 *)(param_1 + 0x2c) = 0;
   *(undefined4 *)(param_1 + 0x40) = uVar4;
   *(undefined4 *)(param_1 + 0x44) = uVar5;
-  puVar3 = *(undefined4 **)(unaff_EBX + 0x484fc5 /* &vec3_angle */ /* &vec3_angle */);
+  puVar3 = *(undefined4 **)(unaff_EBX + 0x484fc5 /* &vec3_angle */ /* &vec3_angle */ /* &vec3_angle */);
   *(undefined4 *)(param_1 + 0x34) = 0;
   *(undefined4 *)(param_1 + 0x48) = *puVar3;
   uVar4 = puVar3[2];
   *(undefined4 *)(param_1 + 0x4c) = puVar3[1];
   *(undefined4 *)(param_1 + 0x50) = uVar4;
   CINSPathFollower::CINSPathFollower(this_00);
-  pcVar1 = (code *)(unaff_EBX + -0x4f160b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
+  pcVar1 = (code *)(unaff_EBX + -0x4f160b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
   *(undefined4 *)(param_1 + 0x48c8) = 0;
   puVar2 = &UNK_0040643d + unaff_EBX;
   *(undefined **)(param_1 + 0x48c4) = puVar2;
@@ -67,7 +67,7 @@ CINSBotGuardDefensive::CINSBotGuardDefensive(CINSBotGuardDefensive *this,int par
   (*pcVar1)(param_1 + 0x48d0,param_1 + 0x48d4);
   *(undefined4 *)(param_1 + 0x48d8) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48d0) + 4))(param_1 + 0x48d0,param_1 + 0x48d8);
-  iVar6 = *(int *)(unaff_EBX + 0x484ed5 /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */);
+  iVar6 = *(int *)(unaff_EBX + 0x484ed5 /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */);
   *(undefined4 *)(param_1 + 0x48e4) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x48e0) = iVar6 + 8;
   (**(code **)(iVar6 + 0x10))(param_1 + 0x48e0,param_1 + 0x48e4);
@@ -196,7 +196,7 @@ CINSNextBot * CINSBotGuardDefensive::Update(CINSNextBot *param_1,float param_2)
     if (iVar6 == 1) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x25edd7 /* "LoS to an enemy." */ /* "LoS to an enemy." */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x25edd7 /* "LoS to an enemy." */ /* "LoS to an enemy." */ /* "LoS to an enemy." */;
       return param_1;
     }
   }
@@ -206,10 +206,10 @@ CINSNextBot * CINSBotGuardDefensive::Update(CINSNextBot *param_1,float param_2)
   if (iVar6 != *(int *)((int)param_2 + 0x38)) {
     *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x25eeb9 /* "Point we were guarding is inactive, relocating to new point." */ /* "Point we were guarding is inactive, relocating to new point." */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x25eeb9 /* "Point we were guarding is inactive, relocating to new point." */ /* "Point we were guarding is inactive, relocating to new point." */ /* "Point we were guarding is inactive, relocating to new point." */;
     return param_1;
   }
-  iVar6 = **(int **)(unaff_EBX + 0x484871 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
+  iVar6 = **(int **)(unaff_EBX + 0x484871 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
   pCVar7 = *(CINSNextBot **)(iVar6 + 0x770);
   iVar8 = *(int *)(iVar6 + 0x450 + (int)pCVar7 * 4);
   if (iVar8 == 2) {
@@ -227,7 +227,7 @@ LAB_007228df:
            (float)fVar10 != *(float *)((int)param_2 + 0x48d8))) {
           *(undefined4 *)param_1 = 3 /* Done */;
           *(undefined4 *)(param_1 + 4) = 0;
-          *(int *)(param_1 + 8) = unaff_EBX + 0x25ee3d /* "Exiting guard state, enemy entering CP" */ /* "Exiting guard state, enemy entering CP" */;
+          *(int *)(param_1 + 8) = unaff_EBX + 0x25ee3d /* "Exiting guard state, enemy entering CP" */ /* "Exiting guard state, enemy entering CP" */ /* "Exiting guard state, enemy entering CP" */;
           return param_1;
         }
         piVar5 = (int *)0x41000000;
@@ -254,7 +254,7 @@ LAB_007228df:
   }
   if (0.0 < *(float *)((int)param_2 + 0x48e4)) {
     (**(code **)(*in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c,piVar5);
-    iVar6 = unaff_EBX + 0x25e176 /* "Crouching at CP" */ /* "Crouching at CP" */;
+    iVar6 = unaff_EBX + 0x25e176 /* "Crouching at CP" */ /* "Crouching at CP" */ /* "Crouching at CP" */;
     this_01 = (CUtlVector<CNavArea*,CUtlMemory<CNavArea*,int>> *)0x7;
     uVar11 = 3;
     CINSBotBody::SetPosture();
@@ -317,15 +317,15 @@ LAB_007228df:
             pcVar3 = *(code **)(*piVar5 + 0xd4);
             CNavArea::GetRandomPoint();
             CINSNextBot::GetViewPosition(local_38);
-            (*pcVar3)(piVar5,local_38,0,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x25ee00 /* "Guard Aiming" */ /* "Guard Aiming" */);
+            (*pcVar3)(piVar5,local_38,0,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x25ee00 /* "Guard Aiming" */ /* "Guard Aiming" */ /* "Guard Aiming" */);
           }
         }
         local_6c = (CNavArea **)0x0;
         iVar6 = local_78[0];
         if (-1 < local_78[2]) {
           if (local_78[0] != 0) {
-            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4843cd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                      ((int *)**(undefined4 **)(unaff_EBX + 0x4843cd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_78[0]);
+            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4843cd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                      ((int *)**(undefined4 **)(unaff_EBX + 0x4843cd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_78[0]);
             local_78[0] = 0;
           }
           local_78[1] = 0;
@@ -354,7 +354,7 @@ LAB_007228df:
     uVar11 = 0;
     fVar10 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                                 (pCVar7,(float)in_stack_0000000c,0x41000000 /* 8.0f */);
-    if ((double)(float)fVar10 < *(double *)(unaff_EBX + 0x25ee75 /* rodata:0x66666666 */ /* rodata:0x66666666 */)) {
+    if ((double)(float)fVar10 < *(double *)(unaff_EBX + 0x25ee75 /* rodata:0x66666666 */ /* rodata:0x66666666 */ /* rodata:0x66666666 */)) {
       (**(code **)(*in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,0x3e800000 /* 0.25f */,uVar11);
     }
     goto LAB_00722894;
@@ -377,7 +377,7 @@ LAB_007228df:
       *(undefined4 *)((int)param_2 + 0x48c8) = 0x3fc00000 /* 1.5f */;
       this_00 = extraout_ECX_03;
     }
-    pfVar4 = *(float **)(unaff_EBX + 0x484121 /* &vec3_origin */ /* &vec3_origin */);
+    pfVar4 = *(float **)(unaff_EBX + 0x484121 /* &vec3_origin */ /* &vec3_origin */ /* &vec3_origin */);
     if ((*pfVar4 == *(float *)((int)param_2 + 0x3c)) &&
        (pfVar4[1] == *(float *)((int)param_2 + 0x40))) {
       if (pfVar4[2] == *(float *)((int)param_2 + 0x44)) {
@@ -441,7 +441,7 @@ int CINSBotGuardDefensive::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x25e3f3 /* "Defensive Guard" */ /* "Defensive Guard" */;
+  return extraout_ECX + 0x25e3f3 /* "Defensive Guard" */ /* "Defensive Guard" */ /* "Defensive Guard" */;
 }
 
 
@@ -467,7 +467,7 @@ CINSNextBot * CINSBotGuardDefensive::OnMoveToSuccess(CINSNextBot *param_1,Path *
     *(float *)(param_2 + 0x48e4) = (float)fVar1;
   }
   fVar1 = (float10)CountdownTimer::Now();
-  fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x202b7a /* 0.5f */ /* 0.5f */);
+  fVar2 = (float)fVar1 + *(float *)(unaff_EBX + 0x202b7a /* 0.5f */ /* 0.5f */ /* 0.5f */);
   if (*(float *)(param_2 + 0x48f0) != fVar2) {
     (**(code **)(*(int *)(param_2 + 0x48e8) + 4))(param_2 + 0x48e8,param_2 + 0x48f0);
     *(float *)(param_2 + 0x48f0) = fVar2;
@@ -500,7 +500,7 @@ void CINSBotGuardDefensive::OnMoveToFailure(undefined4 *param_1)
   __i686_get_pc_thunk_cx();
   *param_1 = 3;
   param_1[1] = 0;
-  param_1[2] = extraout_ECX + 0x25f96d /* "Failed move-to." */ /* "Failed move-to." */;
+  param_1[2] = extraout_ECX + 0x25f96d /* "Failed move-to." */ /* "Failed move-to." */ /* "Failed move-to." */;
   param_1[3] = 1;
   return;
 }
@@ -546,7 +546,7 @@ CINSBotGuardDefensive::OnWeaponFired
       cVar1 = (**(code **)(*piVar2 + 0x104 /* CINSBotVision::IsAbleToSee */))(piVar2,in_stack_00000010,1,0);
       if (cVar1 != '\0') {
         piVar2 = (int *)(**(code **)(*(int *)param_3 + 0x970 /* CINSNextBot::GetBodyInterface */))(param_3);
-        (**(code **)(*piVar2 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar2,in_stack_00000010,2,0x41200000 /* 10.0f */,0,unaff_EBX + 0x25f9ed /* "Heard some gunshots." */ /* "Heard some gunshots." */);
+        (**(code **)(*piVar2 + 0xd8 /* PlayerBody::AimHeadTowards */))(piVar2,in_stack_00000010,2,0x41200000 /* 10.0f */,0,unaff_EBX + 0x25f9ed /* "Heard some gunshots." */ /* "Heard some gunshots." */ /* "Heard some gunshots." */);
       }
     }
   }
@@ -601,7 +601,7 @@ CINSBotGuardDefensive::GetRandomHidingSpotForPoint
   uStack_14 = 0x721feb;
   __i686_get_pc_thunk_bx();
   if ((CBaseEntity *)0xf < in_stack_0000000c) goto LAB_00722276;
-  piVar2 = (int *)(unaff_EBX + 0x5ca935 /* CINSBotGuardDefensive::m_HidingSpotsAtPoint */ /* CINSBotGuardDefensive::m_HidingSpotsAtPoint */ + (int)in_stack_0000000c * 0x14);
+  piVar2 = (int *)(unaff_EBX + 0x5ca935 /* CINSBotGuardDefensive::m_HidingSpotsAtPoint */ /* CINSBotGuardDefensive::m_HidingSpotsAtPoint */ /* CINSBotGuardDefensive::m_HidingSpotsAtPoint */ + (int)in_stack_0000000c * 0x14);
   if (piVar2[3] != 0) goto LAB_007222b8;
   iVar8 = (int)in_stack_0000000c * 0x14 + **(int **)(&DAT_004846cd + unaff_EBX);
   pCVar9 = (CBaseEntity *)(iVar8 + 0x974);
@@ -612,6 +612,7 @@ CINSBotGuardDefensive::GetRandomHidingSpotForPoint
 LAB_00722467:
     uVar12 = CBaseEntity::GetTeamNumber(this_00);
     Warning(unaff_EBX + 0x25f2cd /* "Failed finding guard spots for CP %i, Team %i
+" */ /* "Failed finding guard spots for CP %i, Team %i
 " */ /* "Failed finding guard spots for CP %i, Team %i
 " */,in_stack_0000000c,uVar12);
     iVar10 = piVar2[3];
@@ -711,9 +712,10 @@ LAB_00722173:
   }
   if (iVar10 != 0) {
 LAB_007222b8:
-    iVar8 = unaff_EBX + 0x5ca8f5 /* CINSBotGuardDefensive::m_iSelectedHidingSpot */ /* CINSBotGuardDefensive::m_iSelectedHidingSpot */;
+    iVar8 = unaff_EBX + 0x5ca8f5 /* CINSBotGuardDefensive::m_iSelectedHidingSpot */ /* CINSBotGuardDefensive::m_iSelectedHidingSpot */ /* CINSBotGuardDefensive::m_iSelectedHidingSpot */;
     *(int *)(iVar8 + (int)in_stack_0000000c * 4) = *(int *)(iVar8 + (int)in_stack_0000000c * 4) + 1;
     DevMsg((char *)(unaff_EBX + 0x25f362 /* "Bot hiding in spot %i
+" */ /* "Bot hiding in spot %i
 " */ /* "Bot hiding in spot %i
 " */));
     puVar1 = (undefined4 *)
@@ -759,9 +761,9 @@ void CINSBotGuardDefensive::ResetHidingSpots(void)
   
   iVar1 = __i686_get_pc_thunk_bx();
   do {
-    *(undefined4 *)(iVar1 * 4 + unaff_EBX + 0x5ca944 /* CINSBotGuardDefensive::m_iSelectedHidingSpot */ /* CINSBotGuardDefensive::m_iSelectedHidingSpot */) = 0;
+    *(undefined4 *)(iVar1 * 4 + unaff_EBX + 0x5ca944 /* CINSBotGuardDefensive::m_iSelectedHidingSpot */ /* CINSBotGuardDefensive::m_iSelectedHidingSpot */ /* CINSBotGuardDefensive::m_iSelectedHidingSpot */) = 0;
     iVar2 = iVar1 + 1;
-    *(undefined4 *)(unaff_EBX + 0x5ca990 /* CINSBotGuardDefensive::m_HidingSpotsAtPoint+0xc */ /* CINSBotGuardDefensive::m_HidingSpotsAtPoint+0xc */ + iVar1 * 0x14) = 0;
+    *(undefined4 *)(unaff_EBX + 0x5ca990 /* CINSBotGuardDefensive::m_HidingSpotsAtPoint+0xc */ /* CINSBotGuardDefensive::m_HidingSpotsAtPoint+0xc */ /* CINSBotGuardDefensive::m_HidingSpotsAtPoint+0xc */ + iVar1 * 0x14) = 0;
     iVar1 = iVar2;
   } while (iVar2 != 0x10);
   return;
@@ -801,8 +803,8 @@ void __thiscall CINSBotGuardDefensive::~CINSBotGuardDefensive(CINSBotGuardDefens
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x4743fa /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x47458a /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x4743fa /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x47458a /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -842,8 +844,8 @@ void __thiscall CINSBotGuardDefensive::~CINSBotGuardDefensive(CINSBotGuardDefens
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x47438a /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x47451a /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x47438a /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */ /* vtable for CINSBotGuardDefensive+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x47451a /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */ /* vtable for CINSBotGuardDefensive+0x198 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

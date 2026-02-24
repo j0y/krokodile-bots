@@ -22,8 +22,8 @@ CINSBotFollowCommand::CINSBotFollowCommand(undefined4 param_1,int *param_2,int p
   param_2[8] = 0;
   param_2[9] = 0;
   param_2[10] = 0;
-  *param_2 = unaff_EBX + 0x476c4a /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */;
-  param_2[1] = unaff_EBX + 0x476dda /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */;
+  *param_2 = unaff_EBX + 0x476c4a /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */;
+  param_2[1] = unaff_EBX + 0x476dda /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */;
   param_2[0x10] = (int)(&UNK_00407e5a + unaff_EBX);
   param_2[3] = 0;
   param_2[4] = 0;
@@ -67,7 +67,7 @@ void CINSBotFollowCommand::OnStart(CINSNextBot *param_1,Action *param_2)
   }
   *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
-  *(int *)(param_1 + 8) = extraout_ECX + 0x261067 /* "No radial command!" */ /* "No radial command!" */;
+  *(int *)(param_1 + 8) = extraout_ECX + 0x261067 /* "No radial command!" */ /* "No radial command!" */ /* "No radial command!" */;
   return;
 }
 
@@ -158,7 +158,7 @@ int CINSBotFollowCommand::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x260df9 /* "FollowCommand" */ /* "FollowCommand" */;
+  return extraout_ECX + 0x260df9 /* "FollowCommand" */ /* "FollowCommand" */ /* "FollowCommand" */;
 }
 
 
@@ -193,9 +193,9 @@ void __thiscall CINSBotFollowCommand::~CINSBotFollowCommand(CINSBotFollowCommand
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x476b43 /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x476cd3 /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x486d13 /* &_DYNAMIC */ /* &_DYNAMIC */));
+  *in_stack_00000004 = extraout_ECX + 0x476b43 /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x476cd3 /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x486d13 /* &_DYNAMIC */ /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -232,8 +232,8 @@ void __thiscall CINSBotFollowCommand::~CINSBotFollowCommand(CINSBotFollowCommand
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x476afa /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x476c8a /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x476afa /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */ /* vtable for CINSBotFollowCommand+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x476c8a /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */ /* vtable for CINSBotFollowCommand+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

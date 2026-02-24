@@ -38,10 +38,10 @@ CINSBotStuck::OnStart(CINSBotStuck *this,CINSNextBot *param_1,Action *param_2)
   *(int *)(param_2 + 0x54) = in_stack_0000000c[0x84];
   iVar2 = (**(code **)(*in_stack_0000000c + 0x548 /* CINSNextBot::GetLastKnownArea */))(in_stack_0000000c,uVar3);
   if (iVar2 == 0) {
-    Warning(unaff_EBX + 0x24fd09 /* "Bot stuck on non-existant nav mesh" */ /* "Bot stuck on non-existant nav mesh" */);
+    Warning(unaff_EBX + 0x24fd09 /* "Bot stuck on non-existant nav mesh" */ /* "Bot stuck on non-existant nav mesh" */ /* "Bot stuck on non-existant nav mesh" */);
     *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x24fcd5 /* "Not on the nav mesh" */ /* "Not on the nav mesh" */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x24fcd5 /* "Not on the nav mesh" */ /* "Not on the nav mesh" */ /* "Not on the nav mesh" */;
   }
   else {
     *(uint *)(iVar2 + 0x68) = *(uint *)(iVar2 + 0x68) | 0x80;
@@ -153,7 +153,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
   if (*(float *)((int)param_2 + 0x40) <= (float)fVar4 &&
       (float)fVar4 != *(float *)((int)param_2 + 0x40)) {
     fVar4 = (float10)CountdownTimer::Now();
-    fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f30ed /* 0.5f */ /* 0.5f */);
+    fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f30ed /* 0.5f */ /* 0.5f */ /* 0.5f */);
     if (*(float *)((int)param_2 + 0x40) != fVar5) {
       (**(code **)(*(int *)((int)param_2 + 0x38) + 4))((int)param_2 + 0x38,(int)param_2 + 0x40);
       *(float *)((int)param_2 + 0x40) = fVar5;
@@ -164,40 +164,40 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
     }
     fVar4 = (float10)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x134))
                                (in_stack_0000000c + 0x2060,(int)param_2 + 0x4c);
-    if (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */) <= (float)fVar4 &&
-        (float)fVar4 != *(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */)) {
+    if (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */ /* 32.0f */) <= (float)fVar4 &&
+        (float)fVar4 != *(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */ /* 32.0f */)) {
       piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
       (**(code **)(*piVar3 + 0x194 /* ILocomotion::ClearStuckStatus */))(piVar3,&UNK_00228410 + unaff_EBX);
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x250789 /* " moved from our stuck position" */ /* " moved from our stuck position" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x250789 /* " moved from our stuck position" */ /* " moved from our stuck position" */ /* " moved from our stuck position" */;
       return param_1;
     }
     pVVar8 = (Vector *)&local_58;
     uVar10 = 0;
     pVVar7 = local_64;
     CBasePlayer::EyeVectors(in_stack_0000000c,(Vector *)in_stack_0000000c,pVVar7,pVVar8);
-    fVar5 = *(float *)(unaff_EBX + 0x187911 /* 3.0f */ /* 3.0f */);
-    fVar6 = *(float *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+    fVar5 = *(float *)(unaff_EBX + 0x187911 /* 3.0f */ /* 3.0f */ /* 3.0f */);
+    fVar6 = *(float *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
     if (fVar5 < fVar6 - *(float *)((int)param_2 + 0x44)) {
       (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c,pVVar7,pVVar8,uVar10);
       fVar4 = (float10)CINSBotLocomotion::GetStillDuration(this_01);
-      fVar6 = *(float *)(unaff_EBX + 0x1874a9 /* 1.0f */ /* 1.0f */);
+      fVar6 = *(float *)(unaff_EBX + 0x1874a9 /* 1.0f */ /* 1.0f */ /* 1.0f */);
       if (fVar6 < (float)fVar4) {
         *(undefined4 *)((int)param_2 + 0x44) =
-             *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+             *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
         (**(code **)(*(int *)in_stack_0000000c + 0x8e8 /* NextBotPlayer::PressForwardButton */))(in_stack_0000000c,fVar6);
         piVar3 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
         (**(code **)(*piVar3 + 0xd8 /* PlayerLocomotion::Jump */))(piVar3);
         goto LAB_00731699;
       }
-      fVar6 = *(float *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+      fVar6 = *(float *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
     }
     if (fVar5 < fVar6 - *(float *)((int)param_2 + 0x48)) {
       (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
       fVar4 = (float10)CINSBotLocomotion::GetStillDuration(this_02);
-      if (*(float *)(unaff_EBX + 0x1f5745 /* 2.0f */ /* 2.0f */) <= (float)fVar4 &&
-          (float)fVar4 != *(float *)(unaff_EBX + 0x1f5745 /* 2.0f */ /* 2.0f */)) {
+      if (*(float *)(unaff_EBX + 0x1f5745 /* 2.0f */ /* 2.0f */ /* 2.0f */) <= (float)fVar4 &&
+          (float)fVar4 != *(float *)(unaff_EBX + 0x1f5745 /* 2.0f */ /* 2.0f */ /* 2.0f */)) {
         local_f0 = 0;
         uVar10 = CBaseEntity::GetTeamNumber((CBaseEntity *)in_stack_0000000c);
         uVar11 = 0;
@@ -208,7 +208,7 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         fVar1 = local_50;
         fVar6 = local_54;
         fVar5 = local_58;
-        local_8c = unaff_EBX + 0x463d85 /* vtable for INSVisionTraceFilterIgnoreTeam+0x8 */ /* vtable for INSVisionTraceFilterIgnoreTeam+0x8 */;
+        local_8c = unaff_EBX + 0x463d85 /* vtable for INSVisionTraceFilterIgnoreTeam+0x8 */ /* vtable for INSVisionTraceFilterIgnoreTeam+0x8 */ /* vtable for INSVisionTraceFilterIgnoreTeam+0x8 */;
         local_7c = 0;
         local_78 = 0;
         local_74 = 0;
@@ -222,9 +222,9 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         local_9c = 0;
         local_d8 = local_48;
         local_d4 = local_44;
-        local_cc = (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */) * fVar5 - local_4c) + local_40;
-        local_c8 = (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */) * fVar6 - local_48) + local_3c;
-        local_c4 = (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */) * fVar1 - local_44) + local_38;
+        local_cc = (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */ /* 32.0f */) * fVar5 - local_4c) + local_40;
+        local_c8 = (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */ /* 32.0f */) * fVar6 - local_48) + local_3c;
+        local_c4 = (*(float *)(unaff_EBX + 0x2067ad /* 32.0f */ /* 32.0f */ /* 32.0f */) * fVar1 - local_44) + local_38;
         local_a4 = 0;
         local_a8 = 0;
         local_ac = 0;
@@ -245,10 +245,10 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
           }
           DebugDrawLine(local_13c,local_130,0xff,0,0,true,fVar5);
         }
-        if ((local_110 < *(float *)(unaff_EBX + 0x1874a9 /* 1.0f */ /* 1.0f */)) || (local_105 != '\0')) {
+        if ((local_110 < *(float *)(unaff_EBX + 0x1874a9 /* 1.0f */ /* 1.0f */ /* 1.0f */)) || (local_105 != '\0')) {
           (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_28,in_stack_0000000c);
           (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_34,in_stack_0000000c);
-          fVar5 = *(float *)(unaff_EBX + 0x22ea9d /* CSWTCH.200+0xb4 */ /* CSWTCH.200+0xb4 */);
+          fVar5 = *(float *)(unaff_EBX + 0x22ea9d /* CSWTCH.200+0xb4 */ /* CSWTCH.200+0xb4 */ /* CSWTCH.200+0xb4 */);
           local_9c = 0;
           local_98 = 1;
           local_dc = local_34;
@@ -276,22 +276,22 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
             }
             DebugDrawLine(local_13c,local_130,0xff,0,0,true,fVar5);
           }
-          if ((local_110 < *(float *)(unaff_EBX + 0x1874a9 /* 1.0f */ /* 1.0f */)) || (local_105 != '\0')) {
+          if ((local_110 < *(float *)(unaff_EBX + 0x1874a9 /* 1.0f */ /* 1.0f */ /* 1.0f */)) || (local_105 != '\0')) {
             local_70 = 0;
             *(undefined4 *)((int)param_2 + 0x48) =
-                 *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+                 *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
             *(undefined4 *)param_1 = 0 /* Continue */;
             *(undefined4 *)(param_1 + 4) = 0;
             *(undefined4 *)(param_1 + 8) = 0;
-            local_8c = unaff_EBX + 0x462f0d /* vtable for INSVisionTraceFilter+0x8 */ /* vtable for INSVisionTraceFilter+0x8 */;
+            local_8c = unaff_EBX + 0x462f0d /* vtable for INSVisionTraceFilter+0x8 */ /* vtable for INSVisionTraceFilter+0x8 */ /* vtable for INSVisionTraceFilter+0x8 */;
             if (local_74 < 0) {
               return param_1;
             }
             if (local_7c == 0) {
               return param_1;
             }
-            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                      ((int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_7c);
+            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                      ((int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_7c);
             return param_1;
           }
           (**(code **)(*(int *)in_stack_0000000c + 0x8f8 /* NextBotPlayer::PressLeftButton */))(in_stack_0000000c,0x40000000 /* 2.0f */);
@@ -301,15 +301,15 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
         }
         local_70 = 0;
         *(undefined4 *)((int)param_2 + 0x48) =
-             *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */) + 0xc);
-        local_8c = unaff_EBX + 0x462f0d /* vtable for INSVisionTraceFilter+0x8 */ /* vtable for INSVisionTraceFilter+0x8 */;
+             *(undefined4 *)(**(int **)(unaff_EBX + 0x475235 /* &gpGlobals */ /* &gpGlobals */ /* &gpGlobals */) + 0xc);
+        local_8c = unaff_EBX + 0x462f0d /* vtable for INSVisionTraceFilter+0x8 */ /* vtable for INSVisionTraceFilter+0x8 */ /* vtable for INSVisionTraceFilter+0x8 */;
         if (local_74 < 0) {
           local_6c = local_7c;
         }
         else {
           if (local_7c != 0) {
-            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                      ((int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_7c);
+            (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                      ((int *)**(undefined4 **)(unaff_EBX + 0x47520d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_7c);
             local_7c = 0;
           }
           local_78 = 0;
@@ -319,8 +319,8 @@ CINSNextBot * __thiscall CINSBotStuck::Update(CINSBotStuck *this,CINSNextBot *pa
     }
     (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c);
     fVar4 = (float10)CINSBotLocomotion::GetStillDuration(this_00);
-    if ((*(float *)(unaff_EBX + 0x1f3101 /* 5.0f */ /* 5.0f */) <= (float)fVar4 &&
-         (float)fVar4 != *(float *)(unaff_EBX + 0x1f3101 /* 5.0f */ /* 5.0f */)) && (0 < *(int *)((int)param_2 + 100))) {
+    if ((*(float *)(unaff_EBX + 0x1f3101 /* 5.0f */ /* 5.0f */ /* 5.0f */) <= (float)fVar4 &&
+         (float)fVar4 != *(float *)(unaff_EBX + 0x1f3101 /* 5.0f */ /* 5.0f */ /* 5.0f */)) && (0 < *(int *)((int)param_2 + 100))) {
       piVar3 = *(int **)((int)param_2 + 0x58);
       local_8c = *piVar3;
       local_88 = piVar3[1];
@@ -360,7 +360,7 @@ int CINSBotStuck::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x24d550 /* "Stuck" */ /* "Stuck" */;
+  return extraout_ECX + 0x24d550 /* "Stuck" */ /* "Stuck" */ /* "Stuck" */;
 }
 
 
@@ -440,7 +440,7 @@ void CINSBotStuck::OnUnStuck(CINSNextBot *param_1)
   __i686_get_pc_thunk_cx();
   *(undefined4 *)param_1 = 3 /* Done */;
   *(undefined4 *)(param_1 + 4) = 0;
-  *(int *)(param_1 + 8) = extraout_ECX + 0x2507a7 /* "Successful unstuck " */ /* "Successful unstuck " */;
+  *(int *)(param_1 + 8) = extraout_ECX + 0x2507a7 /* "Successful unstuck " */ /* "Successful unstuck " */ /* "Successful unstuck " */;
   *(undefined4 *)(param_1 + 0xc) = 1;
   return;
 }
@@ -483,14 +483,14 @@ void __thiscall CINSBotStuck::~CINSBotStuck(CINSBotStuck *this)
   
   __i686_get_pc_thunk_bx();
   in_stack_00000004[0x19] = 0;
-  *in_stack_00000004 = unaff_EBX + 0x4661ce /* vtable for CINSBotStuck+0x8 */ /* vtable for CINSBotStuck+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x46635e /* vtable for CINSBotStuck+0x198 */ /* vtable for CINSBotStuck+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x4661ce /* vtable for CINSBotStuck+0x8 */ /* vtable for CINSBotStuck+0x8 */ /* vtable for CINSBotStuck+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x46635e /* vtable for CINSBotStuck+0x198 */ /* vtable for CINSBotStuck+0x198 */ /* vtable for CINSBotStuck+0x198 */;
   iVar1 = in_stack_00000004[0x16];
   this_00 = extraout_ECX;
   if (-1 < in_stack_00000004[0x18]) {
     if (iVar1 != 0) {
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47433e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x47433e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar1);
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47433e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x47433e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar1);
       in_stack_00000004[0x16] = 0;
       this_00 = extraout_ECX_00;
     }
@@ -541,14 +541,14 @@ void __thiscall CINSBotStuck::~CINSBotStuck(CINSBotStuck *this)
   
   __i686_get_pc_thunk_bx();
   in_stack_00000004[0x19] = 0;
-  *in_stack_00000004 = unaff_EBX + 0x46610e /* vtable for CINSBotStuck+0x8 */ /* vtable for CINSBotStuck+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x46629e /* vtable for CINSBotStuck+0x198 */ /* vtable for CINSBotStuck+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x46610e /* vtable for CINSBotStuck+0x8 */ /* vtable for CINSBotStuck+0x8 */ /* vtable for CINSBotStuck+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x46629e /* vtable for CINSBotStuck+0x198 */ /* vtable for CINSBotStuck+0x198 */ /* vtable for CINSBotStuck+0x198 */;
   iVar1 = in_stack_00000004[0x16];
   this_00 = extraout_ECX;
   if (-1 < in_stack_00000004[0x18]) {
     if (iVar1 != 0) {
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47427e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x47427e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar1);
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x47427e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x47427e /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),iVar1);
       in_stack_00000004[0x16] = 0;
       this_00 = extraout_ECX_00;
     }

@@ -107,7 +107,7 @@ CINSBotSweepArea::Update(CINSBotSweepArea *this,CINSNextBot *param_1,float param
       if (iVar6 == 0) {
         *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24e579 /* "No last known area when sweeping?" */ /* "No last known area when sweeping?" */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24e579 /* "No last known area when sweeping?" */ /* "No last known area when sweeping?" */ /* "No last known area when sweeping?" */;
         return param_1;
       }
       fVar11 = (float10)RandomFloat(0x3fc00000 /* 1.5f */,0x40000000 /* 2.0f */);
@@ -129,7 +129,7 @@ CINSBotSweepArea::Update(CINSBotSweepArea *this,CINSNextBot *param_1,float param
       local_60 = (Vector *)0x0;
       local_58 = in_stack_0000000c;
       iVar10 = *(int *)(iVar6 + 0x13c);
-      **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) = **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) + 1;
+      **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) = **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) + 1;
       local_5c = 0;
       if (0 < iVar10) {
         iVar10 = 0;
@@ -137,13 +137,13 @@ CINSBotSweepArea::Update(CINSBotSweepArea *this,CINSNextBot *param_1,float param
           while( true ) {
             iVar2 = *(int *)(*(int *)(iVar6 + 0x134) + iVar10 * 8);
             if ((iVar2 == 0) ||
-               (*(undefined4 *)(iVar2 + 0x148) = **(undefined4 **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */),
+               (*(undefined4 *)(iVar2 + 0x148) = **(undefined4 **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */),
                *(char *)(*(int *)(iVar6 + 0x134) + 4 + iVar10 * 8) == '\0')) break;
             if (local_58 == (CINSPathFollower *)0x0) goto LAB_00733de0;
             local_74 = 3;
             do {
               CNavArea::GetRandomPoint();
-              local_44 = *(float *)(unaff_EBX + 0x22a675 /* 57.0f */ /* 57.0f */) + local_2c;
+              local_44 = *(float *)(unaff_EBX + 0x22a675 /* 57.0f */ /* 57.0f */ /* 57.0f */) + local_2c;
               local_4c = local_34;
               local_48 = local_30;
               cVar5 = (**(code **)(*(int *)local_58 + 0x444 /* CINSPlayer::IsLineOfSightClear */))(local_58,&local_4c,1,local_58);
@@ -164,14 +164,14 @@ LAB_00733cca:
         iVar10 = 0;
         do {
           iVar2 = *(int *)(*(int *)(iVar6 + 0x134) + iVar10 * 8);
-          if (((iVar2 != 0) && (*(int *)(iVar2 + 0x148) != **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */))) &&
-             (*(int *)(iVar2 + 0x148) = **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */),
+          if (((iVar2 != 0) && (*(int *)(iVar2 + 0x148) != **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */))) &&
+             (*(int *)(iVar2 + 0x148) = **(int **)(unaff_EBX + 0x4730a1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */),
              *(char *)(iVar10 * 8 + *(int *)(iVar6 + 0x134) + 4) != '\0')) {
             if (local_58 == (CINSPathFollower *)0x0) break;
             local_70 = 3;
             do {
               CNavArea::GetRandomPoint();
-              local_44 = *(float *)(unaff_EBX + 0x22a675 /* 57.0f */ /* 57.0f */) + local_20;
+              local_44 = *(float *)(unaff_EBX + 0x22a675 /* 57.0f */ /* 57.0f */ /* 57.0f */) + local_20;
               local_4c = local_28;
               local_48 = local_24;
               cVar5 = (**(code **)(*(int *)local_58 + 0x444 /* CINSPlayer::IsLineOfSightClear */))(local_58,&local_4c,1,local_58);
@@ -194,7 +194,7 @@ LAB_00733de0:
         piVar7 = (int *)(**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
         pcVar3 = *(code **)(*piVar7 + 0xd4);
         CINSNextBot::GetViewPosition(local_40);
-        (*pcVar3)(piVar7,local_40,3,fVar12,0,unaff_EBX + 0x24e59d /* "Looking at random visible areas" */ /* "Looking at random visible areas" */);
+        (*pcVar3)(piVar7,local_40,3,fVar12,0,unaff_EBX + 0x24e59d /* "Looking at random visible areas" */ /* "Looking at random visible areas" */ /* "Looking at random visible areas" */);
       }
       local_60 = (Vector *)0x0;
       *(undefined4 *)param_1 = 0 /* Continue */;
@@ -206,8 +206,8 @@ LAB_00733de0:
       if (local_6c[0] == 0) {
         return param_1;
       }
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x472e9d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x472e9d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_6c[0]);
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x472e9d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x472e9d /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_6c[0]);
       return param_1;
     }
   }
@@ -217,7 +217,7 @@ LAB_00733de0:
     if (*(float *)((int)param_2 + 0x48c8) <= (float)fVar11 &&
         (float)fVar11 != *(float *)((int)param_2 + 0x48c8)) {
       fVar11 = (float10)CountdownTimer::Now();
-      fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x220c65 /* 2.5f */ /* 2.5f */);
+      fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x220c65 /* 2.5f */ /* 2.5f */ /* 2.5f */);
       if (*(float *)((int)param_2 + 0x48c8) != fVar12) {
         (**(code **)(*(int *)((int)param_2 + 0x48c0) + 4))
                   ((int)param_2 + 0x48c0,(int)param_2 + 0x48c8);
@@ -241,7 +241,7 @@ LAB_00733de0:
       (**(code **)(*(int *)in_stack_0000000c + 0x20c /* CINSNextBot::EyePosition */))(&local_4c,in_stack_0000000c);
       pCVar9 = extraout_ECX_01;
       if (((*(uint *)((int)param_2 + 0x48bc) < 0x10) &&
-          (piVar7 = (int *)(**(int **)(unaff_EBX + 0x472cdd /* &TheNavMesh */ /* &TheNavMesh */) + 0x974 +
+          (piVar7 = (int *)(**(int **)(unaff_EBX + 0x472cdd /* &TheNavMesh */ /* &TheNavMesh */ /* &TheNavMesh */) + 0x974 +
                            *(uint *)((int)param_2 + 0x48bc) * 0x14), piVar7 != (int *)0x0)) &&
          (pCVar9 = (CINSPathFollower *)piVar7[3], 0 < (int)pCVar9)) {
         iVar6 = 0;
@@ -257,7 +257,7 @@ LAB_00733de0:
               iVar10 = *(int *)((int)param_2 + 0x48b8) * 3;
               pCVar9 = (CINSPathFollower *)(piVar4 + iVar10 + 0x79);
               fVar11 = (float10)CountdownTimer::Now();
-              fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x1f07d5 /* 10.0f */ /* 10.0f */);
+              fVar12 = (float)fVar11 + *(float *)(unaff_EBX + 0x1f07d5 /* 10.0f */ /* 10.0f */ /* 10.0f */);
               if ((float)piVar4[iVar10 + 0x7b] != fVar12) {
                 (**(code **)(piVar4[iVar10 + 0x79] + 4))(pCVar9,piVar4 + iVar10 + 0x7b);
                 piVar4[iVar10 + 0x7b] = (int)fVar12;
@@ -281,7 +281,7 @@ LAB_00733de0:
       if (cVar5 == '\0') {
         *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x24e563 /* "No areas to sweep." */ /* "No areas to sweep." */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x24e563 /* "No areas to sweep." */ /* "No areas to sweep." */ /* "No areas to sweep." */;
         return param_1;
       }
       fVar11 = (float10)CINSNextBot::MaxPathLength();
@@ -344,7 +344,7 @@ CINSNextBot * CINSBotSweepArea::OnMoveToSuccess(CINSNextBot *param_1,Path *param
     iVar1 = CBaseEntity::GetTeamNumber(this);
     iVar1 = (iVar1 * 3 + -6) * 4 + 0x1f0 + *(int *)(param_2 + 0x48b4);
     fVar2 = (float10)CountdownTimer::Now();
-    fVar3 = (float)fVar2 + *(float *)(unaff_EBX + 0x1f0bf5 /* 10.0f */ /* 10.0f */);
+    fVar3 = (float)fVar2 + *(float *)(unaff_EBX + 0x1f0bf5 /* 10.0f */ /* 10.0f */ /* 10.0f */);
     if (*(float *)(iVar1 + 0x14) != fVar3) {
       (**(code **)(*(int *)(iVar1 + 0xc) + 4))(iVar1 + 0xc,iVar1 + 0x14);
       *(float *)(iVar1 + 0x14) = fVar3;
@@ -355,7 +355,7 @@ CINSNextBot * CINSBotSweepArea::OnMoveToSuccess(CINSNextBot *param_1,Path *param
     }
   }
   fVar2 = (float10)CountdownTimer::Now();
-  fVar3 = (float)fVar2 + *(float *)(unaff_EBX + 0x1f11ad /* 7.0f */ /* 7.0f */);
+  fVar3 = (float)fVar2 + *(float *)(unaff_EBX + 0x1f11ad /* 7.0f */ /* 7.0f */ /* 7.0f */);
   if (*(float *)(param_2 + 0x48d4) != fVar3) {
     (**(code **)(*(int *)(param_2 + 0x48cc) + 4))(param_2 + 0x48cc,param_2 + 0x48d4);
     *(float *)(param_2 + 0x48d4) = fVar3;
@@ -429,7 +429,7 @@ undefined4 __thiscall CINSBotSweepArea::GetAreaToSweep(CINSBotSweepArea *this)
   if (0xf < *(uint *)(in_stack_00000004 + 0x48bc)) {
     return 0;
   }
-  piVar2 = (int *)(**(int **)(unaff_EBX + 0x472efd /* &TheNavMesh */ /* &TheNavMesh */) + 0x974 +
+  piVar2 = (int *)(**(int **)(unaff_EBX + 0x472efd /* &TheNavMesh */ /* &TheNavMesh */ /* &TheNavMesh */) + 0x974 +
                   *(uint *)(in_stack_00000004 + 0x48bc) * 0x14);
   if (piVar2 == (int *)0x0) {
     return 0;
@@ -480,8 +480,8 @@ LAB_007338af:
   iVar6 = local_3c[0];
   if (-1 < local_3c[2]) {
     if (local_3c[0] != 0) {
-      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4730bd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
-                ((int *)**(undefined4 **)(unaff_EBX + 0x4730bd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_3c[0]);
+      (**(code **)(*(int *)**(undefined4 **)(unaff_EBX + 0x4730bd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */) + 8))
+                ((int *)**(undefined4 **)(unaff_EBX + 0x4730bd /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */ /* &GCSDK::GetPchTempTextBuffer */),local_3c[0]);
       local_3c[0] = 0;
       pCVar4 = extraout_ECX_02;
     }
@@ -527,8 +527,8 @@ void __thiscall CINSBotSweepArea::~CINSBotSweepArea(CINSBotSweepArea *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x4647fa /* vtable for CINSBotSweepArea+0x8 */ /* vtable for CINSBotSweepArea+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x46498a /* vtable for CINSBotSweepArea+0x198 */ /* vtable for CINSBotSweepArea+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x4647fa /* vtable for CINSBotSweepArea+0x8 */ /* vtable for CINSBotSweepArea+0x8 */ /* vtable for CINSBotSweepArea+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x46498a /* vtable for CINSBotSweepArea+0x198 */ /* vtable for CINSBotSweepArea+0x198 */ /* vtable for CINSBotSweepArea+0x198 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   return;
@@ -568,8 +568,8 @@ void __thiscall CINSBotSweepArea::~CINSBotSweepArea(CINSBotSweepArea *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x46478a /* vtable for CINSBotSweepArea+0x8 */ /* vtable for CINSBotSweepArea+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x46491a /* vtable for CINSBotSweepArea+0x198 */ /* vtable for CINSBotSweepArea+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x46478a /* vtable for CINSBotSweepArea+0x8 */ /* vtable for CINSBotSweepArea+0x8 */ /* vtable for CINSBotSweepArea+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x46491a /* vtable for CINSBotSweepArea+0x198 */ /* vtable for CINSBotSweepArea+0x198 */ /* vtable for CINSBotSweepArea+0x198 */;
   CINSPathFollower::~CINSPathFollower(this_00);
   Action<CINSNextBot>::~Action(this_01);
   operator_delete(in_stack_00000004);

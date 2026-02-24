@@ -25,9 +25,9 @@ void __thiscall CINSBotCaptureCP::CINSBotCaptureCP(CINSBotCaptureCP *this,int pa
   __i686_get_pc_thunk_bx();
   *(undefined4 *)(param_1 + 0x20) = 0;
   *(undefined **)param_1 = &UNK_0048300d + unaff_EBX;
-  *(int *)(param_1 + 4) = unaff_EBX + 0x4831a1 /* vtable for CINSBotCaptureCP+0x19c */ /* vtable for CINSBotCaptureCP+0x19c */;
-  pcVar1 = (code *)(unaff_EBX + -0x4e28ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
-  iVar2 = unaff_EBX + 0x41519d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  *(int *)(param_1 + 4) = unaff_EBX + 0x4831a1 /* vtable for CINSBotCaptureCP+0x19c */ /* vtable for CINSBotCaptureCP+0x19c */ /* vtable for CINSBotCaptureCP+0x19c */;
+  pcVar1 = (code *)(unaff_EBX + -0x4e28ab /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
+  iVar2 = unaff_EBX + 0x41519d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
   *(undefined4 *)(param_1 + 0x24) = 0;
   *(undefined4 *)(param_1 + 0x28) = 0;
   *(undefined4 *)(param_1 + 0xc) = 0;
@@ -50,7 +50,7 @@ void __thiscall CINSBotCaptureCP::CINSBotCaptureCP(CINSBotCaptureCP *this,int pa
   (*pcVar1)(param_1 + 0x48,param_1 + 0x4c);
   *(undefined4 *)(param_1 + 0x50) = 0xbf800000 /* -1.0f */;
   (**(code **)(*(int *)(param_1 + 0x48) + 4))(param_1 + 0x48,param_1 + 0x50);
-  iVar3 = *(int *)(unaff_EBX + 0x493c35 /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */);
+  iVar3 = *(int *)(unaff_EBX + 0x493c35 /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */ /* &vtable for IntervalTimer */);
   *(undefined4 *)(param_1 + 0x74) = 0xbf800000 /* -1.0f */;
   *(int *)(param_1 + 0x70) = iVar3 + 8;
   (**(code **)(iVar3 + 0x10))(param_1 + 0x70,param_1 + 0x74);
@@ -92,11 +92,11 @@ CINSBotCaptureCP::OnStart(CINSBotCaptureCP *this,CINSNextBot *param_1,Action *pa
   uVar4 = *(undefined4 *)(param_2 + 0x54);
   uVar5 = **(undefined4 **)(&DAT_0049382a + unaff_EBX);
   CINSNavMesh::GetControlPointHidingSpot(iVar3);
-  fVar1 = *(float *)(unaff_EBX + 0x21633e /* -0.01f */ /* -0.01f */);
+  fVar1 = *(float *)(unaff_EBX + 0x21633e /* -0.01f */ /* -0.01f */ /* -0.01f */);
   *(float *)(param_2 + 0x58) = local_28;
   *(float *)(param_2 + 0x5c) = local_24;
   *(float *)(param_2 + 0x60) = local_20;
-  if ((((local_28 <= fVar1) || (fVar2 = *(float *)(unaff_EBX + 0x2121a2 /* 0.01f */ /* 0.01f */), fVar2 <= local_28)) ||
+  if ((((local_28 <= fVar1) || (fVar2 = *(float *)(unaff_EBX + 0x2121a2 /* 0.01f */ /* 0.01f */ /* 0.01f */), fVar2 <= local_28)) ||
       (local_24 <= fVar1)) || (((fVar2 <= local_24 || (local_20 <= fVar1)) || (fVar2 <= local_20))))
   {
     uVar4 = (**(code **)(*in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c,uVar5,uVar4);
@@ -110,7 +110,7 @@ CINSBotCaptureCP::OnStart(CINSBotCaptureCP *this,CINSNextBot *param_1,Action *pa
   else {
     *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x26d7c6 /* "Unable to find hiding spots at this control point" */ /* "Unable to find hiding spots at this control point" */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x26d7c6 /* "Unable to find hiding spots at this control point" */ /* "Unable to find hiding spots at this control point" */ /* "Unable to find hiding spots at this control point" */;
   }
   return param_1;
 }
@@ -196,7 +196,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
   if (*(float *)((int)param_2 + 0x50) <= (float)fVar20 &&
       (float)fVar20 != *(float *)((int)param_2 + 0x50)) {
     fVar20 = (float10)CountdownTimer::Now();
-    fVar21 = (float)fVar20 + *(float *)(unaff_EBX + 0x2108e1 /* 0.25f */ /* 0.25f */);
+    fVar21 = (float)fVar20 + *(float *)(unaff_EBX + 0x2108e1 /* 0.25f */ /* 0.25f */ /* 0.25f */);
     if (*(float *)((int)param_2 + 0x50) != fVar21) {
       (**(code **)(*(int *)((int)param_2 + 0x48) + 4))((int)param_2 + 0x48,(int)param_2 + 0x50);
       *(float *)((int)param_2 + 0x50) = fVar21;
@@ -210,24 +210,24 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
     if ((iVar8 == 0) ||
        (((fVar21 = *(float *)(**(int **)(&DAT_004936f5 + unaff_EBX) + 0xc) -
                    *(float *)((int)param_2 + 0x34),
-         *(float *)(unaff_EBX + 0x213c05 /* 2.0f */ /* 2.0f */) <= fVar21 && fVar21 != *(float *)(unaff_EBX + 0x213c05 /* 2.0f */ /* 2.0f */) &&
+         *(float *)(unaff_EBX + 0x213c05 /* 2.0f */ /* 2.0f */ /* 2.0f */) <= fVar21 && fVar21 != *(float *)(unaff_EBX + 0x213c05 /* 2.0f */ /* 2.0f */ /* 2.0f */) &&
          (cVar6 = CINSNextBot::IsIdle((CINSNextBot *)param_2), cVar6 != '\0')) &&
         (fVar20 = (float10)CINSNextBot::GetIdleDuration(this_00),
-        *(float *)(unaff_EBX + 0x1a5dd1 /* 3.0f */ /* 3.0f */) <= (float)fVar20 &&
-        (float)fVar20 != *(float *)(unaff_EBX + 0x1a5dd1 /* 3.0f */ /* 3.0f */))))) {
+        *(float *)(unaff_EBX + 0x1a5dd1 /* 3.0f */ /* 3.0f */ /* 3.0f */) <= (float)fVar20 &&
+        (float)fVar20 != *(float *)(unaff_EBX + 0x1a5dd1 /* 3.0f */ /* 3.0f */ /* 3.0f */))))) {
       uVar23 = *(undefined4 *)((int)param_2 + 0x54);
-      uVar22 = **(undefined4 **)(unaff_EBX + 0x49350d /* &TheNavMesh */ /* &TheNavMesh */);
+      uVar22 = **(undefined4 **)(unaff_EBX + 0x49350d /* &TheNavMesh */ /* &TheNavMesh */ /* &TheNavMesh */);
       CINSNavMesh::GetControlPointHidingSpot((int)&local_74);
       fVar21 = *(float *)(CGameRules::CreateStandardEntities + unaff_EBX + 1);
       *(float *)((int)param_2 + 0x58) = local_74;
       *(float *)((int)param_2 + 0x5c) = local_70;
       *(float *)((int)param_2 + 0x60) = local_6c;
-      if (((((fVar21 < local_74) && (fVar1 = *(float *)(unaff_EBX + 0x211e85 /* 0.01f */ /* 0.01f */), local_74 < fVar1)) &&
+      if (((((fVar21 < local_74) && (fVar1 = *(float *)(unaff_EBX + 0x211e85 /* 0.01f */ /* 0.01f */ /* 0.01f */), local_74 < fVar1)) &&
            (fVar21 < local_70)) && ((local_70 < fVar1 && (fVar21 < local_6c)))) &&
          (local_6c < fVar1)) {
         *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x26d4a9 /* "Unable to find hiding spots at this control point" */ /* "Unable to find hiding spots at this control point" */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x26d4a9 /* "Unable to find hiding spots at this control point" */ /* "Unable to find hiding spots at this control point" */ /* "Unable to find hiding spots at this control point" */;
         return param_1;
       }
       uVar23 = (**(code **)(*(int *)in_stack_0000000c + 0x96c /* CINSNextBot::GetLocomotionInterface */))(in_stack_0000000c,uVar22,uVar23);
@@ -245,7 +245,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
       if (iVar8 == 1) {
         *(undefined4 *)param_1 = 3 /* Done */;
         *(undefined4 *)(param_1 + 4) = 0;
-        *(int *)(param_1 + 8) = unaff_EBX + 0x26d412 /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
+        *(int *)(param_1 + 8) = unaff_EBX + 0x26d412 /* "Attacking nearby threats" */ /* "Attacking nearby threats" */ /* "Attacking nearby threats" */;
         return param_1;
       }
     }
@@ -253,19 +253,19 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
     if (1 < iVar8 - 2U) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x26d42b /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x26d42b /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */ /* "Bot is not on a playteam" */;
       return param_1;
     }
-    iVar18 = *(int *)(**(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x490 + *(int *)((int)param_2 + 0x54) * 4);
+    iVar18 = *(int *)(**(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x490 + *(int *)((int)param_2 + 0x54) * 4);
     iVar19 = CBaseEntity::GetTeamNumber((CBaseEntity *)param_2);
     if (iVar19 == iVar18) {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x26d444 /* "Successfully captured." */ /* "Successfully captured." */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x26d444 /* "Successfully captured." */ /* "Successfully captured." */ /* "Successfully captured." */;
       return param_1;
     }
     iVar18 = *(int *)((int)param_2 + 0x54);
-    iVar19 = **(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
+    iVar19 = **(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
     iVar3 = *(int *)(iVar19 + 0x450 + iVar18 * 4);
     if ((iVar8 != *(int *)(iVar19 + 0x490 + iVar18 * 4)) ||
        (bVar5 = true, (iVar8 == 2) + 2 != iVar3)) {
@@ -281,13 +281,13 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
       }
     }
     if ((bVar5) || (0 < local_1a8)) {
-      uVar23 = CINSNavMesh::GetRandomControlPointArea(**(int **)(unaff_EBX + 0x49350d /* &TheNavMesh */ /* &TheNavMesh */));
+      uVar23 = CINSNavMesh::GetRandomControlPointArea(**(int **)(unaff_EBX + 0x49350d /* &TheNavMesh */ /* &TheNavMesh */ /* &TheNavMesh */));
       CINSNextBot::AddInvestigation(in_stack_0000000c,in_stack_0000000c,uVar23,0);
       pCVar13 = (CNavArea *)::operator_new(0x4900);
       CINSBotInvestigate::CINSBotInvestigate(this_03,pCVar13);
       *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(CNavArea **)(param_1 + 4) = pCVar13;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x26d4dd /* "CP Contested, trying to find threat" */ /* "CP Contested, trying to find threat" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x26d4dd /* "CP Contested, trying to find threat" */ /* "CP Contested, trying to find threat" */ /* "CP Contested, trying to find threat" */;
       return param_1;
     }
     if ((((*(uint *)((int)param_2 + 0x58) & 0x7f800000) != 0x7f800000) &&
@@ -299,15 +299,15 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
     }
     fVar20 = (float10)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x134))
                                 (pCVar17,(int)param_2 + 0x58);
-    if ((((float)fVar20 < *(float *)(unaff_EBX + 0x213c09 /* 200.0f */ /* 200.0f */)) &&
+    if ((((float)fVar20 < *(float *)(unaff_EBX + 0x213c09 /* 200.0f */ /* 200.0f */ /* 200.0f */)) &&
         (*(char *)((int)param_2 + 0x6c) != '\0')) &&
-       ((iVar8 = *(int *)(**(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x6f0 +
+       ((iVar8 = *(int *)(**(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */ /* &g_pObjectiveResource */) + 0x6f0 +
                          *(int *)((int)param_2 + 0x54) * 4), iVar8 == 0 || (iVar8 == 8)))) {
       pvVar14 = ::operator_new(0x4900);
       CINSBotDestroyCache::CINSBotDestroyCache((CINSBotDestroyCache *)param_2,(int)pvVar14);
       *(undefined4 *)param_1 = 1 /* ChangeTo */;
       *(void **)(param_1 + 4) = pvVar14;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x26d501 /* "Point type is a Cache, blow it up!" */ /* "Point type is a Cache, blow it up!" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x26d501 /* "Point type is a Cache, blow it up!" */ /* "Point type is a Cache, blow it up!" */ /* "Point type is a Cache, blow it up!" */;
       return param_1;
     }
   }
@@ -316,7 +316,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
     if ((float)fVar20 < *(float *)((int)param_2 + 0x44) ||
         (float)fVar20 == *(float *)((int)param_2 + 0x44)) goto LAB_007132f0;
     fVar20 = (float10)CountdownTimer::Now();
-    fVar21 = (float)fVar20 + *(float *)(unaff_EBX + 0x213c05 /* 2.0f */ /* 2.0f */);
+    fVar21 = (float)fVar20 + *(float *)(unaff_EBX + 0x213c05 /* 2.0f */ /* 2.0f */ /* 2.0f */);
     if (*(float *)((int)param_2 + 0x44) != fVar21) {
       (**(code **)(*(int *)((int)param_2 + 0x3c) + 4))((int)param_2 + 0x3c,(int)param_2 + 0x44);
       *(float *)((int)param_2 + 0x44) = fVar21;
@@ -327,7 +327,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
       *(undefined4 *)((int)param_2 + 0x40) = 0x40000000 /* 2.0f */;
       this_01 = extraout_ECX_04;
     }
-    CFmtStrN<256,false>::CFmtStrN(this_01,local_19c,unaff_EBX + 0x26d495 /* "Bounding Update:" */ /* "Bounding Update:" */);
+    CFmtStrN<256,false>::CFmtStrN(this_01,local_19c,unaff_EBX + 0x26d495 /* "Bounding Update:" */ /* "Bounding Update:" */ /* "Bounding Update:" */);
     pCVar17 = in_stack_0000000c + 0x2060;
     iVar8 = (**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x114))(pCVar17);
     piVar11 = *(int **)(CUtlRBTree<CUtlMap<CUtlSymbol,CGlobalEventLine*,unsigned_short,bool(*)(CUtlSymbol_const&,CUtlSymbol_const&)>::Node_t,unsigned_short,CUtlMap<CUtlSymbol,CGlobalEventLine*,unsigned_short,bool(*)(CUtlSymbol_const&,CUtlSymbol_const&)>::CKeyLess,CUtlMemory<UtlRBTreeNode_t<CUtlMap<CUtlSymbol,CGlobalEventLine*,unsigned_short,bool(*)(CUtlSymbol_const&,CUtlSymbol_const&)>::Node_t,unsigned_short>,unsigned_short>>
@@ -348,7 +348,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
         }
         piVar11 = (int *)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x114))(pCVar17);
         uVar23 = (**(code **)(*piVar11 + 0x20))(piVar11);
-        pcVar16 = (char *)(unaff_EBX + 0x26d3ff /* " newgoal" */ /* " newgoal" */);
+        pcVar16 = (char *)(unaff_EBX + 0x26d3ff /* " newgoal" */ /* " newgoal" */ /* " newgoal" */);
         *(undefined4 *)((int)param_2 + 0x38) = uVar23;
         pcVar12 = local_197 + local_94;
         if (pcVar12 < local_98) {
@@ -370,7 +370,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
         local_84 = *(float *)(in_stack_0000000c + 0x210) - *(float *)(iVar8 + 0x10);
         local_8c = *(float *)(in_stack_0000000c + 0x208) - *(float *)(iVar8 + 8);
         VectorNormalize((Vector *)&local_8c);
-        local_3c = *(float *)(unaff_EBX + 0x1a5975 /* 100.0f */ /* 100.0f */);
+        local_3c = *(float *)(unaff_EBX + 0x1a5975 /* 100.0f */ /* 100.0f */ /* 100.0f */);
         local_44 = local_8c * local_3c;
         local_40 = (float)local_88 * local_3c;
         local_3c = local_3c * local_84;
@@ -391,7 +391,7 @@ CINSNextBot * CINSBotCaptureCP::Update(CINSNextBot *param_1,float param_2)
                     ((Vector *)(in_stack_0000000c + 0x208),(Vector *)&local_44,5.0,0xff,0xff,0xff,
                      0xff,true,2.0);
         }
-        pcVar16 = (char *)(unaff_EBX + 0x26d408 /* " no cover" */ /* " no cover" */);
+        pcVar16 = (char *)(unaff_EBX + 0x26d408 /* " no cover" */ /* " no cover" */ /* " no cover" */);
         pcVar12 = local_197 + local_94;
         if (pcVar12 < local_98) {
           do {
@@ -415,7 +415,7 @@ LAB_00713cb6:
     goto LAB_007132f0;
   }
   iVar8 = *(int *)((int)param_2 + 0x54);
-  iVar18 = **(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
+  iVar18 = **(int **)(unaff_EBX + 0x493b71 /* &g_pObjectiveResource */ /* &g_pObjectiveResource */ /* &g_pObjectiveResource */);
   iVar19 = *(int *)(iVar18 + 0x450 + iVar8 * 4);
   if (iVar19 == 2) {
     iVar8 = *(int *)(iVar18 + 0x590 + iVar8 * 4);
@@ -423,7 +423,7 @@ LAB_00713477:
     if (iVar8 != 0) {
       in_stack_0000000c[0x2290] = (CINSNextBot)0x1;
       (**(code **)(*(int *)in_stack_0000000c + 0x970 /* CINSNextBot::GetBodyInterface */))(in_stack_0000000c);
-      iVar8 = unaff_EBX + 0x26d476 /* "Crouching at CP" */ /* "Crouching at CP" */;
+      iVar8 = unaff_EBX + 0x26d476 /* "Crouching at CP" */ /* "Crouching at CP" */ /* "Crouching at CP" */;
       this_04 = (CUtlVector<CNavArea*,CUtlMemory<CNavArea*,int>> *)0x7;
       uVar22 = 3;
       uVar23 = in_stack_00000010;
@@ -440,7 +440,7 @@ LAB_00713477:
           local_88 = (int *)0x0;
           local_80 = 0;
           local_7c = (CNavArea **)0x0;
-          **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) = **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) + 1;
+          **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) = **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */) + 1;
           local_78 = (int *)0x0;
           local_8c = (float)((uint)local_8c & 0xffffff00);
           if (0 < *(int *)(iVar8 + 0x13c)) {
@@ -450,7 +450,7 @@ LAB_00713477:
                 pCVar2 = *(CUtlVector<CNavArea*,CUtlMemory<CNavArea*,int>> **)
                           (*(int *)(iVar8 + 0x134) + iVar18 * 8);
                 if ((pCVar2 != (CUtlVector<CNavArea*,CUtlMemory<CNavArea*,int>> *)0x0) &&
-                   (*(undefined4 *)(pCVar2 + 0x148) = **(undefined4 **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */),
+                   (*(undefined4 *)(pCVar2 + 0x148) = **(undefined4 **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */),
                    (*(byte *)(*(int *)(iVar8 + 0x134) + 4 + iVar18 * 8) & 2) != 0)) break;
 LAB_00713558:
                 iVar18 = iVar18 + 1;
@@ -482,8 +482,8 @@ LAB_00713618:
             iVar19 = 0;
             do {
               iVar3 = *(int *)(*(int *)(iVar18 + 0x134) + iVar19 * 8);
-              if ((iVar3 != 0) && (*(int *)(iVar3 + 0x148) != **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */))) {
-                *(int *)(iVar3 + 0x148) = **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */);
+              if ((iVar3 != 0) && (*(int *)(iVar3 + 0x148) != **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */))) {
+                *(int *)(iVar3 + 0x148) = **(int **)(unaff_EBX + 0x4938d1 /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */ /* &CNavArea::s_nCurrVisTestCounter */);
                 puVar15 = (undefined4 *)(iVar19 * 8 + *(int *)(iVar18 + 0x134));
                 if ((*(byte *)(puVar15 + 1) & 2) != 0) {
                   local_2c[0] = (CUtlVector<CNavArea*,CUtlMemory<CNavArea*,int>> *)*puVar15;
@@ -516,7 +516,7 @@ LAB_007136f6:
               pcVar4 = *(code **)(*piVar11 + 0xd4);
               CNavArea::GetRandomPoint();
               CINSNextBot::GetViewPosition(local_50);
-              (*pcVar4)(piVar11,local_50,0,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x26d486 /* "Capture Aiming" */ /* "Capture Aiming" */);
+              (*pcVar4)(piVar11,local_50,0,0x3dcccccd /* 0.1f */,0,unaff_EBX + 0x26d486 /* "Capture Aiming" */ /* "Capture Aiming" */ /* "Capture Aiming" */);
             }
           }
           local_7c = (CNavArea **)0x0;
@@ -551,7 +551,7 @@ LAB_007136f6:
       uVar23 = 0;
       fVar20 = (float10)CINSNextBot::TransientlyConsistentRandomValue
                                   (pCVar17,(float)in_stack_0000000c,0x41000000 /* 8.0f */);
-      if ((double)(float)fVar20 < *(double *)(unaff_EBX + 0x26d58d /* rodata:0x33333333 */ /* rodata:0x33333333 */)) {
+      if ((double)(float)fVar20 < *(double *)(unaff_EBX + 0x26d58d /* rodata:0x33333333 */ /* rodata:0x33333333 */ /* rodata:0x33333333 */)) {
         (**(code **)(*(int *)in_stack_0000000c + 0x95c /* CINSNextBot::PressIronsightButton */))(in_stack_0000000c,in_stack_00000010,uVar23)
         ;
       }
@@ -564,6 +564,7 @@ LAB_007136f6:
   }
   DevMsg((char *)(unaff_EBX + 0x26d45b /* "Not on the point, moving.
 " */ /* "Not on the point, moving.
+" */ /* "Not on the point, moving.
 " */));
   uVar23 = *(undefined4 *)((int)param_2 + 0x54);
   CINSNavMesh::GetControlPointHidingSpot((int)&local_68);
@@ -571,11 +572,11 @@ LAB_007136f6:
   *(float *)((int)param_2 + 0x58) = local_68;
   *(float *)((int)param_2 + 0x5c) = local_64;
   *(float *)((int)param_2 + 0x60) = local_60;
-  if (((((fVar21 < local_68) && (fVar1 = *(float *)(unaff_EBX + 0x211e85 /* 0.01f */ /* 0.01f */), local_68 < fVar1)) &&
+  if (((((fVar21 < local_68) && (fVar1 = *(float *)(unaff_EBX + 0x211e85 /* 0.01f */ /* 0.01f */ /* 0.01f */), local_68 < fVar1)) &&
        (fVar21 < local_64)) && ((local_64 < fVar1 && (fVar21 < local_60)))) && (local_60 < fVar1)) {
     *(undefined4 *)param_1 = 3 /* Done */;
     *(undefined4 *)(param_1 + 4) = 0;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x26d525 /* "Unable to find hiding spots at this control point, falling back to investigate" */ /* "Unable to find hiding spots at this control point, falling back to investigate" */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x26d525 /* "Unable to find hiding spots at this control point, falling back to investigate" */ /* "Unable to find hiding spots at this control point, falling back to investigate" */ /* "Unable to find hiding spots at this control point, falling back to investigate" */;
     return param_1;
   }
   if (*(int *)((int)param_2 + 0x74) != -0x40800000 /* -1.0f */) {
@@ -654,7 +655,7 @@ int CINSBotCaptureCP::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x26c388 /* "Capturing CP" */ /* "Capturing CP" */;
+  return extraout_ECX + 0x26c388 /* "Capturing CP" */ /* "Capturing CP" */ /* "Capturing CP" */;
 }
 
 
@@ -737,8 +738,8 @@ CINSBotCaptureCP::OnMoveToSuccess(CINSBotCaptureCP *this,CINSNextBot *param_1,Pa
   
   __i686_get_pc_thunk_bx();
   fVar1 = (float10)(**(code **)(*(int *)(in_stack_0000000c + 0x2060) + 0x134))
-                             (in_stack_0000000c + 0x2060,extraout_EDX + 0x58 /* CINSBotCaptureCP::OnMoveToSuccess */ /* CINSBotCaptureCP::OnMoveToSuccess */);
-  if ((float)fVar1 < *(float *)(unaff_EBX + 0x1a5f89 /* 100.0f */ /* 100.0f */)) {
+                             (in_stack_0000000c + 0x2060,extraout_EDX + 0x58 /* CINSBotCaptureCP::OnMoveToSuccess */ /* CINSBotCaptureCP::OnMoveToSuccess */ /* CINSBotCaptureCP::OnMoveToSuccess */);
+  if ((float)fVar1 < *(float *)(unaff_EBX + 0x1a5f89 /* 100.0f */ /* 100.0f */ /* 100.0f */)) {
     fVar1 = (float10)IntervalTimer::Now();
     if (*(float *)(param_2 + 0x74) != (float)fVar1) {
       (**(code **)(*(int *)(param_2 + 0x70) + 8))(param_2 + 0x70,param_2 + 0x74);
@@ -784,16 +785,16 @@ CINSNextBot * CINSBotCaptureCP::OnStuck(CINSNextBot *param_1)
   *(undefined1 *)((int)piVar2 + 0x31) = 0;
   piVar2[0xb] = 0;
   piVar2[0xd] = 0;
-  iVar1 = *(int *)(unaff_EBX + 0x493f6d /* &vtable for CINSBotStuck */ /* &vtable for CINSBotStuck */);
+  iVar1 = *(int *)(unaff_EBX + 0x493f6d /* &vtable for CINSBotStuck */ /* &vtable for CINSBotStuck */ /* &vtable for CINSBotStuck */);
   piVar2[0xf] = 0;
   piVar2[1] = iVar1 + 0x198;
   *piVar2 = iVar1 + 8;
-  piVar2[0xe] = unaff_EBX + 0x41576d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  piVar2[0xe] = unaff_EBX + 0x41576d /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
   CountdownTimer::NetworkStateChanged(piVar2 + 0xe);
   piVar2[0x10] = -0x40800000 /* -1.0f */;
   (**(code **)(piVar2[0xe] + 4))(piVar2 + 0xe,piVar2 + 0x10);
   piVar2[0x16] = 0;
-  *(int *)(param_1 + 8) = unaff_EBX + 0x26d006 /* "I'm Stuck" */ /* "I'm Stuck" */;
+  *(int *)(param_1 + 8) = unaff_EBX + 0x26d006 /* "I'm Stuck" */ /* "I'm Stuck" */ /* "I'm Stuck" */;
   piVar2[0x17] = 0;
   piVar2[0x18] = 0;
   piVar2[0x19] = 0;
@@ -836,9 +837,9 @@ void __thiscall CINSBotCaptureCP::~CINSBotCaptureCP(CINSBotCaptureCP *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x481de3 /* vtable for CINSBotCaptureCP+0x8 */ /* vtable for CINSBotCaptureCP+0x8 */;
+  *in_stack_00000004 = extraout_ECX + 0x481de3 /* vtable for CINSBotCaptureCP+0x8 */ /* vtable for CINSBotCaptureCP+0x8 */ /* vtable for CINSBotCaptureCP+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_00481f77 + extraout_ECX);
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x492f33 /* &_DYNAMIC */ /* &_DYNAMIC */));
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x492f33 /* &_DYNAMIC */ /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -875,7 +876,7 @@ void __thiscall CINSBotCaptureCP::~CINSBotCaptureCP(CINSBotCaptureCP *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x481d9a /* vtable for CINSBotCaptureCP+0x8 */ /* vtable for CINSBotCaptureCP+0x8 */;
+  *in_stack_00000004 = unaff_EBX + 0x481d9a /* vtable for CINSBotCaptureCP+0x8 */ /* vtable for CINSBotCaptureCP+0x8 */ /* vtable for CINSBotCaptureCP+0x8 */;
   in_stack_00000004[1] = (int)(&UNK_00481f2e + unaff_EBX);
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);

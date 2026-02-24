@@ -24,7 +24,7 @@ void __thiscall CINSBotReload::CINSBotReload(CINSBotReload *this)
   __i686_get_pc_thunk_bx();
   in_stack_00000004[8] = 0;
   iVar3 = *(int *)(&DAT_0048f03d + unaff_EBX);
-  iVar1 = unaff_EBX + 0x4107fd /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
+  iVar1 = unaff_EBX + 0x4107fd /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */ /* vtable for CountdownTimer+0x8 */;
   *(undefined1 *)(in_stack_00000004 + 0xc) = 0;
   in_stack_00000004[9] = 0;
   in_stack_00000004[10] = 0;
@@ -32,7 +32,7 @@ void __thiscall CINSBotReload::CINSBotReload(CINSBotReload *this)
   *(undefined1 *)((int)in_stack_00000004 + 0x31) = 0;
   in_stack_00000004[1] = iVar3 + 0x198;
   *in_stack_00000004 = iVar3 + 8;
-  pcVar2 = (code *)(unaff_EBX + -0x4e724b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
+  pcVar2 = (code *)(unaff_EBX + -0x4e724b /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */ /* CountdownTimer::NetworkStateChanged */);
   in_stack_00000004[4] = 0;
   in_stack_00000004[5] = 0;
   in_stack_00000004[6] = 0;
@@ -95,7 +95,7 @@ CINSBotReload::OnStart(CINSBotReload *this,CINSNextBot *param_1,Action *param_2)
   cVar1 = CINSNextBot::CheckAnyAmmo(this_00);
   if (cVar1 == '\0') {
     *(undefined4 *)param_1 = 3 /* Done */;
-    *(int *)(param_1 + 8) = unaff_EBX + 0x256d5f /* "No more ammo for this weapon" */ /* "No more ammo for this weapon" */;
+    *(int *)(param_1 + 8) = unaff_EBX + 0x256d5f /* "No more ammo for this weapon" */ /* "No more ammo for this weapon" */ /* "No more ammo for this weapon" */;
     *(undefined4 *)(param_1 + 4) = 0;
     return param_1;
   }
@@ -145,7 +145,7 @@ LAB_0072ab00:
   CINSNextBot::ResetIdleStatus(this_04);
   (**(code **)(*(int *)in_stack_0000000c + 0x8e0 /* NextBotPlayer::PressReloadButton */))(in_stack_0000000c,0x3f800000 /* 1.0f */);
   fVar6 = (float10)CountdownTimer::Now();
-  fVar4 = (float)fVar6 + *(float *)(unaff_EBX + 0x1f9d5d /* 0.5f */ /* 0.5f */);
+  fVar4 = (float)fVar6 + *(float *)(unaff_EBX + 0x1f9d5d /* 0.5f */ /* 0.5f */ /* 0.5f */);
   if (*(float *)(param_2 + 0x58) != fVar4) {
     (**(code **)(*(int *)(param_2 + 0x50) + 4))(param_2 + 0x50,param_2 + 0x58); /* timer_2.NetworkStateChanged() */
     *(float *)(param_2 + 0x58) = fVar4; /* timer_2.Start(0.5f) */
@@ -189,8 +189,8 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
   cVar1 = CINSNextBot::IsIdle(this_00);
   if (cVar1 != '\0') {
     fVar4 = (float10)CINSNextBot::GetIdleDuration(this_01);
-    if ((*(float *)(unaff_EBX + 0x1fc0cf /* 2.0f */ /* 2.0f */) < (float)fVar4) &&
-       (*(float *)(unaff_EBX + 0x1fc0cf /* 2.0f */ /* 2.0f */) <
+    if ((*(float *)(unaff_EBX + 0x1fc0cf /* 2.0f */ /* 2.0f */ /* 2.0f */) < (float)fVar4) &&
+       (*(float *)(unaff_EBX + 0x1fc0cf /* 2.0f */ /* 2.0f */ /* 2.0f */) <
         *(float *)(**(int **)(&LAB_0047bbbf + unaff_EBX) + 0xc) - *(float *)((int)param_2 + 0x34)))
     {
       *(undefined4 *)param_1 = 3 /* Done */;
@@ -213,7 +213,7 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
     if (cVar1 == '\0') {
       *(undefined4 *)param_1 = 3 /* Done */;
       *(undefined4 *)(param_1 + 4) = 0;
-      *(int *)(param_1 + 8) = unaff_EBX + 0x256ad6 /* "Finished reloading!" */ /* "Finished reloading!" */;
+      *(int *)(param_1 + 8) = unaff_EBX + 0x256ad6 /* "Finished reloading!" */ /* "Finished reloading!" */ /* "Finished reloading!" */;
       return param_1;
     }
     cVar1 = CINSPlayer::IsProned(this_02);
@@ -230,7 +230,7 @@ CINSBotReload::Update(CINSBotReload *this,CINSNextBot *param_1,float param_2)
       }
     }
     fVar4 = (float10)CountdownTimer::Now();
-    fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f8dab /* 0.25f */ /* 0.25f */);
+    fVar5 = (float)fVar4 + *(float *)(unaff_EBX + 0x1f8dab /* 0.25f */ /* 0.25f */ /* 0.25f */);
     if (*(float *)((int)param_2 + 0x58) != fVar5) {
       (**(code **)(*(int *)((int)param_2 + 0x50) + 4))((int)param_2 + 0x50,(int)param_2 + 0x58); /* timer_2.NetworkStateChanged() */
       *(float *)((int)param_2 + 0x58) = fVar5; /* timer_2.Start(0.25f) */
@@ -261,7 +261,7 @@ int CINSBotReload::GetName(void)
   int extraout_ECX;
   
   __i686_get_pc_thunk_cx();
-  return extraout_ECX + 0x25679b /* "Reloading" */ /* "Reloading" */;
+  return extraout_ECX + 0x25679b /* "Reloading" */ /* "Reloading" */ /* "Reloading" */;
 }
 
 
@@ -296,9 +296,9 @@ void __thiscall CINSBotReload::~CINSBotReload(CINSBotReload *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_cx();
-  *in_stack_00000004 = extraout_ECX + 0x46cd63 /* vtable for CINSBotReload+0x8 */ /* vtable for CINSBotReload+0x8 */;
-  in_stack_00000004[1] = extraout_ECX + 0x46cef3 /* vtable for CINSBotReload+0x198 */ /* vtable for CINSBotReload+0x198 */;
-  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x47c193 /* &_DYNAMIC */ /* &_DYNAMIC */));
+  *in_stack_00000004 = extraout_ECX + 0x46cd63 /* vtable for CINSBotReload+0x8 */ /* vtable for CINSBotReload+0x8 */ /* vtable for CINSBotReload+0x8 */;
+  in_stack_00000004[1] = extraout_ECX + 0x46cef3 /* vtable for CINSBotReload+0x198 */ /* vtable for CINSBotReload+0x198 */ /* vtable for CINSBotReload+0x198 */;
+  Action<CINSNextBot>::~Action((Action<CINSNextBot> *)(extraout_ECX + 0x47c193 /* &_DYNAMIC */ /* &_DYNAMIC */ /* &_DYNAMIC */));
   return;
 }
 
@@ -335,8 +335,8 @@ void __thiscall CINSBotReload::~CINSBotReload(CINSBotReload *this)
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x46cd1a /* vtable for CINSBotReload+0x8 */ /* vtable for CINSBotReload+0x8 */;
-  in_stack_00000004[1] = unaff_EBX + 0x46ceaa /* vtable for CINSBotReload+0x198 */ /* vtable for CINSBotReload+0x198 */;
+  *in_stack_00000004 = unaff_EBX + 0x46cd1a /* vtable for CINSBotReload+0x8 */ /* vtable for CINSBotReload+0x8 */ /* vtable for CINSBotReload+0x8 */;
+  in_stack_00000004[1] = unaff_EBX + 0x46ceaa /* vtable for CINSBotReload+0x198 */ /* vtable for CINSBotReload+0x198 */ /* vtable for CINSBotReload+0x198 */;
   Action<CINSNextBot>::~Action(this_00);
   operator_delete(in_stack_00000004);
   return;

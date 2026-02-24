@@ -27,8 +27,8 @@ CINSNextBot::CINSNextBotIntention::CINSNextBotIntention
   __i686_get_pc_thunk_bx();
   INextBotComponent::INextBotComponent
             ((INextBotComponent *)(in_stack_00000008 + 0x2060),(INextBot *)param_1);
-  *(int *)param_1 = unaff_EBX + 0x452ccb /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */;
-  *(int *)(param_1 + 0x14) = unaff_EBX + 0x452dcb /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */;
+  *(int *)param_1 = unaff_EBX + 0x452ccb /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */;
+  *(int *)(param_1 + 0x14) = unaff_EBX + 0x452dcb /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */;
   piVar2 = (int *)::operator_new(0x40);
   piVar2[8] = 0;
   piVar2[9] = 0;
@@ -43,14 +43,14 @@ CINSNextBot::CINSNextBotIntention::CINSNextBotIntention
   *(undefined1 *)((int)piVar2 + 0x31) = 0;
   piVar2[0xb] = 0;
   piVar2[0xd] = 0;
-  iVar1 = *(int *)(unaff_EBX + 0x45e983 /* &vtable for CINSBotMainAction */ /* &vtable for CINSBotMainAction */);
+  iVar1 = *(int *)(unaff_EBX + 0x45e983 /* &vtable for CINSBotMainAction */ /* &vtable for CINSBotMainAction */ /* &vtable for CINSBotMainAction */);
   *piVar2 = iVar1 + 8;
   piVar2[1] = iVar1 + 0x1a4;
   puVar3 = (undefined4 *)::operator_new(0x50);
   *puVar3 = &UNK_004539cb + unaff_EBX;
-  puVar3[1] = unaff_EBX + 0x453abb /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */;
+  puVar3[1] = unaff_EBX + 0x453abb /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */;
   CFmtStrN<32,false>::CFmtStrN
-            (this_00,(char *)(puVar3 + 3),&UNK_00230f37 + unaff_EBX,unaff_EBX + 0x2115be /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+            (this_00,(char *)(puVar3 + 3),&UNK_00230f37 + unaff_EBX,unaff_EBX + 0x2115be /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
   puVar3[0xf] = 0;
   puVar3[0x10] = 0;
   puVar3[0x11] = 0;
@@ -159,14 +159,14 @@ void __thiscall CINSNextBot::CINSNextBotIntention::Reset(CINSNextBotIntention *t
   *(undefined1 *)((int)piVar2 + 0x31) = 0;
   piVar2[0xb] = 0;
   piVar2[0xd] = 0;
-  iVar1 = *(int *)(unaff_EBX + 0x45e805 /* &vtable for CINSBotMainAction */ /* &vtable for CINSBotMainAction */);
+  iVar1 = *(int *)(unaff_EBX + 0x45e805 /* &vtable for CINSBotMainAction */ /* &vtable for CINSBotMainAction */ /* &vtable for CINSBotMainAction */);
   *piVar2 = iVar1 + 8;
   piVar2[1] = iVar1 + 0x1a4;
   piVar3 = (int *)::operator_new(0x50);
-  *piVar3 = unaff_EBX + 0x45384d /* vtable for Behavior<CINSNextBot>+0x8 */ /* vtable for Behavior<CINSNextBot>+0x8 */;
-  piVar3[1] = unaff_EBX + 0x45393d /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */;
+  *piVar3 = unaff_EBX + 0x45384d /* vtable for Behavior<CINSNextBot>+0x8 */ /* vtable for Behavior<CINSNextBot>+0x8 */ /* vtable for Behavior<CINSNextBot>+0x8 */;
+  piVar3[1] = unaff_EBX + 0x45393d /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */ /* vtable for Behavior<CINSNextBot>+0xf8 */;
   CFmtStrN<32,false>::CFmtStrN
-            (this_00,(char *)(piVar3 + 3),unaff_EBX + 0x230db9 /* "%s" */ /* "%s" */,unaff_EBX + 0x211440 /* rodata:0x73250900 */ /* rodata:0x73250900 */);
+            (this_00,(char *)(piVar3 + 3),unaff_EBX + 0x230db9 /* "%s" */ /* "%s" */ /* "%s" */,unaff_EBX + 0x211440 /* rodata:0x73250900 */ /* rodata:0x73250900 */ /* rodata:0x73250900 */);
   piVar3[0xf] = 0;
   piVar3[0x10] = 0;
   piVar3[0x11] = 0;
@@ -211,14 +211,14 @@ void __thiscall CINSNextBot::CINSNextBotIntention::~CINSNextBotIntention(CINSNex
   int *in_stack_00000004;
   
   __i686_get_pc_thunk_bx();
-  *in_stack_00000004 = unaff_EBX + 0x4582ea /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */;
-  in_stack_00000004[5] = unaff_EBX + 0x4583ea /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */;
+  *in_stack_00000004 = unaff_EBX + 0x4582ea /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x8 */;
+  in_stack_00000004[5] = unaff_EBX + 0x4583ea /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */ /* vtable for CINSNextBot::CINSNextBotIntention+0x108 */;
   piVar1 = (int *)in_stack_00000004[6];
   if (piVar1 != (int *)0x0) {
     (**(code **)(*piVar1 + 4))(piVar1);
   }
-  in_stack_00000004[5] = unaff_EBX + 0x3e622a /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */;
-  *in_stack_00000004 = unaff_EBX + 0x3e616a /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */;
+  in_stack_00000004[5] = unaff_EBX + 0x3e622a /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */ /* vtable for IContextualQuery+0x8 */;
+  *in_stack_00000004 = unaff_EBX + 0x3e616a /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */ /* vtable for INextBotEventResponder+0x8 */;
   return;
 }
 
