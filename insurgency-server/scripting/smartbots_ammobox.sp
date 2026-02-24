@@ -46,7 +46,7 @@ public Plugin myinfo =
 	name        = "SmartBots AmmoBox",
 	author      = "krokodile",
 	description = "Player-droppable ammo boxes for Insurgency 2014",
-	version     = "1.5.0",
+	version     = "1.6.0",
 	url         = ""
 };
 
@@ -71,10 +71,10 @@ static float g_lastDropTime[MAXPLAYERS + 1];
 #define AMMOBOX_MODEL "models/static_props/wcache_box_01.mdl"
 
 // ---------------------------------------------------------------------------
-// SDKCall: CINSPlayer::GetMagazines(int ammoType) -> CINSWeaponMagazines*
+// SDKCalls
 // ---------------------------------------------------------------------------
 
-static Handle g_sdkGetMagazines = null;
+static Handle g_sdkGetMagazines = null;  // CINSPlayer::GetMagazines(int) -> CINSWeaponMagazines*
 
 // ---------------------------------------------------------------------------
 // Plugin lifecycle
@@ -102,12 +102,13 @@ public void OnPluginStart()
 		PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);  // returns CINSWeaponMagazines* as int
 		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);   // int ammoType
 		g_sdkGetMagazines = EndPrepSDKCall();
-		delete gameConf;
 
 		if (g_sdkGetMagazines == null)
 			PrintToServer("[AmmoBox] WARNING: failed to prepare CINSPlayer::GetMagazines SDKCall");
 		else
 			PrintToServer("[AmmoBox] CINSPlayer::GetMagazines SDKCall ready");
+
+		delete gameConf;
 	}
 
 	PrintToServer("[AmmoBox] Plugin loaded (v1.5.0)");
@@ -347,13 +348,11 @@ static bool GiveMagazine(int client, int slot)
 		return false;
 	}
 
-	// Determine round count for the new magazine.
-	// Copy from data[0] (first existing mag) if available; else weapon+0x1600.
-	int roundsPerMag = 0;
-	if (count > 0)
-		roundsPerMag = LoadFromAddress(view_as<Address>(dataPtr), NumberType_Int32);
-	if (roundsPerMag < 1)
-		roundsPerMag = GetEntData(weapon, 0x1600);
+	// weapon+0x15f8 = the per-weapon magazine capacity from GetMagazineCapacity()
+	// (the non-ammoDef-0x4 path: in_stack[0x57e]).  Empirically correct for all
+	// weapon types: 15 for the primary, 8 for the pistol, 30 for picked-up AKs, etc.
+	// weapon+0x1600 (the ammoDef-0x4 path) is always -1 in practice and is not used.
+	int roundsPerMag = GetEntData(weapon, 0x15f8);
 	if (roundsPerMag < 1)
 		roundsPerMag = 30;
 

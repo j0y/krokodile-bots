@@ -14,5 +14,6 @@
 				"linux"		"@_ZN10CINSPlayer12GetMagazinesEi"
 			}
 		}
+
 	}
 }
