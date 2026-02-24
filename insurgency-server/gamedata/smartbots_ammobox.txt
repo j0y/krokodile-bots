@@ -1,0 +1,18 @@
+"Games"
+{
+	"insurgency"
+	{
+		"Signatures"
+		{
+			// CINSPlayer::GetMagazines(int ammoType)
+			// Searches/creates the CINSWeaponMagazines object in the player's
+			// CUtlMap at player+0x17d8 for the given ammoType key.
+			// Returns CINSWeaponMagazines* (always non-null; creates entry if absent).
+			"CINSPlayer::GetMagazines"
+			{
+				"library"	"server"
+				"linux"		"@_ZN10CINSPlayer12GetMagazinesEi"
+			}
+		}
+	}
+}

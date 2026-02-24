@@ -7,6 +7,30 @@
  *
  * Single-use: box disappears after one pickup.
  * Standalone plugin -- no dependencies on smartbots.sp or other custom plugins.
+ *
+ * Ammo system notes:
+ *   Insurgency weapons use CINSWeaponMagazines -- a UTL vector of per-magazine
+ *   round counts stored in a player-side CUtlMap at player+0x17d8, keyed by
+ *   ammo type index.
+ *
+ *   CINSWeaponMagazines::UpdateCounter() syncs m_iAmmo = vector.count after
+ *   every vector modification, so direct SetEntProp on m_iAmmo is overwritten
+ *   by the next reload.  The fix: append directly to the UTL vector, then
+ *   manually sync m_iAmmo.
+ *
+ *   CINSPlayer::GiveAmmo() only works for ammo types with ammoDef flag 0x4.
+ *   ammoType=29 (the weapon's ammo type) does NOT have this flag, so GiveAmmo
+ *   always returns 0.  Instead, we call CINSPlayer::GetMagazines(ammoType) to
+ *   get the actual CINSWeaponMagazines* heap object, then append to its UTL
+ *   vector directly.
+ *
+ * CINSWeaponMagazines heap object layout (32-bit):
+ *   +0x00  vtable ptr
+ *   +0x04  player entity handle
+ *   +0x08  int* data ptr (array of per-magazine round counts)
+ *   +0x0c  allocated capacity
+ *   +0x10  grow size
+ *   +0x14  element count (number of spare magazines)
  */
 
 #pragma semicolon 1
@@ -22,7 +46,7 @@ public Plugin myinfo =
 	name        = "SmartBots AmmoBox",
 	author      = "krokodile",
 	description = "Player-droppable ammo boxes for Insurgency 2014",
-	version     = "1.1.0",
+	version     = "1.5.0",
 	url         = ""
 };
 
@@ -47,11 +71,10 @@ static float g_lastDropTime[MAXPLAYERS + 1];
 #define AMMOBOX_MODEL "models/static_props/wcache_box_01.mdl"
 
 // ---------------------------------------------------------------------------
-// SDKCall handles (initialized from gamedata in OnPluginStart)
+// SDKCall: CINSPlayer::GetMagazines(int ammoType) -> CINSWeaponMagazines*
 // ---------------------------------------------------------------------------
 
-static Handle g_hGiveAmmo;
-static Handle g_hGetMaxClip1;
+static Handle g_sdkGetMagazines = null;
 
 // ---------------------------------------------------------------------------
 // Plugin lifecycle
@@ -66,52 +89,37 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_ammobox", Cmd_AmmoBox, "Drop an ammo box at your feet");
 	RegAdminCmd("sm_ammobox_scan", Cmd_AmmoScan, ADMFLAG_ROOT, "Scan player memory for internal ammo counter");
 
-	// ---- Gamedata: set up SDKCalls for the game's native ammo functions ----
-	Handle hConf = LoadGameConfigFile("smartbots");
-	if (hConf == null)
-		SetFailState("[AmmoBox] Failed to load smartbots gamedata");
+	// Set up CINSPlayer::GetMagazines SDKCall
+	GameData gameConf = new GameData("smartbots_ammobox");
+	if (gameConf == null)
+	{
+		PrintToServer("[AmmoBox] WARNING: failed to load gamedata/smartbots_ammobox.txt -- ammo giving disabled");
+	}
+	else
+	{
+		StartPrepSDKCall(SDKCall_Entity);
+		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CINSPlayer::GetMagazines");
+		PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);  // returns CINSWeaponMagazines* as int
+		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);   // int ammoType
+		g_sdkGetMagazines = EndPrepSDKCall();
+		delete gameConf;
 
-	// CINSPlayer::GiveAmmo(int ammoType, int count, int roundsPerMag, bool silent, int maxMags)
-	StartPrepSDKCall(SDKCall_Player);
-	PrepSDKCall_SetFromConf(hConf, SDKConf_Signature, "CINSPlayer::GiveAmmo");
-	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // ammoType
-	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // count
-	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // roundsPerMag
-	PrepSDKCall_AddParameter(SDKType_Bool, SDKPass_Plain);          // silent
-	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);  // maxMags
-	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
-	g_hGiveAmmo = EndPrepSDKCall();
-	if (g_hGiveAmmo == null)
-		SetFailState("[AmmoBox] Failed to prep CINSPlayer::GiveAmmo SDKCall");
+		if (g_sdkGetMagazines == null)
+			PrintToServer("[AmmoBox] WARNING: failed to prepare CINSPlayer::GetMagazines SDKCall");
+		else
+			PrintToServer("[AmmoBox] CINSPlayer::GetMagazines SDKCall ready");
+	}
 
-	// CBaseCombatWeapon::GetMaxClip1() — virtual, returns max rounds per magazine
-	StartPrepSDKCall(SDKCall_Entity);
-	PrepSDKCall_SetFromConf(hConf, SDKConf_Virtual, "GetMaxClip1");
-	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_ByValue);
-	g_hGetMaxClip1 = EndPrepSDKCall();
-	if (g_hGetMaxClip1 == null)
-		SetFailState("[AmmoBox] Failed to prep GetMaxClip1 SDKCall");
-
-	delete hConf;
-
-	PrintToServer("[AmmoBox] Plugin loaded (v1.1.0)");
+	PrintToServer("[AmmoBox] Plugin loaded (v1.5.0)");
 }
 
 // ---------------------------------------------------------------------------
-// Debug scan: dump all int-sized values near m_iAmmo[ammoType] on the player
-// that equal the current magazine count.  Run before and after a reload to
-// identify which offset is the internal counter (the one that decrements
-// while m_iAmmo gets reset).
+// Debug scan
 // ---------------------------------------------------------------------------
 
 public Action Cmd_AmmoScan(int client, int args)
 {
-	int target = (client == 0) ? 1 : client;   // default: first connected player
-
-	// Find the base offset of the m_iAmmo array via SendProp
-	int ammoBase = FindSendPropInfo("CINSPlayer", "m_iAmmo");
-	if (ammoBase <= 0)
-		ammoBase = FindSendPropInfo("CBasePlayer", "m_iAmmo");
+	int target = (client == 0) ? 1 : client;
 
 	int weapon = GetPlayerWeaponSlot(target, 0);
 	if (weapon == -1)
@@ -120,38 +128,34 @@ public Action Cmd_AmmoScan(int client, int args)
 		return Plugin_Handled;
 	}
 
-	int ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
-	if (ammoType < 0)
+	int ammoTypeDM   = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
+	int slotVal      = GetEntData(weapon, 0x5a4);
+	int ammoTypeVirt = GetEntData(weapon, 0x15c0);
+	int roundsPerMag = GetEntData(weapon, 0x1600);
+
+	ReplyToCommand(client, "[Scan] weapon=%d DataMap_ammoType=%d slotVal=%d virt_ammoType=%d roundsPerMag=%d",
+		weapon, ammoTypeDM, slotVal, ammoTypeVirt, roundsPerMag);
+
+	if (ammoTypeDM >= 0)
+		ReplyToCommand(client, "[Scan] m_iAmmo[DM=%d]=%d",
+			ammoTypeDM, GetEntProp(target, Prop_Data, "m_iAmmo", _, ammoTypeDM));
+
+	if (g_sdkGetMagazines != null && ammoTypeDM >= 0)
 	{
-		ReplyToCommand(client, "[Scan] ammoType < 0");
-		return Plugin_Handled;
-	}
-
-	int ammoOffset = ammoBase + ammoType * 4;   // offset of m_iAmmo[ammoType]
-	int curMags    = GetEntProp(target, Prop_Data, "m_iAmmo", _, ammoType);
-
-	PrintToServer("[Scan] player=%d ammoType=%d ammoBase=%d ammoOffset=%d curMags=%d",
-		target, ammoType, ammoBase, ammoOffset, curMags);
-
-	// Scan ±600 bytes in 4-byte steps from ammoOffset on the PLAYER entity
-	for (int delta = -600; delta <= 600; delta += 4)
-	{
-		int off = ammoOffset + delta;
-		if (off < 0)
-			continue;
-		int val = GetEntData(target, off);
-		if (val == curMags)
-			PrintToServer("[Scan]  player+%d = %d  (delta %+d from m_iAmmo[%d])",
-				off, val, delta, ammoType);
-	}
-
-	// Also scan the weapon entity ±600 bytes from its start
-	PrintToServer("[Scan] --- weapon entity scan (mags=%d) ---", curMags);
-	for (int off = 0; off < 1200; off += 4)
-	{
-		int val = GetEntData(weapon, off);
-		if (val == curMags)
-			PrintToServer("[Scan]  weapon+%d = %d", off, val);
+		int magsPtr = SDKCall(g_sdkGetMagazines, target, ammoTypeDM);
+		ReplyToCommand(client, "[Scan] GetMagazines(%d) -> 0x%x", ammoTypeDM, magsPtr);
+		if (magsPtr != 0)
+		{
+			int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + 0x08), NumberType_Int32);
+			int allocated = LoadFromAddress(view_as<Address>(magsPtr + 0x0c), NumberType_Int32);
+			int count     = LoadFromAddress(view_as<Address>(magsPtr + 0x14), NumberType_Int32);
+			ReplyToCommand(client, "[Scan]   data=0x%x allocated=%d count=%d", dataPtr, allocated, count);
+			for (int i = 0; i < count && i < 16; i++)
+			{
+				int rounds = LoadFromAddress(view_as<Address>(dataPtr + i * 4), NumberType_Int32);
+				ReplyToCommand(client, "[Scan]   mag[%d] = %d rounds", i, rounds);
+			}
+		}
 	}
 
 	return Plugin_Handled;
@@ -199,24 +203,21 @@ public Action Cmd_AmmoBox(int client, int args)
 		return Plugin_Handled;
 	}
 
-	// Spawn at eye position, toss forward like dropping a weapon
+	// Spawn at eye position, toss forward
 	float eyePos[3], eyeAng[3], fwd[3], vel[3];
 	GetClientEyePosition(client, eyePos);
 	GetClientEyeAngles(client, eyeAng);
 	GetAngleVectors(eyeAng, fwd, NULL_VECTOR, NULL_VECTOR);
 
-	// Start slightly in front of face so it doesn't clip into the player
 	float spawnPos[3];
 	spawnPos[0] = eyePos[0] + fwd[0] * 30.0;
 	spawnPos[1] = eyePos[1] + fwd[1] * 30.0;
 	spawnPos[2] = eyePos[2] + fwd[2] * 30.0;
 
-	// Toss velocity: forward + upward arc
 	vel[0] = fwd[0] * 250.0;
 	vel[1] = fwd[1] * 250.0;
-	vel[2] = fwd[2] * 250.0 + 100.0; // add upward loft
+	vel[2] = fwd[2] * 250.0 + 100.0;
 
-	// Create the ammo box prop
 	int entity = CreateEntityByName("prop_physics_override");
 	if (entity == -1)
 	{
@@ -226,22 +227,18 @@ public Action Cmd_AmmoBox(int client, int args)
 
 	SetEntityModel(entity, AMMOBOX_MODEL);
 	DispatchKeyValue(entity, "solid", "6");
-	DispatchKeyValue(entity, "spawnflags", "256"); // not affected by rotor wash
+	DispatchKeyValue(entity, "spawnflags", "256");
 	DispatchSpawn(entity);
 	TeleportEntity(entity, spawnPos, NULL_VECTOR, vel);
 
-	// Red tint to distinguish from health boxes
 	SetEntityRenderColor(entity, 255, 200, 200, 255);
 
-	// Hook Use key
 	SDKHook(entity, SDKHook_Use, OnAmmoBoxUse);
 
-	// Auto-despawn timer
 	float lifetime = g_cvLifetime.FloatValue;
 	int ref = EntIndexToEntRef(entity);
 	CreateTimer(lifetime, Timer_RemoveBox, ref, TIMER_FLAG_NO_MAPCHANGE);
 
-	// Record cooldown
 	g_lastDropTime[client] = now;
 
 	PrintToChat(client, "[AmmoBox] Ammo box dropped! Teammates can press USE to pick it up.");
@@ -260,7 +257,6 @@ public Action OnAmmoBoxUse(int entity, int activator, int caller, UseType type, 
 
 	bool gaveSomething = false;
 
-	// Give +1 magazine to primary (slot 0) and secondary (slot 1)
 	for (int slot = 0; slot <= 1; slot++)
 	{
 		if (GiveMagazine(activator, slot))
@@ -274,11 +270,8 @@ public Action OnAmmoBoxUse(int entity, int activator, int caller, UseType type, 
 	}
 
 	PrintHintText(activator, "Picked up ammo box (+1 magazine)");
-
-	// Play a pickup sound
 	EmitSoundToClient(activator, "physics/metal/weapon_impact_hard1.wav");
 
-	// Destroy the box
 	SDKUnhook(entity, SDKHook_Use, OnAmmoBoxUse);
 	AcceptEntityInput(entity, "Kill");
 
@@ -286,14 +279,20 @@ public Action OnAmmoBoxUse(int entity, int activator, int caller, UseType type, 
 }
 
 // ---------------------------------------------------------------------------
-// Give one magazine worth of spare ammo for a weapon slot.
+// Give one spare magazine for a weapon slot.
 //
-// Uses CINSPlayer::GiveAmmo() — the game's native function. For magazine-
-// based weapons (flag 0x4), it internally calls GetMagazines() → AddMags(),
-// which updates the CINSWeaponMagazines vector and syncs m_iAmmo[] via
-// UpdateCounter(). For non-magazine weapons, it falls back to the base
-// engine's CBaseCombatCharacter::GiveAmmo().
+// Strategy:
+//   1. Get ammoType from weapon+0x15c0 (= CINSWeapon::GetPrimaryAmmoType()).
+//   2. Call CINSPlayer::GetMagazines(ammoType) to get the CINSWeaponMagazines*
+//      heap object from the player's internal CUtlMap at player+0x17d8.
+//   3. Directly append an entry to the UTL vector inside that object.
+//   4. Sync m_iAmmo to the new count (mirrors what UpdateCounter does).
+//
+// CINSPlayer::GiveAmmo is NOT used here: it requires ammoDef flag 0x4 which
+// ammoType=29 does not have, causing it to always return 0.
 // ---------------------------------------------------------------------------
+
+#define AMMO_HARD_CAP  8
 
 static bool GiveMagazine(int client, int slot)
 {
@@ -301,18 +300,74 @@ static bool GiveMagazine(int client, int slot)
 	if (weapon == -1)
 		return false;
 
-	int ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
-	if (ammoType < 0)
+	// weapon+0x5a4 >= 0: weapon has a magazine system.
+	// weapon+0x15c0: CINSWeapon::GetPrimaryAmmoType() virtual result.
+	int slotVal  = GetEntData(weapon, 0x5a4);
+	int ammoType = GetEntData(weapon, 0x15c0);
+
+	if (slotVal < 0 || ammoType < 0)
+	{
+		// Non-magazine weapon; fall back to DataMap ammoType.
+		ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
+		if (ammoType < 0)
+			return false;
+	}
+
+	if (g_sdkGetMagazines == null)
+	{
+		PrintToServer("[AmmoBox] GetMagazines SDKCall unavailable");
 		return false;
+	}
 
-	int maxClip = SDKCall(g_hGetMaxClip1, weapon);
+	// Get (or create) the CINSWeaponMagazines object for this ammoType.
+	int magsPtr = SDKCall(g_sdkGetMagazines, client, ammoType);
 
-	// GiveAmmo(ammoType, count=1, roundsPerMag=maxClip, silent=false, maxMags=-1)
-	// maxMags=-1 uses the game's default max for this ammo type.
-	// Returns 0 if already at max magazines.
-	int added = SDKCall(g_hGiveAmmo, client, ammoType, 1, maxClip, false, -1);
+	PrintToServer("[AmmoBox] GiveMagazine client=%d slot=%d slotVal=%d ammoType=%d magsPtr=0x%x",
+		client, slot, slotVal, ammoType, magsPtr);
 
-	return added > 0;
+	if (magsPtr == 0)
+	{
+		PrintToServer("[AmmoBox] GetMagazines returned null, skipping");
+		return false;
+	}
+
+	// Read the UTL vector fields from the heap object.
+	int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + 0x08), NumberType_Int32);
+	int allocated = LoadFromAddress(view_as<Address>(magsPtr + 0x0c), NumberType_Int32);
+	int count     = LoadFromAddress(view_as<Address>(magsPtr + 0x14), NumberType_Int32);
+
+	PrintToServer("[AmmoBox]   dataPtr=0x%x allocated=%d count=%d",
+		dataPtr, allocated, count);
+
+	if (dataPtr == 0 || allocated <= 0 || count < 0 ||
+	    count >= allocated || count >= AMMO_HARD_CAP)
+	{
+		PrintToServer("[AmmoBox] at cap or bad state (%d/%d data=0x%x), skip",
+			count, allocated, dataPtr);
+		return false;
+	}
+
+	// Determine round count for the new magazine.
+	// Copy from data[0] (first existing mag) if available; else weapon+0x1600.
+	int roundsPerMag = 0;
+	if (count > 0)
+		roundsPerMag = LoadFromAddress(view_as<Address>(dataPtr), NumberType_Int32);
+	if (roundsPerMag < 1)
+		roundsPerMag = GetEntData(weapon, 0x1600);
+	if (roundsPerMag < 1)
+		roundsPerMag = 30;
+
+	// Append: data[count] = roundsPerMag, count++
+	StoreToAddress(view_as<Address>(dataPtr + count * 4), roundsPerMag, NumberType_Int32);
+	StoreToAddress(view_as<Address>(magsPtr + 0x14),      count + 1,    NumberType_Int32);
+
+	// Sync m_iAmmo to the new vector size (mirrors UpdateCounter).
+	SetEntProp(client, Prop_Data, "m_iAmmo", count + 1, _, ammoType);
+	SetEntProp(client, Prop_Send, "m_iAmmo", count + 1, _, ammoType);
+
+	PrintToServer("[AmmoBox] added mag[%d]=%d rounds, m_iAmmo[%d]->%d",
+		count, roundsPerMag, ammoType, count + 1);
+	return true;
 }
 
 // ---------------------------------------------------------------------------
