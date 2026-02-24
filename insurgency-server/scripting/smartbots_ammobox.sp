@@ -167,9 +167,9 @@ public Action Cmd_AmmoScan(int client, int args)
 	}
 
 	int ammoTypeDM   = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
-	int slotVal      = GetEntData(weapon, 0x5a4);
-	int ammoTypeVirt = GetEntData(weapon, 0x15c0);
-	int roundsPerMag = GetEntData(weapon, 0x1600);
+	int slotVal      = (g_off_weapon_slotVal  >= 0) ? GetEntData(weapon, g_off_weapon_slotVal)  : -1;
+	int ammoTypeVirt = (g_off_weapon_ammoType >= 0) ? GetEntData(weapon, g_off_weapon_ammoType) : -1;
+	int roundsPerMag = (g_off_weapon_magCap   >= 0) ? GetEntData(weapon, g_off_weapon_magCap)   : -1;
 
 	ReplyToCommand(client, "[Scan] weapon=%d DataMap_ammoType=%d slotVal=%d virt_ammoType=%d roundsPerMag=%d",
 		weapon, ammoTypeDM, slotVal, ammoTypeVirt, roundsPerMag);
@@ -178,15 +178,15 @@ public Action Cmd_AmmoScan(int client, int args)
 		ReplyToCommand(client, "[Scan] m_iAmmo[DM=%d]=%d",
 			ammoTypeDM, GetEntProp(target, Prop_Data, "m_iAmmo", _, ammoTypeDM));
 
-	if (g_sdkGetMagazines != null && ammoTypeDM >= 0)
+	if (g_sdkGetMagazines != null && ammoTypeDM >= 0 && g_off_mags_dataPtr >= 0)
 	{
 		int magsPtr = SDKCall(g_sdkGetMagazines, target, ammoTypeDM);
 		ReplyToCommand(client, "[Scan] GetMagazines(%d) -> 0x%x", ammoTypeDM, magsPtr);
 		if (magsPtr != 0)
 		{
-			int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + 0x08), NumberType_Int32);
-			int allocated = LoadFromAddress(view_as<Address>(magsPtr + 0x0c), NumberType_Int32);
-			int count     = LoadFromAddress(view_as<Address>(magsPtr + 0x14), NumberType_Int32);
+			int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_dataPtr),   NumberType_Int32);
+			int allocated = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_allocated), NumberType_Int32);
+			int count     = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_count),     NumberType_Int32);
 			ReplyToCommand(client, "[Scan]   data=0x%x allocated=%d count=%d", dataPtr, allocated, count);
 			for (int i = 0; i < count && i < 16; i++)
 			{
