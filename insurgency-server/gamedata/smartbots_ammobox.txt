@@ -6,17 +6,16 @@
 		{
 			// CINSPlayer::GetMagazines(int ammoType) -> CINSWeaponMagazines*
 			// Searches/creates the CINSWeaponMagazines entry in the player's
-			// CUtlMap at player+0x17d8 for the given ammoType key.
+			// CUtlRBTree (Linux: player+0x17d8, Windows: player+0x17c4).
 			// Returns CINSWeaponMagazines* (always non-null; creates if absent).
 			//
-			// Windows: add MSVC-mangled export name or byte pattern after
-			//          analyzing server.dll (e.g. with IDA/Ghidra).
-			//          Likely: "?GetMagazines@CINSPlayer@@QAEPAVCINSWeaponMagazines@@H@Z"
+			// Windows RVA: 0x2acfd0  (server.dll timestamp 0x68C9132B)
+			// Verified: accesses [ecx+0x17c4] (CUtlRBTree), allocs 0x1c bytes.
 			"CINSPlayer::GetMagazines"
 			{
 				"library"	"server"
 				"linux"		"@_ZN10CINSPlayer12GetMagazinesEi"
-				// "windows"	"????"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x0C\x53\x8B\x5D\x08\x8D\x45\xF4\x56\x57\x8B"
 			}
 		}
 
@@ -25,62 +24,66 @@
 			// ---------------------------------------------------------------
 			// CINSWeapon entity field offsets (raw bytes from entity base).
 			// Used with GetEntData(weapon, offset).
-			// Verified against Linux server_i486.so.
-			// Windows values need verification against server.dll.
+			// Linux verified against server_i486.so.
+			// Windows verified against server.dll (timestamp 0x68C9132B).
+			//   All Windows offsets are 0x14 (20) bytes less than Linux —
+			//   consistent across all three fields due to MSVC vs GCC layout.
 			// ---------------------------------------------------------------
 
 			// >= 0: weapon has a magazine system and a valid ammo type.
-			// = in_stack[0x169] * 4 = 0x5a4
+			// Linux: in_stack[0x169] * 4 = 0x5a4
+			// Windows: GetPrimaryAmmoType reads [ecx+0x590]; same semantics.
 			"CINSWeapon.slotVal"
 			{
 				"linux"		"1444"		// 0x5a4
-				// "windows"	"????"
+				"windows"	"1424"		// 0x590
 			}
 
 			// Internal ammo type index — CINSWeapon::GetPrimaryAmmoType() result.
-			// = 0x15c0
+			// Linux:   0x15c0
+			// Windows: weapon+0x590+0x101c = 0x15ac
 			"CINSWeapon.ammoType"
 			{
 				"linux"		"5568"		// 0x15c0
-				// "windows"	"????"
+				"windows"	"5548"		// 0x15ac
 			}
 
-			// Per-magazine round capacity — GetMagazineCapacity() non-0x4 path.
-			// = in_stack[0x57e] * 4 = 0x15f8
+			// Per-magazine round capacity — GetMagazineCapacity() non-ammoDef path.
+			// Linux:   in_stack[0x57e] * 4 = 0x15f8
+			// Windows: weapon+0x590+0x1054 = 0x15e4
 			"CINSWeapon.magCapacity"
 			{
 				"linux"		"5624"		// 0x15f8
-				// "windows"	"????"
+				"windows"	"5604"		// 0x15e4
 			}
 
 			// ---------------------------------------------------------------
 			// CINSWeaponMagazines heap object field offsets.
 			// Used with LoadFromAddress / StoreToAddress.
-			// CINSWeaponMagazines is a thin wrapper around CUtlVector<int>.
+			// CINSWeaponMagazines wraps CUtlVector<int> starting at offset 8.
 			// The CUtlVector layout is identical on Linux and Windows (Valve
-			// cross-platform code), so these are likely the same on Windows.
-			// Still verify before enabling Windows support.
+			// cross-platform code) — confirmed by inspecting Windows ctor.
 			// ---------------------------------------------------------------
 
 			// int* — pointer to the array of per-magazine round counts.
 			"CINSWeaponMagazines.dataPtr"
 			{
 				"linux"		"8"		// +0x08
-				// "windows"	"8"		// likely same; verify
+				"windows"	"8"		// +0x08  (same; CUtlVector cross-platform)
 			}
 
 			// int — allocated capacity of the array.
 			"CINSWeaponMagazines.allocated"
 			{
 				"linux"		"12"		// +0x0c
-				// "windows"	"12"		// likely same; verify
+				"windows"	"12"		// +0x0c  (same)
 			}
 
 			// int — current element count (number of spare magazines).
 			"CINSWeaponMagazines.count"
 			{
 				"linux"		"20"		// +0x14
-				// "windows"	"20"		// likely same; verify
+				"windows"	"20"		// +0x14  (same)
 			}
 		}
 	}
