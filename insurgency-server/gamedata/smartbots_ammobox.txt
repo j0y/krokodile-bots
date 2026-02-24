@@ -4,16 +4,84 @@
 	{
 		"Signatures"
 		{
-			// CINSPlayer::GetMagazines(int ammoType)
-			// Searches/creates the CINSWeaponMagazines object in the player's
+			// CINSPlayer::GetMagazines(int ammoType) -> CINSWeaponMagazines*
+			// Searches/creates the CINSWeaponMagazines entry in the player's
 			// CUtlMap at player+0x17d8 for the given ammoType key.
-			// Returns CINSWeaponMagazines* (always non-null; creates entry if absent).
+			// Returns CINSWeaponMagazines* (always non-null; creates if absent).
+			//
+			// Windows: add MSVC-mangled export name or byte pattern after
+			//          analyzing server.dll (e.g. with IDA/Ghidra).
+			//          Likely: "?GetMagazines@CINSPlayer@@QAEPAVCINSWeaponMagazines@@H@Z"
 			"CINSPlayer::GetMagazines"
 			{
 				"library"	"server"
 				"linux"		"@_ZN10CINSPlayer12GetMagazinesEi"
+				// "windows"	"????"
 			}
 		}
 
+		"Offsets"
+		{
+			// ---------------------------------------------------------------
+			// CINSWeapon entity field offsets (raw bytes from entity base).
+			// Used with GetEntData(weapon, offset).
+			// Verified against Linux server_i486.so.
+			// Windows values need verification against server.dll.
+			// ---------------------------------------------------------------
+
+			// >= 0: weapon has a magazine system and a valid ammo type.
+			// = in_stack[0x169] * 4 = 0x5a4
+			"CINSWeapon.slotVal"
+			{
+				"linux"		"1444"		// 0x5a4
+				// "windows"	"????"
+			}
+
+			// Internal ammo type index — CINSWeapon::GetPrimaryAmmoType() result.
+			// = 0x15c0
+			"CINSWeapon.ammoType"
+			{
+				"linux"		"5568"		// 0x15c0
+				// "windows"	"????"
+			}
+
+			// Per-magazine round capacity — GetMagazineCapacity() non-0x4 path.
+			// = in_stack[0x57e] * 4 = 0x15f8
+			"CINSWeapon.magCapacity"
+			{
+				"linux"		"5624"		// 0x15f8
+				// "windows"	"????"
+			}
+
+			// ---------------------------------------------------------------
+			// CINSWeaponMagazines heap object field offsets.
+			// Used with LoadFromAddress / StoreToAddress.
+			// CINSWeaponMagazines is a thin wrapper around CUtlVector<int>.
+			// The CUtlVector layout is identical on Linux and Windows (Valve
+			// cross-platform code), so these are likely the same on Windows.
+			// Still verify before enabling Windows support.
+			// ---------------------------------------------------------------
+
+			// int* — pointer to the array of per-magazine round counts.
+			"CINSWeaponMagazines.dataPtr"
+			{
+				"linux"		"8"		// +0x08
+				// "windows"	"8"		// likely same; verify
+			}
+
+			// int — allocated capacity of the array.
+			"CINSWeaponMagazines.allocated"
+			{
+				"linux"		"12"		// +0x0c
+				// "windows"	"12"		// likely same; verify
+			}
+
+			// int — current element count (number of spare magazines).
+			"CINSWeaponMagazines.count"
+			{
+				"linux"		"20"		// +0x14
+				// "windows"	"20"		// likely same; verify
+			}
+		}
 	}
 }

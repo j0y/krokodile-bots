@@ -46,7 +46,7 @@ public Plugin myinfo =
 	name        = "SmartBots AmmoBox",
 	author      = "krokodile",
 	description = "Player-droppable ammo boxes for Insurgency 2014",
-	version     = "1.6.0",
+	version     = "1.7.0",
 	url         = ""
 };
 
@@ -77,6 +77,17 @@ static float g_lastDropTime[MAXPLAYERS + 1];
 static Handle g_sdkGetMagazines = null;  // CINSPlayer::GetMagazines(int) -> CINSWeaponMagazines*
 
 // ---------------------------------------------------------------------------
+// Platform-specific offsets loaded from gamedata
+// ---------------------------------------------------------------------------
+
+static int g_off_weapon_slotVal   = -1;  // CINSWeapon: slotVal (>= 0 = has mag system)
+static int g_off_weapon_ammoType  = -1;  // CINSWeapon: GetPrimaryAmmoType result
+static int g_off_weapon_magCap    = -1;  // CINSWeapon: rounds per magazine
+static int g_off_mags_dataPtr     = -1;  // CINSWeaponMagazines: int* data array
+static int g_off_mags_allocated   = -1;  // CINSWeaponMagazines: allocated capacity
+static int g_off_mags_count       = -1;  // CINSWeaponMagazines: element count
+
+// ---------------------------------------------------------------------------
 // Plugin lifecycle
 // ---------------------------------------------------------------------------
 
@@ -89,29 +100,55 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_ammobox", Cmd_AmmoBox, "Drop an ammo box at your feet");
 	RegAdminCmd("sm_ammobox_scan", Cmd_AmmoScan, ADMFLAG_ROOT, "Scan player memory for internal ammo counter");
 
-	// Set up CINSPlayer::GetMagazines SDKCall
 	GameData gameConf = new GameData("smartbots_ammobox");
 	if (gameConf == null)
 	{
 		PrintToServer("[AmmoBox] WARNING: failed to load gamedata/smartbots_ammobox.txt -- ammo giving disabled");
+		PrintToServer("[AmmoBox] Plugin loaded (v1.7.0) -- DISABLED");
+		return;
 	}
-	else
+
+	// SDKCall: CINSPlayer::GetMagazines
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CINSPlayer::GetMagazines");
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+	g_sdkGetMagazines = EndPrepSDKCall();
+
+	// Platform-specific offsets
+	g_off_weapon_slotVal  = gameConf.GetOffset("CINSWeapon.slotVal");
+	g_off_weapon_ammoType = gameConf.GetOffset("CINSWeapon.ammoType");
+	g_off_weapon_magCap   = gameConf.GetOffset("CINSWeapon.magCapacity");
+	g_off_mags_dataPtr    = gameConf.GetOffset("CINSWeaponMagazines.dataPtr");
+	g_off_mags_allocated  = gameConf.GetOffset("CINSWeaponMagazines.allocated");
+	g_off_mags_count      = gameConf.GetOffset("CINSWeaponMagazines.count");
+
+	delete gameConf;
+
+	bool ok = true;
+	if (g_sdkGetMagazines == null)
+		{ PrintToServer("[AmmoBox] MISSING: CINSPlayer::GetMagazines signature"); ok = false; }
+	if (g_off_weapon_slotVal  < 0)
+		{ PrintToServer("[AmmoBox] MISSING offset: CINSWeapon.slotVal");          ok = false; }
+	if (g_off_weapon_ammoType < 0)
+		{ PrintToServer("[AmmoBox] MISSING offset: CINSWeapon.ammoType");         ok = false; }
+	if (g_off_weapon_magCap   < 0)
+		{ PrintToServer("[AmmoBox] MISSING offset: CINSWeapon.magCapacity");      ok = false; }
+	if (g_off_mags_dataPtr    < 0)
+		{ PrintToServer("[AmmoBox] MISSING offset: CINSWeaponMagazines.dataPtr"); ok = false; }
+	if (g_off_mags_allocated  < 0)
+		{ PrintToServer("[AmmoBox] MISSING offset: CINSWeaponMagazines.allocated"); ok = false; }
+	if (g_off_mags_count      < 0)
+		{ PrintToServer("[AmmoBox] MISSING offset: CINSWeaponMagazines.count");   ok = false; }
+
+	if (!ok)
 	{
-		StartPrepSDKCall(SDKCall_Entity);
-		PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CINSPlayer::GetMagazines");
-		PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);  // returns CINSWeaponMagazines* as int
-		PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);   // int ammoType
-		g_sdkGetMagazines = EndPrepSDKCall();
-
-		if (g_sdkGetMagazines == null)
-			PrintToServer("[AmmoBox] WARNING: failed to prepare CINSPlayer::GetMagazines SDKCall");
-		else
-			PrintToServer("[AmmoBox] CINSPlayer::GetMagazines SDKCall ready");
-
-		delete gameConf;
+		PrintToServer("[AmmoBox] One or more offsets missing for this platform -- ammo giving disabled");
+		PrintToServer("[AmmoBox] Plugin loaded (v1.7.0) -- DISABLED");
+		return;
 	}
 
-	PrintToServer("[AmmoBox] Plugin loaded (v1.5.0)");
+	PrintToServer("[AmmoBox] Plugin loaded (v1.7.0) -- all offsets OK");
 }
 
 // ---------------------------------------------------------------------------
@@ -301,10 +338,11 @@ static bool GiveMagazine(int client, int slot)
 	if (weapon == -1)
 		return false;
 
-	// weapon+0x5a4 >= 0: weapon has a magazine system.
-	// weapon+0x15c0: CINSWeapon::GetPrimaryAmmoType() virtual result.
-	int slotVal  = GetEntData(weapon, 0x5a4);
-	int ammoType = GetEntData(weapon, 0x15c0);
+	if (g_sdkGetMagazines == null || g_off_weapon_slotVal < 0)
+		return false;  // offsets not loaded (unsupported platform)
+
+	int slotVal  = GetEntData(weapon, g_off_weapon_slotVal);
+	int ammoType = GetEntData(weapon, g_off_weapon_ammoType);
 
 	if (slotVal < 0 || ammoType < 0)
 	{
@@ -312,12 +350,6 @@ static bool GiveMagazine(int client, int slot)
 		ammoType = GetEntProp(weapon, Prop_Data, "m_iPrimaryAmmoType");
 		if (ammoType < 0)
 			return false;
-	}
-
-	if (g_sdkGetMagazines == null)
-	{
-		PrintToServer("[AmmoBox] GetMagazines SDKCall unavailable");
-		return false;
 	}
 
 	// Get (or create) the CINSWeaponMagazines object for this ammoType.
@@ -333,9 +365,9 @@ static bool GiveMagazine(int client, int slot)
 	}
 
 	// Read the UTL vector fields from the heap object.
-	int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + 0x08), NumberType_Int32);
-	int allocated = LoadFromAddress(view_as<Address>(magsPtr + 0x0c), NumberType_Int32);
-	int count     = LoadFromAddress(view_as<Address>(magsPtr + 0x14), NumberType_Int32);
+	int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_dataPtr),   NumberType_Int32);
+	int allocated = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_allocated), NumberType_Int32);
+	int count     = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_count),     NumberType_Int32);
 
 	PrintToServer("[AmmoBox]   dataPtr=0x%x allocated=%d count=%d",
 		dataPtr, allocated, count);
@@ -348,17 +380,13 @@ static bool GiveMagazine(int client, int slot)
 		return false;
 	}
 
-	// weapon+0x15f8 = the per-weapon magazine capacity from GetMagazineCapacity()
-	// (the non-ammoDef-0x4 path: in_stack[0x57e]).  Empirically correct for all
-	// weapon types: 15 for the primary, 8 for the pistol, 30 for picked-up AKs, etc.
-	// weapon+0x1600 (the ammoDef-0x4 path) is always -1 in practice and is not used.
-	int roundsPerMag = GetEntData(weapon, 0x15f8);
+	int roundsPerMag = GetEntData(weapon, g_off_weapon_magCap);
 	if (roundsPerMag < 1)
 		roundsPerMag = 30;
 
 	// Append: data[count] = roundsPerMag, count++
-	StoreToAddress(view_as<Address>(dataPtr + count * 4), roundsPerMag, NumberType_Int32);
-	StoreToAddress(view_as<Address>(magsPtr + 0x14),      count + 1,    NumberType_Int32);
+	StoreToAddress(view_as<Address>(dataPtr + count * 4),          roundsPerMag, NumberType_Int32);
+	StoreToAddress(view_as<Address>(magsPtr + g_off_mags_count),  count + 1,    NumberType_Int32);
 
 	// Sync m_iAmmo to the new vector size (mirrors UpdateCounter).
 	SetEntProp(client, Prop_Data, "m_iAmmo", count + 1, _, ammoType);
