@@ -1,0 +1,109 @@
+// Windows signatures for SourceMod gamedata
+// Extracted from server.dll (MD5: 17fbf3b88895ca12ff47babd72e5b786) via Ghidra RTTI analysis
+// Cross-referenced Linux vtable indices with Windows RTTI vtables
+//
+// NOTE: 4 functions had vtable index misalignment (MSVC vs GCC dtor slot count).
+//       These are marked with [CORRECTED] and use the nearby candidate that matches
+//       the expected code structure (verified via decompilation preview).
+
+"Signatures"
+{
+	// CINSBotCombat::Update @ 1028d440 [EXACT vtable[50], 89 bytes]
+	"CINSBotCombat::Update"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x56\x8B\x75\x08\x85\xF6\x74\x49\x8B\x06\x8B\xCE\x8B\x80\x14\x01\x00\x00\xFF\xD0\x84\xC0\x74\x39\x8B\xCE\xE8\x6E\xFF"
+	}
+
+	// CINSBotActionCheckpoint::Update @ 102889b0 [CORRECTED vtable[49] (-1), 1267 bytes]
+	// vtable[50] was a 19-byte byte-copy stub (OnEnd/Resume handler, not the real Update).
+	// vtable[49] has the full checkpoint navigation logic — matches Linux symbol behavior.
+	"CINSBotActionCheckpoint::Update"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x83\xEC\x14\x53\x56\x57\x8B\x7D\x0C\x8B\xD9\x8B\x87\x4C\x20\x00\x00\x8D\xB7\x4C\x20\x00\x00\x8B\xCE\xFF\x90\xD8\x00"
+	}
+
+	// CINSBotLocomotion::Approach @ 1035fa40 [EXACT vtable[50], 40 bytes]
+	"CINSBotLocomotion::Approach"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x57\xFF\x75\x08\x8B\xF9\xE8\xF2\x37\xFF\xFF\x8B\x07\x51\xC7\x04\x24\x00\x00\x80\x3F\x8B\xCF\xFF\x75\x08\xFF\x90\xC4"
+	}
+
+	// CINSBotLocomotion::Update @ 102767e0 [EXACT vtable[47], 140 bytes]
+	"CINSBotLocomotion::Update"
+	{
+		"library"	"server"
+		"windows"	"\x56\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x04\xE8\x1F\x7B\xFB\xFF\x84\xC0\x75\x6B\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x03\xE8\x0E\x7B"
+	}
+
+	// CINSBotLocomotion::FaceTowards @ 10275070 [CORRECTED vtable[76] (-1), 179 bytes]
+	// vtable[77] was a ret-4 stub; vtable[76] has real FaceTowards logic
+	"CINSBotLocomotion::FaceTowards"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x83\xEC\x1C\x8B\x01\x53\x56\x57\x89\x4D\xFC\xFF\x90\xC0\x00\x00\x00\x8B\xF0\x8B\xCE\x8B\x16\xFF\x92\xC4\x00\x00\x00"
+	}
+
+	// CNavArea::IsPotentiallyVisible @ 10319aa0 [EXACT vtable[33], 204 bytes]
+	"CNavArea::IsPotentiallyVisible"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1C\x8B\x0D\x2A\x2A\x2A\x2A"
+	}
+
+	// CNavArea::IsBlocked @ 103186f0 [CORRECTED vtable[17] (-1), 62 bytes]
+	// vtable[18] was a fld/ret getter; vtable[17] checks team flags — matches IsBlocked(int,bool)
+	"CNavArea::IsBlocked"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x80\x7D\x0C\x00\x74\x0F\xF7\x41\x68\x00\x00\x00\x80\x74\x06\x32\xC0\x5D\xC2\x08\x00\x8B\x45\x08\x83\xF8\xFF\x75\x0A"
+	}
+
+	// CINSRules::IsCounterAttack @ 1022e1a0 [CORRECTED vtable[269] (-2), 7 bytes]
+	// vtable[271] was a ret-4 stub; vtable[269] reads bool at this+0x3AC
+	// mov al, byte ptr [ecx+0x3AC]; ret — reads m_bCounterAttack field
+	"CINSRules::IsCounterAttack"
+	{
+		"library"	"server"
+		"windows"	"\x8A\x81\xAC\x03\x00\x00\xC3"
+	}
+
+	// CINSNextBot::Spawn @ 102b2360 [EXACT vtable[23], 90 bytes]
+	"CINSNextBot::Spawn"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x51\x56\x8B\xF1\xE8\x14\x26\xDD\xFF\x6A\x01\x88\x45\xFC\xE8\x0A\x32\xDD\xFF\x68\x2A\x2A\x2A\x2A\xC7\x86\xA0\x1E\x00"
+	}
+
+	// CINSNextBot::CINSNextBotIntention::Update @ 1026e750 [CORRECTED vtable[46] (-1), 46 bytes]
+	// vtable[47] was a bare ret stub; vtable[46] does real Intention::Update work
+	"CINSNextBot::CINSNextBotIntention::Update"
+	{
+		"library"	"server"
+		"windows"	"\x56\x8B\xF1\x8B\x06\xFF\x90\xC0\x00\x00\x00\x85\xC0\x74\x07\x05\xB4\xDF\xFF\xFF\xEB\x02\x33\xC0\xF3\x0F\x10\x46\x08\x51\x8B\x4E"
+	}
+
+	// PlayerLocomotion::Run @ 10276870 [EXACT vtable[59], 21 bytes]
+	"PlayerLocomotion::Run"
+	{
+		"library"	"server"
+		"windows"	"\x56\x8B\xF1\x8B\x06\x8B\x80\x58\x01\x00\x00\xFF\xD0\xD9\x9E\x88\x00\x00\x00\x5E\xC3"
+	}
+
+	// ILocomotion::ClearStuckStatus @ 1021a740 [EXACT vtable[101], 72 bytes]
+	"ILocomotion::ClearStuckStatus"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x51\xF3\x0F\x10\x41\x5C\x0F\x57\xC9\x0F\x2F\xC1\x56\x76\x2F\xF3\x0F\x10\x41\x5C\x8D\x71\x58\x0F\x2F\xC1\x76\x22\x8B"
+	}
+
+	// CINSNextBot::GetLocomotionInterface @ 1021b0c0 [EXACT vtable[603], 54 bytes]
+	"CINSNextBot::GetLocomotionInterface"
+	{
+		"library"	"server"
+		"windows"	"\x55\x8B\xEC\x56\x57\x8B\xF9\x8B\x07\xFF\x50\x04\x8B\xF0\x85\xF6\x74\x1E\x53\x8B\x5D\x0C\x8B\x06\x8B\xCE\x53\xFF\x75\x08\xFF\x50"
+	}
+
+}

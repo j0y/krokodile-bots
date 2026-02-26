@@ -1,0 +1,2218 @@
+======================================================================
+Windows server.dll Signature Extraction Report
+======================================================================
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 47, delta=-3, 152 bytes]
+Address:  10262070
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x81\xEC\x00\x01\x00\x00\xC6\x05\x2A\x2A\x2A\x2A\x00\x56\x57\x8B\xF1\x33\xFF\x85\xF6\x74\x1A\x8B\x06\x8B\xCE\xFF\x90"
+Raw:      55 8B EC 81 EC 00 01 00 00 C6 05 90 BD 6D 10 00 56 57 8B F1 33 FF 85 F6 74 1A 8B 06 8B CE FF 90
+
+Decompiled:
+  
+  undefined * FUN_10262070(void)
+  
+  {
+    undefined4 uVar1;
+    int *in_ECX;
+    int iVar2;
+    undefined4 local_104 [64];
+    
+    DAT_106dbd90 = 0;
+    iVar2 = 0;
+    do {
+      if (in_ECX == (int *)0x0) break;
+      uVar1 = (**(code **)(*in_ECX + 0xb4))();
+      in_ECX = (int *)in_ECX[3];
+      local_104[iVar2] = uVar1;
+      iVar2 = iVar2 + 1;
+    } while (iVar2 < 0x40);
+    while (iVar2 = iVar2 + -1, 0 < iVar2) {
+      FUN_1039f6d0(&DAT_106dbd90,local_104[iVar2],0x100,0xffffffff);
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 48, delta=-2, 247 bytes]
+Address:  1028d710
+Match:    NEAR(-2)
+Sig:      "\x55\x8B\xEC\x83\xEC\x08\x53\x8B\x5D\x0C\x56\x57\x8B\xF1\x8D\xBB\x68\xB3\x00\x00\x8B\xCF\xE8\x25\x75\xF5\xFF\xD8\x05\x2A\x2A\x2A"
+Raw:      55 8B EC 83 EC 08 53 8B 5D 0C 56 57 8B F1 8D BB 68 B3 00 00 8B CF E8 25 75 F5 FF D8 05 E8 36 4A
+
+Decompiled:
+  
+  void FUN_1028d710(undefined4 *param_1,int param_2)
+  
+  {
+    float fVar1;
+    int iVar2;
+    int in_ECX;
+    float *pfVar3;
+    float10 fVar4;
+    
+    fVar4 = (float10)FUN_101e4c50();
+    pfVar3 = (float *)(param_2 + 0xb370);
+    if (*pfVar3 != (float)(fVar4 + (float10)30.0)) {
+      (*(code *)**(undefined4 **)(param_2 + 0xb368))(pfVar3);
+      *pfVar3 = (float)(fVar4 + (float10)30.0);
+    }
+    if (*(int *)(param_2 + 0xb36c) != 0x41f00000) {
+      (*(code *)**(undefined4 **)(param_2 + 0xb368))((undefined4 *)(param_2 + 0xb36c));
+      *(undefined4 *)(param_2 + 0xb36c) = 0x41f00000;
+    }
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 49, delta=-1, 2920 bytes]
+Address:  1028d810
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\xA1\x2A\x2A\x2A\x2A\x81\xEC\x3C\x01\x00\x00\x53\x56\x57\x8B\xF9\xB9\x2A\x2A\x2A\x2A\xFF\x50\x34\x8B\x5D\x0C\x85\xC0"
+Raw:      55 8B EC A1 00 07 6E 10 81 EC 3C 01 00 00 53 56 57 8B F9 B9 00 07 6E 10 FF 50 34 8B 5D 0C 85 C0
+
+Decompiled:
+  
+  void FUN_1028d810(undefined4 *param_1,int *param_2)
+  
+  {
+    char cVar1;
+    char cVar2;
+    int iVar3;
+    int *piVar4;
+    undefined4 uVar5;
+    int iVar6;
+    int *piVar7;
+    undefined8 *puVar8;
+    int in_ECX;
+    float10 fVar9;
+    undefined8 uVar10;
+    undefined8 uVar11;
+    undefined4 uVar12;
+    float fVar13;
+    undefined4 *puVar14;
+    char *pcVar15;
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 50, delta=+0, 89 bytes]
+Address:  1028d440
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x56\x8B\x75\x08\x85\xF6\x74\x49\x8B\x06\x8B\xCE\x8B\x80\x14\x01\x00\x00\xFF\xD0\x84\xC0\x74\x39\x8B\xCE\xE8\x6E\xFF"
+Raw:      55 8B EC 56 8B 75 08 85 F6 74 49 8B 06 8B CE 8B 80 14 01 00 00 FF D0 84 C0 74 39 8B CE E8 6E FF
+
+Decompiled:
+  
+  void FUN_1028d440(int *param_1)
+  
+  {
+    char cVar1;
+    int iVar2;
+    int *piVar3;
+    
+    if (param_1 != (int *)0x0) {
+      cVar1 = (**(code **)(*param_1 + 0x114))();
+      if (cVar1 != '\0') {
+        FUN_1028d3d0();
+        iVar2 = (**(code **)(param_1[0x813] + 0xd0))();
+        if (iVar2 != 0) {
+          piVar3 = (int *)(**(code **)(param_1[0x813] + 0xd0))();
+          (**(code **)(*piVar3 + 0x15c))();
+        }
+      }
+    }
+    return;
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 51, delta=+1, 30 bytes]
+Address:  1028f340
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x8B\x45\x08\xC7\x00\x00\x00\x00\x00\xC7\x40\x04\x00\x00\x00\x00\xC7\x40\x08\x00\x00\x00\x00\x5D\xC2\x0C\x00\xCC\xCC"
+Raw:      55 8B EC 8B 45 08 C7 00 00 00 00 00 C7 40 04 00 00 00 00 C7 40 08 00 00 00 00 5D C2 0C 00 CC CC
+
+Decompiled:
+  
+  void FUN_1028f340(undefined4 *param_1)
+  
+  {
+    *param_1 = 0;
+    param_1[1] = 0;
+    param_1[2] = 0;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 52, delta=+2, 351 bytes]
+Address:  1028d560
+Match:    NEAR(+2)
+Sig:      "\x55\x8B\xEC\x51\x56\x8B\xF1\x8B\x46\x38\x83\xF8\xFF\x75\x23\xE8\x0C\x0E\x00\x00\x8B\x45\x08\x5E\xC7\x00\x00\x00\x00\x00\xC7\x40"
+Raw:      55 8B EC 51 56 8B F1 8B 46 38 83 F8 FF 75 23 E8 0C 0E 00 00 8B 45 08 5E C7 00 00 00 00 00 C7 40
+
+Decompiled:
+  
+  void FUN_1028d560(undefined4 *param_1,int param_2)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    int *piVar3;
+    int iVar4;
+    int in_ECX;
+    int *piVar5;
+    float10 fVar6;
+    
+    if (*(int *)(in_ECX + 0x38) == -1) {
+      FUN_1028e380();
+      *param_1 = 0;
+      param_1[1] = 0;
+      param_1[2] = 0;
+      return;
+    }
+    piVar2 = (int *)FUN_101d8850(*(int *)(in_ECX + 0x38));
+
+------------------------------------------------------------
+Function: CINSBotCombat::Update [vtable 53, delta=+3, 5 bytes]
+Address:  1022a6c0
+Match:    NEAR(+3)
+Sig:      "\x33\xC0\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x83\xEC\x14\x53\x8B\xD9\x8B\x4D\x0C\x56\x57\x8B\x3D"
+Raw:      33 C0 C2 04 00 CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 83 EC 14 53 8B D9 8B 4D 0C 56 57 8B 3D
+
+Decompiled:
+  
+  undefined4 FUN_1022a6c0(void)
+  
+  {
+    return 0;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 47, delta=-3, 152 bytes]
+Address:  10262070
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x81\xEC\x00\x01\x00\x00\xC6\x05\x2A\x2A\x2A\x2A\x00\x56\x57\x8B\xF1\x33\xFF\x85\xF6\x74\x1A\x8B\x06\x8B\xCE\xFF\x90"
+Raw:      55 8B EC 81 EC 00 01 00 00 C6 05 90 BD 6D 10 00 56 57 8B F1 33 FF 85 F6 74 1A 8B 06 8B CE FF 90
+
+Decompiled:
+  
+  undefined * FUN_10262070(void)
+  
+  {
+    undefined4 uVar1;
+    int *in_ECX;
+    int iVar2;
+    undefined4 local_104 [64];
+    
+    DAT_106dbd90 = 0;
+    iVar2 = 0;
+    do {
+      if (in_ECX == (int *)0x0) break;
+      uVar1 = (**(code **)(*in_ECX + 0xb4))();
+      in_ECX = (int *)in_ECX[3];
+      local_104[iVar2] = uVar1;
+      iVar2 = iVar2 + 1;
+    } while (iVar2 < 0x40);
+    while (iVar2 = iVar2 + -1, 0 < iVar2) {
+      FUN_1039f6d0(&DAT_106dbd90,local_104[iVar2],0x100,0xffffffff);
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 48, delta=-2, 56 bytes]
+Address:  10288900
+Match:    NEAR(-2)
+Sig:      "\x55\x8B\xEC\x8B\x55\x0C\x8A\x82\x7B\x22\x00\x00\x88\x41\x38\x8B\x45\x08\xC6\x82\x7B\x22\x00\x00\x00\xC7\x41\x3C\x00\x00\x80\xBF"
+Raw:      55 8B EC 8B 55 0C 8A 82 7B 22 00 00 88 41 38 8B 45 08 C6 82 7B 22 00 00 00 C7 41 3C 00 00 80 BF
+
+Decompiled:
+  
+  void FUN_10288900(undefined4 *param_1,int param_2)
+  
+  {
+    int in_ECX;
+    
+    *(undefined1 *)(in_ECX + 0x38) = *(undefined1 *)(param_2 + 0x227b);
+    *(undefined1 *)(param_2 + 0x227b) = 0;
+    *(undefined4 *)(in_ECX + 0x3c) = 0xbf800000;
+    *param_1 = 0;
+    param_1[1] = 0;
+    param_1[2] = 0;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 49, delta=-1, 1267 bytes]
+Address:  102889b0
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x83\xEC\x14\x53\x56\x57\x8B\x7D\x0C\x8B\xD9\x8B\x87\x4C\x20\x00\x00\x8D\xB7\x4C\x20\x00\x00\x8B\xCE\xFF\x90\xD8\x00"
+Raw:      55 8B EC 83 EC 14 53 56 57 8B 7D 0C 8B D9 8B 87 4C 20 00 00 8D B7 4C 20 00 00 8B CE FF 90 D8 00
+
+Decompiled:
+  
+  void FUN_102889b0(undefined4 *param_1,int param_2)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    int iVar3;
+    int iVar4;
+    undefined4 uVar5;
+    undefined4 uVar6;
+    int in_ECX;
+    float10 fVar7;
+    undefined4 uVar8;
+    undefined4 uVar9;
+    undefined1 local_18 [12];
+    float local_c;
+    float local_8;
+    
+    piVar2 = (int *)(**(code **)(*(int *)(param_2 + 0x204c) + 0xd8))();
+    iVar3 = (**(code **)(*piVar2 + 0xcc))(0);
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 50, delta=+0, 19 bytes]
+Address:  1028ad60
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x8B\x45\x08\x8A\x49\x38\x88\x88\x7B\x22\x00\x00\x5D\xC2\x08\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      55 8B EC 8B 45 08 8A 49 38 88 88 7B 22 00 00 5D C2 08 00 CC CC CC CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  void FUN_1028ad60(int param_1)
+  
+  {
+    int in_ECX;
+    
+    *(undefined1 *)(param_1 + 0x227b) = *(undefined1 *)(in_ECX + 0x38);
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 51, delta=+1, 30 bytes]
+Address:  1028f340
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x8B\x45\x08\xC7\x00\x00\x00\x00\x00\xC7\x40\x04\x00\x00\x00\x00\xC7\x40\x08\x00\x00\x00\x00\x5D\xC2\x0C\x00\xCC\xCC"
+Raw:      55 8B EC 8B 45 08 C7 00 00 00 00 00 C7 40 04 00 00 00 00 C7 40 08 00 00 00 00 5D C2 0C 00 CC CC
+
+Decompiled:
+  
+  void FUN_1028f340(undefined4 *param_1)
+  
+  {
+    *param_1 = 0;
+    param_1[1] = 0;
+    param_1[2] = 0;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 52, delta=+2, 30 bytes]
+Address:  1028f340
+Match:    NEAR(+2)
+Sig:      "\x55\x8B\xEC\x8B\x45\x08\xC7\x00\x00\x00\x00\x00\xC7\x40\x04\x00\x00\x00\x00\xC7\x40\x08\x00\x00\x00\x00\x5D\xC2\x0C\x00\xCC\xCC"
+Raw:      55 8B EC 8B 45 08 C7 00 00 00 00 00 C7 40 04 00 00 00 00 C7 40 08 00 00 00 00 5D C2 0C 00 CC CC
+
+Decompiled:
+  
+  void FUN_1028f340(undefined4 *param_1)
+  
+  {
+    *param_1 = 0;
+    param_1[1] = 0;
+    param_1[2] = 0;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotActionCheckpoint::Update [vtable 53, delta=+3, 5 bytes]
+Address:  1022a6c0
+Match:    NEAR(+3)
+Sig:      "\x33\xC0\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x83\xEC\x14\x53\x8B\xD9\x8B\x4D\x0C\x56\x57\x8B\x3D"
+Raw:      33 C0 C2 04 00 CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 83 EC 14 53 8B D9 8B 4D 0C 56 57 8B 3D
+
+Decompiled:
+  
+  undefined4 FUN_1022a6c0(void)
+  
+  {
+    return 0;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 47, delta=-3, 140 bytes]
+Address:  102767e0
+Match:    NEAR(-3)
+Sig:      "\x56\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x04\xE8\x1F\x7B\xFB\xFF\x84\xC0\x75\x6B\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x03\xE8\x0E\x7B"
+Raw:      56 57 8B F9 8B 0D A8 38 69 10 6A 04 E8 1F 7B FB FF 84 C0 75 6B 8B 0D A8 38 69 10 6A 03 E8 0E 7B
+
+Decompiled:
+  
+  void FUN_102767e0(void)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    int iVar3;
+    int *in_ECX;
+    
+    cVar1 = FUN_1022e310(4);
+    if (cVar1 == '\0') {
+      cVar1 = FUN_1022e310(3);
+      if (cVar1 == '\0') {
+        return;
+      }
+      piVar2 = (int *)(**(code **)(*in_ECX + 0xc0))();
+      iVar3 = (**(code **)(*piVar2 + 0xc4))();
+      iVar3 = *(int *)(iVar3 + 0x18);
+      if (iVar3 != 0) {
+        iVar3 = iVar3 - *(int *)(DAT_106931a8 + 0x5c) >> 4;
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 48, delta=-2, 4 bytes]
+Address:  10110700
+Match:    NEAR(-2)
+Sig:      "\x8B\x41\x0C\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xB8\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      8B 41 0C C3 CC CC CC CC CC CC CC CC CC CC CC CC B8 CC E4 4D 10 C3 CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  undefined4 FUN_10110700(void)
+  
+  {
+    int in_ECX;
+    
+    return *(undefined4 *)(in_ECX + 0xc);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 49, delta=-1, 1875 bytes]
+Address:  10274880
+Match:    NEAR(-1)
+Sig:      "\x53\x8B\xDC\x83\xEC\x08\x83\xE4\xF0\x83\xC4\x04\x55\x8B\x6B\x04\x89\x6C\x24\x04\x8B\xEC\x83\xEC\x48\x56\x8B\xF1\x57\x8B\x06\x8B"
+Raw:      53 8B DC 83 EC 08 83 E4 F0 83 C4 04 55 8B 6B 04 89 6C 24 04 8B EC 83 EC 48 56 8B F1 57 8B 06 8B
+
+Decompiled:
+  
+  void FUN_10274880(float *param_1,undefined4 param_2)
+  
+  {
+    char cVar1;
+    int iVar2;
+    int *piVar3;
+    undefined4 uVar4;
+    float *pfVar5;
+    int iVar6;
+    int *in_ECX;
+    float10 fVar7;
+    float fVar8;
+    float fVar9;
+    undefined4 uVar10;
+    undefined4 uVar11;
+    undefined4 uVar12;
+    undefined4 uVar13;
+    undefined4 uVar14;
+    undefined4 uVar15;
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 50, delta=+0, 40 bytes]
+Address:  1035fa40
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x57\xFF\x75\x08\x8B\xF9\xE8\xF2\x37\xFF\xFF\x8B\x07\x51\xC7\x04\x24\x00\x00\x80\x3F\x8B\xCF\xFF\x75\x08\xFF\x90\xC4"
+Raw:      55 8B EC 57 FF 75 08 8B F9 E8 F2 37 FF FF 8B 07 51 C7 04 24 00 00 80 3F 8B CF FF 75 08 FF 90 C4
+
+Decompiled:
+  
+  void FUN_1035fa40(undefined4 param_1)
+  
+  {
+    int *in_ECX;
+    
+    FUN_10353240(param_1);
+    (**(code **)(*in_ECX + 0xc4))(param_1,0x3f800000);
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 51, delta=+1, 91 bytes]
+Address:  1035f4b0
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x56\x57\xFF\x75\x10\x8B\xF9\x8B\x37\xFF\x96\xC0\x00\x00\x00\x50\x8B\x86\xAC\x01\x00\x00\x8B\xCF\xFF\xD0\x84\xC0\x75"
+Raw:      55 8B EC 56 57 FF 75 10 8B F9 8B 37 FF 96 C0 00 00 00 50 8B 86 AC 01 00 00 8B CF FF D0 84 C0 75
+
+Decompiled:
+  
+  undefined4 FUN_1035f4b0(int *param_1,undefined4 param_2,undefined4 param_3)
+  
+  {
+    int iVar1;
+    undefined4 uVar2;
+    int *in_ECX;
+    
+    iVar1 = *in_ECX;
+    uVar2 = (**(code **)(iVar1 + 0xc0))(param_3);
+    uVar2 = (**(code **)(iVar1 + 0x1ac))(uVar2);
+    if ((char)uVar2 == '\0') {
+      return uVar2;
+    }
+    (**(code **)(*in_ECX + 0xd4))();
+    *(undefined1 *)(in_ECX + 0x1d) = 1;
+    in_ECX[0x1e] = *param_1;
+    in_ECX[0x1f] = param_1[1];
+    iVar1 = param_1[2];
+    in_ECX[0x20] = iVar1;
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 52, delta=+2, 103 bytes]
+Address:  1035fdb0
+Match:    NEAR(+2)
+Sig:      "\x55\x8B\xEC\x56\x57\x8B\xF9\x8B\x07\xFF\x90\xD4\x00\x00\x00\x8B\x07\x8B\xCF\xFF\x90\xC0\x00\x00\x00\x8B\xC8\x8B\x10\xFF\x92\xD0"
+Raw:      55 8B EC 56 57 8B F9 8B 07 FF 90 D4 00 00 00 8B 07 8B CF FF 90 C0 00 00 00 8B C8 8B 10 FF 92 D0
+
+Decompiled:
+  
+  void FUN_1035fdb0(int *param_1)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    
+    (**(code **)(*in_ECX + 0xd4))();
+    piVar1 = (int *)(**(code **)(*in_ECX + 0xc0))();
+    piVar1 = (int *)(**(code **)(*piVar1 + 0xd0))();
+    (**(code **)(*piVar1 + 0xd4))(param_1,5,0x3f800000,0,"Looking forward while jumping a gap");
+    *(undefined1 *)((int)in_ECX + 0x75) = 1;
+    in_ECX[0x1e] = *param_1;
+    in_ECX[0x1f] = param_1[1];
+    in_ECX[0x20] = param_1[2];
+    *(undefined1 *)(in_ECX + 0x21) = 0;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Approach [vtable 53, delta=+3, 182 bytes]
+Address:  1035fcf0
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\x83\xEC\x0C\x53\x56\x57\x8B\xF9\x8D\x4F\x68\xC6\x47\x64\x01\xE8\x49\x4F\xE8\xFF\xD8\x05\x2A\x2A\x2A\x2A\x8D\x77\x70"
+Raw:      55 8B EC 83 EC 0C 53 56 57 8B F9 8D 4F 68 C6 47 64 01 E8 49 4F E8 FF D8 05 98 42 4A 10 8D 77 70
+
+Decompiled:
+  
+  void FUN_1035fcf0(void)
+  
+  {
+    float *pfVar1;
+    undefined4 uVar2;
+    int *piVar3;
+    int *in_ECX;
+    float10 fVar4;
+    
+    *(undefined1 *)(in_ECX + 0x19) = 1;
+    fVar4 = (float10)FUN_101e4c50();
+    pfVar1 = (float *)(in_ECX + 0x1c);
+    if (*pfVar1 != (float)(fVar4 + (float10)0.5)) {
+      (**(code **)in_ECX[0x1a])(pfVar1);
+      *pfVar1 = (float)(fVar4 + (float10)0.5);
+    }
+    if (in_ECX[0x1b] != 0x3f000000) {
+      (**(code **)in_ECX[0x1a])(in_ECX + 0x1b);
+      in_ECX[0x1b] = 0x3f000000;
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 44, delta=-3, 111 bytes]
+Address:  1021b010
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x51\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\x81\xF9\x2A\x2A\x2A\x2A\x75\x16\xF3\x0F\x10\x05\x2A\x2A\x2A\x2A\xF3\x0F\x11"
+Raw:      55 8B EC 51 57 8B F9 8B 0D 3C C4 6D 10 81 F9 20 C4 6D 10 75 16 F3 0F 10 05 4C C4 6D 10 F3 0F 11
+
+Decompiled:
+  
+  void FUN_1021b010(void)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    float10 fVar2;
+    float local_8;
+    
+    if (DAT_106dc43c == (int *)&DAT_106dc420) {
+      local_8 = (float)(DAT_106dc44c ^ 0x106dc420);
+    }
+    else {
+      fVar2 = (float10)(**(code **)(*DAT_106dc43c + 0x30))();
+      local_8 = (float)fVar2;
+    }
+    if (local_8 <= 0.0) {
+      for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+          piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+        (**(code **)(*piVar1 + 0xb0))();
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 45, delta=-2, 166 bytes]
+Address:  1035fe20
+Match:    NEAR(-2)
+Sig:      "\x55\x8B\xEC\x83\xEC\x08\x56\x8B\xF1\x57\x8B\x06\xFF\x90\xC0\x00\x00\x00\x8B\xC8\x8B\x10\xFF\x92\xC4\x00\x00\x00\x89\x46\x60\x8D"
+Raw:      55 8B EC 83 EC 08 56 8B F1 57 8B 06 FF 90 C0 00 00 00 8B C8 8B 10 FF 92 C4 00 00 00 89 46 60 8D
+
+Decompiled:
+  
+  void FUN_1035fe20(void)
+  
+  {
+    int *piVar1;
+    int iVar2;
+    int *in_ECX;
+    
+    piVar1 = (int *)(**(code **)(*in_ECX + 0xc0))();
+    iVar2 = (**(code **)(*piVar1 + 0xc4))();
+    in_ECX[0x18] = iVar2;
+    piVar1 = in_ECX + 0x2a;
+    *(undefined1 *)(in_ECX + 0x19) = 0;
+    *(undefined2 *)(in_ECX + 0x1d) = 0;
+    *(undefined1 *)(in_ECX + 0x21) = 0;
+    in_ECX[0x22] = 0;
+    in_ECX[0x25] = 0;
+    in_ECX[0x26] = 0;
+    in_ECX[0x27] = 0;
+    if (*piVar1 != -0x40800000) {
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 46, delta=-1, 190 bytes]
+Address:  10275d50
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x83\xEC\x0C\x56\x8B\xF1\xE8\x42\xA2\x0E\x00\x8B\x06\x8B\xCE\x8B\x80\x68\x01\x00\x00\xFF\xD0\xD9\x5D\xFC\xF3\x0F\x10"
+Raw:      55 8B EC 83 EC 0C 56 8B F1 E8 42 A2 0E 00 8B 06 8B CE 8B 80 68 01 00 00 FF D0 D9 5D FC F3 0F 10
+
+Decompiled:
+  
+  void FUN_10275d50(void)
+  
+  {
+    int *in_ECX;
+    float10 fVar1;
+    
+    FUN_1035ffa0();
+    fVar1 = (float10)(**(code **)(*in_ECX + 0x168))();
+    if ((float)fVar1 < 5.0) {
+      if ((float)in_ECX[0x1262] <= 0.0) {
+        fVar1 = (float10)FUN_101e4c50();
+        if ((float)in_ECX[0x1262] != (float)fVar1) {
+          (**(code **)(in_ECX[0x1261] + 4))(in_ECX + 0x1262);
+          in_ECX[0x1262] = (int)(float)fVar1;
+        }
+      }
+    }
+    else if (in_ECX[0x1262] != -0x40800000) {
+      (**(code **)(in_ECX[0x1261] + 4))(in_ECX + 0x1262);
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 47, delta=+0, 140 bytes]
+Address:  102767e0
+Match:    EXACT
+Sig:      "\x56\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x04\xE8\x1F\x7B\xFB\xFF\x84\xC0\x75\x6B\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x03\xE8\x0E\x7B"
+Raw:      56 57 8B F9 8B 0D A8 38 69 10 6A 04 E8 1F 7B FB FF 84 C0 75 6B 8B 0D A8 38 69 10 6A 03 E8 0E 7B
+
+Decompiled:
+  
+  void FUN_102767e0(void)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    int iVar3;
+    int *in_ECX;
+    
+    cVar1 = FUN_1022e310(4);
+    if (cVar1 == '\0') {
+      cVar1 = FUN_1022e310(3);
+      if (cVar1 == '\0') {
+        return;
+      }
+      piVar2 = (int *)(**(code **)(*in_ECX + 0xc0))();
+      iVar3 = (**(code **)(*piVar2 + 0xc4))();
+      iVar3 = *(int *)(iVar3 + 0x18);
+      if (iVar3 != 0) {
+        iVar3 = iVar3 - *(int *)(DAT_106931a8 + 0x5c) >> 4;
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 48, delta=+1, 4 bytes]
+Address:  10110700
+Match:    NEAR(+1)
+Sig:      "\x8B\x41\x0C\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xB8\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      8B 41 0C C3 CC CC CC CC CC CC CC CC CC CC CC CC B8 CC E4 4D 10 C3 CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  undefined4 FUN_10110700(void)
+  
+  {
+    int in_ECX;
+    
+    return *(undefined4 *)(in_ECX + 0xc);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 49, delta=+2, 1875 bytes]
+Address:  10274880
+Match:    NEAR(+2)
+Sig:      "\x53\x8B\xDC\x83\xEC\x08\x83\xE4\xF0\x83\xC4\x04\x55\x8B\x6B\x04\x89\x6C\x24\x04\x8B\xEC\x83\xEC\x48\x56\x8B\xF1\x57\x8B\x06\x8B"
+Raw:      53 8B DC 83 EC 08 83 E4 F0 83 C4 04 55 8B 6B 04 89 6C 24 04 8B EC 83 EC 48 56 8B F1 57 8B 06 8B
+
+Decompiled:
+  
+  void FUN_10274880(float *param_1,undefined4 param_2)
+  
+  {
+    char cVar1;
+    int iVar2;
+    int *piVar3;
+    undefined4 uVar4;
+    float *pfVar5;
+    int iVar6;
+    int *in_ECX;
+    float10 fVar7;
+    float fVar8;
+    float fVar9;
+    undefined4 uVar10;
+    undefined4 uVar11;
+    undefined4 uVar12;
+    undefined4 uVar13;
+    undefined4 uVar14;
+    undefined4 uVar15;
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::Update [vtable 50, delta=+3, 40 bytes]
+Address:  1035fa40
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\x57\xFF\x75\x08\x8B\xF9\xE8\xF2\x37\xFF\xFF\x8B\x07\x51\xC7\x04\x24\x00\x00\x80\x3F\x8B\xCF\xFF\x75\x08\xFF\x90\xC4"
+Raw:      55 8B EC 57 FF 75 08 8B F9 E8 F2 37 FF FF 8B 07 51 C7 04 24 00 00 80 3F 8B CF FF 75 08 FF 90 C4
+
+Decompiled:
+  
+  void FUN_1035fa40(undefined4 param_1)
+  
+  {
+    int *in_ECX;
+    
+    FUN_10353240(param_1);
+    (**(code **)(*in_ECX + 0xc4))(param_1,0x3f800000);
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 74, delta=-3, 16 bytes]
+Address:  102757d0
+Match:    NEAR(-3)
+Sig:      "\x8B\x81\x94\x00\x00\x00\x83\xC0\xFD\x83\xF8\x03\x0F\x96\xC0\xC3\x55\x8B\xEC\x56\x8B\x75\x08\x57\x8B\xF9\x85\xF6\x74\x18\x8B\x06"
+Raw:      8B 81 94 00 00 00 83 C0 FD 83 F8 03 0F 96 C0 C3 55 8B EC 56 8B 75 08 57 8B F9 85 F6 74 18 8B 06
+
+Decompiled:
+  
+  undefined4 FUN_102757d0(void)
+  
+  {
+    uint uVar1;
+    int in_ECX;
+    
+    uVar1 = *(int *)(in_ECX + 0x94) - 3;
+    return CONCAT31((int3)(uVar1 >> 8),uVar1 < 4);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 75, delta=-2, 41 bytes]
+Address:  10275740
+Match:    NEAR(-2)
+Sig:      "\x56\x8B\xF1\x8B\x06\x8B\x80\x24\x01\x00\x00\xFF\xD0\x84\xC0\x74\x14\x8B\x86\x94\x00\x00\x00\x83\xF8\x03\x74\x05\x83\xF8\x04\x75"
+Raw:      56 8B F1 8B 06 8B 80 24 01 00 00 FF D0 84 C0 74 14 8B 86 94 00 00 00 83 F8 03 74 05 83 F8 04 75
+
+Decompiled:
+  
+  uint FUN_10275740(void)
+  
+  {
+    uint uVar1;
+    int *in_ECX;
+    
+    uVar1 = (**(code **)(*in_ECX + 0x124))();
+    if (((char)uVar1 != '\0') && ((uVar1 = in_ECX[0x25], uVar1 == 3 || (uVar1 == 4)))) {
+      return CONCAT31((int3)(uVar1 >> 8),1);
+    }
+    return uVar1 & 0xffffff00;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 76, delta=-1, 179 bytes]
+Address:  10275070
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x83\xEC\x1C\x8B\x01\x53\x56\x57\x89\x4D\xFC\xFF\x90\xC0\x00\x00\x00\x8B\xF0\x8B\xCE\x8B\x16\xFF\x92\xC4\x00\x00\x00"
+Raw:      55 8B EC 83 EC 1C 8B 01 53 56 57 89 4D FC FF 90 C0 00 00 00 8B F0 8B CE 8B 16 FF 92 C4 00 00 00
+
+Decompiled:
+  
+  void FUN_10275070(undefined4 *param_1)
+  
+  {
+    int *piVar1;
+    int *piVar2;
+    int iVar3;
+    int iVar4;
+    int *in_ECX;
+    undefined1 local_20 [12];
+    undefined4 local_14;
+    undefined4 local_10;
+    float local_c;
+    int *local_8;
+    
+    local_8 = in_ECX;
+    piVar1 = (int *)(**(code **)(*in_ECX + 0xc0))();
+    piVar2 = (int *)(**(code **)(*piVar1 + 0xc4))();
+    piVar1 = (int *)(**(code **)(*piVar1 + 0xcc))();
+    iVar3 = (**(code **)(*piVar2 + 0x208))(local_20);
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 77, delta=+0, 3 bytes]
+Address:  103d1600
+Match:    EXACT
+Sig:      "\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x53\x56\x8B\xF1\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x4F\x8B"
+Raw:      C2 04 00 CC CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 53 56 8B F1 8B 0D 68 7C 71 10 6A 4F 8B
+
+Decompiled:
+  
+  void FUN_103d1600(void)
+  
+  {
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 78, delta=+1, 23 bytes]
+Address:  10275180
+Match:    NEAR(+1)
+Sig:      "\xA1\x2A\x2A\x2A\x2A\xA8\x01\x75\x08\x83\xC8\x01\xA3\x2A\x2A\x2A\x2A\xB8\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      A1 9C EF 6D 10 A8 01 75 08 83 C8 01 A3 9C EF 6D 10 B8 90 EF 6D 10 C3 CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  undefined * FUN_10275180(void)
+  
+  {
+    if ((DAT_106def9c & 1) == 0) {
+      DAT_106def9c = DAT_106def9c | 1;
+    }
+    return &DAT_106def90;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 79, delta=+2, 3 bytes]
+Address:  10058540
+Match:    NEAR(+2)
+Sig:      "\xB0\x01\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x57\x8B\xF9\x8B\x07\x8B\x40\x18\xFF\xD0\x84\xC0\x74\x60\x8B\x0D"
+Raw:      B0 01 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 57 8B F9 8B 07 8B 40 18 FF D0 84 C0 74 60 8B 0D
+
+Decompiled:
+  
+  undefined1 FUN_10058540(void)
+  
+  {
+    return 1;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSBotLocomotion::FaceTowards [vtable 80, delta=+3, 3 bytes]
+Address:  10058540
+Match:    NEAR(+3)
+Sig:      "\xB0\x01\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x57\x8B\xF9\x8B\x07\x8B\x40\x18\xFF\xD0\x84\xC0\x74\x60\x8B\x0D"
+Raw:      B0 01 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 57 8B F9 8B 07 8B 40 18 FF D0 84 C0 74 60 8B 0D
+
+Decompiled:
+  
+  undefined1 FUN_10058540(void)
+  
+  {
+    return 1;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 30, delta=-3, 606 bytes]
+Address:  103190c0
+Match:    NEAR(-3)
+Sig:      "\x53\x8B\xDC\x83\xEC\x08\x83\xE4\xF0\x83\xC4\x04\x55\x8B\x6B\x04\x89\x6C\x24\x04\x8B\xEC\x81\xEC\xD8\x00\x00\x00\x56\x57\x6A\x00"
+Raw:      53 8B DC 83 EC 08 83 E4 F0 83 C4 04 55 8B 6B 04 89 6C 24 04 8B EC 81 EC D8 00 00 00 56 57 6A 00
+
+Decompiled:
+  
+  undefined4 FUN_103190c0(float *param_1,GSI1 *param_2)
+  
+  {
+    int iVar1;
+    int in_ECX;
+    int iVar2;
+    undefined4 uVar3;
+    undefined4 uVar4;
+    float fVar5;
+    undefined1 local_e8 [12];
+    undefined1 local_dc [32];
+    float local_bc;
+    undefined4 local_9c;
+    float local_90;
+    float local_8c;
+    float local_88;
+    float local_80;
+    float local_7c;
+    float local_78;
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 31, delta=-2, 572 bytes]
+Address:  10319730
+Match:    NEAR(-2)
+Sig:      "\x55\x8B\xEC\x81\xEC\xA0\x00\x00\x00\x53\x57\x6A\x00\x6A\x00\xFF\x75\x0C\x8B\xF9\xC7\x45\xAC\x00\x00\x00\x00\x8D\x4D\xB4\xE8\xFD"
+Raw:      55 8B EC 81 EC A0 00 00 00 53 57 6A 00 6A 00 FF 75 0C 8B F9 C7 45 AC 00 00 00 00 8D 4D B4 E8 FD
+
+Decompiled:
+  
+  undefined4 FUN_10319730(float *param_1,GSI1 *param_2)
+  
+  {
+    int in_ECX;
+    int iVar1;
+    float10 fVar2;
+    undefined4 uVar3;
+    float fVar4;
+    undefined4 uVar5;
+    undefined1 local_a4 [44];
+    float local_78;
+    undefined4 local_58;
+    undefined **local_50 [4];
+    undefined4 local_40;
+    undefined4 local_3c;
+    float local_38;
+    float local_2c;
+    float local_28;
+    float local_24;
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 32, delta=-1, 211 bytes]
+Address:  10319980
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1F\x8B\x0D\x2A\x2A\x2A\x2A"
+Raw:      55 8B EC 51 53 8B D9 8B 0D 40 42 43 10 FF 15 44 42 43 10 88 45 FF 84 C0 74 1F 8B 0D 40 42 43 10
+
+Decompiled:
+  
+  bool FUN_10319980(int param_1)
+  
+  {
+    bool bVar1;
+    int in_ECX;
+    int iVar2;
+    int iVar3;
+    int *piVar4;
+    bool bVar5;
+    
+    bVar1 = CVProfile::IsEnabled((CVProfile *)g_VProfCurrentProfile_exref);
+    if (bVar1) {
+      CVProfile::EnterScope
+                ((CVProfile *)g_VProfCurrentProfile_exref,"CNavArea::IsPotentiallyVisible",0,"NextBot"
+                 ,false,4);
+    }
+    if (param_1 != 0) {
+      if (param_1 == in_ECX) {
+        bVar5 = true;
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 33, delta=+0, 204 bytes]
+Address:  10319aa0
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1C\x8B\x0D\x2A\x2A\x2A\x2A"
+Raw:      55 8B EC 51 53 8B D9 8B 0D 40 42 43 10 FF 15 44 42 43 10 88 45 FF 84 C0 74 1C 8B 0D 40 42 43 10
+
+Decompiled:
+  
+  undefined1 FUN_10319aa0(undefined4 param_1)
+  
+  {
+    bool bVar1;
+    char cVar2;
+    int *piVar3;
+    int iVar4;
+    int *piVar5;
+    undefined1 uVar6;
+    int iVar7;
+    
+    bVar1 = CVProfile::IsEnabled((CVProfile *)g_VProfCurrentProfile_exref);
+    if (bVar1) {
+      CVProfile::EnterScope
+                ((CVProfile *)g_VProfCurrentProfile_exref,"CNavArea::IsPotentiallyVisibleToTeam",0,
+                 "NextBot",false,4);
+    }
+    piVar3 = (int *)FUN_101bca90(param_1);
+    iVar7 = 0;
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 34, delta=+1, 52 bytes]
+Address:  10319a60
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x56\x8B\xF1\x8B\x4D\x08\x8B\x01\xFF\x90\x44\x05\x00\x00\x8B\xC8\x85\xC9\x74\x16\x8B\x01\x56\x8B\x80\x80\x00\x00\x00"
+Raw:      55 8B EC 56 8B F1 8B 4D 08 8B 01 FF 90 44 05 00 00 8B C8 85 C9 74 16 8B 01 56 8B 80 80 00 00 00
+
+Decompiled:
+  
+  undefined4 FUN_10319a60(int *param_1)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    
+    piVar2 = (int *)(**(code **)(*param_1 + 0x544))();
+    if (piVar2 != (int *)0x0) {
+      cVar1 = (**(code **)(*piVar2 + 0x80))();
+      if (cVar1 != '\0') {
+        return 1;
+      }
+    }
+    return 0;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 35, delta=+2, 213 bytes]
+Address:  10318730
+Match:    NEAR(+2)
+Sig:      "\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1F\x8B\x0D\x2A\x2A\x2A\x2A"
+Raw:      55 8B EC 51 53 8B D9 8B 0D 40 42 43 10 FF 15 44 42 43 10 88 45 FF 84 C0 74 1F 8B 0D 40 42 43 10
+
+Decompiled:
+  
+  byte FUN_10318730(int param_1)
+  
+  {
+    bool bVar1;
+    int in_ECX;
+    int iVar2;
+    int iVar3;
+    int *piVar4;
+    byte bVar5;
+    
+    bVar1 = CVProfile::IsEnabled((CVProfile *)g_VProfCurrentProfile_exref);
+    if (bVar1) {
+      CVProfile::EnterScope
+                ((CVProfile *)g_VProfCurrentProfile_exref,"CNavArea::IsCompletelyVisible",0,"NextBot",
+                 false,4);
+    }
+    if (param_1 != 0) {
+      if (param_1 == in_ECX) {
+        bVar5 = 1;
+
+------------------------------------------------------------
+Function: CNavArea::IsPotentiallyVisible [vtable 36, delta=+3, 139 bytes]
+Address:  10318810
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\x53\x56\x57\xFF\x75\x08\x8B\xD9\xE8\x70\x42\xEA\xFF\x8B\xF0\x83\xC4\x04\x8B\xCE\x33\xFF\x8B\x06\xFF\x90\x44\x03\x00"
+Raw:      55 8B EC 53 56 57 FF 75 08 8B D9 E8 70 42 EA FF 8B F0 83 C4 04 8B CE 33 FF 8B 06 FF 90 44 03 00
+
+Decompiled:
+  
+  undefined4 FUN_10318810(undefined4 param_1)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    int iVar3;
+    int *piVar4;
+    int iVar5;
+    
+    piVar2 = (int *)FUN_101bca90(param_1);
+    iVar5 = 0;
+    iVar3 = (**(code **)(*piVar2 + 0x344))();
+    if (0 < iVar3) {
+      do {
+        piVar4 = (int *)(**(code **)(*piVar2 + 0x348))(iVar5);
+        cVar1 = (**(code **)(*piVar4 + 0x114))();
+        if (cVar1 != '\0') {
+          piVar4 = (int *)(**(code **)(*piVar2 + 0x348))(iVar5);
+          piVar4 = (int *)(**(code **)(*piVar4 + 0x544))();
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 15, delta=-3, 65 bytes]
+Address:  1033b280
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x57\x68\x2A\x2A\x2A\x2A\x8B\xF9\x8B\x4D\x08\x68\x2A\x2A\x2A\x2A\xE8\x18\x66\x06\x00\x8B\x0D\x2A\x2A\x2A\x2A\x50\xE8"
+Raw:      55 8B EC 57 68 75 7B 43 10 8B F9 8B 4D 08 68 14 10 57 10 E8 18 66 06 00 8B 0D 54 B9 70 10 50 E8
+
+Decompiled:
+  
+  void FUN_1033b280(void)
+  
+  {
+    undefined4 uVar1;
+    int in_ECX;
+    
+    uVar1 = FUN_103a18b0("Place",&DAT_10437b75);
+    uVar1 = FUN_1033f800(uVar1);
+    *(undefined4 *)(in_ECX + 0xa4) = uVar1;
+    uVar1 = FUN_103a1750("Attributes",0);
+    *(undefined4 *)(in_ECX + 0x68) = uVar1;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 16, delta=-2, 881 bytes]
+Address:  1031d3c0
+Match:    NEAR(-2)
+Sig:      "\x55\x8B\xEC\x81\xEC\xA4\x00\x00\x00\x80\x7D\x08\x00\x56\x57\x8B\xF9\x75\x20\x8D\x8F\xA8\x00\x00\x00\xE8\x72\x78\xEC\xFF\xD9\x5D"
+Raw:      55 8B EC 81 EC A4 00 00 00 80 7D 08 00 56 57 8B F9 75 20 8D 8F A8 00 00 00 E8 72 78 EC FF D9 5D
+
+Decompiled:
+  
+  void FUN_1031d3c0(char param_1,uint param_2)
+  
+  {
+    char cVar1;
+    int iVar2;
+    uint uVar3;
+    int *piVar4;
+    int *in_ECX;
+    float10 fVar5;
+    float fVar6;
+    char cStack00000007;
+    undefined4 uVar7;
+    undefined4 uVar8;
+    undefined1 local_a8 [55];
+    char local_71;
+    undefined4 local_5c;
+    undefined **local_54 [4];
+    undefined4 local_44;
+    float local_40;
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 17, delta=-1, 62 bytes]
+Address:  103186f0
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x80\x7D\x0C\x00\x74\x0F\xF7\x41\x68\x00\x00\x00\x80\x74\x06\x32\xC0\x5D\xC2\x08\x00\x8B\x45\x08\x83\xF8\xFF\x75\x0A"
+Raw:      55 8B EC 80 7D 0C 00 74 0F F7 41 68 00 00 00 80 74 06 32 C0 5D C2 08 00 8B 45 08 83 F8 FF 75 0A
+
+Decompiled:
+  
+  uint FUN_103186f0(uint param_1,char param_2)
+  
+  {
+    uint in_EAX;
+    int in_ECX;
+    
+    if ((param_2 != '\0') && ((*(uint *)(in_ECX + 0x68) & 0x80000000) != 0)) {
+      return in_EAX & 0xffffff00;
+    }
+    if (param_1 == 0xffffffff) {
+      return CONCAT31(0xffffff,*(byte *)(in_ECX + 0x4f) | *(byte *)(in_ECX + 0x4e));
+    }
+    param_1 = param_1 & 0x80000001;
+    if ((int)param_1 < 0) {
+      param_1 = (param_1 - 1 | 0xfffffffe) + 1;
+    }
+    return CONCAT31((int3)(param_1 >> 8),*(undefined1 *)(param_1 + 0x4e + in_ECX));
+  }
+  
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 18, delta=+0, 7 bytes]
+Address:  10253f30
+Match:    EXACT
+Sig:      "\xD9\x05\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x83\xEC\x08\x53\x56\x8B\xF1\x8B\x0D\x2A\x2A\x2A\x2A"
+Raw:      D9 05 20 D5 4B 10 C3 CC CC CC CC CC CC CC CC CC 55 8B EC 83 EC 08 53 56 8B F1 8B 0D 40 42 43 10
+
+Decompiled:
+  
+  float10 FUN_10253f30(void)
+  
+  {
+    return (float10)0.008333334;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 19, delta=+1, 5363 bytes]
+Address:  10314500
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x81\xEC\xE8\x00\x00\x00\xA1\x2A\x2A\x2A\x2A\x56\x57\x8B\xF9\xC6\x45\xFF\x01\x83\xB8\x44\x04\x00\x00\x01\x75\x27\x8B"
+Raw:      55 8B EC 81 EC E8 00 00 00 A1 54 B9 70 10 56 57 8B F9 C6 45 FF 01 83 B8 44 04 00 00 01 75 27 8B
+
+Decompiled:
+  
+  /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+  
+  void FUN_10314500(void)
+  
+  {
+    float *pfVar1;
+    char cVar2;
+    undefined4 uVar3;
+    int iVar4;
+    int *piVar5;
+    int *in_ECX;
+    char *pcVar6;
+    uint uVar7;
+    float10 fVar8;
+    float fVar9;
+    float fVar10;
+    float fVar11;
+    float fVar12;
+    float fVar13;
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 20, delta=+2, 436 bytes]
+Address:  103160e0
+Match:    NEAR(+2)
+Sig:      "\x55\x8B\xEC\x83\xEC\x3C\x56\x57\xF3\x0F\x7E\x41\x04\xF3\x0F\x10\x5D\x20\x66\x0F\xD6\x45\xD0\x0F\x28\xE3\xF3\x0F\x10\x45\xD0\x8B"
+Raw:      55 8B EC 83 EC 3C 56 57 F3 0F 7E 41 04 F3 0F 10 5D 20 66 0F D6 45 D0 0F 28 E3 F3 0F 10 45 D0 8B
+
+Decompiled:
+  
+  void FUN_103160e0(undefined4 param_1,undefined4 param_2,undefined4 param_3,int param_4,
+                   undefined4 param_5,undefined4 param_6,float param_7)
+  
+  {
+    int in_ECX;
+    float local_40;
+    float fStack_3c;
+    float local_34;
+    float fStack_30;
+    undefined4 local_2c;
+    float local_28;
+    float local_24;
+    undefined4 local_20;
+    float local_1c;
+    float local_18;
+    undefined4 local_14;
+    float local_10;
+    float local_c;
+    undefined4 local_8;
+
+------------------------------------------------------------
+Function: CNavArea::IsBlocked [vtable 21, delta=+3, 441 bytes]
+Address:  10316930
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\x83\xEC\x40\xA1\x2A\x2A\x2A\x2A\xF3\x0F\x7E\x41\x04\x53\x66\x0F\xD6\x45\xCC\x0F\xB6\xD0\x0F\xB6\xDC\x8B\x41\x0C\x89"
+Raw:      55 8B EC 83 EC 40 A1 A4 24 63 10 F3 0F 7E 41 04 53 66 0F D6 45 CC 0F B6 D0 0F B6 DC 8B 41 0C 89
+
+Decompiled:
+  
+  void FUN_10316930(float *param_1)
+  
+  {
+    int in_ECX;
+    uint uVar1;
+    uint uVar2;
+    uint uVar3;
+    float local_44;
+    float fStack_40;
+    float local_38;
+    float fStack_34;
+    float local_30;
+    float local_2c;
+    float local_28;
+    float local_24;
+    float local_20;
+    float local_1c;
+    float local_18;
+    float local_14;
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 268, delta=-3, 3 bytes]
+Address:  10221ff0
+Match:    NEAR(-3)
+Sig:      "\x32\xC0\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xA1\x2A\x2A\x2A\x2A\xB9\x2A\x2A\x2A\x2A\xFF\x50\x34\x85\xC0\x75"
+Raw:      32 C0 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC A1 80 22 6D 10 B9 80 22 6D 10 FF 50 34 85 C0 75
+
+Decompiled:
+  
+  undefined1 FUN_10221ff0(void)
+  
+  {
+    return 0;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 269, delta=-2, 7 bytes]
+Address:  1022e1a0
+Match:    NEAR(-2)
+Sig:      "\x8A\x81\xAC\x03\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x56\x8B\x75\x08\x8B\xCE\xE8\xC2\xBB\xED\xFF\x84\xC0"
+Raw:      8A 81 AC 03 00 00 C3 CC CC CC CC CC CC CC CC CC 55 8B EC 56 8B 75 08 8B CE E8 C2 BB ED FF 84 C0
+
+Decompiled:
+  
+  undefined1 FUN_1022e1a0(void)
+  
+  {
+    int in_ECX;
+    
+    return *(undefined1 *)(in_ECX + 0x3ac);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 270, delta=-1, 207 bytes]
+Address:  10230f90
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x83\xEC\x14\x53\x56\x89\x4D\xFC\x8B\x4D\x08\x57\xE8\x6C\xA2\xE5\xFF\x8B\x4D\x08\x8B\xF0\x8B\xFA\xE8\x40\xD4\x07\x00"
+Raw:      55 8B EC 83 EC 14 53 56 89 4D FC 8B 4D 08 57 E8 6C A2 E5 FF 8B 4D 08 8B F0 8B FA E8 40 D4 07 00
+
+Decompiled:
+  
+  void FUN_10230f90(void)
+  
+  {
+    int iVar1;
+    char cVar2;
+    ushort uVar3;
+    uint uVar4;
+    bool bVar5;
+    undefined8 uVar6;
+    undefined8 local_18 [2];
+    int local_8;
+    
+    uVar6 = FUN_1008b210();
+    cVar2 = FUN_102ae3f0();
+    iVar1 = local_8;
+    if (cVar2 == '\0') {
+      local_18[0] = uVar6;
+      uVar3 = FUN_101fbc30(local_18);
+      uVar4 = (uint)uVar3;
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 271, delta=+0, 3 bytes]
+Address:  103d1600
+Match:    EXACT
+Sig:      "\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x53\x56\x8B\xF1\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x4F\x8B"
+Raw:      C2 04 00 CC CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 53 56 8B F1 8B 0D 68 7C 71 10 6A 4F 8B
+
+Decompiled:
+  
+  void FUN_103d1600(void)
+  
+  {
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 272, delta=+1, 64 bytes]
+Address:  102301c0
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x56\x8B\x75\x08\x57\x8B\xF9\x8B\xCE\xE8\x1F\xE2\x07\x00\x84\xC0\x74\x25\x8B\xCE\xE8\xA4\xCE\x07\x00\xD9\x5D\x08\xF3"
+Raw:      55 8B EC 56 8B 75 08 57 8B F9 8B CE E8 1F E2 07 00 84 C0 74 25 8B CE E8 A4 CE 07 00 D9 5D 08 F3
+
+Decompiled:
+  
+  void FUN_102301c0(void)
+  
+  {
+    char cVar1;
+    float10 fVar2;
+    undefined8 uVar3;
+    float fVar4;
+    
+    cVar1 = FUN_102ae3f0();
+    if (cVar1 != '\0') {
+      fVar2 = (float10)FUN_102ad080();
+      fVar4 = (float)fVar2;
+      uVar3 = FUN_1008b210(fVar4);
+      FUN_102364d0(uVar3,fVar4);
+    }
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 273, delta=+2, 5 bytes]
+Address:  1022e0e0
+Match:    NEAR(+2)
+Sig:      "\x32\xC0\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x6A\x03\xE8\x99\x01\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      32 C0 C2 04 00 CC CC CC CC CC CC CC CC CC CC CC 6A 03 E8 99 01 00 00 C3 CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  undefined1 FUN_1022e0e0(void)
+  
+  {
+    return 0;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSRules::IsCounterAttack [vtable 274, delta=+3, 3 bytes]
+Address:  10230310
+Match:    NEAR(+3)
+Sig:      "\xC2\x08\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x8B\x55\x0C\x57\x8B\xF9\x8B\x92\x94\x04\x00\x00\x83"
+Raw:      C2 08 00 CC CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 8B 55 0C 57 8B F9 8B 92 94 04 00 00 83
+
+Decompiled:
+  
+  void FUN_10230310(void)
+  
+  {
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 20, delta=-3, 319 bytes]
+Address:  100671e0
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x53\x56\x57\x8B\xF9\x8B\x4F\x18\x85\xC9\x74\x0B\xA1\x2A\x2A\x2A\x2A\x2B\x48\x5C\xC1\xF9\x04\x8B\x5D\x08\x8B\xF1\xC1"
+Raw:      55 8B EC 53 56 57 8B F9 8B 4F 18 85 C9 74 0B A1 A8 31 69 10 2B 48 5C C1 F9 04 8B 5D 08 8B F1 C1
+
+Decompiled:
+  
+  void FUN_100671e0(int *param_1,undefined4 param_2)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    int *in_ECX;
+    uint uVar3;
+    uint *puVar4;
+    int iVar5;
+    char cVar6;
+    
+    uVar3 = in_ECX[6];
+    if (uVar3 != 0) {
+      uVar3 = (int)(uVar3 - *(int *)(DAT_106931a8 + 0x5c)) >> 4;
+    }
+    if ((*(uint *)(param_1[0x802] + (uVar3 >> 5) * 4) & 1 << ((byte)uVar3 & 0x1f)) == 0) {
+      FUN_1005e130(param_1,param_2);
+      cVar6 = *param_1 == in_ECX[6];
+      cVar1 = (**(code **)(*in_ECX + 0x154))();
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 21, delta=-2, 33 bytes]
+Address:  1008c420
+Match:    NEAR(-2)
+Sig:      "\x56\x8B\xF1\xE8\xC8\xCE\xFD\xFF\x8B\xCE\x85\xC0\x74\x0D\xE8\xBD\xCE\xFD\xFF\x8B\xC8\x5E\x8B\x10\xFF\x62\x54\x5E\xE9\xDF\x84\x07"
+Raw:      56 8B F1 E8 C8 CE FD FF 8B CE 85 C0 74 0D E8 BD CE FD FF 8B C8 5E 8B 10 FF 62 54 5E E9 DF 84 07
+
+Decompiled:
+  
+  void FUN_1008c420(void)
+  
+  {
+    int iVar1;
+    int *piVar2;
+    
+    iVar1 = FUN_100692f0();
+    if (iVar1 != 0) {
+      piVar2 = (int *)FUN_100692f0();
+                      /* WARNING: Could not recover jumptable at 0x1008c438. Too many branches */
+                      /* WARNING: Treating indirect jump as call */
+      (**(code **)(*piVar2 + 0x54))();
+      return;
+    }
+    FUN_10104920();
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 22, delta=-1, 1209 bytes]
+Address:  1026dad0
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x83\xEC\x34\x53\x56\x57\x8B\xF9\xE8\x10\xFD\xFF\xFF\xF3\x0F\x10\x87\xCC\xB3\x00\x00\x8D\xB7\xCC\xB3\x00\x00\xF3\x0F"
+Raw:      55 8B EC 83 EC 34 53 56 57 8B F9 E8 10 FD FF FF F3 0F 10 87 CC B3 00 00 8D B7 CC B3 00 00 F3 0F
+
+Decompiled:
+  
+  void FUN_1026dad0(void)
+  
+  {
+    char *pcVar1;
+    char cVar2;
+    int *piVar3;
+    int iVar4;
+    int iVar5;
+    float *pfVar6;
+    int *in_ECX;
+    undefined1 local_38 [12];
+    float local_2c;
+    float local_28;
+    float local_24;
+    float local_20;
+    float local_1c;
+    float local_18;
+    undefined4 local_14;
+    float local_10;
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 23, delta=+0, 90 bytes]
+Address:  102b2360
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x51\x56\x8B\xF1\xE8\x14\x26\xDD\xFF\x6A\x01\x88\x45\xFC\xE8\x0A\x32\xDD\xFF\x68\x2A\x2A\x2A\x2A\xC7\x86\xA0\x1E\x00"
+Raw:      55 8B EC 51 56 8B F1 E8 14 26 DD FF 6A 01 88 45 FC E8 0A 32 DD FF 68 54 DF 55 10 C7 86 A0 1E 00
+
+Decompiled:
+  
+  void FUN_102b2360(void)
+  
+  {
+    undefined1 uVar1;
+    int in_ECX;
+    
+    uVar1 = FUN_10084980();
+    FUN_10085580(1);
+    *(undefined4 *)(in_ECX + 0x1ea0) = 0xffffffff;
+    FUN_100fb040("models/weapons/lense/lensemask");
+    FUN_1007da30("models/player.mdl",1);
+    FUN_100fb080("achieved");
+    FUN_101642c0();
+    FUN_10085580(uVar1);
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 24, delta=+1, 119 bytes]
+Address:  101660a0
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x56\x57\xFF\x75\x08\x8B\xF9\xE8\x71\x3A\xF2\xFF\x8B\x35\x2A\x2A\x2A\x2A\x8B\xCE\x8B\x06\xFF\x90\x80\x00\x00\x00\x80"
+Raw:      55 8B EC 56 57 FF 75 08 8B F9 E8 71 3A F2 FF 8B 35 AC 7B 71 10 8B CE 8B 06 FF 90 80 00 00 00 80
+
+Decompiled:
+  
+  void FUN_101660a0(undefined4 param_1)
+  
+  {
+    int *piVar1;
+    int iVar2;
+    int *piVar3;
+    undefined4 uVar4;
+    int in_ECX;
+    
+    FUN_10089b20(param_1);
+    piVar1 = DAT_10717bac;
+    (**(code **)(*DAT_10717bac + 0x80))();
+    if (*(char *)(in_ECX + 0x319) == '\0') {
+      if (*(int *)(in_ECX + 0x484) == 0) {
+        iVar2 = FUN_1007aea0();
+        if (iVar2 != 0) {
+          FUN_1005ce90();
+        }
+      }
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 25, delta=+2, 101 bytes]
+Address:  1005d170
+Match:    NEAR(+2)
+Sig:      "\x56\x8B\xF1\xE8\xA8\x77\x0A\x00\x80\xBE\x19\x03\x00\x00\x00\x74\x0B\xC6\x86\xB2\x03\x00\x00\x00\x33\xC0\x5E\xC3\x83\xBE\x84\x04"
+Raw:      56 8B F1 E8 A8 77 0A 00 80 BE 19 03 00 00 00 74 0B C6 86 B2 03 00 00 00 33 C0 5E C3 83 BE 84 04
+
+Decompiled:
+  
+  int * FUN_1005d170(void)
+  
+  {
+    int iVar1;
+    int in_ECX;
+    int *piVar2;
+    
+    FUN_10104920();
+    if (*(char *)(in_ECX + 0x319) != '\0') {
+      *(undefined1 *)(in_ECX + 0x3b2) = 0;
+      return (int *)0x0;
+    }
+    if (*(int *)(in_ECX + 0x484) == 0) {
+      iVar1 = FUN_1007aea0();
+      if (iVar1 != 0) {
+        FUN_1005ce90();
+      }
+    }
+    piVar2 = *(int **)(in_ECX + 0x484);
+
+------------------------------------------------------------
+Function: CINSNextBot::Spawn [vtable 26, delta=+3, 1 bytes]
+Address:  102bfb70
+Match:    NEAR(+3)
+Sig:      "\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x51\x56\x8D\xB1\xBC\x02\x00\x00\x8B\xCE\xE8\xBE\x50"
+Raw:      C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 51 56 8D B1 BC 02 00 00 8B CE E8 BE 50
+
+Decompiled:
+  
+  void FUN_102bfb70(void)
+  
+  {
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::CINSNextBotIntention::Update [vtable 44, delta=-3, 111 bytes]
+Address:  1021b010
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x51\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\x81\xF9\x2A\x2A\x2A\x2A\x75\x16\xF3\x0F\x10\x05\x2A\x2A\x2A\x2A\xF3\x0F\x11"
+Raw:      55 8B EC 51 57 8B F9 8B 0D 3C C4 6D 10 81 F9 20 C4 6D 10 75 16 F3 0F 10 05 4C C4 6D 10 F3 0F 11
+
+Decompiled:
+  
+  void FUN_1021b010(void)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    float10 fVar2;
+    float local_8;
+    
+    if (DAT_106dc43c == (int *)&DAT_106dc420) {
+      local_8 = (float)(DAT_106dc44c ^ 0x106dc420);
+    }
+    else {
+      fVar2 = (float10)(**(code **)(*DAT_106dc43c + 0x30))();
+      local_8 = (float)fVar2;
+    }
+    if (local_8 <= 0.0) {
+      for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+          piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+        (**(code **)(*piVar1 + 0xb0))();
+
+------------------------------------------------------------
+Function: CINSNextBot::CINSNextBotIntention::Update [vtable 45, delta=-2, 104 bytes]
+Address:  1026cd70
+Match:    NEAR(-2)
+Sig:      "\x53\x57\x8B\xF9\x8B\x4F\x18\x85\xC9\x74\x06\x8B\x01\x6A\x01\xFF\x10\x6A\x50\xE8\xC8\x50\xEB\xFF\x8B\xD8\x83\xC4\x04\x85\xDB\x74"
+Raw:      53 57 8B F9 8B 4F 18 85 C9 74 06 8B 01 6A 01 FF 10 6A 50 E8 C8 50 EB FF 8B D8 83 C4 04 85 DB 74
+
+Decompiled:
+  
+  void FUN_1026cd70(void)
+  
+  {
+    int iVar1;
+    undefined4 *puVar2;
+    undefined4 uVar3;
+    int in_ECX;
+    
+    if (*(undefined4 **)(in_ECX + 0x18) != (undefined4 *)0x0) {
+      (**(code **)**(undefined4 **)(in_ECX + 0x18))(1);
+    }
+    iVar1 = FUN_10121e50(0x50);
+    if (iVar1 != 0) {
+      puVar2 = (undefined4 *)FUN_10121e50(0x40);
+      if (puVar2 == (undefined4 *)0x0) {
+        puVar2 = (undefined4 *)0x0;
+      }
+      else {
+        FUN_1025eef0();
+
+------------------------------------------------------------
+Function: CINSNextBot::CINSNextBotIntention::Update [vtable 46, delta=-1, 46 bytes]
+Address:  1026e750
+Match:    NEAR(-1)
+Sig:      "\x56\x8B\xF1\x8B\x06\xFF\x90\xC0\x00\x00\x00\x85\xC0\x74\x07\x05\xB4\xDF\xFF\xFF\xEB\x02\x33\xC0\xF3\x0F\x10\x46\x08\x51\x8B\x4E"
+Raw:      56 8B F1 8B 06 FF 90 C0 00 00 00 85 C0 74 07 05 B4 DF FF FF EB 02 33 C0 F3 0F 10 46 08 51 8B 4E
+
+Decompiled:
+  
+  void FUN_1026e750(void)
+  
+  {
+    int iVar1;
+    int *in_ECX;
+    
+    iVar1 = (**(code **)(*in_ECX + 0xc0))();
+    if (iVar1 == 0) {
+      iVar1 = 0;
+    }
+    else {
+      iVar1 = iVar1 + -0x204c;
+    }
+    FUN_1026e190(iVar1,in_ECX[2]);
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::CINSNextBotIntention::Update [vtable 47, delta=+0, 1 bytes]
+Address:  102bfb70
+Match:    EXACT
+Sig:      "\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x51\x56\x8D\xB1\xBC\x02\x00\x00\x8B\xCE\xE8\xBE\x50"
+Raw:      C3 CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 51 56 8D B1 BC 02 00 00 8B CE E8 BE 50
+
+Decompiled:
+  
+  void FUN_102bfb70(void)
+  
+  {
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::CINSNextBotIntention::Update [vtable 48, delta=+1, 4 bytes]
+Address:  10110700
+Match:    NEAR(+1)
+Sig:      "\x8B\x41\x0C\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xB8\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      8B 41 0C C3 CC CC CC CC CC CC CC CC CC CC CC CC B8 CC E4 4D 10 C3 CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  undefined4 FUN_10110700(void)
+  
+  {
+    int in_ECX;
+    
+    return *(undefined4 *)(in_ECX + 0xc);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::CINSNextBotIntention::Update [vtable 50, delta=+3, 8 bytes]
+Address:  1026033c
+Match:    NEAR(+3)
+Sig:      "\x83\xE9\x14\xE9\xBC\x00\x00\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x56\x8B\xF1\xE8\xB5\xFB\xFF\xFF\xF6"
+Raw:      83 E9 14 E9 BC 00 00 00 CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 56 8B F1 E8 B5 FB FF FF F6
+
+Decompiled:
+  
+  void FUN_1026033c(void)
+  
+  {
+    FUN_10260400();
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 56, delta=-3, 4 bytes]
+Address:  1035fcc0
+Match:    NEAR(-3)
+Sig:      "\x8A\x41\x75\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x8B\x49\x60\xE8\xB8\x3D\xDE\xFF\xF7\xD8\x1B\xC0\xF7\xD8\xC3\xCC"
+Raw:      8A 41 75 C3 CC CC CC CC CC CC CC CC CC CC CC CC 8B 49 60 E8 B8 3D DE FF F7 D8 1B C0 F7 D8 C3 CC
+
+Decompiled:
+  
+  undefined1 FUN_1035fcc0(void)
+  
+  {
+    int in_ECX;
+    
+    return *(undefined1 *)(in_ECX + 0x75);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 57, delta=-2, 55 bytes]
+Address:  1021a8f0
+Match:    NEAR(-2)
+Sig:      "\x56\x8B\xF1\x8B\x06\x8B\x80\x08\x01\x00\x00\xFF\xD0\x84\xC0\x74\x22\x8B\x06\x8B\xCE\x8B\x80\xD8\x00\x00\x00\xFF\xD0\x84\xC0\x75"
+Raw:      56 8B F1 8B 06 8B 80 08 01 00 00 FF D0 84 C0 74 22 8B 06 8B CE 8B 80 D8 00 00 00 FF D0 84 C0 75
+
+Decompiled:
+  
+  undefined1 FUN_1021a8f0(void)
+  
+  {
+    char cVar1;
+    int *in_ECX;
+    
+    cVar1 = (**(code **)(*in_ECX + 0x108))();
+    if (cVar1 != '\0') {
+      cVar1 = (**(code **)(*in_ECX + 0xd8))();
+      if (cVar1 == '\0') {
+        cVar1 = (**(code **)(*in_ECX + 0x128))();
+        if (cVar1 == '\0') {
+          return 0;
+        }
+      }
+    }
+    return 1;
+  }
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 58, delta=-1, 21 bytes]
+Address:  10275cc0
+Match:    NEAR(-1)
+Sig:      "\x56\x8B\xF1\x8B\x06\x8B\x80\x54\x01\x00\x00\xFF\xD0\xD9\x9E\x88\x00\x00\x00\x5E\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      56 8B F1 8B 06 8B 80 54 01 00 00 FF D0 D9 9E 88 00 00 00 5E C3 CC CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  void FUN_10275cc0(void)
+  
+  {
+    int *in_ECX;
+    float10 fVar1;
+    
+    fVar1 = (float10)(**(code **)(*in_ECX + 0x154))();
+    in_ECX[0x22] = (int)(float)fVar1;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 59, delta=+0, 21 bytes]
+Address:  10276870
+Match:    EXACT
+Sig:      "\x56\x8B\xF1\x8B\x06\x8B\x80\x58\x01\x00\x00\xFF\xD0\xD9\x9E\x88\x00\x00\x00\x5E\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      56 8B F1 8B 06 8B 80 58 01 00 00 FF D0 D9 9E 88 00 00 00 5E C3 CC CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  void FUN_10276870(void)
+  
+  {
+    int *in_ECX;
+    float10 fVar1;
+    
+    fVar1 = (float10)(**(code **)(*in_ECX + 0x158))();
+    in_ECX[0x22] = (int)(float)fVar1;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 60, delta=+1, 11 bytes]
+Address:  10275d40
+Match:    NEAR(+1)
+Sig:      "\xC7\x81\x88\x00\x00\x00\x00\x00\x00\x00\xC3\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x83\xEC\x0C\x56\x8B\xF1\xE8\x42\xA2\x0E\x00\x8B\x06"
+Raw:      C7 81 88 00 00 00 00 00 00 00 C3 CC CC CC CC CC 55 8B EC 83 EC 0C 56 8B F1 E8 42 A2 0E 00 8B 06
+
+Decompiled:
+  
+  void FUN_10275d40(void)
+  
+  {
+    int in_ECX;
+    
+    *(undefined4 *)(in_ECX + 0x88) = 0;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 61, delta=+2, 3 bytes]
+Address:  10058540
+Match:    NEAR(+2)
+Sig:      "\xB0\x01\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x57\x8B\xF9\x8B\x07\x8B\x40\x18\xFF\xD0\x84\xC0\x74\x60\x8B\x0D"
+Raw:      B0 01 C3 CC CC CC CC CC CC CC CC CC CC CC CC CC 57 8B F9 8B 07 8B 40 18 FF D0 84 C0 74 60 8B 0D
+
+Decompiled:
+  
+  undefined1 FUN_10058540(void)
+  
+  {
+    return 1;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: PlayerLocomotion::Run [vtable 62, delta=+3, 20 bytes]
+Address:  10275ce0
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\xF3\x0F\x10\x45\x08\xF3\x0F\x11\x81\x88\x00\x00\x00\x5D\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC"
+Raw:      55 8B EC F3 0F 10 45 08 F3 0F 11 81 88 00 00 00 5D C2 04 00 CC CC CC CC CC CC CC CC CC CC CC CC
+
+Decompiled:
+  
+  void FUN_10275ce0(undefined4 param_1)
+  
+  {
+    int in_ECX;
+    
+    *(undefined4 *)(in_ECX + 0x88) = param_1;
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 98, delta=-3, 4 bytes]
+Address:  1021a930
+Match:    NEAR(-3)
+Sig:      "\x8A\x41\x34\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x85\xC9\x74\x07\x8D\x81\x18\x0C\x00\x00\xC3\x33\xC0\xC3\xCC\xCC"
+Raw:      8A 41 34 C3 CC CC CC CC CC CC CC CC CC CC CC CC 85 C9 74 07 8D 81 18 0C 00 00 C3 33 C0 C3 CC CC
+
+Decompiled:
+  
+  undefined1 FUN_1021a930(void)
+  
+  {
+    int in_ECX;
+    
+    return *(undefined1 *)(in_ECX + 0x34);
+  }
+  
+  
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 99, delta=-2, 81 bytes]
+Address:  1021a4e0
+Match:    NEAR(-2)
+Sig:      "\x55\x8B\xEC\x51\x56\x8B\xF1\x8B\x06\x8B\x80\x88\x01\x00\x00\xFF\xD0\x84\xC0\x74\x2D\xF3\x0F\x10\x46\x3C\x0F\x2F\x05\x2A\x2A\x2A"
+Raw:      55 8B EC 51 56 8B F1 8B 06 8B 80 88 01 00 00 FF D0 84 C0 74 2D F3 0F 10 46 3C 0F 2F 05 E0 35 4A
+
+Decompiled:
+  
+  float10 FUN_1021a4e0(void)
+  
+  {
+    char cVar1;
+    int *in_ECX;
+    float10 fVar2;
+    
+    cVar1 = (**(code **)(*in_ECX + 0x188))();
+    if (cVar1 == '\0') {
+      return (float10)0.0;
+    }
+    if (0.0 < (float)in_ECX[0xf]) {
+      fVar2 = (float10)FUN_101e4c50();
+      return fVar2 - (float10)(float)in_ECX[0xf];
+    }
+    return (float10)99999.9;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 100, delta=-1, 230 bytes]
+Address:  10353150
+Match:    NEAR(-1)
+Sig:      "\x55\x8B\xEC\x83\xEC\x0C\x57\x8B\xF9\x8B\x07\x8B\x80\x88\x01\x00\x00\xFF\xD0\x84\xC0\x74\x15\x8B\x07\x8B\xCF\xC6\x47\x34\x00\xFF"
+Raw:      55 8B EC 83 EC 0C 57 8B F9 8B 07 8B 80 88 01 00 00 FF D0 84 C0 74 15 8B 07 8B CF C6 47 34 00 FF
+
+Decompiled:
+  
+  void FUN_10353150(undefined4 param_1)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    undefined4 uVar3;
+    int *in_ECX;
+    float10 fVar4;
+    
+    cVar1 = (**(code **)(*in_ECX + 0x188))();
+    if (cVar1 != '\0') {
+      *(undefined1 *)(in_ECX + 0xd) = 0;
+      piVar2 = (int *)(**(code **)(*in_ECX + 0xc0))();
+      (**(code **)(*piVar2 + 0x24))();
+    }
+    piVar2 = (int *)(**(code **)(*in_ECX + 0x144))();
+    in_ECX[0x13] = *piVar2;
+    in_ECX[0x14] = piVar2[1];
+    in_ECX[0x15] = piVar2[2];
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 101, delta=+0, 72 bytes]
+Address:  1021a740
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x51\xF3\x0F\x10\x41\x5C\x0F\x57\xC9\x0F\x2F\xC1\x56\x76\x2F\xF3\x0F\x10\x41\x5C\x8D\x71\x58\x0F\x2F\xC1\x76\x22\x8B"
+Raw:      55 8B EC 51 F3 0F 10 41 5C 0F 57 C9 0F 2F C1 56 76 2F F3 0F 10 41 5C 8D 71 58 0F 2F C1 76 22 8B
+
+Decompiled:
+  
+  undefined1 FUN_1021a740(void)
+  
+  {
+    int in_ECX;
+    float10 fVar1;
+    
+    if ((0.0 < *(float *)(in_ECX + 0x5c)) && (0.0 < *(float *)(in_ECX + 0x5c))) {
+      fVar1 = (float10)FUN_101e4c50();
+      if ((float)(fVar1 - (float10)*(float *)(in_ECX + 0x5c)) < 0.25) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 102, delta=+1, 5 bytes]
+Address:  1012b5f0
+Match:    NEAR(+1)
+Sig:      "\xB0\x01\xC2\x04\x00\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x8B\x0D\x2A\x2A\x2A\x2A\xF3\x0F\x10\x45\x20\x51\xF3"
+Raw:      B0 01 C2 04 00 CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 8B 0D C4 36 69 10 F3 0F 10 45 20 51 F3
+
+Decompiled:
+  
+  undefined1 FUN_1012b5f0(void)
+  
+  {
+    return 1;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 103, delta=+2, 866 bytes]
+Address:  10352d90
+Match:    NEAR(+2)
+Sig:      "\x53\x8B\xDC\x83\xEC\x08\x83\xE4\xF0\x83\xC4\x04\x55\x8B\x6B\x04\x89\x6C\x24\x04\x8B\xEC\x81\xEC\x18\x01\x00\x00\x56\x8B\xF1\x57"
+Raw:      53 8B DC 83 EC 08 83 E4 F0 83 C4 04 55 8B 6B 04 89 6C 24 04 8B EC 81 EC 18 01 00 00 56 8B F1 57
+
+Decompiled:
+  
+  void FUN_10352d90(float *param_1)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    undefined4 *puVar3;
+    int *piVar4;
+    GSI1 *pGVar5;
+    float *pfVar6;
+    undefined4 uVar7;
+    int *in_ECX;
+    float10 fVar8;
+    HR *pHVar9;
+    int iVar10;
+    undefined1 local_120 [64];
+    undefined4 local_e0;
+    undefined1 local_c8 [44];
+    float local_9c;
+    char local_91;
+
+------------------------------------------------------------
+Function: ILocomotion::ClearStuckStatus [vtable 104, delta=+3, 1194 bytes]
+Address:  10353b90
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\x83\xEC\x24\x56\x57\x8B\xF9\x8D\x4F\x58\xE8\xAE\x10\xE9\xFF\xD8\x67\x5C\x8B\x07\x8B\xCF\xD9\x5D\xFC\xF3\x0F\x10\x45"
+Raw:      55 8B EC 83 EC 24 56 57 8B F9 8D 4F 58 E8 AE 10 E9 FF D8 67 5C 8B 07 8B CF D9 5D FC F3 0F 10 45
+
+Decompiled:
+  
+  void FUN_10353b90(void)
+  
+  {
+    char cVar1;
+    int *piVar2;
+    undefined4 uVar3;
+    float *pfVar4;
+    float *pfVar5;
+    int *in_ECX;
+    float10 fVar6;
+    float local_28;
+    int local_24;
+    float local_20;
+    float local_1c;
+    int local_18;
+    float local_14;
+    float local_10;
+    float local_c;
+    float local_8;
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 600, delta=-3, 124 bytes]
+Address:  1026afb0
+Match:    NEAR(-3)
+Sig:      "\x55\x8B\xEC\x51\x56\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1C\x8B\x0D\x2A\x2A\x2A"
+Raw:      55 8B EC 51 56 57 8B F9 8B 0D 40 42 43 10 FF 15 44 42 43 10 88 45 FF 84 C0 74 1C 8B 0D 40 42 43
+
+Decompiled:
+  
+  void FUN_1026afb0(undefined4 param_1,undefined4 param_2)
+  
+  {
+    bool bVar1;
+    int *piVar2;
+    int *in_ECX;
+    
+    bVar1 = CVProfile::IsEnabled((CVProfile *)g_VProfCurrentProfile_exref);
+    if (bVar1) {
+      CVProfile::EnterScope
+                ((CVProfile *)g_VProfCurrentProfile_exref,"CINSNextBot::OnWeaponFired",0,"INSNextBot",
+                 false,4);
+    }
+    for (piVar2 = (int *)(**(code **)(*in_ECX + 4))(); piVar2 != (int *)0x0;
+        piVar2 = (int *)(**(code **)(*in_ECX + 8))(piVar2)) {
+      (**(code **)(*piVar2 + 0x58))(param_1,param_2);
+    }
+    if (bVar1) {
+      CVProfile::ExitScope((CVProfile *)g_VProfCurrentProfile_exref);
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 601, delta=-2, 11 bytes]
+Address:  102685f6
+Match:    NEAR(-2)
+Sig:      "\x81\xE9\x4C\x20\x00\x00\xE9\x7F\xFF\xFF\xFF\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x83\xEC\x28"
+Raw:      81 E9 4C 20 00 00 E9 7F FF FF FF CC CC CC CC CC CC CC CC CC CC CC CC CC CC CC 55 8B EC 83 EC 28
+
+Decompiled:
+  
+  void FUN_102685f6(void)
+  
+  {
+    FUN_10268580();
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 602, delta=-1, 40 bytes]
+Address:  1021af10
+Match:    NEAR(-1)
+Sig:      "\x56\x57\x8B\xF9\x8B\x07\xFF\x50\x04\x8B\xF0\x85\xF6\x74\x16\x90\x8B\x06\x8B\xCE\xFF\x50\x60\x8B\x07\x8B\xCF\x56\xFF\x50\x08\x8B"
+Raw:      56 57 8B F9 8B 07 FF 50 04 8B F0 85 F6 74 16 90 8B 06 8B CE FF 50 60 8B 07 8B CF 56 FF 50 08 8B
+
+Decompiled:
+  
+  void FUN_1021af10(void)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    
+    for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+        piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+      (**(code **)(*piVar1 + 0x60))();
+    }
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 603, delta=+0, 54 bytes]
+Address:  1021b0c0
+Match:    EXACT
+Sig:      "\x55\x8B\xEC\x56\x57\x8B\xF9\x8B\x07\xFF\x50\x04\x8B\xF0\x85\xF6\x74\x1E\x53\x8B\x5D\x0C\x8B\x06\x8B\xCE\x53\xFF\x75\x08\xFF\x50"
+Raw:      55 8B EC 56 57 8B F9 8B 07 FF 50 04 8B F0 85 F6 74 1E 53 8B 5D 0C 8B 06 8B CE 53 FF 75 08 FF 50
+
+Decompiled:
+  
+  void FUN_1021b0c0(undefined4 param_1,undefined4 param_2)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    
+    for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+        piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+      (**(code **)(*piVar1 + 100))(param_1,param_2);
+    }
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 604, delta=+1, 51 bytes]
+Address:  1021acb0
+Match:    NEAR(+1)
+Sig:      "\x55\x8B\xEC\x56\x57\x8B\xF9\x8B\x07\xFF\x50\x04\x8B\xF0\x85\xF6\x74\x1B\x53\x8B\x5D\x08\x8B\x06\x8B\xCE\x53\xFF\x50\x68\x8B\x07"
+Raw:      55 8B EC 56 57 8B F9 8B 07 FF 50 04 8B F0 85 F6 74 1B 53 8B 5D 08 8B 06 8B CE 53 FF 50 68 8B 07
+
+Decompiled:
+  
+  void FUN_1021acb0(undefined4 param_1)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    
+    for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+        piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+      (**(code **)(*piVar1 + 0x68))(param_1);
+    }
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 605, delta=+2, 54 bytes]
+Address:  1021a980
+Match:    NEAR(+2)
+Sig:      "\x55\x8B\xEC\x56\x57\x8B\xF9\x8B\x07\xFF\x50\x04\x8B\xF0\x85\xF6\x74\x1E\x53\x8B\x5D\x0C\x8B\x06\x8B\xCE\x53\xFF\x75\x08\xFF\x50"
+Raw:      55 8B EC 56 57 8B F9 8B 07 FF 50 04 8B F0 85 F6 74 1E 53 8B 5D 0C 8B 06 8B CE 53 FF 75 08 FF 50
+
+Decompiled:
+  
+  void FUN_1021a980(undefined4 param_1,undefined4 param_2)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    
+    for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+        piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+      (**(code **)(*piVar1 + 0x6c))(param_1,param_2);
+    }
+    return;
+  }
+  
+  
+
+------------------------------------------------------------
+Function: CINSNextBot::GetLocomotionInterface [vtable 606, delta=+3, 51 bytes]
+Address:  1021ab40
+Match:    NEAR(+3)
+Sig:      "\x55\x8B\xEC\x56\x57\x8B\xF9\x8B\x07\xFF\x50\x04\x8B\xF0\x85\xF6\x74\x1B\x53\x8B\x5D\x08\x8B\x06\x8B\xCE\x53\xFF\x50\x70\x8B\x07"
+Raw:      55 8B EC 56 57 8B F9 8B 07 FF 50 04 8B F0 85 F6 74 1B 53 8B 5D 08 8B 06 8B CE 53 FF 50 70 8B 07
+
+Decompiled:
+  
+  void FUN_1021ab40(undefined4 param_1)
+  
+  {
+    int *piVar1;
+    int *in_ECX;
+    
+    for (piVar1 = (int *)(**(code **)(*in_ECX + 4))(); piVar1 != (int *)0x0;
+        piVar1 = (int *)(**(code **)(*in_ECX + 8))(piVar1)) {
+      (**(code **)(*piVar1 + 0x70))(param_1);
+    }
+    return;
+  }
+  
+  
+
