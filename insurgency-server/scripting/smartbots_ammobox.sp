@@ -74,7 +74,8 @@ static float g_lastDropTime[MAXPLAYERS + 1];
 // SDKCalls
 // ---------------------------------------------------------------------------
 
-static Handle g_sdkGetMagazines = null;  // CINSPlayer::GetMagazines(int) -> CINSWeaponMagazines*
+static Handle g_sdkGetMagazines = null;     // CINSPlayer::GetMagazines(int) -> CINSWeaponMagazines*
+static Handle g_sdkGetMagCapacity = null;   // CINSWeapon::GetMagazineCapacity() -> int (debug only)
 
 // ---------------------------------------------------------------------------
 // Platform-specific offsets loaded from gamedata
@@ -114,6 +115,14 @@ public void OnPluginStart()
 	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
 	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
 	g_sdkGetMagazines = EndPrepSDKCall();
+
+	// SDKCall: CINSWeapon::GetMagazineCapacity (debug/diagnostic only)
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gameConf, SDKConf_Signature, "CINSWeapon::GetMagazineCapacity");
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
+	g_sdkGetMagCapacity = EndPrepSDKCall();
+	if (g_sdkGetMagCapacity == null)
+		PrintToServer("[AmmoBox] NOTE: CINSWeapon::GetMagazineCapacity sig not found (debug scan limited)");
 
 	// Platform-specific offsets
 	g_off_weapon_slotVal  = gameConf.GetOffset("CINSWeapon.slotVal");
@@ -171,8 +180,21 @@ public Action Cmd_AmmoScan(int client, int args)
 	int ammoTypeVirt = (g_off_weapon_ammoType >= 0) ? GetEntData(weapon, g_off_weapon_ammoType) : -1;
 	int roundsPerMag = (g_off_weapon_magCap   >= 0) ? GetEntData(weapon, g_off_weapon_magCap)   : -1;
 
-	ReplyToCommand(client, "[Scan] weapon=%d DataMap_ammoType=%d slotVal=%d virt_ammoType=%d roundsPerMag=%d",
-		weapon, ammoTypeDM, slotVal, ammoTypeVirt, roundsPerMag);
+	ReplyToCommand(client, "[Scan] weapon=%d DataMap_ammoType=%d slotVal=%d virt_ammoType=%d",
+		weapon, ammoTypeDM, slotVal, ammoTypeVirt);
+	ReplyToCommand(client, "[Scan] magCapacity(field)=%d", roundsPerMag);
+
+	// Compare field read vs engine's GetMagazineCapacity (accounts for attachments)
+	if (g_sdkGetMagCapacity != null)
+	{
+		int engineCap = SDKCall(g_sdkGetMagCapacity, weapon);
+		ReplyToCommand(client, "[Scan] GetMagazineCapacity(engine)=%d %s",
+			engineCap, (engineCap != roundsPerMag) ? "<-- MISMATCH" : "");
+	}
+	else
+	{
+		ReplyToCommand(client, "[Scan] GetMagazineCapacity unavailable (no sig for this platform)");
+	}
 
 	if (ammoTypeDM >= 0)
 		ReplyToCommand(client, "[Scan] m_iAmmo[DM=%d]=%d",

@@ -10,33 +10,51 @@
 				{
 					"signature"	"TheNavMesh"
 				}
+				"windows"
+				{
+					"signature"	"TheNavMesh"
+					"read"		"17"
+				}
 			}
 		}
 
 		"Signatures"
 		{
 			// TheNavMesh global pointer (CNavMesh*)
-			// Expected offset from server base: 0x00c99800
+			// Linux: exported symbol @TheNavMesh
+			// Windows: pattern from a function that does mov ecx, [TheNavMesh]
+			//   at offset +17; read directive extracts the embedded address.
+			//   Matched function at RVA 0x33fe90.
 			"TheNavMesh"
 			{
 				"library"	"server"
 				"linux"		"@TheNavMesh"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x0C\x56\x8B\xF1\x8D\x45\xF4\x6A\x00\x51\x8B\x0D\x2A\x2A\x2A\x2A\xF3\x0F\x10\x46\x04\xF3\x0F\x11\x45\xF4\xF3"
 			}
 
-			// CNavMesh::GetNearestNavArea(const Vector&, bool anyZ, float maxDist, bool checkLOS, bool checkGround, NearestNavAreaGroundCheck_t) const
-			// Expected offset: 0x004f20d0
+			// CNavMesh::GetNearestNavArea(const Vector&, bool anyZ, float maxDist,
+			//   bool checkLOS, bool checkGround, NearestNavAreaGroundCheck_t) const
+			// Linux offset: 0x004f20d0
+			// Windows: RVA 0x33ec90 — identified via VPROF string xref chain:
+			//   "CNavMesh::GetNavArea" string → GetNavArea function (RVA 0x33e730)
+			//   → callers of GetNavArea → filtered by: thiscall, ret 0x18 (6 params),
+			//   checks m_grid.Count() at [ecx+0x18], has ceil() + spiral grid loop.
+			//   Verified: 33 callers all load TheNavMesh into ecx before calling.
 			"CNavMesh::GetNearestNavArea"
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavMesh17GetNearestNavAreaERK6Vectorbfbb27NearestNavAreaGroundCheck_t"
+				"windows"	"\x55\x8B\xEC\x81\xEC\xDC\x00\x00\x00\x83\x79\x18\x00\x89\x4D\xFC\x75\x08\x33\xC0\x8B\xE5\x5D\xC2\x18\x00\xF3\x0F\x10\x5D\x10\x56"
 			}
 
 			// CNavArea::IsBlocked(int teamID, bool ignoreNavBlockers) const
-			// Expected offset: 0x004adc40
+			// Linux offset: 0x004adc40
+			// Windows: RVA 0x3186f0 — from RTTI vtable analysis (vtable[17])
 			"CNavArea::IsBlocked"
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavArea9IsBlockedEib"
+				"windows"	"\x55\x8B\xEC\x80\x7D\x0C\x00\x74\x0F\xF7\x41\x68\x00\x00\x00\x80\x74\x06\x32\xC0\x5D\xC2\x08\x00\x8B\x45\x08\x83\xF8\xFF\x75\x0A"
 			}
 		}
 

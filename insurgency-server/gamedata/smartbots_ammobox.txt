@@ -17,6 +17,19 @@
 				"linux"		"@_ZN10CINSPlayer12GetMagazinesEi"
 				"windows"	"\x55\x8B\xEC\x83\xEC\x0C\x53\x8B\x5D\x08\x8D\x45\xF4\x56\x57\x8B"
 			}
+
+			// CINSWeapon::GetMagazineCapacity() const -> int
+			// Returns per-magazine round capacity, accounting for attachments
+			// (extended mags) and ammoDef fallback.  Non-virtual, thiscall.
+			// Linux: 0x003104a0 (185 bytes)
+			// Windows RVA: 0x303d10 (138 bytes)
+			// Signature unique at 16 bytes; using 32 for safety.
+			"CINSWeapon::GetMagazineCapacity"
+			{
+				"library"	"server"
+				"linux"		"@_ZNK10CINSWeapon20GetMagazineCapacityEv"
+				"windows"	"\x56\x57\x8B\xF9\x83\xBF\x90\x05\x00\x00\x00\x8D\xB7\x90\x05\x00\x00\x7C\x72\x85\xF6\x74\x6E\x6A\x02\xE8\x2A\x2A\x2A\x2A\x85\xC0"
+			}
 		}
 
 		"Offsets"
@@ -48,13 +61,16 @@
 				"windows"	"5548"		// 0x15ac
 			}
 
-			// Per-magazine round capacity — GetMagazineCapacity() non-ammoDef path.
-			// Linux:   in_stack[0x57e] * 4 = 0x15f8
-			// Windows: weapon+0x590+0x1054 = 0x15e4
+			// Per-magazine round capacity — GetMagazineCapacity() magazine path.
+			// GetMagazineCapacity has two branches based on ammoDef flag 0x4:
+			//   non-magazine: in_stack[0x57e]/in_ECX[0x579] = 0x15f8/0x15e4
+			//   magazine:     in_stack[0x580]/in_ECX[0x57b] = 0x1600/0x15ec
+			// We use the magazine path since the plugin only handles
+			// magazine-based weapons (slotVal >= 0, ammoDef flag 0x4).
 			"CINSWeapon.magCapacity"
 			{
-				"linux"		"5624"		// 0x15f8
-				"windows"	"5604"		// 0x15e4
+				"linux"		"5632"		// 0x1600  (in_stack[0x580] * 4)
+				"windows"	"5612"		// 0x15ec  (in_ECX[0x57b] * 4)
 			}
 
 			// ---------------------------------------------------------------

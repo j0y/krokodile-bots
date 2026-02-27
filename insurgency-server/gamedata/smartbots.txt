@@ -10,8 +10,11 @@
 				{
 					"signature"	"TheNavMesh"
 				}
-				// TODO: Windows — no exported symbol; needs pattern scan of a function
-				// that references the TheNavMesh global to extract its address.
+				"windows"
+				{
+					"signature"	"TheNavMesh"
+					"read"		"17"
+				}
 			}
 			"g_pGameRules"
 			{
@@ -28,12 +31,14 @@
 			// ----- Global addresses -----
 
 			// CNavMesh *TheNavMesh — global pointer (BSS segment)
-			// Expected offset from server base: 0x00c99800
-			// Windows: no exported symbol; TODO needs pattern scan
+			// Linux offset from server base: 0x00c99800
+			// Windows: RVA 0x70b954 — extracted via read offset from a function
+			//   that does mov ecx, [TheNavMesh] (function at RVA 0x33fe90)
 			"TheNavMesh"
 			{
 				"library"	"server"
 				"linux"		"@TheNavMesh"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x0C\x56\x8B\xF1\x8D\x45\xF4\x6A\x00\x51\x8B\x0D\x2A\x2A\x2A\x2A\xF3\x0F\x10\x46\x04\xF3\x0F\x11\x45\xF4\xF3"
 			}
 
 			// CGameRules *g_pGameRules — global pointer
@@ -75,25 +80,27 @@
 			{
 				"library"	"server"
 				"linux"		"@_ZN17CINSBotLocomotion8ApproachERK6Vectorf"
-				"windows"	"\x55\x8B\xEC\x57\xFF\x75\x08\x8B\xF9\xE8\xF2\x37\xFF\xFF\x8B\x07\x51\xC7\x04\x24\x00\x00\x80\x3F\x8B\xCF\xFF\x75\x08\xFF\x90\xC4"
+				"windows"	"\x55\x8B\xEC\x57\xFF\x75\x08\x8B\xF9\xE8\x2A\x2A\x2A\x2A\x8B\x07\x51\xC7\x04\x24\x00\x00\x80\x3F\x8B\xCF\xFF\x75\x08\xFF\x90\xC4"
 			}
 
 			// CNavMesh::GetNearestNavArea(const Vector&, bool, float, bool, bool, NearestNavAreaGroundCheck_t) const
 			// Linux offset: 0x004f20d0
-			// Windows: TODO — not extracted by Ghidra script (function not found via RTTI)
+			// Windows: RVA 0x33ec90 — found via GetNavArea VPROF string xref chain
 			"CNavMesh::GetNearestNavArea"
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavMesh17GetNearestNavAreaERK6Vectorbfbb27NearestNavAreaGroundCheck_t"
+				"windows"	"\x55\x8B\xEC\x81\xEC\xDC\x00\x00\x00\x83\x79\x18\x00\x89\x4D\xFC\x75\x08\x33\xC0\x8B\xE5\x5D\xC2\x18\x00\xF3\x0F\x10\x5D\x10\x56"
 			}
 
 			// CNavArea::IsPotentiallyVisible(const CNavArea*) const
 			// Linux offset: 0x004ae260  Windows: 10319aa0 [EXACT vtable[33], 204 bytes]
+			// 56-byte sig needed: first 32 bytes had only 20 fixed (3 VPROF globals relocated)
 			"CNavArea::IsPotentiallyVisible"
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavArea20IsPotentiallyVisibleEPKS_"
-				"windows"	"\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1C\x8B\x0D\x2A\x2A\x2A\x2A"
+				"windows"	"\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1C\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x04\x6A\x00\x68\x2A\x2A\x2A\x2A\x6A\x00\x68\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x56\x57"
 			}
 
 			// CNavArea::IsBlocked(int, bool) const

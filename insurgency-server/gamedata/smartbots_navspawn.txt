@@ -10,6 +10,11 @@
 				{
 					"signature"	"TheNavMesh"
 				}
+				"windows"
+				{
+					"signature"	"TheNavMesh"
+					"read"		"17"
+				}
 			}
 		}
 
@@ -20,6 +25,7 @@
 			{
 				"library"	"server"
 				"linux"		"@TheNavMesh"
+				"windows"	"\x55\x8B\xEC\x83\xEC\x0C\x56\x8B\xF1\x8D\x45\xF4\x6A\x00\x51\x8B\x0D\x2A\x2A\x2A\x2A\xF3\x0F\x10\x46\x04\xF3\x0F\x11\x45\xF4\xF3"
 			}
 
 			// CINSNextBot::Spawn() — virtual override of CBaseEntity::Spawn
@@ -27,6 +33,7 @@
 			{
 				"library"	"server"
 				"linux"		"@_ZN11CINSNextBot5SpawnEv"
+				"windows"	"\x55\x8B\xEC\x51\x56\x8B\xF1\xE8\x2A\x2A\x2A\x2A\x6A\x01\x88\x45\xFC\xE8\x2A\x2A\x2A\x2A\x68\x2A\x2A\x2A\x2A\xC7\x86\xA0\x1E\x00"
 			}
 
 			// CNavMesh::GetNearestNavArea(const Vector&, bool, float, bool, bool, NearestNavAreaGroundCheck_t) const
@@ -34,13 +41,16 @@
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavMesh17GetNearestNavAreaERK6Vectorbfbb27NearestNavAreaGroundCheck_t"
+				"windows"	"\x55\x8B\xEC\x81\xEC\xDC\x00\x00\x00\x83\x79\x18\x00\x89\x4D\xFC\x75\x08\x33\xC0\x8B\xE5\x5D\xC2\x18\x00\xF3\x0F\x10\x5D\x10\x56"
 			}
 
 			// CNavArea::IsPotentiallyVisible(const CNavArea*) const
+			// 56-byte sig: prologue has many relocated VPROF globals
 			"CNavArea::IsPotentiallyVisible"
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavArea20IsPotentiallyVisibleEPKS_"
+				"windows"	"\x55\x8B\xEC\x51\x53\x8B\xD9\x8B\x0D\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x88\x45\xFF\x84\xC0\x74\x1C\x8B\x0D\x2A\x2A\x2A\x2A\x6A\x04\x6A\x00\x68\x2A\x2A\x2A\x2A\x6A\x00\x68\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x56\x57"
 			}
 
 			// CNavArea::IsBlocked(int, bool) const
@@ -48,6 +58,7 @@
 			{
 				"library"	"server"
 				"linux"		"@_ZNK8CNavArea9IsBlockedEib"
+				"windows"	"\x55\x8B\xEC\x80\x7D\x0C\x00\x74\x0F\xF7\x41\x68\x00\x00\x00\x80\x74\x06\x32\xC0\x5D\xC2\x08\x00\x8B\x45\x08\x83\xF8\xFF\x75\x0A"
 			}
 		}
 
