@@ -402,7 +402,11 @@ static bool GiveMagazine(int client, int slot)
 		return false;
 	}
 
-	int roundsPerMag = GetEntData(weapon, g_off_weapon_magCap);
+	int roundsPerMag = -1;
+	if (g_sdkGetMagCapacity != null)
+		roundsPerMag = SDKCall(g_sdkGetMagCapacity, weapon);
+	if (roundsPerMag < 1)
+		roundsPerMag = GetEntData(weapon, g_off_weapon_magCap);
 	if (roundsPerMag < 1)
 		roundsPerMag = 30;
 
