@@ -9,6 +9,12 @@
 			// CUtlRBTree (Linux: player+0x17d8, Windows: player+0x17c4).
 			// Returns CINSWeaponMagazines* (always non-null; creates if absent).
 			//
+			// WARNING: For non-magazine weapons (no ammoDef flag 0x4, e.g.
+			// shotguns), calling this creates a new entry whose constructor
+			// calls UpdateCounter(), which RESETS m_iAmmo[ammoType] to 0,
+			// destroying the player's spare shell count.  Only call this for
+			// magazine-based weapons (magCapacity > 0).
+			//
 			// Windows RVA: 0x2acfd0  (server.dll timestamp 0x68C9132B)
 			// Verified: accesses [ecx+0x17c4] (CUtlRBTree), allocs 0x1c bytes.
 			"CINSPlayer::GetMagazines"
@@ -21,6 +27,9 @@
 			// CINSWeapon::GetMagazineCapacity() const -> int
 			// Returns per-magazine round capacity, accounting for attachments
 			// (extended mags) and ammoDef fallback.  Non-virtual, thiscall.
+			// Branches on ammoDef flag 0x4:
+			//   flag set:   returns magCapacity (detachable magazine size)
+			//   flag clear: returns nonMagCapacity (tube/internal capacity)
 			// Linux: 0x003104a0 (185 bytes)
 			// Windows RVA: 0x303d10 (138 bytes)
 			// Signature unique at 16 bytes; using 32 for safety.
@@ -39,11 +48,11 @@
 			// Used with GetEntData(weapon, offset).
 			// Linux verified against server_i486.so.
 			// Windows verified against server.dll (timestamp 0x68C9132B).
-			//   All Windows offsets are 0x14 (20) bytes less than Linux —
+			//   All Windows offsets are 0x14 (20) bytes less than Linux --
 			//   consistent across all three fields due to MSVC vs GCC layout.
 			// ---------------------------------------------------------------
 
-			// >= 0: weapon has a magazine system and a valid ammo type.
+			// >= 0: weapon has a valid INS ammo type (not necessarily magazine-based).
 			// Linux: in_stack[0x169] * 4 = 0x5a4
 			// Windows: GetPrimaryAmmoType reads [ecx+0x590]; same semantics.
 			"CINSWeapon.slotVal"
@@ -52,7 +61,7 @@
 				"windows"	"1424"		// 0x590
 			}
 
-			// Internal ammo type index — CINSWeapon::GetPrimaryAmmoType() result.
+			// Internal ammo type index -- CINSWeapon::GetPrimaryAmmoType() result.
 			// Linux:   0x15c0
 			// Windows: weapon+0x590+0x101c = 0x15ac
 			"CINSWeapon.ammoType"
@@ -61,16 +70,31 @@
 				"windows"	"5548"		// 0x15ac
 			}
 
-			// Per-magazine round capacity — GetMagazineCapacity() magazine path.
+			// Per-magazine round capacity -- GetMagazineCapacity() magazine path.
 			// GetMagazineCapacity has two branches based on ammoDef flag 0x4:
 			//   non-magazine: in_stack[0x57e]/in_ECX[0x579] = 0x15f8/0x15e4
 			//   magazine:     in_stack[0x580]/in_ECX[0x57b] = 0x1600/0x15ec
-			// We use the magazine path since the plugin only handles
-			// magazine-based weapons (slotVal >= 0, ammoDef flag 0x4).
+			// magCapacity is for magazine-based weapons (ammoDef flag 0x4).
+			// nonMagCapacity is for non-magazine weapons (shotguns, etc.).
+			//
+			// Detection: if magCapacity > 0, the weapon uses the
+			// CINSWeaponMagazines system (detachable magazine swap on reload).
+			// If magCapacity <= 0 and nonMagCapacity > 0, the weapon uses
+			// simple m_iAmmo shell counts (single-round reload from reserve).
 			"CINSWeapon.magCapacity"
 			{
 				"linux"		"5632"		// 0x1600  (in_stack[0x580] * 4)
 				"windows"	"5612"		// 0x15ec  (in_ECX[0x57b] * 4)
+			}
+
+			// Per-round capacity -- GetMagazineCapacity() non-magazine path.
+			// Used for weapons without ammoDef flag 0x4 (shotguns, etc.).
+			// Stores the tube/internal magazine capacity (e.g. 6 for M590).
+			// m_iAmmo for these weapons = number of spare shells (not mags).
+			"CINSWeapon.nonMagCapacity"
+			{
+				"linux"		"5624"		// 0x15f8  (in_stack[0x57e] * 4)
+				"windows"	"5604"		// 0x15e4  (in_ECX[0x579] * 4)
 			}
 
 			// ---------------------------------------------------------------
@@ -78,24 +102,24 @@
 			// Used with LoadFromAddress / StoreToAddress.
 			// CINSWeaponMagazines wraps CUtlVector<int> starting at offset 8.
 			// The CUtlVector layout is identical on Linux and Windows (Valve
-			// cross-platform code) — confirmed by inspecting Windows ctor.
+			// cross-platform code) -- confirmed by inspecting Windows ctor.
 			// ---------------------------------------------------------------
 
-			// int* — pointer to the array of per-magazine round counts.
+			// int* -- pointer to the array of per-magazine round counts.
 			"CINSWeaponMagazines.dataPtr"
 			{
 				"linux"		"8"		// +0x08
 				"windows"	"8"		// +0x08  (same; CUtlVector cross-platform)
 			}
 
-			// int — allocated capacity of the array.
+			// int -- allocated capacity of the array.
 			"CINSWeaponMagazines.allocated"
 			{
 				"linux"		"12"		// +0x0c
 				"windows"	"12"		// +0x0c  (same)
 			}
 
-			// int — current element count (number of spare magazines).
+			// int -- current element count (number of spare magazines).
 			"CINSWeaponMagazines.count"
 			{
 				"linux"		"20"		// +0x14

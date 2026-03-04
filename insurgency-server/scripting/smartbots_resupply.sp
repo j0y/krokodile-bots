@@ -2,15 +2,19 @@
  * smartbots_resupply.sp -- Battlefield-style resupply boxes for Insurgency 2014
  *
  * Players type !resupply (or /resupply) to throw a resupply crate forward.
- * The crate periodically gives +1 spare magazine (primary + secondary) to all
- * nearby teammates within a configurable radius.  After its lifetime expires
- * the crate despawns.
+ * The crate periodically gives ammo (primary + secondary) to all nearby
+ * teammates within a configurable radius.  After its lifetime expires the
+ * crate despawns.
  *
  * Unlike the single-use ammobox, this crate stays active and keeps resupplying
  * on a timer -- just like the Battlefield support class ammo box.
  *
  * Standalone plugin -- shares the same gamedata file (smartbots_ammobox.txt)
  * for CINSWeaponMagazines access but has no code dependency on smartbots.sp.
+ *
+ * Handles both ammo systems:
+ *   MAGAZINE weapons (ammoDef flag 0x4): +1 magazine via CINSWeaponMagazines
+ *   NON-MAGAZINE weapons (shotguns):     +shells via direct m_iAmmo increment
  */
 
 #pragma semicolon 1
@@ -26,7 +30,7 @@ public Plugin myinfo =
 	name        = "SmartBots Resupply",
 	author      = "krokodile",
 	description = "Battlefield-style area resupply boxes for Insurgency 2014",
-	version     = "1.0.0",
+	version     = "1.1.0",
 	url         = ""
 };
 
@@ -64,12 +68,13 @@ static Handle g_sdkGetMagCapacity = null;  // CINSWeapon::GetMagazineCapacity() 
 // Platform-specific offsets loaded from gamedata
 // ---------------------------------------------------------------------------
 
-static int g_off_weapon_slotVal   = -1;
-static int g_off_weapon_ammoType  = -1;
-static int g_off_weapon_magCap    = -1;
-static int g_off_mags_dataPtr     = -1;
-static int g_off_mags_allocated   = -1;
-static int g_off_mags_count       = -1;
+static int g_off_weapon_slotVal      = -1;  // CINSWeapon: slotVal (>= 0 = valid INS ammo type)
+static int g_off_weapon_ammoType     = -1;  // CINSWeapon: GetPrimaryAmmoType result
+static int g_off_weapon_magCap       = -1;  // CINSWeapon: rounds per magazine (magazine path)
+static int g_off_weapon_nonMagCap    = -1;  // CINSWeapon: rounds capacity (non-magazine path)
+static int g_off_mags_dataPtr        = -1;  // CINSWeaponMagazines: int* data array
+static int g_off_mags_allocated      = -1;  // CINSWeaponMagazines: allocated capacity
+static int g_off_mags_count          = -1;  // CINSWeaponMagazines: element count
 
 // ---------------------------------------------------------------------------
 // Active resupply box tracking
@@ -97,7 +102,7 @@ public void OnPluginStart()
 	if (gameConf == null)
 	{
 		PrintToServer("[Resupply] WARNING: failed to load gamedata/smartbots_ammobox.txt -- ammo giving disabled");
-		PrintToServer("[Resupply] Plugin loaded (v1.0.0) -- DISABLED");
+		PrintToServer("[Resupply] Plugin loaded (v1.1.0) -- DISABLED");
 		return;
 	}
 
@@ -115,12 +120,13 @@ public void OnPluginStart()
 	g_sdkGetMagCapacity = EndPrepSDKCall();
 
 	// Platform-specific offsets
-	g_off_weapon_slotVal  = gameConf.GetOffset("CINSWeapon.slotVal");
-	g_off_weapon_ammoType = gameConf.GetOffset("CINSWeapon.ammoType");
-	g_off_weapon_magCap   = gameConf.GetOffset("CINSWeapon.magCapacity");
-	g_off_mags_dataPtr    = gameConf.GetOffset("CINSWeaponMagazines.dataPtr");
-	g_off_mags_allocated  = gameConf.GetOffset("CINSWeaponMagazines.allocated");
-	g_off_mags_count      = gameConf.GetOffset("CINSWeaponMagazines.count");
+	g_off_weapon_slotVal   = gameConf.GetOffset("CINSWeapon.slotVal");
+	g_off_weapon_ammoType  = gameConf.GetOffset("CINSWeapon.ammoType");
+	g_off_weapon_magCap    = gameConf.GetOffset("CINSWeapon.magCapacity");
+	g_off_weapon_nonMagCap = gameConf.GetOffset("CINSWeapon.nonMagCapacity");
+	g_off_mags_dataPtr     = gameConf.GetOffset("CINSWeaponMagazines.dataPtr");
+	g_off_mags_allocated   = gameConf.GetOffset("CINSWeaponMagazines.allocated");
+	g_off_mags_count       = gameConf.GetOffset("CINSWeaponMagazines.count");
 
 	delete gameConf;
 
@@ -133,6 +139,8 @@ public void OnPluginStart()
 		{ PrintToServer("[Resupply] MISSING offset: CINSWeapon.ammoType");         ok = false; }
 	if (g_off_weapon_magCap   < 0)
 		{ PrintToServer("[Resupply] MISSING offset: CINSWeapon.magCapacity");      ok = false; }
+	if (g_off_weapon_nonMagCap < 0)
+		{ PrintToServer("[Resupply] MISSING offset: CINSWeapon.nonMagCapacity");   ok = false; }
 	if (g_off_mags_dataPtr    < 0)
 		{ PrintToServer("[Resupply] MISSING offset: CINSWeaponMagazines.dataPtr"); ok = false; }
 	if (g_off_mags_allocated  < 0)
@@ -143,11 +151,11 @@ public void OnPluginStart()
 	if (!ok)
 	{
 		PrintToServer("[Resupply] One or more offsets missing -- ammo giving disabled");
-		PrintToServer("[Resupply] Plugin loaded (v1.0.0) -- DISABLED");
+		PrintToServer("[Resupply] Plugin loaded (v1.1.0) -- DISABLED");
 		return;
 	}
 
-	PrintToServer("[Resupply] Plugin loaded (v1.0.0) -- all offsets OK");
+	PrintToServer("[Resupply] Plugin loaded (v1.1.0) -- all offsets OK");
 }
 
 public void OnMapStart()
@@ -283,12 +291,12 @@ public Action Timer_ResupplyTick(Handle timer, int entRef)
 		bool gaveSomething = false;
 		for (int slot = 0; slot <= 1; slot++)
 		{
-			if (GiveMagazine(i, slot))
+			if (GiveAmmoForSlot(i, slot))
 				gaveSomething = true;
 		}
 
 		if (gaveSomething)
-			PrintHintText(i, "Resupplied (+1 magazine)");
+			PrintHintText(i, "Resupplied (+ammo)");
 	}
 
 	return Plugin_Continue;
@@ -327,20 +335,28 @@ static float GetVectorDistanceSq(const float a[3], const float b[3])
 }
 
 // ---------------------------------------------------------------------------
-// Give one spare magazine for a weapon slot.
+// Give ammo for a weapon slot.  Detects whether the weapon uses the magazine
+// system (rifles, bolt-action) or simple shell counts (shotguns) and handles
+// each path appropriately.
 // (Same logic as smartbots_ammobox.sp -- duplicated for standalone operation)
+//
+// Detection: read the raw magCapacity field (magazine path) and
+// nonMagCapacity field (non-magazine path).  If magCapacity > 0, the weapon
+// uses detachable magazines and the CINSWeaponMagazines vector.
+// Otherwise nonMagCapacity > 0 means simple m_iAmmo shell counts.
 // ---------------------------------------------------------------------------
 
-#define AMMO_HARD_CAP  8
+#define MAG_HARD_CAP    8    // max spare magazines for magazine weapons
+#define SHELL_HARD_CAP  48   // max spare shells for non-magazine weapons
 
-static bool GiveMagazine(int client, int slot)
+static bool GiveAmmoForSlot(int client, int slot)
 {
 	int weapon = GetPlayerWeaponSlot(client, slot);
 	if (weapon == -1)
 		return false;
 
-	if (g_sdkGetMagazines == null || g_off_weapon_slotVal < 0)
-		return false;
+	if (g_off_weapon_slotVal < 0)
+		return false;  // offsets not loaded (unsupported platform)
 
 	int slotVal  = GetEntData(weapon, g_off_weapon_slotVal);
 	int ammoType = GetEntData(weapon, g_off_weapon_ammoType);
@@ -352,35 +368,118 @@ static bool GiveMagazine(int client, int slot)
 			return false;
 	}
 
+	// Detect weapon type: magazine vs non-magazine
+	int rawMagCap    = GetEntData(weapon, g_off_weapon_magCap);
+	int rawNonMagCap = GetEntData(weapon, g_off_weapon_nonMagCap);
+
+	if (rawMagCap > 0)
+	{
+		// Magazine weapon (rifles, SMGs, pistols, bolt-action with clips).
+		// Use CINSWeaponMagazines vector approach.
+		return GiveMagazine(client, weapon, slot, ammoType, rawMagCap);
+	}
+	else if (rawNonMagCap > 0)
+	{
+		// Non-magazine weapon (shotguns, etc.).
+		// Add shells directly to m_iAmmo.
+		return GiveShells(client, weapon, slot, ammoType, rawNonMagCap);
+	}
+	else
+	{
+		// Both capacity fields are 0.  Try SDK call for capacity and
+		// assume magazine weapon (handles ammoDef fallback cases).
+		int capacity = -1;
+		if (g_sdkGetMagCapacity != null)
+			capacity = SDKCall(g_sdkGetMagCapacity, weapon);
+		if (capacity < 1)
+			return false;
+
+		return GiveMagazine(client, weapon, slot, ammoType, capacity);
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Give +1 spare magazine for a magazine-based weapon.
+//
+// Appends an entry to the CINSWeaponMagazines UTL vector, then syncs
+// m_iAmmo to the new count (mirrors UpdateCounter).
+// ---------------------------------------------------------------------------
+
+static bool GiveMagazine(int client, int weapon, int slot, int ammoType, int rawMagCap)
+{
+	if (g_sdkGetMagazines == null)
+		return false;
+
 	int magsPtr = SDKCall(g_sdkGetMagazines, client, ammoType);
 	if (magsPtr == 0)
 		return false;
 
+	// Read the UTL vector fields from the heap object.
 	int dataPtr   = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_dataPtr),   NumberType_Int32);
 	int allocated = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_allocated), NumberType_Int32);
 	int count     = LoadFromAddress(view_as<Address>(magsPtr + g_off_mags_count),     NumberType_Int32);
 
 	if (dataPtr == 0 || allocated <= 0 || count < 0 ||
-	    count >= allocated || count >= AMMO_HARD_CAP)
+	    count >= allocated || count >= MAG_HARD_CAP)
 	{
 		return false;
 	}
 
+	// Determine rounds per magazine.  Prefer SDK call (accounts for
+	// attachments like extended mags), fall back to raw field.
 	int roundsPerMag = -1;
 	if (g_sdkGetMagCapacity != null)
 		roundsPerMag = SDKCall(g_sdkGetMagCapacity, weapon);
 	if (roundsPerMag < 1)
-		roundsPerMag = GetEntData(weapon, g_off_weapon_magCap);
+		roundsPerMag = rawMagCap;
 	if (roundsPerMag < 1)
 		roundsPerMag = 30;
 
 	// Append: data[count] = roundsPerMag, count++
-	StoreToAddress(view_as<Address>(dataPtr + count * 4),         roundsPerMag, NumberType_Int32);
-	StoreToAddress(view_as<Address>(magsPtr + g_off_mags_count), count + 1,    NumberType_Int32);
+	StoreToAddress(view_as<Address>(dataPtr + count * 4),          roundsPerMag, NumberType_Int32);
+	StoreToAddress(view_as<Address>(magsPtr + g_off_mags_count),  count + 1,    NumberType_Int32);
 
-	// Sync m_iAmmo to the new vector size
+	// Sync m_iAmmo to the new vector size (mirrors UpdateCounter).
 	SetEntProp(client, Prop_Data, "m_iAmmo", count + 1, _, ammoType);
 	SetEntProp(client, Prop_Send, "m_iAmmo", count + 1, _, ammoType);
+
+	return true;
+}
+
+// ---------------------------------------------------------------------------
+// Give spare shells for a non-magazine weapon (shotgun, etc.).
+//
+// For non-magazine weapons, m_iAmmo[ammoType] is the number of spare
+// SHELLS (not magazines).  The engine's ReloadCycle loads shells one at
+// a time from this count into the clip.  We simply increment m_iAmmo.
+//
+// IMPORTANT: Do NOT call GetMagazines for these weapons -- doing so
+// creates a CINSWeaponMagazines entry whose constructor resets m_iAmmo
+// to 0, destroying the player's existing shell reserves.
+// ---------------------------------------------------------------------------
+
+static bool GiveShells(int client, int weapon, int slot, int ammoType, int tubeCapacity)
+{
+	int currentAmmo = GetEntProp(client, Prop_Data, "m_iAmmo", _, ammoType);
+
+	if (currentAmmo >= SHELL_HARD_CAP)
+		return false;
+
+	// Give one "tube load" worth of shells (e.g. 6 for a 6-shell shotgun).
+	// This is equivalent to giving +1 magazine for magazine weapons.
+	int shellsToGive = tubeCapacity;
+	if (shellsToGive < 1)
+		shellsToGive = 8;  // fallback
+
+	if (currentAmmo + shellsToGive > SHELL_HARD_CAP)
+		shellsToGive = SHELL_HARD_CAP - currentAmmo;
+
+	if (shellsToGive <= 0)
+		return false;
+
+	int newAmmo = currentAmmo + shellsToGive;
+	SetEntProp(client, Prop_Data, "m_iAmmo", newAmmo, _, ammoType);
+	SetEntProp(client, Prop_Send, "m_iAmmo", newAmmo, _, ammoType);
 
 	return true;
 }
