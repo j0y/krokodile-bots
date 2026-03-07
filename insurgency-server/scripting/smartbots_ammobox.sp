@@ -148,9 +148,6 @@ public void OnPluginStart()
 	g_cvCooldown = CreateConVar("sm_ammobox_cooldown", "60",  "Seconds between drops per player");
 	g_cvLifetime = CreateConVar("sm_ammobox_lifetime", "120", "Seconds before unclaimed box despawns");
 
-	RegConsoleCmd("sm_ammobox", Cmd_AmmoBox, "Drop an ammo box at your feet");
-	RegAdminCmd("sm_ammobox_scan", Cmd_AmmoScan, ADMFLAG_ROOT, "Scan player memory for internal ammo counter");
-
 	GameData gameConf = new GameData("smartbots_ammobox");
 	if (gameConf == null)
 	{
@@ -225,6 +222,8 @@ public void OnPluginStart()
 		return;
 	}
 
+	RegConsoleCmd("sm_ammobox", Cmd_AmmoBox, "Drop an ammo box at your feet");
+	RegAdminCmd("sm_ammobox_scan", Cmd_AmmoScan, ADMFLAG_ROOT, "Scan player memory for internal ammo counter");
 	PrintToServer("[AmmoBox] Plugin loaded (v1.8.0) -- all offsets OK");
 }
 

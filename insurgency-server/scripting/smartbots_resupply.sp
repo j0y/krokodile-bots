@@ -128,8 +128,6 @@ public void OnPluginStart()
 	g_cvInterval = CreateConVar("sm_resupply_interval",  "15",   "Seconds between each resupply tick");
 	g_cvTeamOnly = CreateConVar("sm_resupply_teamonly",  "1",    "Only resupply teammates of the dropper");
 
-	RegConsoleCmd("sm_resupply", Cmd_Resupply, "Throw a resupply box");
-
 	GameData gameConf = new GameData("smartbots_ammobox");
 	if (gameConf == null)
 	{
@@ -195,6 +193,7 @@ public void OnPluginStart()
 		return;
 	}
 
+	RegConsoleCmd("sm_resupply", Cmd_Resupply, "Throw a resupply box");
 	PrintToServer("[Resupply] Plugin loaded (v1.2.0) -- all offsets OK");
 }
 
@@ -380,11 +379,7 @@ public Action Timer_ResupplyTick(Handle timer, int entRef)
 {
 	int entity = EntRefToEntIndex(entRef);
 	if (entity == INVALID_ENT_REFERENCE || !IsValidEntity(entity))
-	{
-		// Entity gone, stop repeating
-		g_boxRepeatTimer[entity] = null;
 		return Plugin_Stop;
-	}
 
 	float boxPos[3];
 	GetEntPropVector(entity, Prop_Data, "m_vecOrigin", boxPos);
