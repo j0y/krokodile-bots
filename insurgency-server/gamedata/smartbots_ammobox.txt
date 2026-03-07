@@ -4,6 +4,33 @@
 	{
 		"Signatures"
 		{
+			// GetAmmoDef() -> CAmmoDef*
+			// Returns the global singleton CAmmoDef instance.
+			// The CAmmoDef holds an array of Ammo_t entries (stride 0xbc, base +8).
+			// Each Ammo_t entry has a flags field at entry+0x94; bit 0x4 set means
+			// the weapon uses the CINSWeaponMagazines system (detachable magazines).
+			// Bit 0x4 clear means simple m_iAmmo shell count (tube-fed / bolt-action).
+			//
+			// Linux: symbol _Z10GetAmmoDefv  (22 bytes, PIC thunk + lea)
+			// Windows RVA: 0x2e4660 (trivial: mov eax, &g_AmmoDef; ret)
+			//   g_AmmoDef is at VA 0x106faa20 (BSS region of .data,
+			//   server.dll preferred base 0x10000000, timestamp 0x68C9132B).
+			//   The signature includes the absolute VA bytes -- stable as long as
+			//   the DLL loads at its preferred base (no ASLR on 32-bit servers).
+				// GetAmmoDef() -> CAmmoDef*
+			// Linux symbol is used for a direct SDKCall.
+			// Windows: the function body is just "mov eax, &g_AmmoDef; ret" (6 bytes).
+			// The immediate VA bytes are patched by the loader under ASLR, so we do NOT
+			// use a Windows byte signature here.  Instead the plugin navigates from the
+			// known-good CINSWeapon::GetMagazineCapacity signature at runtime.
+			// See Addresses section below and LoadAmmoFlags() in the plugin.
+			"GetAmmoDef"
+			{
+				"library"	"server"
+				"linux"		"@_Z10GetAmmoDefv"
+				// No Windows entry -- plugin navigates from GetMagazineCapacity
+			}
+
 			// CINSPlayer::GetMagazines(int ammoType) -> CINSWeaponMagazines*
 			// Searches/creates the CINSWeaponMagazines entry in the player's
 			// CUtlRBTree (Linux: player+0x17d8, Windows: player+0x17c4).
