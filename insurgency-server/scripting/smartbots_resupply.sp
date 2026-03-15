@@ -112,8 +112,11 @@ static Address g_getMagCapAddr = Address_Null;
 // Active resupply box tracking
 // ---------------------------------------------------------------------------
 
-static int    g_boxOwnerTeam[2048];     // team of the player who dropped each box
-static Handle g_boxRepeatTimer[2048];   // repeating resupply timer per entity
+static int    g_boxOwnerTeam[2048];                    // team of the player who dropped each box
+static Handle g_boxRepeatTimer[2048];                  // fast scan timer per entity (ticks every 1.5s)
+static float  g_boxLastResupply[2048][MAXPLAYERS + 1]; // per-box per-player last resupply time
+
+#define BOX_SCAN_INTERVAL 1.5   // how often each box checks for nearby players
 
 // ---------------------------------------------------------------------------
 // Plugin lifecycle
@@ -354,11 +357,14 @@ public Action Cmd_Resupply(int client, int args)
 	// Track owner team for team-only resupply
 	g_boxOwnerTeam[entity] = GetClientTeam(client);
 
-	// Start repeating resupply timer (first tick after a short delay to let the box land)
+	// Clear per-player resupply timestamps for this box
+	for (int i = 0; i <= MaxClients; i++)
+		g_boxLastResupply[entity][i] = 0.0;
+
+	// Fast scan timer -- checks for nearby players every 1.5s
+	// Per-player cooldown is governed by sm_resupply_interval
 	int ref = EntIndexToEntRef(entity);
-	float interval = g_cvInterval.FloatValue;
-	CreateTimer(2.0, Timer_ResupplyTick_Once, ref, TIMER_FLAG_NO_MAPCHANGE);
-	g_boxRepeatTimer[entity] = CreateTimer(interval, Timer_ResupplyTick, ref,
+	g_boxRepeatTimer[entity] = CreateTimer(BOX_SCAN_INTERVAL, Timer_ResupplyTick, ref,
 		TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 
 	// Despawn timer
@@ -373,7 +379,8 @@ public Action Cmd_Resupply(int client, int args)
 }
 
 // ---------------------------------------------------------------------------
-// Repeating timer: resupply all nearby players
+// Fast scan timer: check nearby players, resupply those whose per-player
+// cooldown has expired.  First resupply is immediate on contact.
 // ---------------------------------------------------------------------------
 
 public Action Timer_ResupplyTick(Handle timer, int entRef)
@@ -389,6 +396,8 @@ public Action Timer_ResupplyTick(Handle timer, int entRef)
 	float radiusSq = radius * radius;
 	bool teamOnly = g_cvTeamOnly.BoolValue;
 	int boxTeam = g_boxOwnerTeam[entity];
+	float now = GetGameTime();
+	float interval = g_cvInterval.FloatValue;
 
 	for (int i = 1; i <= MaxClients; i++)
 	{
@@ -405,6 +414,11 @@ public Action Timer_ResupplyTick(Handle timer, int entRef)
 		if (distSq > radiusSq)
 			continue;
 
+		// Check per-player cooldown for this box
+		float lastTime = g_boxLastResupply[entity][i];
+		if (lastTime > 0.0 && (now - lastTime) < interval)
+			continue;
+
 		bool gaveSomething = false;
 		for (int slot = 0; slot <= 1; slot++)
 		{
@@ -413,20 +427,13 @@ public Action Timer_ResupplyTick(Handle timer, int entRef)
 		}
 
 		if (gaveSomething)
+		{
+			g_boxLastResupply[entity][i] = now;
 			PrintHintText(i, "Resupplied (+ammo)");
+		}
 	}
 
 	return Plugin_Continue;
-}
-
-// ---------------------------------------------------------------------------
-// One-shot initial resupply tick (fires 2s after deploy so the box has landed)
-// ---------------------------------------------------------------------------
-
-public Action Timer_ResupplyTick_Once(Handle timer, int entRef)
-{
-	Timer_ResupplyTick(timer, entRef);
-	return Plugin_Stop;
 }
 
 // ---------------------------------------------------------------------------
