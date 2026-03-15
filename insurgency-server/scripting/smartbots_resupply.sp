@@ -354,9 +354,10 @@ public Action Cmd_Resupply(int client, int args)
 	// Track owner team for team-only resupply
 	g_boxOwnerTeam[entity] = GetClientTeam(client);
 
-	// Start repeating resupply timer
+	// Start repeating resupply timer (first tick after a short delay to let the box land)
 	int ref = EntIndexToEntRef(entity);
 	float interval = g_cvInterval.FloatValue;
+	CreateTimer(2.0, Timer_ResupplyTick_Once, ref, TIMER_FLAG_NO_MAPCHANGE);
 	g_boxRepeatTimer[entity] = CreateTimer(interval, Timer_ResupplyTick, ref,
 		TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 
@@ -416,6 +417,16 @@ public Action Timer_ResupplyTick(Handle timer, int entRef)
 	}
 
 	return Plugin_Continue;
+}
+
+// ---------------------------------------------------------------------------
+// One-shot initial resupply tick (fires 2s after deploy so the box has landed)
+// ---------------------------------------------------------------------------
+
+public Action Timer_ResupplyTick_Once(Handle timer, int entRef)
+{
+	Timer_ResupplyTick(timer, entRef);
+	return Plugin_Stop;
 }
 
 // ---------------------------------------------------------------------------
